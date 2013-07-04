@@ -16,20 +16,22 @@ public class Location {
 
     @Id
     private String id;
+    private String title;
     private String description;
     private String addressDescription;
     private Address address;
     private GeoLocation geoLocation;
     private Date actualDate;
     private String creatorId;
-    private Boolean footype;
+    private boolean footype;
     private String type;
 
     public Location() {
     }
 
-    public Location(String id, String description, String addressDescription, Address address, GeoLocation geoLocation, Date actualDate, String creatorId, Boolean footype, String type) {
+    public Location(String id, String title, String description, String addressDescription, Address address, GeoLocation geoLocation, Date actualDate, String creatorId, boolean footype, String type) {
         this.id = id;
+        this.title = title;
         this.description = description;
         this.addressDescription = addressDescription;
         this.address = address;
@@ -38,6 +40,14 @@ public class Location {
         this.creatorId = creatorId;
         this.footype = footype;
         this.type = type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getId() {
@@ -96,11 +106,11 @@ public class Location {
         this.creatorId = creatorId;
     }
 
-    public Boolean getFootype() {
+    public boolean isFootype() {
         return footype;
     }
 
-    public void setFootype(Boolean footype) {
+    public void setFootype(boolean footype) {
         this.footype = footype;
     }
 

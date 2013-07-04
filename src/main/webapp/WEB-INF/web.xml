@@ -12,6 +12,7 @@
         </session-timeout>
     </session-config>
 
+
     <!-- Spring Security filter starts -->
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
@@ -37,6 +38,7 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     <!-- Spring main servlet ends -->
+
 
     <!-- Spring REST filter for hidden fields starts -->
     <filter>

@@ -21,8 +21,11 @@
     <script src="<s:url value="/resources"/>/js/jquery-1.10.1.min.js"></script>
     <script src="<s:url value="/resources"/>/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=EN"></script>
     <!--script src="https://www.google.com/jsapi?sensor=true&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script-->
+
+    <script type="text/javascript" src="<s:url value="/resources"/>/js/markerclusterer.min.js"></script>
+    <script type="text/javascript" src="<s:url value="/resources"/>/js/infobox.min.js"></script>
 
     <script src="<s:url value="/resources"/>/js/gmaps.js"></script>
     <script src="<s:url value="/resources"/>/js/cheapfood.js"></script>
@@ -60,6 +63,15 @@
 </div>
 
 <div id="map"></div>
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+
+        </div>
+    </div>
+</div>
+
 
 <div class="navbar navbar-fixed-bottom">
     <div class="navbar-inner">
