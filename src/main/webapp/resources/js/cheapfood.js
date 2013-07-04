@@ -17,6 +17,7 @@ $(document).ready(function(){
         createContextMenuForMap();
         centerMapToLocation();
         createMarkersForLocations();
+        createMarkerEditFormOnMap();
     }
 
 
@@ -26,8 +27,9 @@ $(document).ready(function(){
             lat: moscowCenter.lat,
             lng: moscowCenter.lng,
             zoom: ZOOM_LEVEL,
-            streetViewControl: false,
-            panControl: false,
+            streetViewControl: true,
+            panControl: true,
+            mapTypeControl: false,
             markerClusterer: function(map) {
                 return new MarkerClusterer(map);
             }
@@ -81,6 +83,14 @@ $(document).ready(function(){
         });
     }
 
+    function createMarkerEditFormOnMap() {
+        var div = $('<div/>').attr('id','editMarkerFormDiv').attr('hidden', 'true')
+            .addClass('span6 transparent infoWindow').append(getMarkerEditContent());
+        var mapControls = map.map.controls[google.maps.ControlPosition.TOP_RIGHT];
+
+        map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(div.get(0));
+    }
+
     function createInfoBoxForMarkers() {
         var boxText = document.createElement("div");
         boxText.id = 'infoBox';
@@ -89,10 +99,11 @@ $(document).ready(function(){
         var infoOptions = {
             content: boxText,
             boxClass: "span5 transparent infoWindow",
+            disableAutoPan: false,
             isHidden: true,
             pane: "floatPane",
             infoBoxClearance: new google.maps.Size(50, 50),
-            maxWidth: 300,
+            maxWidth: 500,
             pixelOffset: new google.maps.Size(0, -150),
             enableEventPropagation: false
         };
@@ -101,7 +112,31 @@ $(document).ready(function(){
         return infoBox;
     }
 
+    function createMarkerWithInfoBoxForLocation(location, infoBox) {
+
+        var pos = getLatLngFromText(location.geoLocation);
+
+        var marker = map.addMarker({
+            lat: pos.lat(),
+            lng: pos.lng(),
+            title: location.title,
+            click: function() {
+
+                if( !isEditMarkerFormActive() ) {
+                    infoBox.open(map.map, marker);
+                    infoBox.show();
+
+                    google.maps.event.addListener(infoBox, 'domready', function() {
+                        setInfoBoxContentFromLocation(location);
+                        initInfoBoxButtonsBehavior(location, infoBox);
+                    });
+                }
+            }
+        });
+    }
+
     function setInfoBoxContentFromLocation(location) {
+
         $('#info_title').text(location.title);
         $('#info_type').text(location.type);
         $('#info_description').text(location.description);
@@ -109,13 +144,56 @@ $(document).ready(function(){
         $('#info_address').text(location.address);
         $('#info_actualDate').text(location.actualDate);
 
-        $('#editMarkerButton').click(function(){
-            $('#infoContent').replaceWith(getMarkerEditContent());
+    }
 
-            $('#title').focus();
-            initDatePicker();
-            initSwitch();
+    function initInfoBoxButtonsBehavior(location, infoBox) {
+
+        initScrollInfoBoxBehavior();
+        initToggleEditAndViewBehavior(location, infoBox);
+    }
+
+    function initScrollInfoBoxBehavior() {
+        //https://code.google.com/p/google-maps-utility-library-v3/issues/detail?id=19#c8
+        //this is for scrolling into the InfoBox
+        $('#infoBox').on('mouseenter', function() {
+            map.setOptions({draggable:false, scrollwheel:false});
         });
+        $('#infoBox').on('mouseleave', function() {
+            map.setOptions({draggable:true, scrollwheel:true});
+        });
+        //end of scrolling
+    }
+
+    function isEditMarkerFormActive() {
+        if( $('#editMarkerFormDiv').is(':visible') ) {
+              return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function initToggleEditAndViewBehavior(location, infoBox) {
+
+        $('#editMarkerButton').click(function(){
+
+            map.map.setCenter( infoBox.getPosition() );
+            infoBox.hide();
+
+            $('#cancelEdit').click(function() {
+                $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+            });
+
+            $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
+                initEditFormFocus();
+                initDatePicker();
+                initSwitch();
+            });
+        });
+    }
+
+    function initEditFormFocus() {
+        $('#title').focus();
     }
 
     function initDatePicker() {
@@ -129,36 +207,12 @@ $(document).ready(function(){
 
     function initSwitch() {
 
-        $('#createAddressSwitch').wrap('<div class="switch" />').parent().bootstrapSwitch();
-
-        $('#addressSwitch').on('switch-change', function (e, data) {
-
-            var active = $('#addressSwitch').bootstrapSwitch('status');
-
-            if( active === true  ) {
+        $('#createAddressSwitch').click(function(){
+            if($(this).parent().find('input').is(':checked')) {
                 $('#realAddress').show(EFFECTS_TIME);
             }
-            else if(active === false) {
+            else {
                 $('#realAddress').hide(EFFECTS_TIME);
-            }
-        });
-    }
-
-    function createMarkerWithInfoBoxForLocation(location, infoBox) {
-
-        var pos = getLatLngFromText(location.geoLocation);
-
-        var marker = map.addMarker({
-            lat: pos.lat(),
-            lng: pos.lng(),
-            title: location.title,
-            click: function() {
-                infoBox.open(map.map, marker);
-                infoBox.show();
-
-                google.maps.event.addListener(infoBox, 'domready', function() {
-                    setInfoBoxContentFromLocation(location);
-                });
             }
         });
     }
@@ -202,7 +256,7 @@ $(document).ready(function(){
                                     .append(
                                         $('<div/>').addClass('media-body')
                                             .append(
-                                                $('<span/>').addClass('label label-info').text('Адрес:')
+                                                $('<span/>').addClass('label label-info').text('Адрес')
                                             )
                                             .append(
                                                 $('<span/>').attr('id','info_addressDescription')
@@ -212,7 +266,7 @@ $(document).ready(function(){
                                     .append(
                                         $('<div/>').addClass('media-body')
                                             .append(
-                                                $('<span/>').addClass('label').text('Реальный адрес:')
+                                                $('<span/>').addClass('label').text('Реальный адрес')
                                             )
                                             .append(
                                                 $('<span/>').attr('id', 'info_address').addClass('spacer5')
@@ -222,7 +276,7 @@ $(document).ready(function(){
                                     .append(
                                         $('<div/>').addClass('media-body')
                                             .append(
-                                                $('<span/>').addClass('label').text('Дата проверки:')
+                                                $('<span/>').addClass('label').text('Дата проверки')
                                             )
                                             .append(
                                                 $('<span/>').attr('id', 'info_actualDate').addClass('spacer5')
@@ -310,7 +364,8 @@ $(document).ready(function(){
     }
 
     function getMarkerEditContent() {
-        var res = $('<form/>').addClass('form-horizontal')
+
+        var res = $('<form/>').attr('id', 'editMarkerForm').addClass('form-horizontal scrollable')
             .append(
                 $('<legend/>').text('Создание точки')
             )
@@ -322,7 +377,7 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span3').attr('id', 'title')
+                                $('<input/>').addClass('input-block-level span4').attr('id', 'title')
                                     .attr('placeholder', 'Чебуречная Ашота')
                             )
                     )
@@ -335,7 +390,7 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span3').attr('id', 'description')
+                                $('<input/>').addClass('input-block-level span4').attr('id', 'description')
                                     .attr('placeholder', 'Самые лучшие чебуреки и шаурма в городе!')
                             )
                     )
@@ -409,7 +464,7 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span3').attr('id', 'addressDescription')
+                                $('<input/>').addClass('input-block-level span4').attr('id', 'addressDescription')
                                     .attr('placeholder', 'Выходите с электрички и спускаетесь под мост')
                             )
                     )
@@ -422,7 +477,7 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span3').attr('id', 'latitude')
+                                $('<input/>').addClass('input-block-level span4').attr('id', 'latitude')
                                     .attr('hidden', 'true')
                             )
                     )
@@ -435,7 +490,7 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span3').attr('id', 'longitude')
+                                $('<input/>').addClass('input-block-level span4').attr('id', 'longitude')
 
                             )
                     )
@@ -475,7 +530,6 @@ $(document).ready(function(){
                             $('<div/>').addClass('controls')
                                 .append(
                                     $('<div/>').addClass('switch').attr('id', 'addressSwitch')
-                                        .attr('data-on-label', 'Да').attr('data-off-label', 'Нет')
                                         .append(
                                             $('<input/>').attr('type', 'checkbox').attr('id','createAddressSwitch')
                                         )
@@ -492,7 +546,7 @@ $(document).ready(function(){
                                 .append(
                                     $('<div/>').addClass('controls')
                                         .append(
-                                            $('<input/>').addClass('input-block-level span3').attr('id', 'country')
+                                            $('<input/>').addClass('input-block-level span4').attr('id', 'country')
 
                                         )
                                 )
@@ -505,7 +559,7 @@ $(document).ready(function(){
                                 .append(
                                     $('<div/>').addClass('controls')
                                         .append(
-                                            $('<input/>').addClass('input-block-level span3').attr('id', 'region')
+                                            $('<input/>').addClass('input-block-level span4').attr('id', 'region')
 
                                         )
                                 )
@@ -518,7 +572,7 @@ $(document).ready(function(){
                                 .append(
                                     $('<div/>').addClass('controls')
                                         .append(
-                                            $('<input/>').addClass('input-block-level span3').attr('id', 'city')
+                                            $('<input/>').addClass('input-block-level span4').attr('id', 'city')
 
                                         )
                                 )
@@ -531,7 +585,7 @@ $(document).ready(function(){
                                 .append(
                                     $('<div/>').addClass('controls')
                                         .append(
-                                            $('<input/>').addClass('input-block-level span3').attr('id', 'address')
+                                            $('<input/>').addClass('input-block-level span4').attr('id', 'address')
 
                                         )
                                 )
@@ -544,7 +598,7 @@ $(document).ready(function(){
                                 .append(
                                     $('<div/>').addClass('controls')
                                         .append(
-                                            $('<input/>').addClass('input-block-level span3').attr('id', 'zipcode')
+                                            $('<input/>').addClass('input-block-level span4').attr('id', 'zipcode')
 
                                         )
                                 )

@@ -10,19 +10,17 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Дешевая еда</title>
+    <title>Cheat food</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap -->
     <link href="<s:url value="/resources" />/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css"/>
     <link href="<s:url value="/resources" />/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
-    <link href="<s:url value="/resources" />/css/bootstrapSwitch.css" rel="stylesheet" type="text/css"/>
     <link href="<s:url value="/resources" />/css/style.css" rel="stylesheet" type="text/css"/>
 
 
     <script src="<s:url value="/resources"/>/js/jquery-1.10.1.min.js"></script>
     <script src="<s:url value="/resources"/>/js/bootstrap.min.js"></script>
-    <script src="<s:url value="/resources"/>/js/bootstrapSwitch.min.js"></script>
 
     <script src="<s:url value="/resources"/>/js/bootstrap-datepicker.js"></script>
     <script src="<s:url value="/resources"/>/js/bootstrap-datepicker.ru.js" charset="UTF-8"></script>

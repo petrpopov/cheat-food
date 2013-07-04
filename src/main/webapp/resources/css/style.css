@@ -25,11 +25,17 @@ img { max-width: inherit; }
     opacity: 0.95;
 }
 
+.scrollable {
+    height: 600px;
+    max-height: 800px;
+    overflow: auto;
+}
+
 .infoWindow {
     background-color: #fafafa;
     border: 1px solid #d4d4d4;
     padding: 25px;
-    min-with: 300px;
+    min-with: 360px;
 
 
     background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
