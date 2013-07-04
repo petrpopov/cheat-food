@@ -16,12 +16,18 @@
     <!-- Bootstrap -->
     <link href="<s:url value="/resources" />/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css"/>
     <link href="<s:url value="/resources" />/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
+    <link href="<s:url value="/resources" />/css/bootstrapSwitch.css" rel="stylesheet" type="text/css"/>
     <link href="<s:url value="/resources" />/css/style.css" rel="stylesheet" type="text/css"/>
+
 
     <script src="<s:url value="/resources"/>/js/jquery-1.10.1.min.js"></script>
     <script src="<s:url value="/resources"/>/js/bootstrap.min.js"></script>
+    <script src="<s:url value="/resources"/>/js/bootstrapSwitch.min.js"></script>
 
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=EN"></script>
+    <script src="<s:url value="/resources"/>/js/bootstrap-datepicker.js"></script>
+    <script src="<s:url value="/resources"/>/js/bootstrap-datepicker.ru.js" charset="UTF-8"></script>
+
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script>
     <!--script src="https://www.google.com/jsapi?sensor=true&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script-->
 
     <script type="text/javascript" src="<s:url value="/resources"/>/js/markerclusterer.min.js"></script>
@@ -45,9 +51,10 @@
             </a>
 
             <!-- Be sure to leave the brand out there if you want it shown -->
-            <a class="brand" href="<c:url value="/"/>">Дешевая еда</a>
+            <a class="brand" href="<c:url value="/"/>">Cheat food</a>
             <ul class="nav">
                 <li><a href="#">Манифест</a></li>
+                <li><a href="#">Пользователям</a></li>
             </ul>
 
             <!-- Everything you want hidden at 940px or less, place within here -->
@@ -63,14 +70,6 @@
 </div>
 
 <div id="map"></div>
-
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12">
-
-        </div>
-    </div>
-</div>
 
 
 <div class="navbar navbar-fixed-bottom">

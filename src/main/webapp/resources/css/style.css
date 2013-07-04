@@ -8,7 +8,7 @@ body { height: 100%; margin: 0px; padding: 0px }
 #map {
     display: block;
     width: 100%;
-    height: 95%;
+    height: 92%;
 }
 
 /* this is for strange maps render problem */
