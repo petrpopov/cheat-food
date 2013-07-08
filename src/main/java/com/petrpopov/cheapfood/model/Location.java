@@ -1,8 +1,13 @@
 package com.petrpopov.cheapfood.model;
 
+import com.petrpopov.cheapfood.config.DateSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -16,20 +21,40 @@ public class Location {
 
     @Id
     private String id;
+
+    @NotNull
+    @NotEmpty
     private String title;
+
+    @NotNull
+    @NotEmpty
     private String description;
+
+    @NotNull
+    @NotEmpty
     private String addressDescription;
+
     private Address address;
+
+    @Valid
     private GeoLocation geoLocation;
+
+    @NotNull
     private Date actualDate;
+
     private String creatorId;
-    private boolean footype;
+
+    @NotNull
+    private Boolean footype;
+
+    @NotNull
+    @NotEmpty
     private String type;
 
     public Location() {
     }
 
-    public Location(String id, String title, String description, String addressDescription, Address address, GeoLocation geoLocation, Date actualDate, String creatorId, boolean footype, String type) {
+    public Location(String id, String title, String description, String addressDescription, Address address, GeoLocation geoLocation, Date actualDate, String creatorId, Boolean footype, String type) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -90,6 +115,7 @@ public class Location {
         this.geoLocation = geoLocation;
     }
 
+    @JsonSerialize(using = DateSerializer.class)
     public Date getActualDate() {
         return actualDate;
     }
@@ -106,11 +132,11 @@ public class Location {
         this.creatorId = creatorId;
     }
 
-    public boolean isFootype() {
+    public Boolean getFootype() {
         return footype;
     }
 
-    public void setFootype(boolean footype) {
+    public void setFootype(Boolean footype) {
         this.footype = footype;
     }
 

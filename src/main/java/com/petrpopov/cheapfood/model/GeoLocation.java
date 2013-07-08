@@ -1,5 +1,9 @@
 package com.petrpopov.cheapfood.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * User: petrpopov
  * Date: 02.07.13
@@ -7,7 +11,12 @@ package com.petrpopov.cheapfood.model;
  */
 public class GeoLocation {
 
+    @NotNull
+    @NotEmpty
     private String latitude;
+
+    @NotNull
+    @NotEmpty
     private String longitude;
 
     public GeoLocation() {

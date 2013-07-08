@@ -8,6 +8,9 @@ $(document).ready(function(){
 
     var TYPE_IMAGE_WIDTH = 128;
     var EFFECTS_TIME = 250;
+    var DATE_FORMAT = 'yy-mm-dd';
+    var DATE_FORMAT_DISPLAY = 'dd/mm/yy';
+    var DATE_LANGUAGE = 'ru';
 
 
     init();
@@ -86,8 +89,8 @@ $(document).ready(function(){
     function createMarkerEditFormOnMap() {
         var div = $('<div/>').attr('id','editMarkerFormDiv').attr('hidden', 'true')
             .addClass('span6 transparent infoWindow').append(getMarkerEditContent());
-        var mapControls = map.map.controls[google.maps.ControlPosition.TOP_RIGHT];
 
+        var mapControls = map.map.controls[google.maps.ControlPosition.TOP_RIGHT];
         map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(div.get(0));
     }
 
@@ -180,29 +183,169 @@ $(document).ready(function(){
             map.map.setCenter( infoBox.getPosition() );
             infoBox.hide();
 
-            $('#cancelEdit').click(function() {
-                $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
-            });
-
             $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
+                initEditFormValidation();
+                initEditFormWithData(location);
                 initEditFormFocus();
                 initDatePicker();
                 initSwitch();
             });
+
+            $('#cancelEdit').click(function() {
+                $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+            });
+
+            $('#submitEdit').click( function() {
+                $('#submitEdit').button('loading');
+                checkEditFormValidOrNot(infoBox);
+            });
         });
+    }
+
+    function checkEditFormValidOrNot(infoBox) {
+
+        if( $("#editMarkerForm").valid() ) {
+            submitEditForm(infoBox);
+        }
+        else {
+            $('#submitEdit').button('reset');
+        }
+    }
+
+    function submitEditForm(infoBox) {
+
+        var id = $('#location-id').val();
+        var title = $('#title').val();
+        var description = $('#description').val();
+        var type = $('#type').val();
+        var footype = $("#editMarkerForm input[type='radio']:checked").val();
+        var addressDescription = $('#addressDescription').val();
+        var actualDate = $('#actualDate').datepicker('getDate');
+        var latitude = $('#latitude').val();
+        var longitude = $('#longitude').val();
+        var country = $('#country').val();
+        var region = $('#region').val();
+        var city = $('#city').val();
+        var street = $('#street').val();
+        var zipcode = $('#zipcode').val();
+
+        var param = {
+            id: id,
+            title: title,
+            description: description,
+            type: type,
+            footype: footype,
+            addressDescription: addressDescription,
+            actualDate: actualDate,
+            geoLocation: {
+                latitude: latitude,
+                longitude: longitude
+            },
+            address: {
+                country: country,
+                region: region,
+                city: city,
+                street: street,
+                zipcode: zipcode
+            }
+        };
+
+        param = JSON.stringify(param);
+
+        $.ajax({
+            type: "POST",
+            url: 'api/location',
+            data: param = param,
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+                //console.log(data);
+            },
+            complete: function(data) {
+                $('#submitEdit').button('reset');
+                $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+                infoBox.show();
+                // console.log('Done');
+            },
+            statusCode: {
+                400: function(data) {
+
+                }
+            }
+        });
+    }
+
+    function initEditFormValidation() {
+        $("#editMarkerForm").validate({
+            rules : {
+                title: "required",
+                description: "required",
+                type: "required",
+                addressDescription: "required",
+                actualDate: "required",
+                latitude: "required",
+                longitude: "required"
+            },
+            success: function() {
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
+            }
+        });
+    }
+
+    function initEditFormWithData(location) {
+
+        //main fields
+        $('#location-id').val( location.id );
+        $('#title').val( location.title );
+        $('#description').val( location.description );
+        $('#addressDescription').val( location.addressDescription );
+
+        initDatePicker(location.actualDate);
+
+        //types
+        $("#type").val(location.type);
+        if( location.footype === true ) {
+            $('input:radio[name="footypeRadio"]').filter('[value="true"]').attr('checked', true);
+        }
+        else {
+            $('input:radio[name="footypeRadio"]').filter('[value="false"]').attr('checked', true);
+        }
+
+        //hidden fields
+        $('#latitude').val( location.geoLocation.latitude );
+        $('#longitude').val( location.geoLocation.longitude );
+
+        //unnecessary fields
+        if( location.address ) {
+            $('#country').val( location.address.country );
+            $('#region').val( location.address.region );
+            $('#city').val( location.address.city );
+            $('#street').val( location.address.street );
+            $('#zipcode').val( location.address.zipcode );
+        }
     }
 
     function initEditFormFocus() {
         $('#title').focus();
     }
 
-    function initDatePicker() {
-        $('.datepicker').datepicker({
-            language: 'ru'
-        });
-        $('.datepicker').datepicker().on('changeDate', function(e){
-            $('.datepicker').datepicker('hide');
-        });
+    function initDatePicker(date) {
+
+        $.datepicker.setDefaults(
+            $.datepicker.regional[DATE_LANGUAGE]
+        );
+        $('#actualDate').datepicker({ dateFormat: DATE_FORMAT_DISPLAY });
+
+        if( date ) {
+            var parseDate = $.datepicker.parseDate( DATE_FORMAT, date );
+            $('#actualDate').datepicker('setDate', parseDate );
+        }
     }
 
     function initSwitch() {
@@ -366,8 +509,21 @@ $(document).ready(function(){
     function getMarkerEditContent() {
 
         var res = $('<form/>').attr('id', 'editMarkerForm').addClass('form-horizontal scrollable')
+            .attr('autocomplete', 'off')
             .append(
                 $('<legend/>').text('Создание точки')
+            )
+            .append(
+                $('<div/>').addClass('control-group').attr('hidden', 'true')
+                    .append(
+                        $('<label/>').addClass('control-label').attr('for','location-id').text('id')
+                    )
+                    .append(
+                        $('<div/>').addClass('controls')
+                            .append(
+                                $('<input/>').addClass('input-block-level span4').attr('id', 'location-id')
+                            )
+                    )
             )
             .append(
                 $('<div/>').addClass('control-group')
@@ -377,8 +533,9 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span4').attr('id', 'title')
-                                    .attr('placeholder', 'Чебуречная Ашота')
+                                $('<input/>').addClass('input-block-level span4')
+                                    .attr('id', 'title').attr('name', 'title')
+                                    .attr('placeholder', 'Чебуречная Ашота').attr('required', 'true')
                             )
                     )
             )
@@ -390,8 +547,10 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span4').attr('id', 'description')
+                                $('<input/>').addClass('input-block-level span4')
+                                    .attr('id', 'description').attr('name', 'description')
                                     .attr('placeholder', 'Самые лучшие чебуреки и шаурма в городе!')
+                                    .attr('required', 'true')
                             )
                     )
             )
@@ -403,7 +562,7 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<select/>').attr('id', 'type')
+                                $('<select/>').attr('id', 'type').attr('name', 'type')
                                     .append(
                                         $('<option/>').text('Шаверменная')
                                     )
@@ -435,7 +594,7 @@ $(document).ready(function(){
                             .append(
                                 $('<label/>').addClass('radio')
                                     .append(
-                                        $('<input/>').attr('id', 'footype1').attr('name', 'optionsRadios')
+                                        $('<input/>').attr('id', 'footype1').attr('name', 'footypeRadio')
                                             .attr('type', 'radio')
                                             .attr('value', 'true').attr('checked', 'true')
                                     )
@@ -446,7 +605,7 @@ $(document).ready(function(){
                             .append(
                                 $('<label/>').addClass('radio')
                                     .append(
-                                        $('<input/>').attr('id', 'footype2').attr('name', 'optionsRadios')
+                                        $('<input/>').attr('id', 'footype2').attr('name', 'footypeRadio')
                                             .attr('type', 'radio')
                                             .attr('value', 'false')
                                     )
@@ -464,8 +623,10 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span4').attr('id', 'addressDescription')
+                                $('<input/>').addClass('input-block-level span4')
+                                    .attr('id', 'addressDescription').attr('name', 'addressDescription')
                                     .attr('placeholder', 'Выходите с электрички и спускаетесь под мост')
+                                    .attr('required', 'true')
                             )
                     )
             )
@@ -477,8 +638,9 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span4').attr('id', 'latitude')
-                                    .attr('hidden', 'true')
+                                $('<input/>').addClass('input-block-level span4')
+                                    .attr('id', 'latitude').attr('name', 'latitude')
+                                    .attr('hidden', 'true').attr('required', 'true')
                             )
                     )
             )
@@ -490,8 +652,9 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span4').attr('id', 'longitude')
-
+                                $('<input/>').addClass('input-block-level span4')
+                                    .attr('id', 'longitude').attr('name', 'longitude')
+                                    .attr('required', 'true')
                             )
                     )
                 )
@@ -503,18 +666,8 @@ $(document).ready(function(){
                         .append(
                             $('<div/>').addClass('controls')
                                 .append(
-                                    $('<div/>').addClass('input-append date datepicker')
-                                        .attr('data-date', '13-07-2013').attr('data-date-format', 'dd-mm-yyyy')
-                                        .append(
-                                            $('<input/>').attr('id', 'actualDate').attr('type', 'text')
-                                                .attr('value', '13-07-2013')
-                                        )
-                                        .append(
-                                            $('<span/>').addClass('add-on')
-                                                .append(
-                                                    $('<i/>').addClass('icon-th')
-                                                )
-                                        )
+                                    $('<input/>').attr('id', 'actualDate').addClass('input-block-level span4')
+                                        .attr('type', 'text').attr('name', 'actualDate')
                                 )
                         )
             )
@@ -524,14 +677,14 @@ $(document).ready(function(){
                 .append(
                     $('<div/>').addClass('control-group')
                         .append(
-                            $('<label/>').addClass('control-label').attr('for', 'addressSwitch').text('Знаете реальный адрес?')
-                        )
-                        .append(
                             $('<div/>').addClass('controls')
                                 .append(
-                                    $('<div/>').addClass('switch').attr('id', 'addressSwitch')
+                                    $('<label/>').addClass("checkbox inline")
                                         .append(
                                             $('<input/>').attr('type', 'checkbox').attr('id','createAddressSwitch')
+                                        )
+                                        .append(
+                                            $('<span/>').text('Знаете реальный адрес?')
                                         )
                                 )
                         )
@@ -546,7 +699,8 @@ $(document).ready(function(){
                                 .append(
                                     $('<div/>').addClass('controls')
                                         .append(
-                                            $('<input/>').addClass('input-block-level span4').attr('id', 'country')
+                                            $('<input/>').addClass('input-block-level span4')
+                                                .attr('id', 'country').attr('name', 'country')
 
                                         )
                                 )
@@ -559,7 +713,8 @@ $(document).ready(function(){
                                 .append(
                                     $('<div/>').addClass('controls')
                                         .append(
-                                            $('<input/>').addClass('input-block-level span4').attr('id', 'region')
+                                            $('<input/>').addClass('input-block-level span4')
+                                                .attr('id', 'region').attr('name', 'region')
 
                                         )
                                 )
@@ -572,7 +727,8 @@ $(document).ready(function(){
                                 .append(
                                     $('<div/>').addClass('controls')
                                         .append(
-                                            $('<input/>').addClass('input-block-level span4').attr('id', 'city')
+                                            $('<input/>').addClass('input-block-level span4')
+                                                .attr('id', 'city').attr('name', 'city')
 
                                         )
                                 )
@@ -580,12 +736,13 @@ $(document).ready(function(){
                         .append(
                             $('<div/>').addClass('control-group')
                                 .append(
-                                    $('<label/>').addClass('control-label').attr('for','address').text('Улица, дом итд')
+                                    $('<label/>').addClass('control-label').attr('for','street').text('Улица, дом итд')
                                 )
                                 .append(
                                     $('<div/>').addClass('controls')
                                         .append(
-                                            $('<input/>').addClass('input-block-level span4').attr('id', 'address')
+                                            $('<input/>').addClass('input-block-level span4')
+                                                .attr('id', 'street').attr('name', 'street')
 
                                         )
                                 )
@@ -598,7 +755,8 @@ $(document).ready(function(){
                                 .append(
                                     $('<div/>').addClass('controls')
                                         .append(
-                                            $('<input/>').addClass('input-block-level span4').attr('id', 'zipcode')
+                                            $('<input/>').addClass('input-block-level span4')
+                                                .attr('id', 'zipcode').attr('name', 'zipcode')
 
                                         )
                                 )
@@ -608,6 +766,7 @@ $(document).ready(function(){
                 $('<div/>').addClass('form-actions')
                     .append(
                         $('<button/>').attr('id','submitEdit').attr('type', 'button').addClass('btn btn-primary')
+                            .attr('data-loading-text', 'Сохраняем...')
                             .text('Сохранить точку')
                     )
                     .append(

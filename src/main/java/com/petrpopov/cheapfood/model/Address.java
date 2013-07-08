@@ -11,17 +11,17 @@ public class Address {
     private String country;
     private String region;
     private String city;
-    private String address;
+    private String street;
 
     public Address() {
     }
 
-    public Address(String zipcode, String country, String region, String city, String address) {
+    public Address(String zipcode, String country, String region, String city, String street) {
         this.zipcode = zipcode;
         this.country = country;
         this.region = region;
         this.city = city;
-        this.address = address;
+        this.street = street;
     }
 
     public String getZipcode() {
@@ -56,12 +56,12 @@ public class Address {
         this.city = city;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     @Override
@@ -69,13 +69,13 @@ public class Address {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Address address1 = (Address) o;
+        Address address = (Address) o;
 
-        if (address != null ? !address.equals(address1.address) : address1.address != null) return false;
-        if (city != null ? !city.equals(address1.city) : address1.city != null) return false;
-        if (country != null ? !country.equals(address1.country) : address1.country != null) return false;
-        if (region != null ? !region.equals(address1.region) : address1.region != null) return false;
-        if (zipcode != null ? !zipcode.equals(address1.zipcode) : address1.zipcode != null) return false;
+        if (city != null ? !city.equals(address.city) : address.city != null) return false;
+        if (country != null ? !country.equals(address.country) : address.country != null) return false;
+        if (region != null ? !region.equals(address.region) : address.region != null) return false;
+        if (street != null ? !street.equals(address.street) : address.street != null) return false;
+        if (zipcode != null ? !zipcode.equals(address.zipcode) : address.zipcode != null) return false;
 
         return true;
     }
@@ -86,7 +86,7 @@ public class Address {
         result = 31 * result + (country != null ? country.hashCode() : 0);
         result = 31 * result + (region != null ? region.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
-        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (street != null ? street.hashCode() : 0);
         return result;
     }
 }

@@ -17,13 +17,20 @@
     <link href="<s:url value="/resources" />/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css"/>
     <link href="<s:url value="/resources" />/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
     <link href="<s:url value="/resources" />/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="<s:url value="/resources" />/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
 
 
     <script src="<s:url value="/resources"/>/js/jquery-1.10.1.min.js"></script>
     <script src="<s:url value="/resources"/>/js/bootstrap.min.js"></script>
 
-    <script src="<s:url value="/resources"/>/js/bootstrap-datepicker.js"></script>
-    <script src="<s:url value="/resources"/>/js/bootstrap-datepicker.ru.js" charset="UTF-8"></script>
+    <script src="<s:url value="/resources"/>/js/jquery.validate.min.js"></script>
+    <script src="<s:url value="/resources"/>/js/validation.messages_ru.js"></script>
+
+    <script src="<s:url value="/resources"/>/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="<s:url value="/resources"/>/js/jquery-ui.datepicker.ru.js"></script>
+
+    <!--script src="<s:url value="/resources"/>/js/bootstrap-datepicker.js"></script>
+    <script src="<s:url value="/resources"/>/js/bootstrap-datepicker.ru.js" charset="UTF-8"></script-->
 
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script>
     <!--script src="https://www.google.com/jsapi?sensor=true&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script-->
