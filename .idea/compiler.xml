@@ -23,6 +23,7 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="cheap-food" />
+        <module name="cheatfood" />
       </profile>
     </annotationProcessing>
   </component>
