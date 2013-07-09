@@ -3,14 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="d3c17744-07db-495c-8d73-b4d20484b32d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" afterPath="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/resources/css/style.css" afterPath="$PROJECT_DIR$/src/main/webapp/resources/css/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cheap-food.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373358045419" ignored="false" />
     <file path="/index.jsp" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373308014060" ignored="false" />
-    <file path="/Dummy.txt" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373397669074" ignored="false" />
+    <file path="/Dummy.txt" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373409437967" ignored="false" />
     <file path="/cheapfood.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373307491550" ignored="false" />
     <file path="/gmaps.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1372714264491" ignored="false" />
     <file path="/style.css" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373409248878" ignored="false" />
@@ -43,7 +42,7 @@
     <file path="/JSONMapper.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373283456970" ignored="false" />
     <file path="/CustomMapper.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373283393790" ignored="false" />
     <file path="/DateSerializer.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373283537480" ignored="false" />
-    <file path="/cheatfood.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373408470432" ignored="false" />
+    <file path="/cheatfood.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373411690785" ignored="false" />
     <file path="/rebel.xml" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373357697773" ignored="false" />
     <file path="/ParamsWebService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373362756447" ignored="false" />
     <file path="/test.html" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373407786785" ignored="false" />
@@ -98,23 +97,6 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheapfood/web/LocationWebService.java" line="40" class="com.petrpopov.cheapfood.web.LocationWebService" package="com.petrpopov.cheapfood.web">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="REMOVE_AFTER_HIT" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-    </line_breakpoints>
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -136,7 +118,7 @@
       <file leaf-file-name="LocationWebService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheapfood/web/LocationWebService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="47" selection-start="1302" selection-end="1302" vertical-scroll-proportion="0.0">
+            <state line="40" column="0" selection-start="1255" selection-end="1255" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -145,7 +127,7 @@
       <file leaf-file-name="cheatfood.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="140" column="47" selection-start="3942" selection-end="3942" vertical-scroll-proportion="0.4442083">
+            <state line="260" column="8" selection-start="7567" selection-end="7567" vertical-scroll-proportion="0.35175344">
               <folding />
             </state>
           </provider>
@@ -154,7 +136,7 @@
       <file leaf-file-name="style.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="62" column="13" selection-start="1590" selection-end="1590" vertical-scroll-proportion="0.0">
+            <state line="55" column="16" selection-start="1475" selection-end="1490" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -174,7 +156,7 @@
       <file leaf-file-name="LocationService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheapfood/service/LocationService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="52" column="12" selection-start="1423" selection-end="1423" vertical-scroll-proportion="0.0">
+            <state line="36" column="0" selection-start="1024" selection-end="1024" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -852,7 +834,11 @@
       <created>1373397671691</created>
       <updated>1373397671691</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="issue #3 nice arrow fo InfoBox from http://cssarrowplease.com/">
+      <created>1373409441762</created>
+      <updated>1373409441762</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -900,7 +886,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.6700611" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296146" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.5407332" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.67107946" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.47142857" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -951,7 +937,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="issue #3 issue #9&#10;new validation rules, submit form on enter, create marker on context menu working" />
+    <option name="LAST_COMMIT_MESSAGE" value="issue #3 nice arrow fo InfoBox from http://cssarrowplease.com/" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -973,6 +959,7 @@
     <MESSAGE value="fixed issue #8 JRebel" />
     <MESSAGE value="fixed issue #3" />
     <MESSAGE value="issue #3 issue #9&#10;new validation rules, submit form on enter, create marker on context menu working" />
+    <MESSAGE value="issue #3 nice arrow fo InfoBox from http://cssarrowplease.com/" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1043,23 +1030,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheapfood/web/LocationWebService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="47" selection-start="1302" selection-end="1302" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-mongodb/1.0.4.RELEASE/spring-data-mongodb-1.0.4.RELEASE-sources.jar!/org/springframework/data/mongodb/core/MongoOperations.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="623" column="9" selection-start="27286" selection-end="27286" vertical-scroll-proportion="0.33962265">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheapfood/service/LocationService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="12" selection-start="1423" selection-end="1423" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1073,14 +1046,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/css/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="13" selection-start="1590" selection-end="1590" vertical-scroll-proportion="0.0">
+        <state line="55" column="16" selection-start="1475" selection-end="1490" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheapfood/web/LocationWebService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="0" selection-start="1255" selection-end="1255" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheapfood/service/LocationService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="0" selection-start="1024" selection-end="1024" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="140" column="47" selection-start="3942" selection-end="3942" vertical-scroll-proportion="0.4442083">
+        <state line="260" column="8" selection-start="7567" selection-end="7567" vertical-scroll-proportion="0.35175344">
           <folding />
         </state>
       </provider>

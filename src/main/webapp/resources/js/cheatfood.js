@@ -253,10 +253,11 @@ $(document).ready(function(){
             infoBoxObject.infoBox.show();
         });
 
-
-        $('#submitEdit').click( function() {
+        $('#editMarkerForm').submit(function(){
             submitEditForm(infoBoxObject);
+            return false;
         });
+
 
         $("#editMarkerForm :input").keypress(function(e) {
             if(e.which === ENTER_KEY) {
@@ -270,18 +271,17 @@ $(document).ready(function(){
     }
 
     function checkEditFormValidOrNot(infoBoxObject) {
-
         $('#submitEdit').button('loading');
 
         if( $("#editMarkerForm").valid() ) {
-            submitEditForm(infoBoxObject);
+            submitEditFormPost(infoBoxObject);
         }
         else {
             $('#submitEdit').button('reset');
         }
     }
 
-    function submitEditForm(infoBoxObject) {
+    function submitEditFormPost(infoBoxObject) {
 
         var id = $('#location-id').val();
         var title = $('#title').val();
@@ -600,7 +600,7 @@ $(document).ready(function(){
 
     function getMarkerEditContent() {
 
-        var res = $('<form/>').attr('id', 'editMarkerForm').addClass('form-horizontal scrollable')
+        var res = $('<form/>').attr('id', 'editMarkerForm').addClass('infoWindowInner form-horizontal scrollable')
             .attr('autocomplete', 'off')
             .append(
                 $('<legend/>').text('Создание точки')
@@ -839,7 +839,7 @@ $(document).ready(function(){
             .append(
                 $('<div/>').addClass('form-actions')
                     .append(
-                        $('<button/>').attr('id','submitEdit').attr('type', 'button').addClass('btn btn-primary')
+                        $('<button/>').attr('id','submitEdit').attr('type', 'submit').addClass('btn btn-primary')
                             .attr('data-loading-text', 'Сохраняем...')
                             .text('Сохранить точку')
                     )
