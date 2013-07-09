@@ -16,7 +16,7 @@ import java.util.Date;
  * Time: 17:01
  */
 
-@Document
+@Document(collection = "location")
 public class Location {
 
     @Id

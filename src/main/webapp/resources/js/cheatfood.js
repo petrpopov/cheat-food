@@ -258,7 +258,6 @@ $(document).ready(function(){
             return false;
         });
 
-
         $("#editMarkerForm :input").keypress(function(e) {
             if(e.which === ENTER_KEY) {
                 $('#submitEdit').click();
