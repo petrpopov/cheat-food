@@ -34,9 +34,7 @@ img { max-width: inherit; }
 .infoWindow {
     background-color: #fafafa;
     border: 1px solid #d4d4d4;
-    padding: 25px;
-    min-with: 360px;
-
+    min-with: 410px;
 
     background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
@@ -53,4 +51,38 @@ img { max-width: inherit; }
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+}
+
+.infoWindowInner {
+    padding: 25px;
+}
+
+.arrow_box {
+    position: relative;
+    background: #fafafa;
+    border: 1px solid #d4d4d4;
+}
+.arrow_box:after, .arrow_box:before {
+    right: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.arrow_box:after {
+    border-color: rgba(250, 250, 250, 0);
+    border-right-color: #fafafa;
+    border-width: 30px;
+    top: 50%;
+    margin-top: -30px;
+}
+.arrow_box:before {
+    border-color: rgba(212, 212, 212, 0);
+    border-right-color: #d4d4d4;
+    border-width: 31px;
+    top: 50%;
+    margin-top: -31px;
 }

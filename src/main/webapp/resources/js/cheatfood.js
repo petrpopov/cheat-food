@@ -127,6 +127,7 @@ $(document).ready(function(){
 
         var boxText = document.createElement("div");
         boxText.id = 'infoBox';
+        boxText.className = "arrow_box infoWindowInner";
         boxText.innerHTML = getMarkerContentFromLocation();
 
         var infoOptions = {
@@ -137,7 +138,7 @@ $(document).ready(function(){
             pane: "floatPane",
             infoBoxClearance: new google.maps.Size(50, 50),
             maxWidth: 500,
-            pixelOffset: new google.maps.Size(0, -150),
+            pixelOffset: new google.maps.Size(8, -190),
             enableEventPropagation: false
         };
         var infoBox = new InfoBox(infoOptions);
