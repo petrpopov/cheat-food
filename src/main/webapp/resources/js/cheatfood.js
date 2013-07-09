@@ -4,25 +4,33 @@ $(document).ready(function(){
 
     var map;
     var moscowCenter = {lat: 55.764283, lng: 37.606614};
-    var ZOOM_LEVEL = 10;
+    var types = [];
 
+    var ZOOM_LEVEL = 10;
     var TYPE_IMAGE_WIDTH = 128;
     var EFFECTS_TIME = 250;
     var DATE_FORMAT = 'yy-mm-dd';
-    var DATE_FORMAT_DISPLAY = 'dd/mm/yy';
+    var DATE_FORMAT_DISPLAY = 'dd.mm.yy';
     var DATE_LANGUAGE = 'ru';
 
 
-    init();
+    loadParams();
+
+    function loadParams() {
+        $.get('api/types', function(data) {
+            types = data;
+            init();
+        });
+    }
 
     function init() {
+
         createMap();
         createContextMenuForMap();
         centerMapToLocation();
         createMarkersForLocations();
         createMarkerEditFormOnMap();
     }
-
 
     function createMap() {
         map = new GMaps({
@@ -129,30 +137,47 @@ $(document).ready(function(){
                     infoBox.open(map.map, marker);
                     infoBox.show();
 
+                    var infoBoxObject = {
+                        infoBox: infoBox,
+                        location: location
+                    };
+
                     google.maps.event.addListener(infoBox, 'domready', function() {
-                        setInfoBoxContentFromLocation(location);
-                        initInfoBoxButtonsBehavior(location, infoBox);
+                        setInfoBoxContentFromLocation(infoBoxObject);
+                        initInfoBoxButtonsBehavior(infoBoxObject);
                     });
                 }
             }
         });
     }
 
-    function setInfoBoxContentFromLocation(location) {
+    function setInfoBoxContentFromLocation(infoBoxObject) {
+
+        var location = infoBoxObject.location;
 
         $('#info_title').text(location.title);
         $('#info_type').text(location.type);
         $('#info_description').text(location.description);
         $('#info_addressDescription').text(location.addressDescription);
-        $('#info_address').text(location.address);
-        $('#info_actualDate').text(location.actualDate);
+
+        var address = addressToString(location.address);
+        if( stringIsNotEmpty(address) === true   ) {
+            $('#info_address').text(address);
+        }
+        else {
+            $('#info_address_body').hide();
+        }
+
+        var parseDate = $.datepicker.parseDate( DATE_FORMAT, location.actualDate );
+        var displayDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, parseDate );
+        $('#info_actualDate').text(displayDate);
 
     }
 
-    function initInfoBoxButtonsBehavior(location, infoBox) {
+    function initInfoBoxButtonsBehavior(infoBoxObject) {
 
         initScrollInfoBoxBehavior();
-        initToggleEditAndViewBehavior(location, infoBox);
+        initToggleEditAndViewBehavior(infoBoxObject);
     }
 
     function initScrollInfoBoxBehavior() {
@@ -176,16 +201,16 @@ $(document).ready(function(){
         }
     }
 
-    function initToggleEditAndViewBehavior(location, infoBox) {
+    function initToggleEditAndViewBehavior(infoBoxObject) {
 
         $('#editMarkerButton').click(function(){
 
-            map.map.setCenter( infoBox.getPosition() );
-            infoBox.hide();
+            map.map.setCenter( infoBoxObject.infoBox.getPosition() );
+            infoBoxObject.infoBox.hide();
 
             $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
                 initEditFormValidation();
-                initEditFormWithData(location);
+                initEditFormWithData(infoBoxObject);
                 initEditFormFocus();
                 initDatePicker();
                 initSwitch();
@@ -193,26 +218,28 @@ $(document).ready(function(){
 
             $('#cancelEdit').click(function() {
                 $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+                infoBoxObject.infoBox.show();
             });
 
             $('#submitEdit').click( function() {
-                $('#submitEdit').button('loading');
-                checkEditFormValidOrNot(infoBox);
+                checkEditFormValidOrNot(infoBoxObject);
             });
         });
     }
 
-    function checkEditFormValidOrNot(infoBox) {
+    function checkEditFormValidOrNot(infoBoxObject) {
+
+        $('#submitEdit').button('loading');
 
         if( $("#editMarkerForm").valid() ) {
-            submitEditForm(infoBox);
+            submitEditForm(infoBoxObject);
         }
         else {
             $('#submitEdit').button('reset');
         }
     }
 
-    function submitEditForm(infoBox) {
+    function submitEditForm(infoBoxObject) {
 
         var id = $('#location-id').val();
         var title = $('#title').val();
@@ -260,13 +287,16 @@ $(document).ready(function(){
             mimeType: 'application/json',
             dataType: 'json',
             success: function(data) {
-                //console.log(data);
             },
             complete: function(data) {
+                var newLocation = JSON.parse(data.responseText);
+                infoBoxObject.location = newLocation;
+
                 $('#submitEdit').button('reset');
                 $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
-                infoBox.show();
-                // console.log('Done');
+
+                infoBoxObject.infoBox.show();
+                setInfoBoxContentFromLocation(infoBoxObject);
             },
             statusCode: {
                 400: function(data) {
@@ -298,7 +328,9 @@ $(document).ready(function(){
         });
     }
 
-    function initEditFormWithData(location) {
+    function initEditFormWithData(infoBoxObject) {
+
+        var location = infoBoxObject.location;
 
         //main fields
         $('#location-id').val( location.id );
@@ -407,7 +439,7 @@ $(document).ready(function(){
                                             )
                                     )
                                     .append(
-                                        $('<div/>').addClass('media-body')
+                                        $('<div/>').addClass('media-body').attr("id", "info_address_body")
                                             .append(
                                                 $('<span/>').addClass('label').text('Реальный адрес')
                                             )
@@ -564,25 +596,7 @@ $(document).ready(function(){
                             .append(
                                 $('<select/>').attr('id', 'type').attr('name', 'type')
                                     .append(
-                                        $('<option/>').text('Шаверменная')
-                                    )
-                                    .append(
-                                        $('<option/>').text('Чебуречная')
-                                    )
-                                    .append(
-                                        $('<option/>').text('Шашлычная')
-                                    )
-                                    .append(
-                                        $('<option/>').text('Булочная')
-                                    )
-                                    .append(
-                                        $('<option/>').text('Столовая')
-                                    )
-                                    .append(
-                                        $('<option/>').text('Кафе')
-                                    )
-                                    .append(
-                                        $('<option/>').text('Другое')
+                                        getOptionsElementsForType()
                                     )
                             )
                     )
@@ -777,9 +791,55 @@ $(document).ready(function(){
         return res;
     }
 
+    function getOptionsElementsForType() {
+
+        var res = [];
+        for(var i = 0; i < types.length; i++) {
+            res.push($('<option/>').text(types[i]));
+        }
+        return res;
+    }
+
     ///  help functions
     function getLatLngFromText(geoLocation) {
         return new google.maps.LatLng( geoLocation.latitude, geoLocation.longitude );
+    }
+
+    function addressToString(address) {
+
+        var res = "";
+        if( stringIsNotEmpty(address.street) ) {
+            res += address.street;
+        }
+
+        if( stringIsNotEmpty(address.city) ) {
+            if( stringIsNotEmpty(res) ) {
+                res += ", ";
+            }
+            res += address.city;
+        }
+
+        if( stringIsNotEmpty(address.region) ) {
+            if( stringIsNotEmpty(res) ) {
+                res += ", ";
+            }
+            res += address.region;
+        }
+
+        return res;
+    }
+
+    function stringIsNotEmpty(str) {
+
+        if( str === "" ) {
+            return false;
+        }
+
+        if( str.length === 0 ) {
+            return false;
+        }
+
+        return true;
     }
 });
 
