@@ -5,7 +5,9 @@ $(document).ready(function(){
     var map;
     var moscowCenter = {lat: 55.764283, lng: 37.606614};
     var types = [];
+    var infoBoxList = [];
 
+    var ENTER_KEY = 13;
     var ZOOM_LEVEL = 10;
     var TYPE_IMAGE_WIDTH = 128;
     var EFFECTS_TIME = 250;
@@ -47,25 +49,6 @@ $(document).ready(function(){
         });
     }
 
-    function createContextMenuForMap() {
-        map.setContextMenu({
-            control: 'map',
-            options: [
-                {
-                    title: 'Создать точку',
-                    name: 'add_location',
-                    action: function(e) {
-                        this.addMarker({
-                            lat: e.latLng.lat(),
-                            lng: e.latLng.lng(),
-                            title: 'New marker'
-                        });
-                    }
-                }
-            ]
-        });
-    }
-
     function centerMapToLocation() {
         GMaps.geolocate({
             success: function(position) {
@@ -82,6 +65,38 @@ $(document).ready(function(){
 
     }
 
+    function createContextMenuForMap() {
+        map.setContextMenu({
+            control: 'map',
+            options: [
+                {
+                    title: 'Создать точку',
+                    name: 'add_location',
+                    action: function(e) {
+                        createMarkerForContextMenu(e);
+                    }
+                }
+            ]
+        });
+    }
+
+    function createMarkerForContextMenu(e) {
+
+        var location = createEmptyLocation();
+        location.geoLocation = getGeoLocationFromLatLng(e.latLng);
+
+        var infoBox = createInfoBoxForMarkers(e.latLng);
+
+        var infoBoxObject = {
+            infoBox: infoBox,
+            location: location
+        };
+
+        var marker = createMarkerWithInfoBoxForLocation(infoBoxObject);
+        infoBoxObject.infoBox.open(map.map, marker);
+        initAndShowEditForm(infoBoxObject);
+    }
+
     function createMarkersForLocations() {
 
         var infoBox = createInfoBoxForMarkers();
@@ -89,7 +104,13 @@ $(document).ready(function(){
         $.get("api/locations", function(data) {
 
             $.each(data, function(n, location) {
-                createMarkerWithInfoBoxForLocation(location, infoBox);
+
+                var infoBoxObject = {
+                    infoBox: infoBox,
+                    location: location
+                };
+
+                createMarkerWithInfoBoxForLocation(infoBoxObject);
             });
         });
     }
@@ -102,10 +123,11 @@ $(document).ready(function(){
         map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(div.get(0));
     }
 
-    function createInfoBoxForMarkers() {
+    function createInfoBoxForMarkers(position) {
+
         var boxText = document.createElement("div");
         boxText.id = 'infoBox';
-        boxText.innerHTML = getMarkerContentFromLocation(location);
+        boxText.innerHTML = getMarkerContentFromLocation();
 
         var infoOptions = {
             content: boxText,
@@ -119,13 +141,18 @@ $(document).ready(function(){
             enableEventPropagation: false
         };
         var infoBox = new InfoBox(infoOptions);
+        infoBoxList.push(infoBox);
+
+        if(position) {
+            infoBox.setPosition(position);
+        }
 
         return infoBox;
     }
 
-    function createMarkerWithInfoBoxForLocation(location, infoBox) {
+    function createMarkerWithInfoBoxForLocation(infoBoxObject) {
 
-        var pos = getLatLngFromText(location.geoLocation);
+        var pos = getLatLngFromGeoLocation(infoBoxObject.location.geoLocation);
 
         var marker = map.addMarker({
             lat: pos.lat(),
@@ -134,21 +161,18 @@ $(document).ready(function(){
             click: function() {
 
                 if( !isEditMarkerFormActive() ) {
-                    infoBox.open(map.map, marker);
-                    infoBox.show();
+                    infoBoxObject.infoBox.open(map.map, marker);
+                    infoBoxObject.infoBox.show();
 
-                    var infoBoxObject = {
-                        infoBox: infoBox,
-                        location: location
-                    };
-
-                    google.maps.event.addListener(infoBox, 'domready', function() {
+                    google.maps.event.addListener(infoBoxObject.infoBox, 'domready', function() {
                         setInfoBoxContentFromLocation(infoBoxObject);
                         initInfoBoxButtonsBehavior(infoBoxObject);
                     });
                 }
             }
         });
+
+        return marker;
     }
 
     function setInfoBoxContentFromLocation(infoBoxObject) {
@@ -160,13 +184,16 @@ $(document).ready(function(){
         $('#info_description').text(location.description);
         $('#info_addressDescription').text(location.addressDescription);
 
-        var address = addressToString(location.address);
-        if( stringIsNotEmpty(address) === true   ) {
-            $('#info_address').text(address);
+        if( location.address ) {
+            var address = addressToString(location.address);
+            if( stringIsNotEmpty(address) === true   ) {
+                $('#info_address').text(address);
+            }
+            else {
+                $('#info_address_body').hide();
+            }
         }
-        else {
-            $('#info_address_body').hide();
-        }
+
 
         var parseDate = $.datepicker.parseDate( DATE_FORMAT, location.actualDate );
         var displayDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, parseDate );
@@ -204,27 +231,41 @@ $(document).ready(function(){
     function initToggleEditAndViewBehavior(infoBoxObject) {
 
         $('#editMarkerButton').click(function(){
-
-            map.map.setCenter( infoBoxObject.infoBox.getPosition() );
-            infoBoxObject.infoBox.hide();
-
-            $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
-                initEditFormValidation();
-                initEditFormWithData(infoBoxObject);
-                initEditFormFocus();
-                initDatePicker();
-                initSwitch();
-            });
-
-            $('#cancelEdit').click(function() {
-                $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
-                infoBoxObject.infoBox.show();
-            });
-
-            $('#submitEdit').click( function() {
-                checkEditFormValidOrNot(infoBoxObject);
-            });
+            initAndShowEditForm(infoBoxObject);
         });
+    }
+
+    function initAndShowEditForm(infoBoxObject) {
+        map.map.setCenter( infoBoxObject.infoBox.getPosition() );
+        infoBoxObject.infoBox.hide();
+
+        $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
+            initEditFormValidation();
+            initEditFormWithData(infoBoxObject);
+            initEditFormFocus();
+            initDatePicker();
+            initSwitch();
+        });
+
+        $('#cancelEdit').click(function() {
+            $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+            infoBoxObject.infoBox.show();
+        });
+
+
+        $('#submitEdit').click( function() {
+            submitEditForm(infoBoxObject);
+        });
+
+        $("#editMarkerForm :input").keypress(function(e) {
+            if(e.which === ENTER_KEY) {
+                $('#submitEdit').click();
+            }
+        });
+    }
+
+    function submitEditForm(infoBoxObject) {
+        checkEditFormValidOrNot(infoBoxObject);
     }
 
     function checkEditFormValidOrNot(infoBoxObject) {
@@ -309,13 +350,33 @@ $(document).ready(function(){
     function initEditFormValidation() {
         $("#editMarkerForm").validate({
             rules : {
-                title: "required",
-                description: "required",
-                type: "required",
-                addressDescription: "required",
-                actualDate: "required",
-                latitude: "required",
-                longitude: "required"
+                title: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 50
+                },
+                description: {
+                    required: true,
+                    minlength: 4,
+                    maxlength: 250
+                },
+                type: {
+                    required: true
+                },
+                addressDescription: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 250
+                },
+                actualDate: {
+                    required: true
+                },
+                latitude: {
+                    required: true
+                },
+                longitude: {
+                    required: true
+                }
             },
             success: function() {
             },
@@ -392,14 +453,14 @@ $(document).ready(function(){
         });
     }
 
-    function getMarkerContentFromLocation(location) {
+    function getMarkerContentFromLocation() {
 
-        var res = getMarkerContentElementFromLocation(location);
+        var res = getMarkerContentElementFromLocation();
 
         return res.html();
     }
 
-    function getMarkerContentElementFromLocation(location) {
+    function getMarkerContentElementFromLocation() {
 
         var exRes = $('<div/>');
 
@@ -414,17 +475,17 @@ $(document).ready(function(){
                             )
                             .append(
                                 $('<p/>').attr('align', 'center').append(
-                                    $('<span/>').attr('id', 'info_type').addClass('label label-info').text(location.type)
+                                    $('<span/>').attr('id', 'info_type').addClass('label label-info')
                                 )
                             )
                     )
                     .append(
                         $('<div/>').addClass('media-body')
                             .append(
-                                $('<h4/>').attr('id', 'info_title').addClass('media-heading').text(location.title)
+                                $('<h4/>').attr('id', 'info_title').addClass('media-heading')
                             )
                             .append(
-                                $('<p/>').attr('id', 'info_description').text(location.description)
+                                $('<p/>').attr('id', 'info_description')
                             )
                             .append(
                                 $('<div/>').addClass('media')
@@ -435,7 +496,7 @@ $(document).ready(function(){
                                             )
                                             .append(
                                                 $('<span/>').attr('id','info_addressDescription')
-                                                    .addClass('spacer5').text(location.addressDescription)
+                                                    .addClass('spacer5')
                                             )
                                     )
                                     .append(
@@ -445,7 +506,6 @@ $(document).ready(function(){
                                             )
                                             .append(
                                                 $('<span/>').attr('id', 'info_address').addClass('spacer5')
-                                                    .text(location.address)
                                             )
                                     )
                                     .append(
@@ -455,7 +515,6 @@ $(document).ready(function(){
                                             )
                                             .append(
                                                 $('<span/>').attr('id', 'info_actualDate').addClass('spacer5')
-                                                    .text(location.actualDate)
                                             )
                                     )
                             )
@@ -801,8 +860,37 @@ $(document).ready(function(){
     }
 
     ///  help functions
-    function getLatLngFromText(geoLocation) {
+    function getLatLngFromGeoLocation(geoLocation) {
         return new google.maps.LatLng( geoLocation.latitude, geoLocation.longitude );
+    }
+
+    function getGeoLocationFromLatLng(latLng) {
+        return {
+            latitude: latLng.lat(),
+            longitude: latLng.lng()
+        };
+    }
+
+    function createEmptyLocation() {
+        return {
+            title: "",
+            description: "",
+            type: "",
+            footype: "",
+            addressDescription: "",
+            actualDate: "",
+            geoLocation: {
+                latitude: "",
+                longitude: ""
+            },
+            address: {
+                country: "",
+                region: "",
+                city: "",
+                street: "",
+                zipcode: ""
+            }
+        };
     }
 
     function addressToString(address) {
