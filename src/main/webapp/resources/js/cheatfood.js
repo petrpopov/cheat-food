@@ -252,6 +252,10 @@ $(document).ready(function(){
                 }
             });
         });
+
+        $('#closeInfoBox').click(function() {
+            infoBoxObject.infoBox.hide();
+        });
     }
 
     function initAndShowEditForm(infoBoxObject) {
@@ -484,7 +488,11 @@ $(document).ready(function(){
 
         var res = $('<ul/>').attr('id', 'infoContent').addClass('media-list')
             .append(
+                $('<button/>').attr('id','closeInfoBox').attr('type', 'button').addClass('close').text("x")
+            )
+            .append(
                 $('<li/>').addClass('media')
+
                     .append(
                         $('<a/>').addClass('pull-left img-with-text').attr('href', '#')
                             .append(
@@ -544,16 +552,16 @@ $(document).ready(function(){
                         $('<div/>').addClass('media')
                             .append(
                                 $('<div/>').addClass('btn-toolbar')
-                                    /*.append(
-                                        $('<div/>').addClass('btn-group')
-                                            .append(
-                                                $('<button/>').addClass('btn btn-small').text('Подробнее')
-                                            )
-                                    ) */
                                     .append(
                                         $('<div/>').addClass('btn-group')
                                             .append(
-                                                $('<button/>').addClass('btn btn-small').text('Маршрут')
+                                                $('<button/>').addClass('btn btn-small')
+                                                    .append(
+                                                        $('<i/>').addClass('icon-road')
+                                                    )
+                                                    .append(
+                                                        $('<span/>').addClass("spacer3").text('Маршрут')
+                                                    )
                                             )
                                             .append(
                                                 $('<button/>').addClass('btn btn-small dropdown-toggle')
@@ -580,11 +588,23 @@ $(document).ready(function(){
                                         $('<div/>').addClass('btn-group pull-right')
                                             .append(
                                                 $('<button/>').attr('id', 'editMarkerButton')
-                                                    .addClass('btn btn-primary btn-small').text('Редактировать')
+                                                    .addClass('btn btn-primary btn-small')
+                                                    .append(
+                                                        $('<i/>').addClass('icon-edit icon-white')
+                                                    )
+                                                    .append(
+                                                        $('<span/>').addClass("spacer3").text('Редактировать')
+                                                    )
                                             )
                                             .append(
                                                 $('<button/>').attr('id', 'deleteMarkerButton')
-                                                    .addClass('btn btn-danger btn-small').text('Удалить')
+                                                    .addClass('btn btn-danger btn-small')
+                                                    .append(
+                                                        $('<i/>').addClass('icon-trash icon-white')
+                                                    )
+                                                    .append(
+                                                        $('<span/>').addClass("spacer3").text('Удалить')
+                                                    )
                                             )
                                     )
                             )
@@ -602,13 +622,26 @@ $(document).ready(function(){
                                     .append(
                                         $('<div/>').addClass('btn-group pull-left')
                                             .append(
-                                                $('<button/>').addClass('btn btn-small').text('Подтверждаю точку')
+                                                $('<button/>').addClass('btn btn-small btn-success')
+                                                    .append(
+                                                        $('<i/>').addClass('icon-ok icon-white')
+                                                    )
+                                                    .append(
+                                                        $('<span/>').addClass("spacer3").text('Подтверждаю точку')
+                                                    )
                                             )
+
                                     )
                                     .append(
                                         $('<div/>').addClass('btn-group pull-right')
                                             .append(
-                                                $('<button/>').addClass('btn btn-small').text('Точки здесь больше нет')
+                                                $('<button/>').addClass('btn btn-small btn-warning')
+                                                    .append(
+                                                        $('<i/>').addClass('icon-remove icon-white')
+                                                    )
+                                                    .append(
+                                                        $('<span/>').addClass("spacer3").text('Точки здесь больше нет')
+                                                    )
                                             )
                                     )
                             )
@@ -898,7 +931,7 @@ $(document).ready(function(){
             title: "",
             description: "",
             type: "",
-            footype: "",
+            footype: true,
             addressDescription: "",
             actualDate: "",
             geoLocation: {
