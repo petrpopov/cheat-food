@@ -303,15 +303,7 @@ $(document).ready(function(){
 
         $('#editMarkerForm').off('submit');
         $('#editMarkerForm').submit(function(){
-
-            if(typeof $.data(this, "disabledOnSubmit") == 'undefined') {
-                $.data(this, "disabledOnSubmit", { submited: true });
-                $('input[type=submit], input[type=button]', this).each(function() {
-                    $(this).attr("disabled", "disabled");
-                });
-
-                submitEditForm(infoBoxObject);
-            }
+            submitEditForm(infoBoxObject);
             return false;
         });
 
