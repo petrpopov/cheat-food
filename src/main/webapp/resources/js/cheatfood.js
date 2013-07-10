@@ -7,6 +7,8 @@ $(document).ready(function(){
     var types = [];
     var infoBox;
 
+    var markers = new HashMap();
+
     var ENTER_KEY = 13;
     var ZOOM_LEVEL = 10;
     var TYPE_IMAGE_WIDTH = 128;
@@ -29,6 +31,7 @@ $(document).ready(function(){
 
         createMap();
         createContextMenuForMap();
+        createContextMenuForMarker();
         centerMapToLocation();
         createMarkersForLocations();
         createMarkerEditFormOnMap();
@@ -70,10 +73,48 @@ $(document).ready(function(){
             control: 'map',
             options: [
                 {
-                    title: 'Создать точку',
+                    title: '<i class="icon-ok"></i><span class="spacer3">Создать точку здесь</span>',
                     name: 'add_location',
                     action: function(e) {
                         createMarkerForContextMenu(e);
+                    }
+                }
+            ]
+        });
+    }
+
+    function createContextMenuForMarker() {
+        map.setContextMenu({
+            control: 'marker',
+            options: [
+                {
+                    title: '<i class="icon-list-alt"></i><span class="spacer3">Подробнее</span>',
+                    name: 'show_marker',
+                    action: function(e) {
+                        var infoBoxObject = markers.get(e.marker);
+                        initialShowInfoBoxForMarker(e.marker, infoBoxObject);
+                    }
+                },
+                {
+                    title: '<i class="icon-edit"></i><span class="spacer3">Редактировать</span>',
+                    name: 'edit_marker',
+                    action: function(e) {
+                        var infoBoxObject = markers.get(e.marker);
+                        infoBox.setPosition(e.latLng);
+                        initAndShowEditForm(infoBoxObject);
+                    }
+                },
+                {
+                    title: '<i class="icon-trash"></i><span class="spacer3">Удалить</span>',
+                    name: 'delete_marker',
+                    action: function(e) {
+                        var infoBoxObject = markers.get(e.marker);
+                        $('#deleteMarkerButtonModal').off('click');
+                        $('#deleteMarkerButtonModal').click( function() {
+                            deleteMarkerRequest(infoBoxObject);
+                        });
+
+                        $('#deleteModal').modal('show');
                     }
                 }
             ]
@@ -157,22 +198,36 @@ $(document).ready(function(){
             lng: pos.lng(),
             title: location.title,
             click: function() {
-
-                if( !isEditMarkerFormActive() ) {
-                    infoBoxObject.infoBox.open(map.map, marker);
-                    infoBoxObject.infoBox.show();
-
-                    google.maps.event.addListener(infoBoxObject.infoBox, 'domready', function() {
-                        setInfoBoxContentFromLocation(infoBoxObject);
-                        initInfoBoxButtonsBehavior(infoBoxObject);
-                    });
-                }
+                initialShowInfoBoxForMarker(marker, infoBoxObject);
             }
         });
 
         infoBoxObject.marker = marker;
+        markers.put(marker, infoBoxObject);
 
         return marker;
+    }
+
+    function initialShowInfoBoxForMarker(marker, infoBoxObject) {
+        if( !isEditMarkerFormActive() ) {
+            var m = infoBoxObject.marker;
+            if( !m ) {
+                m = marker;
+            }
+            infoBoxObject.infoBox.open(map.map, m);
+            infoBoxObject.infoBox.show();
+
+            google.maps.event.addListener(infoBoxObject.infoBox, 'domready', function() {
+                setInfoBoxContentFromLocation(infoBoxObject);
+                initInfoBoxButtonsBehavior(infoBoxObject);
+            });
+        }
+    }
+
+    function showInfoBoxForMarker(infoBoxObject) {
+        initInfoBoxButtonsBehavior(infoBoxObject);
+        infoBoxObject.infoBox.show();
+        setInfoBoxContentFromLocation(infoBoxObject);
     }
 
     function setInfoBoxContentFromLocation(infoBoxObject) {
@@ -258,18 +313,7 @@ $(document).ready(function(){
 
         $('#deleteMarkerButtonModal').off('click');
         $('#deleteMarkerButtonModal').click( function() {
-
-            $('#deleteMarkerButtonModal').button('loading');
-
-            $.ajax({
-                type: "DELETE",
-                url: 'api/location/'+infoBoxObject.location.id,
-                success: function(data) {
-                    $('#deleteModal').modal('hide');
-                    $('#deleteMarkerButtonModal').button('reset');
-                    removeMarkerAndInfoBox(infoBoxObject);
-                }
-            });
+            deleteMarkerRequest(infoBoxObject);
         });
 
         $('#closeInfoBox').off('click');
@@ -278,9 +322,24 @@ $(document).ready(function(){
         });
     }
 
+    function deleteMarkerRequest(infoBoxObject) {
+        $('#deleteMarkerButtonModal').button('loading');
+
+        $.ajax({
+            type: "DELETE",
+            url: 'api/location/'+infoBoxObject.location.id,
+            success: function(data) {
+                $('#deleteModal').modal('hide');
+                $('#deleteMarkerButtonModal').button('reset');
+                removeMarkerAndInfoBox(infoBoxObject);
+            }
+        });
+    }
+
     function removeMarkerAndInfoBox(infoBoxObject) {
         infoBoxObject.infoBox.hide();
         map.removeMarker(infoBoxObject.marker);
+        markers.remove(infoBoxObject.marker);
     }
 
     function initAndShowEditForm(infoBoxObject) {
@@ -385,9 +444,7 @@ $(document).ready(function(){
                 $('#submitEdit').button('reset');
                 $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
 
-                initInfoBoxButtonsBehavior(infoBoxObject);
-                infoBoxObject.infoBox.show();
-                setInfoBoxContentFromLocation(infoBoxObject);
+                showInfoBoxForMarker(infoBoxObject);
             },
             statusCode: {
                 400: function(data) {
@@ -1037,5 +1094,37 @@ $(document).ready(function(){
 
         return true;
     }
+
+    function HashMap(){
+        this._dict = {};
+    }
+    HashMap.prototype._shared = {id: 1};
+    HashMap.prototype.put = function put(key, value){
+        if(typeof key == "object"){
+            if(!key.hasOwnProperty._id){
+                key.hasOwnProperty = function(key){
+                    return Object.prototype.hasOwnProperty.call(this, key);
+                }
+                key.hasOwnProperty._id = this._shared.id++;
+            }
+            this._dict[key.hasOwnProperty._id] = value;
+        }else{
+            this._dict[key] = value;
+        }
+        return this; // for chaining
+    }
+    HashMap.prototype.get = function get(key){
+        if(typeof key == "object"){
+            return this._dict[key.hasOwnProperty._id];
+        }
+        return this._dict[key];
+    }
+    HashMap.prototype.remove = function remove(key) {
+        if(typeof key == "object"){
+            delete this._dict[key.hasOwnProperty._id];
+        }
+        delete this._dict[key];
+    }
+
 });
 
