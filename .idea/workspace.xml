@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d3c17744-07db-495c-8d73-b4d20484b32d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" afterPath="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -9,7 +10,7 @@
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373358045419" ignored="false" />
     <file path="/index.jsp" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373458004484" ignored="false" />
-    <file path="/Dummy.txt" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373467699224" ignored="false" />
+    <file path="/Dummy.txt" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373468064106" ignored="false" />
     <file path="/cheapfood.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373307491550" ignored="false" />
     <file path="/gmaps.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1372714264491" ignored="false" />
     <file path="/style.css" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373453671796" ignored="false" />
@@ -44,7 +45,7 @@
     <file path="/DateSerializer.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373283537480" ignored="false" />
     <file path="/cheatfood.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373468037509" ignored="false" />
     <file path="/rebel.xml" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373357697773" ignored="false" />
-    <file path="/ParamsWebService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373462861317" ignored="false" />
+    <file path="/ParamsWebService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373469511642" ignored="false" />
     <file path="/test.html" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373407786785" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -124,10 +125,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cheatfood.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="cheatfood.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="42" column="63" selection-start="931" selection-end="931" vertical-scroll-proportion="0.51890755">
+            <state line="771" column="86" selection-start="28467" selection-end="28467" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="style.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/css/style.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="36" column="1" selection-start="582" selection-end="582" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -144,10 +154,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ParamsWebService.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ParamsWebService.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="64" selection-start="513" selection-end="513" vertical-scroll-proportion="0.0">
+            <state line="21" column="57" selection-start="622" selection-end="622" vertical-scroll-proportion="0.41911766">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -213,9 +223,9 @@
         <option value="$PROJECT_DIR$/src/main/resources/config.properties" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Location.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/LocationService.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/resources/js/gmaps.js" />
         <option value="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" />
+        <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java" />
       </list>
     </option>
   </component>
@@ -974,7 +984,11 @@
       <created>1373467701906</created>
       <updated>1373467701906</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="cluster changes">
+      <created>1373468066907</created>
+      <updated>1373468066907</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1073,7 +1087,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="issue #11 seems all working correct" />
+    <option name="LAST_COMMIT_MESSAGE" value="cluster changes" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1106,6 +1120,7 @@
     <MESSAGE value="issue #3 show footype in infoBox" />
     <MESSAGE value="issue #3 remove uneccessary submit" />
     <MESSAGE value="issue #11 seems all working correct" />
+    <MESSAGE value="cluster changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1155,13 +1170,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="23" selection-start="756" selection-end="756" vertical-scroll-proportion="0.10189076">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp">
       <provider selected="true" editor-type-id="text-editor">
         <state line="21" column="0" selection-start="1043" selection-end="1043" vertical-scroll-proportion="18.321428">
@@ -1206,15 +1214,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="64" selection-start="513" selection-end="513" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/gmaps.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="323" column="28" selection-start="9403" selection-end="9403" vertical-scroll-proportion="0.0">
@@ -1231,10 +1230,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="1" selection-start="582" selection-end="582" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="63" selection-start="931" selection-end="931" vertical-scroll-proportion="0.51890755">
+        <state line="771" column="86" selection-start="28467" selection-end="28467" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="57" selection-start="622" selection-end="622" vertical-scroll-proportion="0.41911766">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

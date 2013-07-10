@@ -175,12 +175,12 @@ $(document).ready(function(){
 
         var infoOptions = {
             content: boxText,
-            boxClass: "span5 transparent infoWindow",
+            boxClass: "span6 transparent infoWindow",
             disableAutoPan: false,
             isHidden: true,
             pane: "floatPane",
             infoBoxClearance: new google.maps.Size(50, 50),
-            maxWidth: 500,
+            maxWidth: 800,
             pixelOffset: new google.maps.Size(8, -190),
             enableEventPropagation: false
         };
@@ -769,7 +769,7 @@ $(document).ready(function(){
 
     function getMarkerEditContent() {
 
-        var res = $('<form/>').attr('id', 'editMarkerForm').addClass('infoWindowInner form-horizontal scrollable')
+        var res = $('<form/>').attr('id', 'editMarkerForm').addClass('infoWindowInner form-horizontal')
             .attr('autocomplete', 'off')
             .append(
                 $('<legend/>').text('Создание точки')

@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ParamsWebService {
 
     private String[] types = new String[]{
-            "Шашлычная", "Чебуречная", "Шаверменная", "Чайхона", "Булочная", "Столовая", "Кафе", "Другое"};
+            "Шашлычная", "Чебуречная", "Шаверменная", "Чайхона",
+            "Блинная", "Бутербродная", "Рюмочная",
+            "Булочная", "Столовая", "Кафе", "Кулинария", "Другое"};
 
     @RequestMapping(value="types", method = RequestMethod.GET)
     @ResponseBody
