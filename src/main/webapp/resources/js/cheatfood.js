@@ -85,15 +85,13 @@ $(document).ready(function(){
         var location = createEmptyLocation();
         location.geoLocation = getGeoLocationFromLatLng(e.latLng);
 
-        infoBox.setPosition(e.latLng);
-
         var infoBoxObject = {
             infoBox: infoBox,
             location: location
         };
+        infoBox.setPosition(e.latLng);
 
-        var marker = createMarkerWithInfoBoxForLocation(infoBoxObject);
-        infoBoxObject.infoBox.open(map.map, marker);
+        createMarkerWithInfoBoxForLocation(infoBoxObject);
         initAndShowEditForm(infoBoxObject);
     }
 
@@ -239,14 +237,17 @@ $(document).ready(function(){
 
     function initToggleEditAndViewBehavior(infoBoxObject) {
 
+        $('#editMarkerButton').off('click');
         $('#editMarkerButton').click(function() {
             initAndShowEditForm(infoBoxObject);
         });
 
+        $('#deleteMarkerButton').off('click');
         $('#deleteMarkerButton').click(function() {
             $('#deleteModal').modal('show');
         });
 
+        $('#deleteMarkerButtonModal').off('click');
         $('#deleteMarkerButtonModal').click( function() {
 
             $('#deleteMarkerButtonModal').button('loading');
@@ -262,6 +263,7 @@ $(document).ready(function(){
             });
         });
 
+        $('#closeInfoBox').off('click');
         $('#closeInfoBox').click(function() {
             infoBoxObject.infoBox.hide();
         });
@@ -284,11 +286,13 @@ $(document).ready(function(){
             initSwitch();
         });
 
+        $('#cancelEdit').off('click');
         $('#cancelEdit').click(function() {
             $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
             infoBoxObject.infoBox.show();
         });
 
+        $('#editMarkerForm').off('submit');
         $('#editMarkerForm').submit(function(){
             submitEditForm(infoBoxObject);
             return false;
@@ -427,6 +431,8 @@ $(document).ready(function(){
 
     function initEditFormWithData(infoBoxObject) {
 
+        clearEditForm();
+
         var location = infoBoxObject.location;
 
         //main fields
@@ -460,6 +466,21 @@ $(document).ready(function(){
         }
     }
 
+    function clearEditForm() {
+        $('#location-id').val(null);
+        $('#title').val( null );
+        $('#description').val( null );
+        $('#addressDescription').val(null);
+        $('#actualDate').val(null);
+        $('#latitude').val( null );
+        $('#longitude').val( null );
+        $('#country').val( null );
+        $('#region').val( null );
+        $('#city').val( null );
+        $('#street').val( null );
+        $('#zipcode').val( null );
+    }
+
     function initEditFormFocus() {
         $('#title').focus();
     }
@@ -479,6 +500,7 @@ $(document).ready(function(){
 
     function initSwitch() {
 
+        $('#createAddressSwitch').off('click');
         $('#createAddressSwitch').click(function(){
             if($(this).parent().find('input').is(':checked')) {
                 $('#realAddress').show(EFFECTS_TIME);
