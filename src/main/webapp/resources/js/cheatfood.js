@@ -9,6 +9,8 @@ $(document).ready(function(){
 
     var markers = new HashMap();
 
+    var GRID_SIZE = 50;
+    var MAX_ZOOM = 15;
     var ENTER_KEY = 13;
     var ZOOM_LEVEL = 10;
     var TYPE_IMAGE_WIDTH = 128;
@@ -38,6 +40,8 @@ $(document).ready(function(){
     }
 
     function createMap() {
+        var mcOptions = {gridSize: GRID_SIZE, maxZoom: MAX_ZOOM};
+
         map = new GMaps({
             div: '#map',
             lat: moscowCenter.lat,
@@ -47,7 +51,7 @@ $(document).ready(function(){
             panControl: true,
             mapTypeControl: false,
             markerClusterer: function(map) {
-                return new MarkerClusterer(map);
+                return new MarkerClusterer(map, [], mcOptions);
             }
         });
     }
