@@ -73,6 +73,17 @@
 
 <div id="map"></div>
 
+<div id="deleteModal" class="modal hide fade alert alert-error alert-block">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <p>
+        <strong>Удалить?</strong> Вот так просто взять и удалить весь нажитый опыт в области доступной еды и больше не
+        делиться ни с кем этим сакральным знанием?
+    </p>
+    <p>
+        <button id="deleteMarkerButtonModal" class="btn btn-danger" href="#">Ага</button>
+        <button class="btn" data-dismiss="modal">Отмена</button>
+    </p>
+</div>
 
 <div class="navbar navbar-fixed-bottom">
     <div class="navbar-inner">

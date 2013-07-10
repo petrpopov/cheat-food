@@ -173,6 +173,8 @@ $(document).ready(function(){
             }
         });
 
+        infoBoxObject.marker = marker;
+
         return marker;
     }
 
@@ -231,8 +233,24 @@ $(document).ready(function(){
 
     function initToggleEditAndViewBehavior(infoBoxObject) {
 
-        $('#editMarkerButton').click(function(){
+        $('#editMarkerButton').click(function() {
             initAndShowEditForm(infoBoxObject);
+        });
+
+        $('#deleteMarkerButton').click(function() {
+            $('#deleteModal').modal('show');
+        });
+
+        $('#deleteMarkerButtonModal').click( function() {
+            $.ajax({
+                type: "DELETE",
+                url: 'api/location/'+infoBoxObject.location.id,
+                success: function(data) {
+                    $('#deleteModal').modal('hide');
+                    infoBoxObject.infoBox.hide();
+                    map.removeMarker(infoBoxObject.marker);
+                }
+            });
         });
     }
 
@@ -561,8 +579,12 @@ $(document).ready(function(){
                                     .append(
                                         $('<div/>').addClass('btn-group pull-right')
                                             .append(
-                                                $('<button/>').attr('id', 'editMarkerButton').
-                                                    addClass('btn btn-primary btn-small').text('Редактировать')
+                                                $('<button/>').attr('id', 'editMarkerButton')
+                                                    .addClass('btn btn-primary btn-small').text('Редактировать')
+                                            )
+                                            .append(
+                                                $('<button/>').attr('id', 'deleteMarkerButton')
+                                                    .addClass('btn btn-danger btn-small').text('Удалить')
                                             )
                                     )
                             )
@@ -580,13 +602,13 @@ $(document).ready(function(){
                                     .append(
                                         $('<div/>').addClass('btn-group pull-left')
                                             .append(
-                                                $('<button/>').addClass('btn btn-success btn-small').text('Подтверждаю точку')
+                                                $('<button/>').addClass('btn btn-small').text('Подтверждаю точку')
                                             )
                                     )
                                     .append(
                                         $('<div/>').addClass('btn-group pull-right')
                                             .append(
-                                                $('<button/>').addClass('btn btn-warning btn-small').text('Точки здесь больше нет')
+                                                $('<button/>').addClass('btn btn-small').text('Точки здесь больше нет')
                                             )
                                     )
                             )
