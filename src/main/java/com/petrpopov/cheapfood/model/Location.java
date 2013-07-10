@@ -30,11 +30,7 @@ public class Location {
     @NotEmpty
     private String description;
 
-    @NotNull
-    @NotEmpty
     private String addressDescription;
-
-    private Address address;
 
     @Valid
     private GeoLocation geoLocation;
@@ -43,6 +39,7 @@ public class Location {
     private Date actualDate;
 
     private String creatorId;
+    private Address address;
 
     @NotNull
     private Boolean footype;

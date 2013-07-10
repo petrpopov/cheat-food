@@ -185,7 +185,14 @@ $(document).ready(function(){
         $('#info_title').text(location.title);
         $('#info_type').text(location.type);
         $('#info_description').text(location.description);
-        $('#info_addressDescription').text(location.addressDescription);
+
+        if(location.addressDescription) {
+            $('#info_addressDescription').text(location.addressDescription);
+        }
+        else {
+            $('#info_addressd_body').hide();
+        }
+        $('#info_addressd_body').hide();
 
         if( location.address ) {
             var address = addressToString(location.address);
@@ -197,11 +204,11 @@ $(document).ready(function(){
             }
         }
 
-
-        var parseDate = $.datepicker.parseDate( DATE_FORMAT, location.actualDate );
-        var displayDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, parseDate );
-        $('#info_actualDate').text(displayDate);
-
+        if(location.actualDate) {
+            var parseDate = $.datepicker.parseDate( DATE_FORMAT, location.actualDate );
+            var displayDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, parseDate );
+            $('#info_actualDate').text(displayDate);
+        }
     }
 
     function initInfoBoxButtonsBehavior(infoBoxObject) {
@@ -242,20 +249,29 @@ $(document).ready(function(){
         });
 
         $('#deleteMarkerButtonModal').click( function() {
+
+            $('#deleteMarkerButtonModal').button('loading');
+
             $.ajax({
                 type: "DELETE",
                 url: 'api/location/'+infoBoxObject.location.id,
                 success: function(data) {
                     $('#deleteModal').modal('hide');
-                    infoBoxObject.infoBox.hide();
-                    map.removeMarker(infoBoxObject.marker);
+                    $('#deleteMarkerButtonModal').button('reset');
+                    removeMarkerAndInfoBox(infoBoxObject);
                 }
             });
         });
 
         $('#closeInfoBox').click(function() {
+            console.log(infoBoxObject);
             infoBoxObject.infoBox.hide();
         });
+    }
+
+    function removeMarkerAndInfoBox(infoBoxObject) {
+        infoBoxObject.infoBox.hide();
+        map.removeMarker(infoBoxObject.marker);
     }
 
     function initAndShowEditForm(infoBoxObject) {
@@ -358,6 +374,7 @@ $(document).ready(function(){
                 $('#submitEdit').button('reset');
                 $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
 
+                initInfoBoxButtonsBehavior(infoBoxObject);
                 infoBoxObject.infoBox.show();
                 setInfoBoxContentFromLocation(infoBoxObject);
             },
@@ -386,7 +403,6 @@ $(document).ready(function(){
                     required: true
                 },
                 addressDescription: {
-                    required: true,
                     minlength: 3,
                     maxlength: 250
                 },
@@ -516,7 +532,7 @@ $(document).ready(function(){
                             .append(
                                 $('<div/>').addClass('media')
                                     .append(
-                                        $('<div/>').addClass('media-body')
+                                        $('<div/>').addClass('media-body').attr('id','info_addressd_body')
                                             .append(
                                                 $('<span/>').addClass('label label-info').text('Адрес')
                                             )
@@ -754,7 +770,6 @@ $(document).ready(function(){
                                 $('<input/>').addClass('input-block-level span4')
                                     .attr('id', 'addressDescription').attr('name', 'addressDescription')
                                     .attr('placeholder', 'Выходите с электрички и спускаетесь под мост')
-                                    .attr('required', 'true')
                             )
                     )
             )

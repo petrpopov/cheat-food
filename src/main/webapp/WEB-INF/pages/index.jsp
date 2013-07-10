@@ -10,7 +10,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Cheat food</title>
+    <title>cheat food</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap -->
@@ -53,7 +53,7 @@
             </a>
 
             <!-- Be sure to leave the brand out there if you want it shown -->
-            <a class="brand" href="<c:url value="/"/>">Cheat food</a>
+            <a class="brand" href="<c:url value="/"/>">cheat food</a>
             <ul class="nav">
                 <li><a href="#">Манифест</a></li>
                 <li><a href="#">Пользователям</a></li>
@@ -80,7 +80,7 @@
         делиться ни с кем этим сакральным знанием?
     </p>
     <p>
-        <button id="deleteMarkerButtonModal" class="btn btn-danger" href="#">Ага</button>
+        <button id="deleteMarkerButtonModal" data-loading-text="Удаляем..." class="btn btn-danger" href="#">Ага</button>
         <button class="btn" data-dismiss="modal">Отмена</button>
     </p>
 </div>
