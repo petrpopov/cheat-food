@@ -185,11 +185,20 @@ $(document).ready(function(){
 
         if(location.addressDescription) {
             $('#info_addressDescription').text(location.addressDescription);
+            $('#info_addressd_body').show();
         }
         else {
             $('#info_addressd_body').hide();
         }
-        $('#info_addressd_body').hide();
+
+        if( location.footype === true ) {
+            $('#info_footype').addClass('icon-warning-sign').removeClass('icon-ok-sign');
+            $('#info_footype_text').text('Это тошняк или палатка');
+        }
+        else if( location.footype === false ) {
+            $('#info_footype').removeClass('icon-warning-sign').addClass('icon-ok-sign');
+            $('#info_footype_text').text('Это нормальное кафе');
+        }
 
         if( location.address ) {
             var address = addressToString(location.address);
@@ -294,7 +303,15 @@ $(document).ready(function(){
 
         $('#editMarkerForm').off('submit');
         $('#editMarkerForm').submit(function(){
-            submitEditForm(infoBoxObject);
+
+            if(typeof $.data(this, "disabledOnSubmit") == 'undefined') {
+                $.data(this, "disabledOnSubmit", { submited: true });
+                $('input[type=submit], input[type=button]', this).each(function() {
+                    $(this).attr("disabled", "disabled");
+                });
+
+                submitEditForm(infoBoxObject);
+            }
             return false;
         });
 
@@ -528,7 +545,6 @@ $(document).ready(function(){
             )
             .append(
                 $('<li/>').addClass('media')
-
                     .append(
                         $('<a/>').addClass('pull-left img-with-text').attr('href', '#')
                             .append(
@@ -551,6 +567,16 @@ $(document).ready(function(){
                             )
                             .append(
                                 $('<div/>').addClass('media')
+                                    .append(
+                                        $('<div/>').addClass('media-body')
+                                            .append(
+                                                $('<i/>').attr('id','info_footype')
+                                            )
+                                            .append(
+                                                $('<span/>').attr('id','info_footype_text')
+                                                    .addClass('spacer5')
+                                            )
+                                    )
                                     .append(
                                         $('<div/>').addClass('media-body').attr('id','info_addressd_body')
                                             .append(
