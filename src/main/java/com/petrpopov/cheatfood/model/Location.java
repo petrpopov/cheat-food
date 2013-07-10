@@ -1,6 +1,6 @@
-package com.petrpopov.cheapfood.model;
+package com.petrpopov.cheatfood.model;
 
-import com.petrpopov.cheapfood.config.DateSerializer;
+import com.petrpopov.cheatfood.config.DateSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
@@ -16,7 +16,7 @@ import java.util.Date;
  * Time: 17:01
  */
 
-@Document(collection = "location")
+@Document(collection = "locations")
 public class Location {
 
     @Id

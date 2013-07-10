@@ -5,7 +5,7 @@ $(document).ready(function(){
     var map;
     var moscowCenter = {lat: 55.764283, lng: 37.606614};
     var types = [];
-    var infoBoxList = [];
+    var infoBox;
 
     var ENTER_KEY = 13;
     var ZOOM_LEVEL = 10;
@@ -85,7 +85,7 @@ $(document).ready(function(){
         var location = createEmptyLocation();
         location.geoLocation = getGeoLocationFromLatLng(e.latLng);
 
-        var infoBox = createInfoBoxForMarkers(e.latLng);
+        infoBox.setPosition(e.latLng);
 
         var infoBoxObject = {
             infoBox: infoBox,
@@ -99,7 +99,7 @@ $(document).ready(function(){
 
     function createMarkersForLocations() {
 
-        var infoBox = createInfoBoxForMarkers();
+        infoBox = createInfoBoxForMarkers();
 
         $.get("api/locations", function(data) {
 
@@ -141,8 +141,7 @@ $(document).ready(function(){
             pixelOffset: new google.maps.Size(8, -190),
             enableEventPropagation: false
         };
-        var infoBox = new InfoBox(infoOptions);
-        infoBoxList.push(infoBox);
+        infoBox = new InfoBox(infoOptions);
 
         if(position) {
             infoBox.setPosition(position);
@@ -264,7 +263,6 @@ $(document).ready(function(){
         });
 
         $('#closeInfoBox').click(function() {
-            console.log(infoBoxObject);
             infoBoxObject.infoBox.hide();
         });
     }

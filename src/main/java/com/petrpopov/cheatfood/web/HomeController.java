@@ -1,4 +1,4 @@
-package com.petrpopov.cheapfood.web;
+package com.petrpopov.cheatfood.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;

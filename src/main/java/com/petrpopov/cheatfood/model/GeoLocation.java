@@ -1,4 +1,4 @@
-package com.petrpopov.cheapfood.model;
+package com.petrpopov.cheatfood.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 

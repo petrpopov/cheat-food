@@ -26,7 +26,7 @@
 
     <!-- Spring main servlet starts -->
     <servlet>
-        <servlet-name>cheapfood</servlet-name>
+        <servlet-name>cheatfood</servlet-name>
         <servlet-class>
             org.springframework.web.servlet.DispatcherServlet
         </servlet-class>
@@ -34,7 +34,7 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>cheapfood</servlet-name>
+        <servlet-name>cheatfood</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     <!-- Spring main servlet ends -->
@@ -48,7 +48,7 @@
 
     <filter-mapping>
         <filter-name>hiddenHttpMethodFilter</filter-name>
-        <servlet-name>cheapfood</servlet-name>
+        <servlet-name>cheatfood</servlet-name>
     </filter-mapping>
     <!-- Spring REST filter for hidden fields ends -->
 
@@ -56,7 +56,7 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            /WEB-INF/cheapfood-servlet.xml
+            /WEB-INF/cheatfood-servlet.xml
         </param-value>
     </context-param>
     <listener>

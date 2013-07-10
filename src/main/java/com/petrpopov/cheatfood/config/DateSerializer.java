@@ -1,4 +1,4 @@
-package com.petrpopov.cheapfood.config;
+package com.petrpopov.cheatfood.config;
 
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
