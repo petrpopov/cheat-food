@@ -66,7 +66,18 @@
                                     <img src="resources/img/pin.png" width="20"/>
                                     <span class="spacer3">Добавить точку</span>
                                 </a>
-
+                        </li>
+                        <li>
+                            <a id="editMarkerMenu">
+                                <i class="icon-edit"></i>
+                                <span class="spacer3">Редактировать точку</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a id="deleteMarkerMenu">
+                                <i class="icon-remove"></i>
+                                <span class="spacer3">Удалить точку</span>
+                            </a>
                         </li>
                     </ul>
                 </li>

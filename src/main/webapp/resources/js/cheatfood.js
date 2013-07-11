@@ -98,6 +98,11 @@ $(document).ready(function(){
     function setDefaultMapClickBehavior() {
         google.maps.event.addListener(map.map, 'click', function(event) {
             map.hideContextMenu();
+
+            if( !$('#infoBox').is(":visible") ) {
+                disableEditMarkerMenu();
+                disableDeleteMarkerMenu();
+            }
         });
     }
 
@@ -163,12 +168,7 @@ $(document).ready(function(){
                     name: 'delete_marker',
                     action: function(e) {
                         var infoBoxObject = markers.get(e.marker);
-                        $('#deleteMarkerButtonModal').off('click');
-                        $('#deleteMarkerButtonModal').click( function() {
-                            deleteMarkerRequest(infoBoxObject);
-                        });
-
-                        $('#deleteModal').modal('show');
+                        deleteMarkerAction(infoBoxObject);
                     }
                 }
             ]
@@ -198,8 +198,9 @@ $(document).ready(function(){
     }
 
     function createMainMenuBehavior() {
-
         enableAddMarkerMenu();
+        disableEditMarkerMenu();
+        disableDeleteMarkerMenu();
     }
 
     function enableAddMarkerMenu() {
@@ -222,6 +223,32 @@ $(document).ready(function(){
 
         $('#addMarkerButton').addClass('disabled');
         $('#addMarkerButton').off('click');
+    }
+
+    function enableEditMarkerMenu(infoBoxObject) {
+        $('#editMarkerMenu').closest('li').removeClass('disabled');
+        $('#editMarkerMenu').off('click');
+        $('#editMarkerMenu').click(function() {
+            initAndShowEditForm(infoBoxObject);
+        });
+    }
+
+    function disableEditMarkerMenu() {
+        $('#editMarkerMenu').closest('li').addClass('disabled');
+        $('#editMarkerMenu').off('click');
+    }
+
+    function enableDeleteMarkerMenu(infoBoxObject) {
+        $('#deleteMarkerMenu').closest('li').removeClass('disabled');
+        $('#deleteMarkerMenu').off('click');
+        $('#deleteMarkerMenu').click(function() {
+            deleteMarkerAction(infoBoxObject);
+        });
+    }
+
+    function disableDeleteMarkerMenu() {
+        $('#deleteMarkerMenu').closest('li').addClass('disabled');
+        $('#deleteMarkerMenu').off('click');
     }
 
     function addMarkerOnMapByLeftClick() {
@@ -413,6 +440,8 @@ $(document).ready(function(){
             icon: 'resources/img/bread.png',
             click: function() {
                 initialShowInfoBoxForMarker(marker, infoBoxObject);
+                enableEditMarkerMenu(infoBoxObject);
+                enableDeleteMarkerMenu(infoBoxObject);
             }
         });
 
@@ -533,7 +562,18 @@ $(document).ready(function(){
         $('#closeInfoBox').off('click');
         $('#closeInfoBox').click(function() {
             infoBoxObject.infoBox.hide();
+            disableEditMarkerMenu();
+            disableDeleteMarkerMenu();
         });
+    }
+
+    function deleteMarkerAction(infoBoxObject) {
+        $('#deleteMarkerButtonModal').off('click');
+        $('#deleteMarkerButtonModal').click( function() {
+            deleteMarkerRequest(infoBoxObject);
+        });
+
+        $('#deleteModal').modal('show');
     }
 
     function deleteMarkerRequest(infoBoxObject) {
@@ -591,14 +631,21 @@ $(document).ready(function(){
 
         if( infoBoxObject ) {
             infoBoxObject.infoBox.show();
+            enableEditMarkerMenu(infoBoxObject);
+            enableDeleteMarkerMenu(infoBoxObject);
 
             if( newMarker === true ) {
                 removeMarkerAndInfoBox(infoBoxObject);
             }
         }
+        else {
+            disableEditMarkerMenu();
+            disableDeleteMarkerMenu();
+        }
         setDefaultMouseBehavior();
 
         newMarker = false;
+
     }
 
     function submitEditForm(infoBoxObject) {
@@ -674,6 +721,8 @@ $(document).ready(function(){
 
                 showInfoBoxForMarker(infoBoxObject);
                 newMarker = false;
+                enableEditMarkerMenu(infoBoxObject);
+                enableDeleteMarkerMenu(infoBoxObject);
             },
             statusCode: {
                 400: function(data) {
