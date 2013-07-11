@@ -191,6 +191,8 @@ $(document).ready(function(){
         };
         infoBox.setPosition(latLng);
 
+        $('#currentActionForm').data("infoBoxObject", infoBoxObject);
+
         createMarkerWithInfoBoxForLocation(infoBoxObject);
         initAndShowEditForm(infoBoxObject);
     }
@@ -224,6 +226,8 @@ $(document).ready(function(){
 
     function addMarkerOnMapByLeftClick() {
 
+        showCurrentActionForm('Добавление новой точки...', cancelNewMarkerAddition, "infoBoxObject");
+
         //change cursor
         map.setOptions( {
             draggableCursor : "url(resources/img/pin.png), auto",
@@ -242,6 +246,9 @@ $(document).ready(function(){
     }
 
     function setDefaultMouseBehavior() {
+
+        //hide bottom form
+        $('#currentActionForm').hide(EFFECTS_TIME);
 
         //set default cursor
         map.setOptions({
@@ -265,6 +272,35 @@ $(document).ready(function(){
         setDefaultMapClickBehavior();
 
         enableAddMarkerMenu();
+    }
+
+    function showCurrentActionForm(text, callback, paramName) {
+
+        $('#currentActionForm').off('submit');
+        $('#currentActionForm').submit(function() {
+            return false;
+        });
+
+        $('#currentActionText').text(text);
+        $('#currentActionForm').show(EFFECTS_TIME);
+
+        $('#cancelCurrentAction').off('click');
+        $('#cancelCurrentAction').click(function() {
+            $('#currentActionForm').hide(EFFECTS_TIME);
+
+            if( paramName ) {
+                var param = $('#currentActionForm').data(paramName);
+                if( param ) {
+                    callback(param);
+                }
+                else {
+                    callback();
+                }
+            }
+            else {
+                callback();
+            }
+        });
     }
 
     function createMarkersForLocations() {
@@ -295,7 +331,7 @@ $(document).ready(function(){
 
     function createLocateMeButton() {
         var div = $('<div/>').attr('id','locateMeDiv').addClass("spacer28 infoWindow").append(
-            $('<a/>').attr('id', 'locateMe').attr('href', '#').append(
+            $('<a/>').attr('id', 'locateMe').append(
                 $('<img/>').attr('src', 'resources/img/location.png').attr('width', '32')
             )
         );
@@ -321,7 +357,7 @@ $(document).ready(function(){
     function createAddMarkerButton() {
         var div = $('<div/>').addClass('addMarker')
             .append(
-                $('<a/>').attr('id','addMarkerButton').attr('href', '#').addClass("btn btn-small")
+                $('<a/>').attr('id','addMarkerButton').addClass("btn btn-small")
                     .append(
                         $('<img/>').attr('src','resources/img/pin.png').attr('width', '20')
                     )
@@ -555,10 +591,10 @@ $(document).ready(function(){
 
         if( infoBoxObject ) {
             infoBoxObject.infoBox.show();
-        }
 
-        if( newMarker === true ) {
-            removeMarkerAndInfoBox(infoBoxObject);
+            if( newMarker === true ) {
+                removeMarkerAndInfoBox(infoBoxObject);
+            }
         }
         setDefaultMouseBehavior();
 

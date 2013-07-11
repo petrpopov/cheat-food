@@ -10,7 +10,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>cheat food</title>
+    <title>Cheat food</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap -->
@@ -62,7 +62,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                                <a id="addMarkerMenu" href="#">
+                                <a id="addMarkerMenu">
                                     <img src="resources/img/pin.png" width="20"/>
                                     <span class="spacer3">Добавить точку</span>
                                 </a>
@@ -113,6 +113,13 @@
         <ul class="nav">
             <li><a href="mailto:popov.petr@gmail.com">Разработка и поддержка - Петр Попов, &copy; 2013</a></li>
         </ul>
+
+        <form id="currentActionForm" class="navbar-form form-inline centerForm" style="display: none;">
+            <label class="blackLabel">
+                <h4 id="currentActionText">Добавление новой точки</h4>
+            </label>
+            <button id="cancelCurrentAction" class="btn">Отмена</button>
+        </form>
     </div>
 </div>
 
