@@ -62,8 +62,10 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                                <i class="icon-ok"></i>
-                                <a id="addMarkerMenu" href="#">Добавить точку</a>
+                                <a id="addMarkerMenu" href="#">
+                                    <img src="resources/img/pin.png" width="20"/>
+                                    <span class="spacer3">Добавить точку</span>
+                                </a>
 
                         </li>
                     </ul>

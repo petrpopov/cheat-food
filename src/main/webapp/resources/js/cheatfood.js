@@ -40,6 +40,7 @@ $(document).ready(function(){
         createMarkersForLocations();
         createMarkerEditFormOnMap();
         createLocateMeButton();
+        createAddMarkerButton();
         createMainMenuBehavior();
     }
 
@@ -75,7 +76,7 @@ $(document).ready(function(){
                     google.maps.MapTypeId.ROADMAP,
                     google.maps.MapTypeId.SATELLITE,
                     google.maps.MapTypeId.TERRAIN],
-                position: google.maps.ControlPosition.TOP_LEFT,
+                position: google.maps.ControlPosition.BOTTOM_LEFT,
                 style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
             },
             zoomControl: true,
@@ -96,7 +97,7 @@ $(document).ready(function(){
 
     function setDefaultMapClickBehavior() {
         google.maps.event.addListener(map.map, 'click', function(event) {
-            $('#gmaps_context_menu').hide();
+            map.hideContextMenu();
         });
     }
 
@@ -123,7 +124,7 @@ $(document).ready(function(){
             control: 'map',
             options: [
                 {
-                    title: '<i class="icon-ok"></i><span class="spacer3">Создать точку здесь</span>',
+                    title: '<img src="resources/img/pin.png" width="20"/><span class="spacer3">Создать точку здесь</span>',
                     name: 'add_location',
                     action: function(e) {
                         createMarkerForContextMenu(e.latLng);
@@ -292,6 +293,27 @@ $(document).ready(function(){
         google.maps.event.addListener(map.map, 'idle', function(event) {
             $('#locateMe').click(function(){
                 centerMapToLocation();
+            });
+        });
+    }
+
+    function createAddMarkerButton() {
+        var div = $('<div/>').addClass('addMarker')
+            .append(
+                $('<a/>').attr('id','addMarkerButton').attr('href', '#').addClass("btn btn-small")
+                    .append(
+                        $('<img/>').attr('src','resources/img/pin.png').attr('width', '20')
+                    )
+                    .append(
+                        $('<span/>').addClass("spacer3").text('Добавить точку')
+                    )
+            );
+
+        map.map.controls[google.maps.ControlPosition.TOP_LEFT].push( div.get(0) );
+
+        google.maps.event.addListener(map.map, 'idle', function(event) {
+            $('#addMarkerButton').click(function(){
+                addMarkerOnMapByLeftClick();
             });
         });
     }

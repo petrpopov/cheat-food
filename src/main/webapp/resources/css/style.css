@@ -32,6 +32,10 @@ hr {
     margin-left: 28px;
 }
 
+.addMarker {
+    margin-top: 25px;
+}
+
 .transparent {
     zoom: 1;
     filter: alpha(opacity=95);
