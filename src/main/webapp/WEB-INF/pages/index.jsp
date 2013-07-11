@@ -41,7 +41,7 @@
 
 <body>
 
-<div class="navbar">
+<div class="navbar navbar-inverse">
     <div class="navbar-inner">
         <div class="container">
 
@@ -54,16 +54,37 @@
 
             <!-- Be sure to leave the brand out there if you want it shown -->
             <a class="brand" href="<c:url value="/"/>">cheat food</a>
+
             <ul class="nav">
-                <li><a href="#">Манифест</a></li>
-                <li><a href="#">Пользователям</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Редактировать<b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                                <i class="icon-ok"></i>
+                                <a id="addMarkerMenu" href="#">Добавить точку</a>
+
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Категории<b class="caret"></b>
+                    </a>
+                    <ul id="categoryMenu" class="dropdown-menu">
+                    </ul>
+                </li>
+                <li><a href="#">Вход</a></li>
+
             </ul>
 
             <!-- Everything you want hidden at 940px or less, place within here -->
             <div class="nav-collapse collapse">
                 <!-- .nav, .navbar-search, .navbar-form, etc -->
                 <ul class="nav pull-right">
-                    <li><a href="#">Вход</a></li>
+                    <li><a href="#">Манифест</a></li>
+                    <li><a href="#">Пользователям</a></li>
                 </ul>
             </div>
 
@@ -85,7 +106,7 @@
     </p>
 </div>
 
-<div class="navbar navbar-fixed-bottom">
+<div class="navbar navbar-fixed-bottom navbar-inverse">
     <div class="navbar-inner">
         <ul class="nav">
             <li><a href="mailto:popov.petr@gmail.com">Разработка и поддержка - Петр Попов, &copy; 2013</a></li>

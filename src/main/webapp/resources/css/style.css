@@ -28,6 +28,10 @@ hr {
     margin-left: 5px;
 }
 
+.spacer28 {
+    margin-left: 28px;
+}
+
 .transparent {
     zoom: 1;
     filter: alpha(opacity=95);
@@ -94,4 +98,14 @@ hr {
     border-width: 31px;
     top: 50%;
     margin-top: -31px;
+}
+
+.dropdown-menu>li>a {
+    display: inline;
+    padding: 3px 10px;
+    clear: both;
+    font-weight: normal;
+    line-height: 20px;
+    color: #333;
+    white-space: nowrap;
 }

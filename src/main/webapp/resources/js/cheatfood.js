@@ -9,6 +9,8 @@ $(document).ready(function(){
 
     var markers = new HashMap();
 
+    var newMarker = false;
+
     var GRID_SIZE = 50;
     var MAX_ZOOM = 15;
     var ENTER_KEY = 13;
@@ -37,10 +39,28 @@ $(document).ready(function(){
         centerMapToLocation();
         createMarkersForLocations();
         createMarkerEditFormOnMap();
+        createLocateMeButton();
+        createMainMenuBehavior();
     }
 
     function createMap() {
         var mcOptions = {gridSize: GRID_SIZE, maxZoom: MAX_ZOOM};
+        var styles = [
+            {
+                featureType: "road",
+                elementType: "geometry",
+                stylers: [
+                    { lightness: 100 },
+                    { visibility: "simplified" }
+                ]
+            },{
+                featureType: "road",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            }
+        ];
 
         map = new GMaps({
             div: '#map',
@@ -49,10 +69,34 @@ $(document).ready(function(){
             zoom: ZOOM_LEVEL,
             streetViewControl: true,
             panControl: true,
-            mapTypeControl: false,
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                mapTypeIds: [google.maps.MapTypeId.HYBRID,
+                    google.maps.MapTypeId.ROADMAP,
+                    google.maps.MapTypeId.SATELLITE,
+                    google.maps.MapTypeId.TERRAIN],
+                position: google.maps.ControlPosition.TOP_LEFT,
+                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+            },
+            zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.TOP_LEFT
+            },
+            styles: styles,
             markerClusterer: function(map) {
                 return new MarkerClusterer(map, [], mcOptions);
             }
+        });
+
+        var transitLayer = new google.maps.TransitLayer();
+        transitLayer.setMap(map.map);
+
+        setDefaultMapClickBehavior();
+    }
+
+    function setDefaultMapClickBehavior() {
+        google.maps.event.addListener(map.map, 'click', function(event) {
+            $('#gmaps_context_menu').hide();
         });
     }
 
@@ -63,9 +107,11 @@ $(document).ready(function(){
             },
             error: function(error) {
                 map.setCenter( moscowCenter.lat, moscowCenter.lng );
+                $('#locateMeDiv').hide();
             },
             not_supported: function() {
                 map.setCenter( moscowCenter.lat, moscowCenter.lng );
+                $('#locateMeDiv').hide();
             },
             always: function() {}
         });
@@ -80,7 +126,7 @@ $(document).ready(function(){
                     title: '<i class="icon-ok"></i><span class="spacer3">Создать точку здесь</span>',
                     name: 'add_location',
                     action: function(e) {
-                        createMarkerForContextMenu(e);
+                        createMarkerForContextMenu(e.latLng);
                     }
                 }
             ]
@@ -125,19 +171,87 @@ $(document).ready(function(){
         });
     }
 
-    function createMarkerForContextMenu(e) {
+    function createMarkerForContextMenu(latLng) {
 
+        if( newMarker === true ) {
+            return;
+        }
+
+        newMarker = true;
         var location = createEmptyLocation();
-        location.geoLocation = getGeoLocationFromLatLng(e.latLng);
+        location.geoLocation = getGeoLocationFromLatLng(latLng);
 
         var infoBoxObject = {
             infoBox: infoBox,
             location: location
         };
-        infoBox.setPosition(e.latLng);
+        infoBox.setPosition(latLng);
 
         createMarkerWithInfoBoxForLocation(infoBoxObject);
         initAndShowEditForm(infoBoxObject);
+    }
+
+    function createMainMenuBehavior() {
+
+        enableAddMarkerMenu();
+    }
+
+    function enableAddMarkerMenu() {
+        $('#addMarkerMenu').closest('li').removeClass('disabled');
+        $('#addMarkerMenu').off('click');
+        $('#addMarkerMenu').click(function() {
+            addMarkerOnMapByLeftClick();
+        });
+    }
+
+    function disableAddMarkerMenu() {
+        $('#addMarkerMenu').closest('li').addClass('disabled');
+        $('#addMarkerMenu').off('click');
+    }
+
+    function addMarkerOnMapByLeftClick() {
+
+        //change cursor
+        map.setOptions( {
+            draggableCursor : "url(resources/img/pin.png), auto",
+            draggingCursor : "url(resources/img/pin.png), auto"
+        });
+
+        //disable context menu
+        google.maps.event.clearListeners(map.map, 'rightclick');
+
+        //create marker and edit-form on left click
+        google.maps.event.addListener(map.map, 'click', function(event) {
+            createMarkerForContextMenu(event.latLng);
+        });
+
+        disableAddMarkerMenu();
+    }
+
+    function setDefaultMouseBehavior() {
+
+        //set default cursor
+        map.setOptions({
+            draggableCursor: 'default',
+            draggingCursor: 'pointer'
+        });
+
+        //disable create marker on left click event function
+        google.maps.event.clearListeners(map.map, 'click');
+
+        //enable context menu
+        //code from gmaps.js
+        google.maps.event.addListener(map.map, 'rightclick', function(e) {
+            if(window.context_menu[map.el.id]['map'] != undefined) {
+                map.buildContextMenu('map', e);
+            }
+        });
+        //end of gmaps.js
+
+        //hide context on left click (default behavior)
+        setDefaultMapClickBehavior();
+
+        enableAddMarkerMenu();
     }
 
     function createMarkersForLocations() {
@@ -164,6 +278,22 @@ $(document).ready(function(){
 
         var mapControls = map.map.controls[google.maps.ControlPosition.TOP_RIGHT];
         map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(div.get(0));
+    }
+
+    function createLocateMeButton() {
+        var div = $('<div/>').attr('id','locateMeDiv').addClass("spacer28 infoWindow").append(
+            $('<a/>').attr('id', 'locateMe').attr('href', '#').append(
+                $('<img/>').attr('src', 'resources/img/location.png').attr('width', '32')
+            )
+        );
+
+        map.map.controls[google.maps.ControlPosition.LEFT_TOP].push( div.get(0) );
+
+        google.maps.event.addListener(map.map, 'idle', function(event) {
+            $('#locateMe').click(function(){
+                centerMapToLocation();
+            });
+        });
     }
 
     function createInfoBoxForMarkers(position) {
@@ -201,6 +331,7 @@ $(document).ready(function(){
             lat: pos.lat(),
             lng: pos.lng(),
             title: location.title,
+            icon: 'resources/img/bread.png',
             click: function() {
                 initialShowInfoBoxForMarker(marker, infoBoxObject);
             }
@@ -360,8 +491,7 @@ $(document).ready(function(){
 
         $('#cancelEdit').off('click');
         $('#cancelEdit').click(function() {
-            $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
-            infoBoxObject.infoBox.show();
+            cancelNewMarkerAddition(infoBoxObject);
         });
 
         $('#editMarkerForm').off('submit');
@@ -375,6 +505,21 @@ $(document).ready(function(){
                 $('#submitEdit').click();
             }
         });
+    }
+
+    function cancelNewMarkerAddition(infoBoxObject) {
+        $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+
+        if( infoBoxObject ) {
+            infoBoxObject.infoBox.show();
+        }
+
+        if( newMarker === true ) {
+            removeMarkerAndInfoBox(infoBoxObject);
+        }
+        setDefaultMouseBehavior();
+
+        newMarker = false;
     }
 
     function submitEditForm(infoBoxObject) {
@@ -449,6 +594,7 @@ $(document).ready(function(){
                 $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
 
                 showInfoBoxForMarker(infoBoxObject);
+                newMarker = false;
             },
             statusCode: {
                 400: function(data) {

@@ -329,7 +329,7 @@ var GMaps = (function(global) {
 
       doc.body.appendChild(ul);
 
-      var context_menu_element = getElementById('gmaps_context_menu')
+      var context_menu_element = getElementById('gmaps_context_menu');
 
       google.maps.event.addDomListener(context_menu_element, 'mouseout', function(ev) {
         if (!ev.relatedTarget || !this.contains(ev.relatedTarget)) {
@@ -663,6 +663,10 @@ GMaps.prototype.removeMarker = function(marker) {
     if (this.markers[i] === marker) {
       this.markers[i].setMap(null);
       this.markers.splice(i, 1);
+
+        if(this.markerClusterer) {
+            this.markerClusterer.removeMarker(marker);
+        }
 
       GMaps.fire('marker_removed', marker, this);
 
