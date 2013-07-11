@@ -78,8 +78,12 @@
                     </ul>
                 </li>
                 <li><a href="#">Вход</a></li>
-
             </ul>
+
+            <form class="navbar-search pull-left">
+                <input type="text" class="search-query input-block-level span5 searchInput" placeholder="Поиск">
+            </form>
+
 
             <!-- Everything you want hidden at 940px or less, place within here -->
             <div class="nav-collapse collapse">

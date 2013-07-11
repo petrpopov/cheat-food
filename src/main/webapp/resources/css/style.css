@@ -57,6 +57,10 @@ hr {
     margin: 0 auto;
 }
 
+.searchInput {
+    min-height: 30px;
+}
+
 .infoWindow {
     background-color: #fafafa;
     border: 1px solid #d4d4d4;
