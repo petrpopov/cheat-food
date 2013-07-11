@@ -2,24 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d3c17744-07db-495c-8d73-b4d20484b32d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/resources/img/bread.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/resources/img/butcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/resources/img/location.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/resources/img/pin.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" afterPath="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/resources/js/gmaps.js" afterPath="$PROJECT_DIR$/src/main/webapp/resources/js/gmaps.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/resources/css/style.css" afterPath="$PROJECT_DIR$/src/main/webapp/resources/css/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cheap-food.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373358045419" ignored="false" />
-    <file path="/index.jsp" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373534581722" ignored="false" />
-    <file path="/Dummy.txt" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373469521635" ignored="false" />
+    <file path="/index.jsp" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373572413222" ignored="false" />
+    <file path="/Dummy.txt" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373572729922" ignored="false" />
     <file path="/cheapfood.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373307491550" ignored="false" />
     <file path="/gmaps.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373562166606" ignored="false" />
-    <file path="/style.css" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373567853403" ignored="false" />
+    <file path="/style.css" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373572124984" ignored="false" />
     <file path="/basic.html" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1372714646923" ignored="false" />
     <file path="/Catch Statement Body.txt.ft" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1372769957606" ignored="false" />
     <file path="/Implemented Method Body.txt.ft" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1372769971689" ignored="false" />
@@ -49,7 +42,7 @@
     <file path="/JSONMapper.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373283456970" ignored="false" />
     <file path="/CustomMapper.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373283393790" ignored="false" />
     <file path="/DateSerializer.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373283537480" ignored="false" />
-    <file path="/cheatfood.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373568290218" ignored="false" />
+    <file path="/cheatfood.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373573081263" ignored="false" />
     <file path="/rebel.xml" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373357697773" ignored="false" />
     <file path="/ParamsWebService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373469511642" ignored="false" />
     <file path="/test.html" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373407786785" ignored="false" />
@@ -116,7 +109,7 @@
       <file leaf-file-name="index.jsp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="52" selection-start="3211" selection-end="3224" vertical-scroll-proportion="-20.357143">
+            <state line="66" column="56" selection-start="3318" selection-end="3318" vertical-scroll-proportion="-19.0">
               <folding />
             </state>
           </provider>
@@ -134,7 +127,7 @@
       <file leaf-file-name="cheatfood.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="113" column="41" selection-start="3283" selection-end="3283" vertical-scroll-proportion="0.43067226">
+            <state line="309" column="37" selection-start="9477" selection-end="9477" vertical-scroll-proportion="0.43067226">
               <folding />
             </state>
           </provider>
@@ -143,7 +136,7 @@
       <file leaf-file-name="style.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="9" selection-start="509" selection-end="509" vertical-scroll-proportion="0.0">
+            <state line="34" column="10" selection-start="539" selection-end="548" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -152,7 +145,7 @@
       <file leaf-file-name="gmaps.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/gmaps.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="601" column="27" selection-start="16822" selection-end="16822" vertical-scroll-proportion="0.0">
+            <state line="342" column="9" selection-start="9984" selection-end="9984" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -219,9 +212,9 @@
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Location.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/LocationService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/resources/js/gmaps.js" />
         <option value="$PROJECT_DIR$/src/main/webapp/resources/css/style.css" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" />
       </list>
     </option>
@@ -959,7 +952,15 @@
       <created>1373469523269</created>
       <updated>1373469523269</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="locateMe button, new icons for marker, dark navbar, main menu in navbar, add new marker from menu action">
+      <created>1373568388645</created>
+      <updated>1373568388645</updated>
+    </task>
+    <task id="LOCAL-00023" summary="fixed #16">
+      <created>1373572733808</created>
+      <updated>1373572733808</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1058,7 +1059,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="some changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed #16" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1093,6 +1094,8 @@
     <MESSAGE value="issue #11 seems all working correct" />
     <MESSAGE value="cluster changes" />
     <MESSAGE value="some changes" />
+    <MESSAGE value="locateMe button, new icons for marker, dark navbar, main menu in navbar, add new marker from menu action" />
+    <MESSAGE value="fixed #16" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1190,22 +1193,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="52" selection-start="3211" selection-end="3224" vertical-scroll-proportion="-20.357143">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/gmaps.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="601" column="27" selection-start="16822" selection-end="16822" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavascriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/EcmaScript.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="154" column="16" selection-start="2524" selection-end="2524" vertical-scroll-proportion="0.3329832">
@@ -1215,14 +1202,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/css/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="9" selection-start="509" selection-end="509" vertical-scroll-proportion="0.0">
+        <state line="34" column="10" selection-start="539" selection-end="548" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/gmaps.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="342" column="9" selection-start="9984" selection-end="9984" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="66" column="56" selection-start="3318" selection-end="3318" vertical-scroll-proportion="-19.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="41" selection-start="3283" selection-end="3283" vertical-scroll-proportion="0.43067226">
+        <state line="309" column="37" selection-start="9477" selection-end="9477" vertical-scroll-proportion="0.43067226">
           <folding />
         </state>
       </provider>

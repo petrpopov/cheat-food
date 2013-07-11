@@ -102,9 +102,12 @@ $(document).ready(function(){
     }
 
     function centerMapToLocation() {
+        disableLocateMeButton();
+
         GMaps.geolocate({
             success: function(position) {
                 map.setCenter(position.coords.latitude, position.coords.longitude);
+                enableLocateMeButton();
             },
             error: function(error) {
                 map.setCenter( moscowCenter.lat, moscowCenter.lng );
@@ -203,11 +206,20 @@ $(document).ready(function(){
         $('#addMarkerMenu').click(function() {
             addMarkerOnMapByLeftClick();
         });
+
+        $('#addMarkerButton').removeClass('disabled');
+        $('#addMarkerButton').off('click');
+        $('#addMarkerButton').click(function() {
+            addMarkerOnMapByLeftClick();
+        });
     }
 
     function disableAddMarkerMenu() {
         $('#addMarkerMenu').closest('li').addClass('disabled');
         $('#addMarkerMenu').off('click');
+
+        $('#addMarkerButton').addClass('disabled');
+        $('#addMarkerButton').off('click');
     }
 
     function addMarkerOnMapByLeftClick() {
@@ -291,10 +303,19 @@ $(document).ready(function(){
         map.map.controls[google.maps.ControlPosition.LEFT_TOP].push( div.get(0) );
 
         google.maps.event.addListener(map.map, 'idle', function(event) {
-            $('#locateMe').click(function(){
-                centerMapToLocation();
-            });
+            enableLocateMeButton();
         });
+    }
+
+    function enableLocateMeButton() {
+        $('#locateMe').click(function(){
+            centerMapToLocation();
+        });
+    }
+
+    function disableLocateMeButton() {
+        $('#locateMe').off('click');
+        $('#locateMe').addClass('disabled');
     }
 
     function createAddMarkerButton() {
