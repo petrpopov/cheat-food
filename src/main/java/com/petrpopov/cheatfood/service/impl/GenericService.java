@@ -1,5 +1,7 @@
-package com.petrpopov.cheatfood.service;
+package com.petrpopov.cheatfood.service.impl;
 
+import com.petrpopov.cheatfood.service.IGenericService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -22,20 +24,26 @@ public class GenericService<T> implements IGenericService<T> {
 
     protected Class<T> domainClass;
 
+    private Logger logger;
+
     public GenericService() {
+        logger = Logger.getLogger(GenericService.class);
     }
 
     public GenericService(Class<T> domainClass) {
         this.domainClass = domainClass;
+        logger = Logger.getLogger(domainClass);
     }
 
     @Override
     public List findAll() {
+        logger.info("Returning all entities " + domainClass.getSimpleName() + " from database");
         return op.findAll(domainClass);
     }
 
     @Override
     public T findById(String id) {
+        logger.info("Returning entity " + domainClass.getSimpleName() + " from database by ID");
         return op.findById(id, domainClass);
     }
 }

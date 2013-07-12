@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d3c17744-07db-495c-8d73-b4d20484b32d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/GenericService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/IGenericService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/ITypeService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Text.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Type.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/TypeService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Location.java" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Location.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/GenericService.java" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/impl/GenericService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/TypeService.java" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/impl/TypeService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java" afterPath="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" afterPath="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
@@ -18,7 +12,7 @@
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373358045419" ignored="false" />
     <file path="/index.jsp" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373578042936" ignored="false" />
-    <file path="/Dummy.txt" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373583056222" ignored="false" />
+    <file path="/Dummy.txt" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373620282396" ignored="false" />
     <file path="/cheapfood.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373307491550" ignored="false" />
     <file path="/gmaps.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373562166606" ignored="false" />
     <file path="/style.css" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373577503322" ignored="false" />
@@ -34,7 +28,7 @@
     <file path="/fragment.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373270820500" ignored="false" />
     <file path="/a.dummy" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1372772879924" ignored="false" />
     <file path="/config.properties" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373459069134" ignored="false" />
-    <file path="/LocationService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373619879338" ignored="false" />
+    <file path="/LocationService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373620848279" ignored="false" />
     <file path="/LocationWebService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373619796014" ignored="false" />
     <file path="/MyFilter.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1372883621113" ignored="false" />
     <file path="/infoform.html" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1372937495356" ignored="false" />
@@ -53,12 +47,12 @@
     <file path="/DateSerializer.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373283537480" ignored="false" />
     <file path="/cheatfood.js" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373586099084" ignored="false" />
     <file path="/rebel.xml" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373357697773" ignored="false" />
-    <file path="/ParamsWebService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373583747183" ignored="false" />
+    <file path="/ParamsWebService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373620883953" ignored="false" />
     <file path="/test.html" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373407786785" ignored="false" />
     <file path="/Category.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373583112644" ignored="false" />
     <file path="/Text.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373583090030" ignored="false" />
     <file path="/TypeService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373619913457" ignored="false" />
-    <file path="/GenericService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373619727389" ignored="false" />
+    <file path="/GenericService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373621068143" ignored="false" />
     <file path="/IGenericService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373619708377" ignored="false" />
     <file path="/ILocationService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373619251883" ignored="false" />
     <file path="/ITypeService.java" changelist="d3c17744-07db-495c-8d73-b4d20484b32d" time="1373619663613" ignored="false" />
@@ -131,10 +125,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LocationWebService.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="LocationWebService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/LocationWebService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="0" selection-start="142" selection-end="142" vertical-scroll-proportion="-0.05777311">
+            <state line="4" column="0" selection-start="142" selection-end="142" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -143,37 +137,17 @@
       <file leaf-file-name="cheatfood.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="797" column="39" selection-start="24716" selection-end="24716" vertical-scroll-proportion="0.0">
+            <state line="28" column="12" selection-start="587" selection-end="587" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Location.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Location.java">
+      <file leaf-file-name="LocationService.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="48" column="10" selection-start="998" selection-end="998" vertical-scroll-proportion="0.0">
+            <state line="23" column="45" selection-start="786" selection-end="786" vertical-scroll-proportion="0.15966387">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LocationService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/LocationService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="13" selection-start="715" selection-end="715" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ILocationService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="42" selection-start="356" selection-end="356" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -196,15 +170,11 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/webapp/resources/css/style.css" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Category.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Text.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/config/InitBean.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Type.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Location.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/ITypeService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/IGenericService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/GenericService.java" />
@@ -212,6 +182,10 @@
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/LocationService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/TypeService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/LocationWebService.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js" />
+        <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/impl/GenericService.java" />
       </list>
     </option>
   </component>
@@ -502,6 +476,40 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="service" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cheap-food" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cheatfood" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cheatfood" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="impl" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -980,7 +988,11 @@
       <created>1373583059025</created>
       <updated>1373583059025</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="issue #17">
+      <created>1373620285597</created>
+      <updated>1373620285597</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1079,7 +1091,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="issue #15" />
+    <option name="LAST_COMMIT_MESSAGE" value="issue #17" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1093,7 +1105,6 @@
     <option name="UPDATE_FILTER_BY_SCOPE" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="issue #3 interface enhancements, edit from is now in controls list" />
     <MESSAGE value="issue #3 &#10;interface enhancements, validation on form, new datepicker, REST service for saving data, validation data on server side, JSON format date serialization" />
     <MESSAGE value="fixed issue #8" />
     <MESSAGE value="fixed issue #8 JRebel" />
@@ -1118,6 +1129,7 @@
     <MESSAGE value="fixed #14" />
     <MESSAGE value="fixed #13" />
     <MESSAGE value="issue #15" />
+    <MESSAGE value="issue #17" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1127,20 +1139,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/2.7.1/mongo-java-driver-2.7.1.jar!/com/mongodb/DBCollection.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="22" selection-start="163" selection-end="163" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-mongodb/1.0.4.RELEASE/spring-data-mongodb-1.0.4.RELEASE-sources.jar!/org/springframework/data/mongodb/core/MongoOperations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="11" selection-start="2177" selection-end="2177" vertical-scroll-proportion="0.3329832">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/2.7.1/mongo-java-driver-2.7.1-sources.jar!/com/mongodb/DBCollection.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="775" column="16" selection-start="27798" selection-end="27798" vertical-scroll-proportion="0.33333334">
@@ -1148,32 +1146,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="28" selection-start="66" selection-end="66" vertical-scroll-proportion="0.039915968">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/css/style.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="119" column="19" selection-start="2411" selection-end="2429" vertical-scroll-proportion="0.70063025">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Type.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="29" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Location.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="10" selection-start="998" selection-end="998" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1192,58 +1167,97 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/GenericService.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="42" selection-start="873" selection-end="873" vertical-scroll-proportion="0.75840336">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/IGenericService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="33" selection-start="228" selection-end="228" vertical-scroll-proportion="0.2394958">
+        <state line="12" column="42" selection-start="324" selection-end="324" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Text.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="42" selection-start="356" selection-end="356" vertical-scroll-proportion="0.0">
+        <state line="11" column="13" selection-start="212" selection-end="212" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/TypeService.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Type.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="23" selection-start="565" selection-end="565" vertical-scroll-proportion="0.2394958">
+        <state line="31" column="29" selection-start="608" selection-end="608" vertical-scroll-proportion="0.61869746">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#531#537#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/impl/TypeService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="23" selection-start="599" selection-end="599" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#589#595#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/config/AppSettings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="13" selection-start="276" selection-end="276" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/model/Location.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="10" selection-start="998" selection-end="998" vertical-scroll-proportion="0.5548456">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/cheatfood.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="797" column="39" selection-start="24716" selection-end="24716" vertical-scroll-proportion="0.0">
+        <state line="28" column="12" selection-start="587" selection-end="587" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/LocationService.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/IGenericService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="13" selection-start="715" selection-end="715" vertical-scroll-proportion="0.0">
+        <state line="11" column="19" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/ParamsWebService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="33" selection-start="990" selection-end="990" vertical-scroll-proportion="0.6785714">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/web/LocationWebService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="142" selection-end="142" vertical-scroll-proportion="-0.05777311">
+        <state line="4" column="0" selection-start="142" selection-end="142" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/impl/GenericService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="75" selection-start="1036" selection-end="1036" vertical-scroll-proportion="0.7521008">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="45" selection-start="786" selection-end="786" vertical-scroll-proportion="0.15966387">
           <folding />
         </state>
       </provider>

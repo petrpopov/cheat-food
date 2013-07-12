@@ -25,7 +25,7 @@ $(document).ready(function(){
     loadParams();
 
     function loadParams() {
-        $.get('api/types1', function(data) {
+        $.get('api/types', function(data) {
             types = data;
             init();
         });

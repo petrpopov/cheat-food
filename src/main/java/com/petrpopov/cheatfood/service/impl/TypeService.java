@@ -1,8 +1,9 @@
-package com.petrpopov.cheatfood.service;
+package com.petrpopov.cheatfood.service.impl;
 
 import com.mongodb.DBCollection;
 import com.petrpopov.cheatfood.model.Text;
 import com.petrpopov.cheatfood.model.Type;
+import com.petrpopov.cheatfood.service.ITypeService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

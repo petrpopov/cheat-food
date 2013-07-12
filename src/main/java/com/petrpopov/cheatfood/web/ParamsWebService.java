@@ -1,7 +1,8 @@
 package com.petrpopov.cheatfood.web;
 
 import com.petrpopov.cheatfood.model.Type;
-import com.petrpopov.cheatfood.service.TypeService;
+import com.petrpopov.cheatfood.service.ITypeService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,24 +22,16 @@ import java.util.List;
 @RequestMapping("/api")
 public class ParamsWebService {
 
-    private String[] types = new String[]{
-            "Шашлычная", "Чебуречная", "Шаверменная", "Чайхона",
-            "Блинная", "Бутербродная", "Рюмочная",
-            "Булочная", "Столовая", "Кафе", "Кулинария", "Другое"};
-
     @Autowired
-    private TypeService typeService;
+    private ITypeService typeService;
 
+    private Logger logger = Logger.getLogger(ParamsWebService.class);
 
     @RequestMapping(value="types", method = RequestMethod.GET)
     @ResponseBody
-    public String[] getLocationTypesList() {
-        return types;
-    }
-
-    @RequestMapping(value="types1", method = RequestMethod.GET)
-    @ResponseBody
     public List<Type> getLocationTypes() {
+
+        logger.info("Returning all types from database to WEB response");
         return typeService.findAll();
     }
 }
