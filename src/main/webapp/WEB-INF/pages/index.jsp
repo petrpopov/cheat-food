@@ -23,7 +23,7 @@
     <script src="<s:url value="/resources"/>/js/jquery-1.10.1.min.js"></script>
     <script src="<s:url value="/resources"/>/js/bootstrap.min.js"></script>
 
-    <script src="<s:url value="/resources"/>/js/jquery.validate.min.js"></script>
+    <script src="<s:url value="/resources"/>/js/jquery.validate-1.11.1.min.js"></script>
     <script src="<s:url value="/resources"/>/js/validation.messages_ru.js"></script>
 
     <script src="<s:url value="/resources"/>/js/jquery-ui-1.10.3.custom.min.js"></script>
@@ -32,10 +32,10 @@
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script>
     <!--script src="https://www.google.com/jsapi?sensor=true&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script-->
 
-    <script type="text/javascript" src="<s:url value="/resources"/>/js/markerclusterer.min.js"></script>
-    <script type="text/javascript" src="<s:url value="/resources"/>/js/infobox.min.js"></script>
+    <script type="text/javascript" src="<s:url value="/resources"/>/js/markerclusterer-2.0.9.min.js"></script>
+    <script type="text/javascript" src="<s:url value="/resources"/>/js/infobox-1.1.9.min.js"></script>
 
-    <script src="<s:url value="/resources"/>/js/gmaps.js"></script>
+    <script src="<s:url value="/resources"/>/js/gmaps-0.4.4.js"></script>
     <script src="<s:url value="/resources"/>/js/cheatfood.js"></script>
 </head>
 
@@ -45,6 +45,8 @@
     <%= request.getScheme()+"://"
             + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() %>
 </label>
+
+<label id="locationLabel" hidden="true" style="display: none;">${location}</label>
 
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">

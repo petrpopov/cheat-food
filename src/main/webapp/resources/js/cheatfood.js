@@ -16,6 +16,8 @@ $(document).ready(function(){
 
     var GRID_SIZE = 50;
     var MAX_ZOOM = 15;
+    var MAX_ZOOM_FOR_MARKER = 18;
+    var MAX_POSSIBLE_ZOOM = 30;
     var ENTER_KEY = 13;
     var ZOOM_LEVEL = 10;
     var TYPE_IMAGE_WIDTH = 128;
@@ -30,25 +32,44 @@ $(document).ready(function(){
     function loadParams() {
 
         params.realPath = $('#realPath').text().trim();
-        console.log(params.realPath);
+
+        var location = $('#locationLabel').text();
+        if( location ) {
+            location = JSON.parse(location);
+        }
+
+
+        var index = document.URL.indexOf(params.realPath);
+        if( index >= 0 ) {
+            var tempURL = document.URL.substring(params.realPath.length+1);
+            var locationIndex = tempURL.indexOf("location");
+            if( locationIndex === 0 ) {
+                //location/id - in URL
+                //if location == null, wrong location, wrong id etc
+                //we change URL in address bar to main page URL
+                if( !location ) {
+                    window.history.pushState("", "", params.realPath );
+                }
+            }
+        }
 
         $.get(params.realPath+'/api/types', function(data) {
             params.types = data;
-            init();
+            init(location);
         });
     }
 
-    function init() {
+    function init(location) {
 
         createMap();
         createContextMenuForMap();
         createContextMenuForMarker();
-        centerMapToLocation();
-        createMarkersForLocations();
         createMarkerEditFormOnMap();
         createLocateMeButton();
         createAddMarkerButton();
         createMainMenuBehavior();
+        centerMapToLocation(location);
+        createMarkersForLocations(location);
     }
 
     function createMap() {
@@ -75,6 +96,7 @@ $(document).ready(function(){
             lat: moscowCenter.lat,
             lng: moscowCenter.lng,
             zoom: ZOOM_LEVEL,
+            maxZoom: MAX_POSSIBLE_ZOOM,
             streetViewControl: true,
             panControl: true,
             mapTypeControl: true,
@@ -118,15 +140,26 @@ $(document).ready(function(){
 
         GMaps.geolocate({
             success: function(position) {
-                map.setCenter(position.coords.latitude, position.coords.longitude);
+
+                if( !location ) {
+                    map.setCenter(position.coords.latitude, position.coords.longitude);
+                }
+
                 enableLocateMeButton();
             },
             error: function(error) {
-                map.setCenter( moscowCenter.lat, moscowCenter.lng );
+
+                if( !location ) {
+                    map.setCenter( moscowCenter.lat, moscowCenter.lng );
+                }
+
                 $('#locateMeDiv').hide();
             },
             not_supported: function() {
-                map.setCenter( moscowCenter.lat, moscowCenter.lng );
+                if( !location ) {
+                    map.setCenter( moscowCenter.lat, moscowCenter.lng );
+                }
+
                 $('#locateMeDiv').hide();
             },
             always: function() {}
@@ -373,20 +406,25 @@ $(document).ready(function(){
         });
     }
 
-    function createMarkersForLocations() {
+    function createMarkersForLocations(location) {
 
         infoBox = createInfoBoxForMarkers();
 
         $.get(params.realPath+"/api/locations", function(data) {
-
-            $.each(data, function(n, location) {
-
+            $.each(data, function(n, loadedLocation) {
                 var infoBoxObject = {
                     infoBox: infoBox,
-                    location: location
+                    location: loadedLocation
                 };
 
-                createMarkerWithInfoBoxForLocation(infoBoxObject);
+                var zoomIn = false;
+                if( location ) {
+                    if(loadedLocation.id === location.id) {
+                        zoomIn = true;
+                    }
+                }
+
+                createMarkerWithInfoBoxForLocation(infoBoxObject, zoomIn);
             });
         });
     }
@@ -472,7 +510,7 @@ $(document).ready(function(){
         return infoBox;
     }
 
-    function createMarkerWithInfoBoxForLocation(infoBoxObject) {
+    function createMarkerWithInfoBoxForLocation(infoBoxObject, zoomIn) {
 
         var pos = getLatLngFromGeoLocation(infoBoxObject.location.geoLocation);
 
@@ -482,16 +520,31 @@ $(document).ready(function(){
             title: location.title,
             icon: getImagePath('bread.png'),
             click: function() {
-                initialShowInfoBoxForMarker(marker, infoBoxObject);
-                enableEditMarkerMenu(infoBoxObject);
-                enableDeleteMarkerMenu(infoBoxObject);
+                markerClickBehavior(marker, infoBoxObject);
             }
         });
 
         infoBoxObject.marker = marker;
         markers.put(marker, infoBoxObject);
 
+
+        if( zoomIn ) {
+            if( zoomIn === true ) {
+                map.map.setCenter(marker.getPosition());
+
+                markerClickBehavior(marker, infoBoxObject);
+
+                map.setZoom(MAX_ZOOM_FOR_MARKER);
+            }
+        }
+
         return marker;
+    }
+
+    function markerClickBehavior(marker, infoBoxObject) {
+        initialShowInfoBoxForMarker(marker, infoBoxObject);
+        enableEditMarkerMenu(infoBoxObject);
+        enableDeleteMarkerMenu(infoBoxObject);
     }
 
     function initialShowInfoBoxForMarker(marker, infoBoxObject) {
