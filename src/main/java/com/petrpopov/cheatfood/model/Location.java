@@ -4,6 +4,7 @@ import com.petrpopov.cheatfood.config.DateSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
@@ -44,22 +45,22 @@ public class Location {
     @NotNull
     private Boolean footype;
 
-    @NotNull
-    @NotEmpty
-    private String type;
+    @Valid
+    @DBRef
+    private Type type;
 
     public Location() {
     }
 
-    public Location(String id, String title, String description, String addressDescription, Address address, GeoLocation geoLocation, Date actualDate, String creatorId, Boolean footype, String type) {
+    public Location(String id, String title, String description, String addressDescription, GeoLocation geoLocation, Date actualDate, String creatorId, Address address, Boolean footype, Type type) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.addressDescription = addressDescription;
-        this.address = address;
         this.geoLocation = geoLocation;
         this.actualDate = actualDate;
         this.creatorId = creatorId;
+        this.address = address;
         this.footype = footype;
         this.type = type;
     }
@@ -137,11 +138,11 @@ public class Location {
         this.footype = footype;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 }

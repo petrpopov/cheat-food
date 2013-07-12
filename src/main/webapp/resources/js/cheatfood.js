@@ -25,7 +25,7 @@ $(document).ready(function(){
     loadParams();
 
     function loadParams() {
-        $.get('api/types', function(data) {
+        $.get('api/types1', function(data) {
             types = data;
             init();
         });
@@ -478,7 +478,7 @@ $(document).ready(function(){
         var location = infoBoxObject.location;
 
         $('#info_title').text(location.title);
-        $('#info_type').text(location.type);
+        $('#info_type').text( getTypeValueByLanguage(location.type, DATE_LANGUAGE) );
         $('#info_description').text(location.description);
 
         if(location.addressDescription) {
@@ -671,7 +671,10 @@ $(document).ready(function(){
         var id = $('#location-id').val();
         var title = $('#title').val();
         var description = $('#description').val();
-        var type = $('#type').val();
+
+        var typeId = $('#type').val();
+        var type = getTypeById(typeId);
+
         var footype = $("#editMarkerForm input[type='radio']:checked").val();
         var addressDescription = $('#addressDescription').val();
         var actualDate = $('#actualDate').datepicker('getDate');
@@ -726,6 +729,7 @@ $(document).ready(function(){
                 newMarker = false;
                 enableEditMarkerMenu(infoBoxObject);
                 enableDeleteMarkerMenu(infoBoxObject);
+                setDefaultMouseBehavior();
             },
             statusCode: {
                 400: function(data) {
@@ -791,7 +795,7 @@ $(document).ready(function(){
         initDatePicker(location.actualDate);
 
         //types
-        $("#type").val(location.type);
+        $("#type").val(location.type.id);
         if( location.footype === true ) {
             $('input:radio[name="footypeRadio"]').filter('[value="true"]').attr('checked', true);
         }
@@ -980,9 +984,9 @@ $(document).ready(function(){
                                         $('<div/>').addClass('btn-group pull-right')
                                             .append(
                                                 $('<button/>').attr('id', 'editMarkerButton')
-                                                    .addClass('btn btn-primary btn-small')
+                                                    .addClass('btn btn-small')
                                                     .append(
-                                                        $('<i/>').addClass('icon-edit icon-white')
+                                                        $('<i/>').addClass('icon-edit')
                                                     )
                                                     .append(
                                                         $('<span/>').addClass("spacer3").text('Редактировать')
@@ -990,9 +994,9 @@ $(document).ready(function(){
                                             )
                                             .append(
                                                 $('<button/>').attr('id', 'deleteMarkerButton')
-                                                    .addClass('btn btn-danger btn-small')
+                                                    .addClass('btn btn-small')
                                                     .append(
-                                                        $('<i/>').addClass('icon-trash icon-white')
+                                                        $('<i/>').addClass('icon-trash')
                                                     )
                                                     .append(
                                                         $('<span/>').addClass("spacer3").text('Удалить')
@@ -1300,7 +1304,16 @@ $(document).ready(function(){
 
         var res = [];
         for(var i = 0; i < types.length; i++) {
-            res.push($('<option/>').text(types[i]));
+            var type = types[i];
+
+            var id = type.id;
+            var val = null;
+            for(var j = 0; j < type.names.length; j++) {
+                if( type.names[j].language === DATE_LANGUAGE ) {
+                    val = type.names[j].value;
+                }
+            }
+            res.push($('<option/>').val(id).text(val));
         }
         return res;
     }
@@ -1321,7 +1334,15 @@ $(document).ready(function(){
         return {
             title: "",
             description: "",
-            type: "",
+            type: {
+                id: "",
+                names: [
+                    {
+                        language: DATE_LANGUAGE,
+                        value: ""
+                    }
+                ]
+            },
             footype: true,
             addressDescription: "",
             actualDate: "",
@@ -1337,6 +1358,26 @@ $(document).ready(function(){
                 zipcode: ""
             }
         };
+    }
+
+    function getTypeById(id) {
+        for(var i = 0; i < types.length; i++) {
+            var type = types[i];
+            if( type.id !== id ) {
+                continue;
+            }
+
+            return type;
+        }
+        return null;
+    }
+
+    function getTypeValueByLanguage(type, lang) {
+        for(var i = 0; i < type.names.length; i++) {
+            if(type.names[i].language === lang) {
+                return type.names[i].value;
+            }
+        }
     }
 
     function addressToString(address) {
