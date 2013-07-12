@@ -4,9 +4,12 @@ $(document).ready(function(){
 
     var map;
     var moscowCenter = {lat: 55.764283, lng: 37.606614};
-    var types = [];
     var infoBox;
 
+    var params = {
+        realPath: null,
+        types: []
+    };
     var markers = new HashMap();
 
     var newMarker = false;
@@ -25,8 +28,12 @@ $(document).ready(function(){
     loadParams();
 
     function loadParams() {
-        $.get('api/types', function(data) {
-            types = data;
+
+        params.realPath = $('#realPath').text().trim();
+        console.log(params.realPath);
+
+        $.get(params.realPath+'/api/types', function(data) {
+            params.types = data;
             init();
         });
     }
@@ -128,11 +135,20 @@ $(document).ready(function(){
     }
 
     function createContextMenuForMap() {
+
+        var title = $('<span/>')
+            .append(
+                $('<img/>').attr('src', getImagePath('pin.png')).attr('width', 20)
+            )
+            .append(
+                $('<span/>').addClass("spacer3").text("Создать точку здесь")
+            ).html();
+
         map.setContextMenu({
             control: 'map',
             options: [
                 {
-                    title: '<img src="resources/img/pin.png" width="20"/><span class="spacer3">Создать точку здесь</span>',
+                    title: title,
                     name: 'add_location',
                     action: function(e) {
                         createMarkerForContextMenu(e.latLng);
@@ -143,11 +159,36 @@ $(document).ready(function(){
     }
 
     function createContextMenuForMarker() {
+
+        var show = $('<span/>')
+            .append(
+                $('<i/>').addClass("icon-list-alt")
+            )
+            .append(
+                $('<span/>').addClass("spacer3").text("Подробнее")
+            ).html();
+
+        var edit = $('<span/>')
+            .append(
+                $('<i/>').addClass("icon-edit")
+            )
+            .append(
+                $('<span/>').addClass("spacer3").text("Редактировать")
+            ).html();
+
+        var delete_ = $('<span/>')
+            .append(
+                $('<i/>').addClass("icon-trash")
+            )
+            .append(
+                $('<span/>').addClass("spacer3").text("Удалить")
+            ).html();
+
         map.setContextMenu({
             control: 'marker',
             options: [
                 {
-                    title: '<i class="icon-list-alt"></i><span class="spacer3">Подробнее</span>',
+                    title: show,
                     name: 'show_marker',
                     action: function(e) {
                         var infoBoxObject = markers.get(e.marker);
@@ -155,7 +196,7 @@ $(document).ready(function(){
                     }
                 },
                 {
-                    title: '<i class="icon-edit"></i><span class="spacer3">Редактировать</span>',
+                    title: edit,
                     name: 'edit_marker',
                     action: function(e) {
                         var infoBoxObject = markers.get(e.marker);
@@ -164,7 +205,7 @@ $(document).ready(function(){
                     }
                 },
                 {
-                    title: '<i class="icon-trash"></i><span class="spacer3">Удалить</span>',
+                    title: delete_,
                     name: 'delete_marker',
                     action: function(e) {
                         var infoBoxObject = markers.get(e.marker);
@@ -255,10 +296,12 @@ $(document).ready(function(){
 
         showCurrentActionForm('Добавление новой точки...', cancelNewMarkerAddition, "infoBoxObject");
 
+        var cursorPath = getImagePath('pin.png');
+
         //change cursor
         map.setOptions( {
-            draggableCursor : "url(resources/img/pin.png), auto",
-            draggingCursor : "url(resources/img/pin.png), auto"
+            draggableCursor : "url("+cursorPath+"), auto",
+            draggingCursor : "url("+cursorPath+"), auto"
         });
 
         //disable context menu
@@ -334,7 +377,7 @@ $(document).ready(function(){
 
         infoBox = createInfoBoxForMarkers();
 
-        $.get("api/locations", function(data) {
+        $.get(params.realPath+"/api/locations", function(data) {
 
             $.each(data, function(n, location) {
 
@@ -359,7 +402,7 @@ $(document).ready(function(){
     function createLocateMeButton() {
         var div = $('<div/>').attr('id','locateMeDiv').addClass("spacer28 infoWindow").append(
             $('<a/>').attr('id', 'locateMe').append(
-                $('<img/>').attr('src', 'resources/img/location.png').attr('width', '32')
+                $('<img/>').attr('src', getImagePath('location.png')).attr('width', '32')
             )
         );
 
@@ -386,7 +429,7 @@ $(document).ready(function(){
             .append(
                 $('<a/>').attr('id','addMarkerButton').addClass("btn btn-small")
                     .append(
-                        $('<img/>').attr('src','resources/img/pin.png').attr('width', '20')
+                        $('<img/>').attr('src', getImagePath('pin.png')).attr('width', '20')
                     )
                     .append(
                         $('<span/>').addClass("spacer3").text('Добавить точку')
@@ -437,7 +480,7 @@ $(document).ready(function(){
             lat: pos.lat(),
             lng: pos.lng(),
             title: location.title,
-            icon: 'resources/img/bread.png',
+            icon: getImagePath('bread.png'),
             click: function() {
                 initialShowInfoBoxForMarker(marker, infoBoxObject);
                 enableEditMarkerMenu(infoBoxObject);
@@ -581,7 +624,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "DELETE",
-            url: 'api/location/'+infoBoxObject.location.id,
+            url: params.realPath+'/api/location/'+infoBoxObject.location.id,
             success: function(data) {
                 $('#deleteModal').modal('hide');
                 $('#deleteMarkerButtonModal').button('reset');
@@ -711,7 +754,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "POST",
-            url: 'api/location',
+            url: params.realPath+'/api/location',
             data: param = param,
             contentType: 'application/json',
             mimeType: 'application/json',
@@ -882,7 +925,7 @@ $(document).ready(function(){
                     .append(
                         $('<a/>').addClass('pull-left img-with-text').attr('href', '#')
                             .append(
-                                $('<img/>').addClass('media-object').attr('src', 'resources/img/basic.png')
+                                $('<img/>').addClass('media-object').attr('src', getImagePath('basic.png'))
                                     .attr('width', TYPE_IMAGE_WIDTH)
                             )
                             .append(
@@ -1303,8 +1346,8 @@ $(document).ready(function(){
     function getOptionsElementsForType() {
 
         var res = [];
-        for(var i = 0; i < types.length; i++) {
-            var type = types[i];
+        for(var i = 0; i < params.types.length; i++) {
+            var type = params.types[i];
 
             var id = type.id;
             var val = null;
@@ -1361,8 +1404,8 @@ $(document).ready(function(){
     }
 
     function getTypeById(id) {
-        for(var i = 0; i < types.length; i++) {
-            var type = types[i];
+        for(var i = 0; i < params.types.length; i++) {
+            var type = params.types[i];
             if( type.id !== id ) {
                 continue;
             }
@@ -1415,6 +1458,10 @@ $(document).ready(function(){
         }
 
         return true;
+    }
+
+    function getImagePath(imageName) {
+        return params.realPath + "/resources/img/" + imageName;
     }
 
     function HashMap(){

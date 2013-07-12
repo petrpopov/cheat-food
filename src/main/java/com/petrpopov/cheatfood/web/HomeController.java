@@ -2,6 +2,7 @@ package com.petrpopov.cheatfood.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
@@ -18,6 +19,12 @@ public class HomeController {
     public String showHomePage(@CookieValue(required = false, value = "guid") String cookie,
                                Map<String, Object> model)
     {
+        return "index";
+    }
+
+    @RequestMapping(value = "location/{locationid}")
+    public String getLocation(@PathVariable String locationid) {
+        //System.out.println(locationService.findById(locationid));
         return "index";
     }
 }

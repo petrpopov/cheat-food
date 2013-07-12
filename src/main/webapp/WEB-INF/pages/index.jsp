@@ -41,6 +41,11 @@
 
 <body>
 
+<label id="realPath" hidden="true" style="display: none;">
+    <%= request.getScheme()+"://"
+            + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() %>
+</label>
+
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">
         <div class="container">
@@ -53,7 +58,9 @@
             </a>
 
             <!-- Be sure to leave the brand out there if you want it shown -->
-            <a class="brand" href="<c:url value="/"/>">cheat food</a>
+            <a class="brand" href="<c:url value="/"/>">
+                cheat food
+            </a>
 
             <ul class="nav">
                 <li class="dropdown">
@@ -63,7 +70,7 @@
                     <ul class="dropdown-menu">
                         <li>
                                 <a id="addMarkerMenu">
-                                    <img src="resources/img/pin.png" width="20"/>
+                                    <img src="<s:url value="/resources"/>/img/pin.png" width="20"/>
                                     <span class="spacer3">Добавить точку</span>
                                 </a>
                         </li>
