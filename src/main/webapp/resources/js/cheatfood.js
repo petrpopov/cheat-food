@@ -612,7 +612,6 @@ $(document).ready(function(){
     }
 
     function initInfoBoxButtonsBehavior(infoBoxObject) {
-
         initScrollInfoBoxBehavior();
         initToggleEditAndViewBehavior(infoBoxObject);
     }
@@ -639,6 +638,8 @@ $(document).ready(function(){
     }
 
     function initToggleEditAndViewBehavior(infoBoxObject) {
+
+        $('.dropdown-toggle').dropdown();
 
         $('#editMarkerButton').off('click');
         $('#editMarkerButton').click(function() {
@@ -1047,34 +1048,12 @@ $(document).ready(function(){
                                     .append(
                                         $('<div/>').addClass('btn-group')
                                             .append(
-                                                $('<button/>').addClass('btn btn-small')
-                                                    .append(
-                                                        $('<i/>').addClass('icon-road')
-                                                    )
-                                                    .append(
-                                                        $('<span/>').addClass("spacer3").text('Маршрут')
-                                                    )
+                                                $('<button/>').addClass('btn btn-small').text('Маршрут сюда')
                                             )
                                             .append(
-                                                $('<button/>').addClass('btn btn-small dropdown-toggle')
-                                                    .attr('data-toggle','dropdown')
-                                                    .append(
-                                                        $('<span/>').addClass('caret')
-                                                    )
+                                                $('<button/>').addClass('btn btn-small').text('Маршрут отсюда')
                                             )
-                                            .append(
-                                                $('<ul/>').addClass('dropdown-menu')
-                                                    .append(
-                                                        $('<li/>').append(
-                                                            $('<a/>').attr('href', '#').text('Сюда')
-                                                        )
-                                                    )
-                                                    .append(
-                                                        $('<li/>').append(
-                                                            $('<a/>').attr('href', '#').text('Отсюда')
-                                                        )
-                                                    )
-                                            )
+
                                     )
                                     .append(
                                         $('<div/>').addClass('btn-group pull-right')
