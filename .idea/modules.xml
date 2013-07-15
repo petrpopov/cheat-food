@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/cheatfood.iml" filepath="$PROJECT_DIR$/cheatfood.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cheatood.iml" filepath="$PROJECT_DIR$/cheatood.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cheatfood-war/cheatood-war.iml" filepath="$PROJECT_DIR$/cheatfood-war/cheatood-war.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-social-foursquare/spring-social-foursquare.iml" filepath="$PROJECT_DIR$/spring-social-foursquare/spring-social-foursquare.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-social-mongo/spring-social-mongo.iml" filepath="$PROJECT_DIR$/spring-social-mongo/spring-social-mongo.iml" />
     </modules>
   </component>
 </project>

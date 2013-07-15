@@ -22,8 +22,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="cheap-food" />
-        <module name="cheatfood" />
+        <module name="cheatood-war" />
+        <module name="spring-social-foursquare" />
+        <module name="spring-social-mongo" />
       </profile>
     </annotationProcessing>
   </component>

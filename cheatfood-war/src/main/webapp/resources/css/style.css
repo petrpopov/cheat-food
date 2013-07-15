@@ -1,0 +1,186 @@
+html { height: 100% }
+body { height: 100%; margin: 0px; padding: 0px }
+
+.navbar {
+    margin-bottom: 0;
+}
+
+#map {
+    display: block;
+    width: 100%;
+    height: 92%;
+}
+
+/* this is for strange maps render problem */
+/* http://stackoverflow.com/questions/8273041/marker-infowindow-and-shadow-not-rendering-correctly-in-google-maps-javascript */
+img { max-width: inherit; }
+
+hr {
+    margin-bottom: 10px;
+    margin-top: 7px;
+}
+
+.spacer3 {
+    margin-left: 3px;
+}
+
+.spacer5 {
+    margin-left: 5px;
+}
+
+.spacer28 {
+    margin-left: 28px;
+}
+
+.addMarker {
+    margin-top: 25px;
+}
+
+.transparent {
+    zoom: 1;
+    filter: alpha(opacity=95);
+    opacity: 0.95;
+}
+
+.transparent {
+    zoom: 1;
+    filter: alpha(opacity=90);
+    opacity: 0.90;
+}
+
+.scrollable {
+    height: 600px;
+    max-height: 800px;
+    overflow: auto;
+}
+
+.blackLabel {
+    color: #fafafa;
+}
+
+.centerForm {
+    width: 360px;
+    margin: 0 auto;
+}
+
+.searchInput {
+    min-height: 30px;
+}
+
+.facebookImage {
+    background-image: url(images/facebook_login.png);
+    width: 170px;
+    height: 28px;
+    background-size: contain;
+    background-color: transparent; /* make the button transparent */
+    background-repeat: no-repeat;  /* make the background image appear only once */
+    background-position: 0px 0px;  /* equivalent to 'top left' */
+    border: none;           /* assuming we don't want any borders */
+    cursor: pointer;
+}
+
+.foursquareImage {
+    background-image: url(images/foursquare_login.png);
+    width: 183px;
+    height: 28px;
+    background-size: contain;
+    background-color: transparent; /* make the button transparent */
+    background-repeat: no-repeat;  /* make the background image appear only once */
+    background-position: 0px 0px;  /* equivalent to 'top left' */
+    border: none;           /* assuming we don't want any borders */
+    cursor: pointer;
+}
+
+.twitterImage {
+    background-image: url(images/twitter_login.png);
+    width: 158px;
+    height: 28px;
+    background-size: contain;
+    background-color: transparent; /* make the button transparent */
+    background-repeat: no-repeat;  /* make the background image appear only once */
+    background-position: 0px 0px;  /* equivalent to 'top left' */
+    border: none;           /* assuming we don't want any borders */
+    cursor: pointer;
+}
+
+.vkImage {
+    background-image: url(images/vk_login.png);
+    width: 93px;
+    height: 28px;
+    background-size: contain;
+    background-color: transparent; /* make the button transparent */
+    background-repeat: no-repeat;  /* make the background image appear only once */
+    background-position: 0px 0px;  /* equivalent to 'top left' */
+    border: none;           /* assuming we don't want any borders */
+    cursor: pointer;
+}
+
+.modal {
+    min-width: 700px;
+}
+
+.infoWindow {
+    background-color: #fafafa;
+    border: 1px solid #d4d4d4;
+    min-with: 410px;
+
+    background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
+    background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    background-repeat: repeat-x;
+    border: 1px solid #d4d4d4;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
+    *zoom: 1;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+}
+
+.infoWindowInner {
+    padding: 25px;
+}
+
+.arrow_box {
+    position: relative;
+    background: #fafafa;
+    border: 1px solid #d4d4d4;
+}
+.arrow_box:after, .arrow_box:before {
+    right: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.arrow_box:after {
+    border-color: rgba(250, 250, 250, 0);
+    border-right-color: #fafafa;
+    border-width: 30px;
+    top: 50%;
+    margin-top: -30px;
+}
+.arrow_box:before {
+    border-color: rgba(212, 212, 212, 0);
+    border-right-color: #d4d4d4;
+    border-width: 31px;
+    top: 50%;
+    margin-top: -31px;
+}
+
+.dropdown-menu>li>a {
+    display: inline;
+    padding: 3px 10px;
+    clear: both;
+    font-weight: normal;
+    line-height: 20px;
+    color: #333;
+    white-space: nowrap;
+}

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="cheatfood:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="cheatfood.war">
-      <element id="artifact" artifact-name="cheatfood:war exploded" />
-    </root>
-  </artifact>
-</component>
