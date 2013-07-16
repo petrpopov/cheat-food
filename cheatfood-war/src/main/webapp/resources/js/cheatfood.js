@@ -91,7 +91,7 @@ $(document).ready(function(){
                 $('#loginMenuLink').text('Вход');
 
                 $('#loginLink').show();
-                $('#registrationLink').show();
+                $('#registrationLink').hide();
                 $('#profileLink').hide();
                 $('#logoutLink').hide();
             }
