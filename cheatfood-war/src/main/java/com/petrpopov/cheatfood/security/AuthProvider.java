@@ -32,11 +32,18 @@ public class AuthProvider extends AbstractUserDetailsAuthenticationProvider
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 
-        UserDetails u;
+        UserDetails u = null;
         try
         {
-            u = cheatUserDetailsService.loadUserByUsername(username);
-            userDetailsFieldHandler.setPassword(u, authentication);
+            Object details = authentication.getDetails();
+            if( details instanceof Class<?> ) {
+                Class<?> clazz = (Class<?>) details;
+
+                u = cheatUserDetailsService.loadUserById(username, clazz);
+            }
+            else {
+                u = cheatUserDetailsService.loadUserByUsername(username);
+            }
         }
         catch (UsernameNotFoundException e)
         {
@@ -45,6 +52,8 @@ public class AuthProvider extends AbstractUserDetailsAuthenticationProvider
 
         if( u == null )
             throw new AuthenticationServiceException("User cannot be null !");
+
+        userDetailsFieldHandler.setPassword(u, authentication);
 
         return u;
     }

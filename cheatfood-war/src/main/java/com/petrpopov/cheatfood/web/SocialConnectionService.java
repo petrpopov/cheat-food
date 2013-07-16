@@ -66,18 +66,25 @@ public class SocialConnectionService {
 
         connectionRepository.addConnection(connection);
 
+        //create cookies for remember-me shit
         rememberMeServices.onLoginSuccess(request, response, authentication);
     }
 
     public String getAuthorizeUrl(String providerId) {
 
         ConnectionService<?> connectionService = registry.getConnectionService(providerId);
-        return connectionService.getAuthorizeUrl();
+        return connectionService.getAuthorizeUrl(null);
     }
 
     public String getAuthorizeUrl(Class<?> apiClass) {
 
         ConnectionService<?> connectionService = registry.getConnectionService(apiClass);
-        return connectionService.getAuthorizeUrl();
+        return connectionService.getAuthorizeUrl(null);
+    }
+
+    public String getAuthorizeUrl(Class<?> apiClass, String scope) {
+
+        ConnectionService<?> connectionService = registry.getConnectionService(apiClass);
+        return connectionService.getAuthorizeUrl(scope);
     }
 }

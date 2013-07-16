@@ -10,6 +10,6 @@ import org.springframework.social.connect.Connection;
 public interface ConnectionService<T> {
 
     public String getProviderId();
-    public String getAuthorizeUrl();
+    public String getAuthorizeUrl(String scope);
     public Connection<T> getConnection(String code);
 }

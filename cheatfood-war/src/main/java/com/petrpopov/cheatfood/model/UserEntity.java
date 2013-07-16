@@ -14,10 +14,13 @@ public class UserEntity {
 
     @Id
     private String id;
+
     private String foursquareId;
     private String foursquareToken;
+
     private String facebookId;
     private String facebookToken;
+
     private String firstName;
     private String lastName;
     private String cookieId;

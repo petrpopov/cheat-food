@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
  * Time: 22:17
  */
 @Component
-public class FoursquareConnectionFieldHandler {
+public class ConnectionAccessTokenFieldHandler {
 
     public String getAccessTokenFromConnection(OAuth2Connection connection)
     {

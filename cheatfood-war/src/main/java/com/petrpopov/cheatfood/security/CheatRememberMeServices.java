@@ -1,6 +1,10 @@
 package com.petrpopov.cheatfood.security;
 
+import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
+import com.petrpopov.cheatfood.connection.UserStorageService;
+import com.petrpopov.cheatfood.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,6 +13,7 @@ import org.springframework.security.web.authentication.rememberme.TokenBasedReme
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
+import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.foursquare.api.Foursquare;
 
 import javax.servlet.http.Cookie;
@@ -25,12 +30,20 @@ import java.util.Arrays;
 public class CheatRememberMeServices extends TokenBasedRememberMeServices {
 
     private String cookieName = "CHEATFOOD";
+    private String cookieName_name = "name";
+    private int cookieSize = 4;
 
     @Autowired
     private UserDetailsFieldHandler userDetailsFieldHandler;
 
     @Autowired
     private UsersConnectionRepository usersConnectionRepository;
+
+    @Autowired
+    private UserStorageService userStorageService;
+
+    @Autowired
+    private ProviderIdClassStorage providerIdClassStorage;
 
     public CheatRememberMeServices(String key, UserDetailsService userDetailsService) {
         super(key, userDetailsService);
@@ -42,10 +55,23 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
 
         String username = retrieveUserName(authentication);
         String token = retrievePassword(authentication);
+        String type = "default";
+
+        if( authentication instanceof UsernamePasswordAuthenticationToken ) {
+            Object details = authentication.getDetails();
+
+            if( details instanceof Class<?> ) {
+                Class<?> clazz = (Class<?>) details;
+                String providerId = providerIdClassStorage.getProviderIdByClass(clazz);
+
+                if( providerId != null )
+                    type = providerId;
+            }
+        }
 
         long expiryTime = System.currentTimeMillis() + (1000L* TWO_WEEKS_S);
 
-        setCookie(new String[] {username, Long.toString(expiryTime), token}, (int)expiryTime, request, response);
+        setCookie(new String[] {username, Long.toString(expiryTime), token, type}, (int)expiryTime, request, response);
     }
 
     @Override
@@ -59,7 +85,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
 
         response.addCookie(cookie);
 
-        Cookie name = new Cookie("name", tokens[0]);
+        Cookie name = new Cookie(cookieName_name, tokens[0]);
         name.setMaxAge(maxAge);
         name.setPath(getCookiePath(request));
         response.addCookie(name);
@@ -117,29 +143,50 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
     @Override
     protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request, HttpServletResponse response) {
 
-        if (cookieTokens.length != 3) {
+        if (cookieTokens.length != cookieSize) {
             throw new InvalidCookieException("Cookie token did not contain 3" +
                     " tokens, but contained '" + Arrays.asList(cookieTokens) + "'");
         }
 
         String username = cookieTokens[0];
+
+        //load by main id, becuase we saved in cookie real id, not facebook or other social network id
         UserDetails userDetails = this.getUserDetailsService().loadUserByUsername(username);
 
         String token = cookieTokens[2];
         userDetailsFieldHandler.setPassword( userDetails, token );
 
-        boolean exists = checkConnectionsForUser(username);
+        String type = cookieTokens[3];
+        Class<?> apiClass = providerIdClassStorage.getProviderClassById(type);
+        boolean exists = checkConnectionsForUser(username, apiClass);
         if( !exists )
             return null;
 
         return userDetails;
     }
 
-    protected boolean checkConnectionsForUser(String username)
+
+    @Override
+    public void cancelCookie(HttpServletRequest request, HttpServletResponse response)
+    {
+        Cookie cookie = new Cookie(cookieName, null);
+        cookie.setMaxAge(0);
+        cookie.setPath(getCookiePath(request));
+
+        response.addCookie(cookie);
+
+        Cookie name = new Cookie(cookieName_name, null);
+        name.setMaxAge(0);
+        name.setPath(getCookiePath(request));
+
+        response.addCookie(cookie);
+    }
+
+    protected boolean checkConnectionsForUser(String username, Class<?> apiClass)
     {
         try {
             ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(username);
-            Connection<Foursquare> connection = connectionRepository.getPrimaryConnection(Foursquare.class);
+            Connection<?> connection = connectionRepository.getPrimaryConnection(apiClass);
 
             if(connection != null )
                 return true;
@@ -151,19 +198,31 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
         return false;
     }
 
-    public void cancelCookie(HttpServletRequest request, HttpServletResponse response)
-    {
-        Cookie cookie = new Cookie(cookieName, null);
-        cookie.setMaxAge(0);
-        cookie.setPath(getCookiePath(request));
+    @Override
+    protected String retrieveUserName(Authentication authentication) {
 
-        response.addCookie(cookie);
+        if( authentication instanceof UsernamePasswordAuthenticationToken ) {
+            Object details = authentication.getDetails();
 
-        Cookie name = new Cookie("name", null);
-        name.setMaxAge(0);
-        name.setPath(getCookiePath(request));
+            if( details instanceof Class<?> ) {
+                Class<?> clazz = (Class<?>) details;
 
-        response.addCookie(cookie);
+                String id = ((UserDetails) authentication.getPrincipal()).getUsername();
+                if( clazz.equals(Foursquare.class) ) {
+                    UserEntity userEntity = userStorageService.getUserByFoursquareId(id);
+                    return userEntity.getId();
+                }
+                else if( clazz.equals(Facebook.class) ) {
+                    UserEntity userEntity = userStorageService.getUserByFacebookId(id);
+                    return userEntity.getId();
+                }
+                return id;
+            }
+            else
+                return super.retrieveUserName(authentication);
+        }
+        else
+            return super.retrieveUserName(authentication);
     }
 
     private String getCookiePath(HttpServletRequest request) {

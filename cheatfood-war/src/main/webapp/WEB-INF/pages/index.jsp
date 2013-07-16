@@ -143,6 +143,7 @@
         <p>Тут можно пришвартовать свой швербот с помощью разных соцсетей:</p>
         <div class="form-inline clearfix">
             <form id="facebookForm" class="pull-left" method="POST" action="<c:url value="/connect/facebook" />">
+                <input type="hidden" name="scope" value="email,publish_stream,offline_access" />
                 <button class="facebookImage" type="submit"></button>
             </form>
             <form id="foursquareForm" class="pull-left spacer3" method="POST" action="<c:url value="/connect/foursquare" />">

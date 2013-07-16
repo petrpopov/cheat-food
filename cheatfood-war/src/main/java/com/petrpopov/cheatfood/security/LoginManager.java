@@ -1,6 +1,7 @@
 package com.petrpopov.cheatfood.security;
 
-import com.petrpopov.cheatfood.connection.FoursquareConnectionFieldHandler;
+import com.petrpopov.cheatfood.connection.ConnectionAccessTokenFieldHandler;
+import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,25 +31,33 @@ public class LoginManager {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private FoursquareConnectionFieldHandler foursquareConnectionFieldHandler;
+    private ConnectionAccessTokenFieldHandler connectionAccessTokenFieldHandler;
 
     @Autowired
     private CheatRememberMeServices rememberMeServices;
+
+    @Autowired
+    private ProviderIdClassStorage providerIdClassStorage;
 
     public Authentication authenticate(Connection connection)
     {
         if( !(connection instanceof OAuth2Connection) )
             return null;
 
-        String token = foursquareConnectionFieldHandler.getAccessTokenFromConnection((OAuth2Connection) connection);
-        Authentication authentication = this.authenticate(connection.getKey().getProviderUserId(), token );
+        Class<?> apiClass = providerIdClassStorage.getProviderClassByConnection(connection);
+
+        String token = connectionAccessTokenFieldHandler.getAccessTokenFromConnection((OAuth2Connection) connection);
+        Authentication authentication = this.authenticate(connection.getKey().getProviderUserId(), token, apiClass );
 
         return authentication;
     }
 
-    public Authentication authenticate(String username, String token)
+    private Authentication authenticate(String username, String token, Class<?> apiClass)
     {
-        Authentication authentication = authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(username, token) );
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, token);
+        authenticationToken.setDetails(apiClass);
+
+        Authentication authentication = authenticationManager.authenticate( authenticationToken );
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return authentication;

@@ -33,9 +33,9 @@ public class SocialController {
     }
 
     @RequestMapping(value="connect/facebook", method= RequestMethod.POST)
-    public RedirectView facebookConnect() {
+    public RedirectView facebookConnect(HttpServletRequest request) {
 
-        String url = socialConnectionService.getAuthorizeUrl(Facebook.class);
+        String url = socialConnectionService.getAuthorizeUrl(Facebook.class, getScope(request));
 
         return new RedirectView(url);
     }
@@ -45,7 +45,7 @@ public class SocialController {
     {
         socialConnectionService.apiCallback(code, Foursquare.class, request, response);
 
-        return new RedirectView("/index", true);
+        return new RedirectView("/", true);
     }
 
     @RequestMapping(value="connect/facebook", method=RequestMethod.GET, params="code")
@@ -53,6 +53,12 @@ public class SocialController {
     {
         socialConnectionService.apiCallback(code, Facebook.class, request, response);
 
-        return new RedirectView("/index", true);
+        return new RedirectView("/", true);
+    }
+
+    private String getScope(HttpServletRequest request) {
+
+        String scope = request.getParameter("scope");
+        return scope;
     }
 }

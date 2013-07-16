@@ -45,12 +45,11 @@ public class GenericConnectionService<T> implements ConnectionService {
     }
 
     @Override
-    public String getAuthorizeUrl() {
+    public String getAuthorizeUrl(String scope) {
         OAuth2ConnectionFactory<T> connectionFactory = getConnectionFactory();
 
         OAuth2Operations oauthOperations = connectionFactory.getOAuthOperations();
-        OAuth2Parameters params = new OAuth2Parameters();
-        params.setRedirectUri( callbackUrl );
+        OAuth2Parameters params = getOAuth2Parameters(scope);
 
         String url = oauthOperations.buildAuthorizeUrl(GrantType.AUTHORIZATION_CODE, params);
         return url;
@@ -67,8 +66,20 @@ public class GenericConnectionService<T> implements ConnectionService {
         return connection;
     }
 
+
+
     private OAuth2ConnectionFactory<T> getConnectionFactory() {
         OAuth2ConnectionFactory<T> connectionFactory = (OAuth2ConnectionFactory<T>) registry.getConnectionFactory(domainClass);
         return connectionFactory;
+    }
+
+    private OAuth2Parameters getOAuth2Parameters(String scope) {
+        OAuth2Parameters params = new OAuth2Parameters();
+
+        if( scope != null ) {
+            params.setScope(scope);
+        }
+        params.setRedirectUri( callbackUrl );
+        return params;
     }
 }
