@@ -53,6 +53,14 @@ $(document).ready(function(){
             }
         }
 
+
+        //strange bug in URL after facebook authorization
+        index = document.URL.indexOf('#_=_');
+        if( index >= 0 ) {
+            var url = document.URL.substring(0, index);
+            window.history.pushState("", "", url);
+        }
+
         $.get(params.realPath+'/api/types', function(data) {
             params.types = data;
             init(location);
@@ -60,6 +68,9 @@ $(document).ready(function(){
     }
 
     function init(location) {
+
+        buildLoginMenu();
+        createRegistrationAuthActions();
 
         createMap();
         createContextMenuForMap();
@@ -71,8 +82,180 @@ $(document).ready(function(){
         centerMapToLocation(location);
         createMarkersForLocations(location);
 
+    }
+
+    function buildLoginMenu() {
+        $.get(params.realPath+"/api/users/current", function(user) {
+
+            if( !user ) {
+                $('#loginMenuLink').text('Вход');
+
+                $('#loginLink').show();
+                $('#registrationLink').show();
+                $('#profileLink').hide();
+                $('#logoutLink').hide();
+            }
+            else {
+                var email = user.email;
+                var firstName = user.firstName;
+                var lastName = user.lastName;
+
+                var name = "";
+                if( firstName ) {
+                    name = firstName;
+                }
+                if( lastName ) {
+                    if( stringIsNotEmpty(name) ) {
+                        name += " " + lastName;
+                    }
+                    else {
+                        name = lastName;
+                    }
+                }
+
+                if( !stringIsNotEmpty(name) ) {
+                    name = email;
+                }
+
+                $('#loginMenuLink').text(name);
+
+                $('#loginLink').hide();
+                $('#registrationLink').hide();
+                $('#profileLink').show();
+                $('#logoutLink').show();
+            }
+        });
+    }
+
+    function createRegistrationAuthActions() {
+
+        $('#logoutLink').click(function() {
+            logout();
+        });
+
         $('#loginLink').click(function() {
-            $('#authorizationModel').modal('show');
+            $('#loginModal').modal('show');
+        });
+
+        $('#registrationLink').click(function() {
+            clearCreateUserForm();
+            $('#registrationModal').modal('show');
+        });
+
+        $('#registrationButton').click(function() {
+            clearCreateUserForm();
+            $('#loginModal').modal('hide');
+            $('#registrationModal').modal('show');
+        });
+
+        initCreateUserFormValidation();
+
+        $('#registrationAlert').hide();
+
+        $('#createUserForm').ready(function() {
+            $('#emailCreate').focus()
+        });
+
+        $('#createUserForm').off('submit');
+        $('#createUserForm').submit(function() {
+            checkCreateUserFormValidOrNot();
+            return false;
+        });
+    }
+
+    function logout() {
+
+        $.ajax({
+            type: "DELETE",
+            url: params.realPath + "/connect/logout",
+            success: function(data) {
+
+            },
+            complete: function(data) {
+                buildLoginMenu();
+            }
+        })
+    }
+
+    function clearCreateUserForm() {
+        $('#emailCreate').val(null);
+        $('#passwordCreate').val(null);
+        $('#registrationAlert').hide();
+    }
+
+    function initCreateUserFormValidation() {
+        $("#createUserForm").validate({
+            rules : {
+                email: {
+                    required: true,
+                    email: true,
+                    minlength: 3,
+                    maxlength: 50
+                },
+                password: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 50
+                }
+            },
+            success: function() {
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
+            }
+        });
+    }
+
+    function checkCreateUserFormValidOrNot() {
+
+        $('#createUserSubmit').button('loading');
+        $('#registrationAlert').hide();
+
+        if( $("#createUserForm").valid() ) {
+            submitCreateUserForm();
+        }
+        else {
+            $('#createUserSubmit').button('reset');
+        }
+    }
+
+    function submitCreateUserForm() {
+
+        var formParams = {
+            email: $('#emailCreate').val().trim(),
+            password: $('#passwordCreate').val().trim()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: params.realPath + '/api/users/create',
+            data: JSON.stringify(formParams),
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+            },
+            complete: function(data) {
+                var result = JSON.parse(data.responseText);
+
+                if( result.error === false ) {
+                    $('#registrationModal').modal('hide');
+                }
+                else {
+                    $('#registrationAlert').show(EFFECTS_TIME);
+                }
+
+                buildLoginMenu();
+                $('#createUserSubmit').button('reset');
+            },
+            statusCode: {
+                400: function(data) {
+
+                }
+            }
         });
     }
 

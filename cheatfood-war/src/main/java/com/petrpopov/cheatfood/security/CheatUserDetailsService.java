@@ -1,7 +1,7 @@
 package com.petrpopov.cheatfood.security;
 
-import com.petrpopov.cheatfood.connection.UserStorageService;
 import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class CheatUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserStorageService userStorageService;
+    private UserService userService;
 
     @Autowired
     private UserDetailsAssembler userDetailsAssembler;
@@ -27,7 +27,7 @@ public class CheatUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserEntity user = userStorageService.getUserById(username);
+        UserEntity user = userService.getUserById(username);
 
         return convertUser(user);
     }
@@ -50,12 +50,12 @@ public class CheatUserDetailsService implements UserDetailsService {
     }
 
     private UserEntity loadUserByFoursquareId(String foursquareId) {
-        UserEntity user = userStorageService.getUserByFoursquareId(foursquareId);
+        UserEntity user = userService.getUserByFoursquareId(foursquareId);
         return user;
     }
 
     private UserEntity loadUserByFacebookId(String facebookId) {
-        UserEntity user = userStorageService.getUserByFacebookId(facebookId);
+        UserEntity user = userService.getUserByFacebookId(facebookId);
         return user;
     }
 

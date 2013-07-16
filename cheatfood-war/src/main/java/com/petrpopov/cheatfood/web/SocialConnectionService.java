@@ -48,7 +48,7 @@ public class SocialConnectionService {
         ConnectionService<?> connectionService = registry.getConnectionService(apiClass);
         Connection<?> connection = connectionService.getConnection(code);
 
-        //first - save user (if it not saved)
+        //first - save user or update it
         if( connection instanceof OAuth2Connection<?> ) {
             OAuth2Connection<?> oAuth2Connection = (OAuth2Connection<?>) connection;
             connectionSignUp.execute(oAuth2Connection);
@@ -56,6 +56,8 @@ public class SocialConnectionService {
 
         //second - use SpringSecurity auth services, because they use DB to retrieve user
         Authentication authentication = loginManager.authenticate(connection);
+        //create cookies for remember-me shit
+        rememberMeServices.onLoginSuccess(request, response, authentication);
 
         //then play with connections
         try {
@@ -65,9 +67,12 @@ public class SocialConnectionService {
         catch (Exception e) {}
 
         connectionRepository.addConnection(connection);
+    }
 
-        //create cookies for remember-me shit
-        rememberMeServices.onLoginSuccess(request, response, authentication);
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        // connectionRepository.removeConnections("foursquare");
+
+        loginManager.logout(request, response);
     }
 
     public String getAuthorizeUrl(String providerId) {

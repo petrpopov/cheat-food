@@ -97,8 +97,25 @@
                     <ul id="categoryMenu" class="dropdown-menu">
                     </ul>
                 </li>
-                <li>
-                    <a id="loginLink" href="#">Вход</a>
+                <li class="dropdown">
+                    <a href="#"  class="dropdown-toggle" data-toggle="dropdown">
+                        <span id="loginMenuLink">Вход</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a id="loginLink" href="#">Вход</a>
+                        </li>
+                        <li>
+                            <a id="registrationLink" href="#">Регистрация</a>
+                        </li>
+                        <li>
+                            <a id="profileLink" href="#">Профиль</a>
+                        </li>
+                        <li>
+                            <a id="logoutLink" href="#">Выход</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
 
@@ -134,10 +151,10 @@
     </p>
 </div>
 
-<div id="authorizationModel" class="modal hide fade">
+<div id="loginModal" class="modal hide fade">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Авторизация</h3>
+        <h3>Вход</h3>
     </div>
     <div class="modal-body">
         <p>Тут можно пришвартовать свой швербот с помощью разных соцсетей:</p>
@@ -157,6 +174,8 @@
             </form>
         </div>
 
+        <hr/>
+
         <div class="form-horizontal">
             <div>Или войти с логином и паролем:</div>
             <form class="form-horizontal" method="post" action='' name="login_form">
@@ -173,7 +192,66 @@
     </div>
     <div class="modal-footer">
         Нет учетки в соцсетях? Ну, тогда можно и по-старинке:
-        <a href="#" class="btn btn-primary">Регистрация</a>
+        <a id="registrationButton" href="#" class="btn btn-primary">Регистрация</a>
+        <a href="#" class="btn" data-dismiss="modal">Отмена</a>
+    </div>
+</div>
+
+<div id="registrationModal" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Регистрация</h3>
+    </div>
+
+    <div class="modal-body">
+        <div>
+            <div id="registrationAlert" class="alert" hidden="true" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Ошибка!</strong> Пользователь с таким email уже существует.
+            </div>
+
+            <p>Регистрация нового пользователя</p>
+            <form id="createUserForm" class="form-horizontal">
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="email" name="email" class="span3" id="emailCreate" placeholder="электропочта" required />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="password" name="password" class="span3" id="passwordCreate" placeholder="пароль" required />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button id="createUserSubmit" data-loading-text="Подождите..." type="submit" class="btn btn-primary">YARR!</button>
+                        <button class="btn" data-dismiss="modal">Отмена</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <hr/>
+
+        <p>Или вы все-таки можете припарковаться тут с помощью соцсетей:</p>
+        <div class="form-inline clearfix">
+            <form id="facebookFormReg" class="pull-left" method="POST" action="<c:url value="/connect/facebook" />">
+                <input type="hidden" name="scope" value="email,publish_stream,offline_access" />
+                <button class="facebookImage" type="submit"></button>
+            </form>
+            <form id="foursquareFormReg" class="pull-left spacer3" method="POST" action="<c:url value="/connect/foursquare" />">
+                <button class="foursquareImage" type="submit"></button>
+            </form>
+            <form id="twitterFormReg" class="pull-left spacer3" method="POST" action="<c:url value="/connect/twitter" />">
+                <button class="twitterImage" type="submit"></button>
+            </form>
+            <form id="vkFormReg" class="pull-left spacer3" method="POST" action="<c:url value="/connect/vk" />">
+                <button class="vkImage" type="submit"></button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Отмена</a>
     </div>
 </div>

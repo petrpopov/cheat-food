@@ -1,6 +1,9 @@
-package com.petrpopov.cheatfood.connection;
+package com.petrpopov.cheatfood.service;
 
+import com.petrpopov.cheatfood.config.CheatException;
+import com.petrpopov.cheatfood.model.UserCreate;
 import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * User: petrpopov
@@ -22,11 +27,38 @@ import java.util.List;
  * Time: 13:33
  */
 @Component
-public class UserStorageService {
+public class UserService {
 
     @Autowired
     @Qualifier("mongoTemplate")
     private MongoOperations op;
+
+    @Autowired
+    private CheatPasswordEncoder encoder;
+
+
+    @CacheEvict(value = "users", allEntries = true)
+    public UserEntity createUser(@Valid UserCreate user) throws CheatException {
+
+        UserEntity userByEmail = this.getUserByEmail(user.getEmail());
+
+        if( userByEmail != null )
+            throw new CheatException("User is already exists!");
+
+        //generate random salt
+        UUID randomUUID = UUID.randomUUID();
+        String newSalt = randomUUID.toString();
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(user.getEmail());
+
+        String encodePassword = encoder.encodePassword(user.getPassword(), newSalt);
+        userEntity.setPasswordHash(encodePassword);
+        userEntity.setSalt(newSalt);
+
+        op.save(userEntity);
+        return getUserByEmail(user.getEmail());
+    }
 
     //@Cacheable("users")
     public UserEntity getUserByEmail(String email) {
@@ -70,7 +102,7 @@ public class UserStorageService {
         return op.findOne(query, UserEntity.class);
     }
 
-    @CacheEvict(value = "users", key = "#userEntity.id")
+    @CacheEvict(value = "users", allEntries = true) //key = "#userEntity.id")
     public UserEntity saveOrUpdate(UserEntity userEntity)
     {
         if(userEntity.getFoursquareId() != null) {
@@ -145,7 +177,7 @@ public class UserStorageService {
             Update update = new Update()
                     .set("firstName", userEntity.getFirstName())
                     .set("lastName", userEntity.getLastName())
-                    .set("facebookToken", userEntity.getFoursquareToken() )
+                    .set("facebookToken", userEntity.getFacebookToken() )
                     .set("email", userEntity.getEmail());
 
             return findAndUpdate(userEntity, update, "facebookId");

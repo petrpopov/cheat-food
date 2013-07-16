@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +55,15 @@ public class SocialController {
         socialConnectionService.apiCallback(code, Facebook.class, request, response);
 
         return new RedirectView("/", true);
+    }
+
+    @RequestMapping(value="connect/logout", method=RequestMethod.DELETE)
+    @ResponseBody
+    public MessageResult foursquareLogout(HttpServletRequest request, HttpServletResponse response) {
+
+        socialConnectionService.logout(request, response);
+
+        return new MessageResult("ok");
     }
 
     private String getScope(HttpServletRequest request) {

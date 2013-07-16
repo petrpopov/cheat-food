@@ -23,18 +23,18 @@ public class UserDetailsAssembler {
     public UserDetails fromUserToUserDetails(UserEntity user)
     {
         String username = this.getUsername(user, null);
-        return buildUser(user, username);
+        String password = this.getPassword(user, null);
+        return buildUser(user, username, password);
     }
 
     public UserDetails fromUserToUserDetails(UserEntity user, Class<?> apiClass)
     {
         String username = this.getUsername(user, apiClass);
-        return buildUser(user, username);
+        String password = this.getPassword(user, apiClass);
+        return buildUser(user, username, password);
     }
 
-    private UserDetails buildUser(UserEntity user, String username) {
-
-        String password = "";
+    private UserDetails buildUser(UserEntity user, String username, String password) {
 
         boolean enabled = true;
         boolean accountNonExpired = true;
@@ -43,7 +43,6 @@ public class UserDetailsAssembler {
 
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority( "ROLE_USER") );
-        authorities.add(new SimpleGrantedAuthority( "ROLE_FOURSQUARE") );
 
         User userDetails = new User(username, password, enabled,
                 accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
@@ -63,5 +62,13 @@ public class UserDetailsAssembler {
         }
 
         return user.getId();
+    }
+
+    private String getPassword(UserEntity user, Class<?> apiClass) {
+
+        if( apiClass == null )
+            return user.getPasswordHash();
+        else
+            return "";
     }
 }

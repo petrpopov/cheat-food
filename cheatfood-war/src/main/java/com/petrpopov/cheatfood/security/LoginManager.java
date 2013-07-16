@@ -47,18 +47,14 @@ public class LoginManager {
         Class<?> apiClass = providerIdClassStorage.getProviderClassByConnection(connection);
 
         String token = connectionAccessTokenFieldHandler.getAccessTokenFromConnection((OAuth2Connection) connection);
-        Authentication authentication = this.authenticate(connection.getKey().getProviderUserId(), token, apiClass );
+        Authentication authentication = this.doAuthenticate(connection.getKey().getProviderUserId(), token, apiClass);
 
         return authentication;
     }
 
-    private Authentication authenticate(String username, String token, Class<?> apiClass)
+    public Authentication authenticate(String username, String password)
     {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, token);
-        authenticationToken.setDetails(apiClass);
-
-        Authentication authentication = authenticationManager.authenticate( authenticationToken );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Authentication authentication = this.doAuthenticate(username, password, null);
 
         return authentication;
     }
@@ -70,6 +66,19 @@ public class LoginManager {
         SecurityContextHolder.getContext().setAuthentication(anonymous);
 
         rememberMeServices.cancelCookie(request, response);
+    }
+
+    private Authentication doAuthenticate(String username, String token, Class<?> apiClass)
+    {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, token);
+
+        if( apiClass != null )
+            authenticationToken.setDetails(apiClass);
+
+        Authentication authentication = authenticationManager.authenticate( authenticationToken );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return authentication;
     }
 
 }

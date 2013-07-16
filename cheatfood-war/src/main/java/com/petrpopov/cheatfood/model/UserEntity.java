@@ -25,6 +25,8 @@ public class UserEntity {
     private String lastName;
     private String cookieId;
     private String email;
+    private String passwordHash;
+    private String salt;
 
     public UserEntity() {
     }
@@ -99,5 +101,21 @@ public class UserEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

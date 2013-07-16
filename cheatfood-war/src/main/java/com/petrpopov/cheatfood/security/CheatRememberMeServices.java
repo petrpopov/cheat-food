@@ -1,8 +1,8 @@
 package com.petrpopov.cheatfood.security;
 
 import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
-import com.petrpopov.cheatfood.connection.UserStorageService;
 import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,7 +40,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
     private UsersConnectionRepository usersConnectionRepository;
 
     @Autowired
-    private UserStorageService userStorageService;
+    private UserService userService;
 
     @Autowired
     private ProviderIdClassStorage providerIdClassStorage;
@@ -209,11 +209,11 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
 
                 String id = ((UserDetails) authentication.getPrincipal()).getUsername();
                 if( clazz.equals(Foursquare.class) ) {
-                    UserEntity userEntity = userStorageService.getUserByFoursquareId(id);
+                    UserEntity userEntity = userService.getUserByFoursquareId(id);
                     return userEntity.getId();
                 }
                 else if( clazz.equals(Facebook.class) ) {
-                    UserEntity userEntity = userStorageService.getUserByFacebookId(id);
+                    UserEntity userEntity = userService.getUserByFacebookId(id);
                     return userEntity.getId();
                 }
                 return id;
