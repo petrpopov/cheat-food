@@ -1,17 +1,16 @@
 package com.petrpopov.cheatfood.web;
 
+import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.foursquare.api.Foursquare;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * User: petrpopov
@@ -25,34 +24,40 @@ public class SocialController {
     @Autowired
     private SocialConnectionService socialConnectionService;
 
-    @RequestMapping(value="connect/foursquare", method= RequestMethod.POST)
-    public RedirectView foursquareConnect() {
+    @Autowired
+    private ProviderIdClassStorage providerIdClassStorage;
 
-        String url = socialConnectionService.getAuthorizeUrl(Foursquare.class);
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @RequestMapping(value="connect/{providerId}", method= RequestMethod.POST)
+    public RedirectView foursquareConnect(@PathVariable String providerId, HttpServletRequest request) {
+
+        Class<?> apiClass = providerIdClassStorage.getProviderClassById(providerId);
+
+        String scope = null;
+        if( apiClass.equals(Facebook.class) ) {
+            scope = this.getScope(request);
+        }
+
+        String url = socialConnectionService.getAuthorizeUrl(apiClass, scope);
 
         return new RedirectView(url);
     }
 
-    @RequestMapping(value="connect/facebook", method= RequestMethod.POST)
-    public RedirectView facebookConnect(HttpServletRequest request) {
-
-        String url = socialConnectionService.getAuthorizeUrl(Facebook.class, getScope(request));
-
-        return new RedirectView(url);
-    }
-
-    @RequestMapping(value="connect/foursquare", method=RequestMethod.GET, params="code")
-    public RedirectView foursquareCallback(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping(value="connect/{providerId}", method=RequestMethod.GET, params="code")
+    public RedirectView foursquareCallback(@PathVariable String providerId, @RequestParam("code") String code,
+                                           HttpServletRequest request, HttpServletResponse response)
     {
-        socialConnectionService.apiCallback(code, Foursquare.class, request, response);
+        Class<?> apiClass = providerIdClassStorage.getProviderClassById(providerId);
+
+        socialConnectionService.apiCallback(code, apiClass, request, response);
 
         return new RedirectView("/", true);
     }
 
-    @RequestMapping(value="connect/facebook", method=RequestMethod.GET, params="code")
-    public RedirectView facebookCallback(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response)
-    {
-        socialConnectionService.apiCallback(code, Facebook.class, request, response);
+    @RequestMapping(value = "connect/{providerId}", method = RequestMethod.GET)
+    public RedirectView accessDenied(@PathVariable String providerId, SocialAccessError error) throws IOException {
 
         return new RedirectView("/", true);
     }

@@ -51,7 +51,14 @@ public class CheatRememberFilter extends GenericFilterBean{
             return;
         }
 
-        Authentication rememberMeAuth = rememberMeServices.autoLoginWithCookie(request, response);
+        //TODO: this is a pretty shitty code
+        RememberMe rememberMe = rememberMeServices.autoLoginWithCookie(request, response);
+        if( rememberMe == null ) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
+        Authentication rememberMeAuth = rememberMe.getAuthentication();
         if (rememberMeAuth == null)
         {
             filterChain.doFilter(servletRequest, servletResponse);
@@ -62,10 +69,12 @@ public class CheatRememberFilter extends GenericFilterBean{
         {
             if(rememberMeAuth instanceof RememberMeAuthenticationToken)
             {
-                RememberMeAuthenticationToken t = (RememberMeAuthenticationToken) rememberMeAuth;
-                UsernamePasswordAuthenticationToken auth = usernameAuthenticationTokenService.getUsernamePasswordToken(t);
+               // RememberMeAuthenticationToken t = (RememberMeAuthenticationToken) rememberMeAuth;
+                //UsernamePasswordAuthenticationToken token = usernameAuthenticationTokenService.getUsernamePasswordToken(t);
 
-                rememberMeAuth = authenticationManager.authenticate(auth);
+                UsernamePasswordAuthenticationToken token = rememberMe.getToken();
+
+                rememberMeAuth = authenticationManager.authenticate(token);
                 SecurityContextHolder.getContext().setAuthentication(rememberMeAuth);
 
                 filterChain.doFilter(request, response);

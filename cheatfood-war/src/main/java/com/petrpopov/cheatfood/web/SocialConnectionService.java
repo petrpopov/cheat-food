@@ -83,8 +83,7 @@ public class SocialConnectionService {
 
     public String getAuthorizeUrl(Class<?> apiClass) {
 
-        ConnectionService<?> connectionService = registry.getConnectionService(apiClass);
-        return connectionService.getAuthorizeUrl(null);
+        return this.getAuthorizeUrl(apiClass, null);
     }
 
     public String getAuthorizeUrl(Class<?> apiClass, String scope) {

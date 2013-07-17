@@ -25,7 +25,8 @@ public class HomeController {
     @Autowired
     private ILocationService locationService;
 
-    ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @RequestMapping({"/","/home", "/index", "/main"})
     public String showHomePage(@CookieValue(required = false, value = "guid") String cookie,
@@ -41,7 +42,7 @@ public class HomeController {
         Location location = locationService.findById(locationid);
 
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("location", mapper.writeValueAsString(location));
+        modelAndView.addObject("location", objectMapper.writeValueAsString(location));
         return modelAndView;
     }
 }

@@ -69,7 +69,7 @@ public class CheatUserDetailsService implements UserDetailsService {
 
     private UserDetails convertUser(UserEntity user, Class<?> apiClass) throws UsernameNotFoundException {
         if(user == null)
-            throw new UsernameNotFoundException("User not found in MongoDB !");
+            throw new UsernameNotFoundException("User not found in database !");
 
         UserDetails u = userDetailsAssembler.fromUserToUserDetails(user, apiClass);
         return u;

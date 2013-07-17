@@ -1,5 +1,6 @@
 package com.petrpopov.cheatfood.config;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
@@ -30,5 +31,10 @@ public class AppConfig {
         EhCacheCacheManager cacheManager = new EhCacheCacheManager();
         cacheManager.setCacheManager(cacheManagerFactoryBean().getObject());
         return cacheManager;
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }

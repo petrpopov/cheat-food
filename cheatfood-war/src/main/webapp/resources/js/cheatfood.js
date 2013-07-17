@@ -38,7 +38,6 @@ $(document).ready(function(){
             location = JSON.parse(location);
         }
 
-
         var index = document.URL.indexOf(params.realPath);
         if( index >= 0 ) {
             var tempURL = document.URL.substring(params.realPath.length+1);
