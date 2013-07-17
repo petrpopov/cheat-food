@@ -15,6 +15,7 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.foursquare.api.Foursquare;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,7 @@ import java.util.Arrays;
  * Time: 10:21
  */
 
+@Component
 public class CheatRememberMeServices extends TokenBasedRememberMeServices {
 
     private String cookieName = "CHEATFOOD";
@@ -49,8 +51,9 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
     @Autowired
     private ProviderIdClassStorage providerIdClassStorage;
 
-    public CheatRememberMeServices(String key, UserDetailsService userDetailsService) {
-        super(key, userDetailsService);
+    @Autowired
+    public CheatRememberMeServices(UserDetailsService userDetailsService) {
+        super("cheatfood", userDetailsService);
     }
 
 
@@ -114,6 +117,8 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
         try {
             String[] cookieTokens = decodeCookie(rememberMeCookie);
             user = processAutoLoginCookie(cookieTokens, request, response);
+
+            //TODO: this is a pretty shitty code
             UsernamePasswordAuthenticationToken token = processCookies(cookieTokens, request, response);
 
             if( user == null )

@@ -6,18 +6,6 @@ http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 http://www.springframework.org/schema/security
 http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-    <!--http access-denied-page="/error403.jsp">
-        <intercept-url pattern="/index*" access="ROLE_USER,ROLE_ANONYMOUS" />
-        <intercept-url pattern="/add*" access="ROLE_USER" />
-        <intercept-url pattern="/delete/*" access="ROLE_ADMIN" />
-        <form-login login-page="/login.jsp" default-target-url="/index"
-                            authentication-failure-url="/login.jsp?error=true" />
-        <logout logout-url="/logout" logout-success-url="/index" />
-
-        <anonymous username="guest" granted-authority="ROLE_ANONYMOUS" />
-        <remember-me />
-    </http-->
-
     <http auto-config="true"  access-denied-page="/error403.jsp" use-expressions="true">
         <form-login login-page="/login" default-target-url="/index"
                     authentication-failure-url="/login?error=true" />
@@ -33,14 +21,6 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd">
     </authentication-manager>
 
     <global-method-security secured-annotations="enabled" jsr250-annotations="enabled" pre-post-annotations="enabled"/>
-
-    <beans:bean id="cheatRememberMeServices" class="com.petrpopov.cheatfood.security.CheatRememberMeServices">
-        <beans:constructor-arg name="key" value="cheatfood"/>
-        <beans:constructor-arg name="userDetailsService" ref="cheatUserDetailsService"/>
-        <beans:property name="alwaysRemember" value="true"/>
-        <beans:property name="cookieName" value="CHEATFOOD"/>
-        <beans:property name="tokenValiditySeconds" value="2419200"/>
-    </beans:bean>
 
 
 </beans:beans>
