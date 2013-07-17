@@ -36,7 +36,6 @@ public class UserService extends GenericService<UserEntity> implements IUserServ
     @Autowired
     private CheatPasswordEncoder encoder;
 
-
     @CacheEvict(value = "users", allEntries = true)
     public UserEntity createUser(@Valid UserCreate user) throws CheatException {
 
