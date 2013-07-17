@@ -3,6 +3,7 @@ package com.petrpopov.cheatfood.web.rest;
 import com.petrpopov.cheatfood.model.Location;
 import com.petrpopov.cheatfood.service.ILocationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class LocationWebService {
     private ILocationService locationService;
 
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value="locations", method = RequestMethod.GET)
     public @ResponseBody
     List<Location> getAllCheckins(HttpServletRequest request) throws Exception {
