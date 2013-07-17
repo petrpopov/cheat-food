@@ -35,7 +35,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <bean id="noConnectionInterceptor" class="com.petrpopov.cheatfood.web.SocialConnectionInterceptor"/>
+            <bean id="noConnectionInterceptor" class="com.petrpopov.cheatfood.web.other.SocialConnectionInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

@@ -1,4 +1,4 @@
-package com.petrpopov.cheatfood.web;
+package com.petrpopov.cheatfood.web.other;
 
 import com.petrpopov.cheatfood.connection.FoursquareDefaultBean;
 import org.apache.log4j.Logger;

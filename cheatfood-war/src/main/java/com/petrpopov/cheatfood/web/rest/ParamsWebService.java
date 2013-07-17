@@ -1,4 +1,4 @@
-package com.petrpopov.cheatfood.web;
+package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.model.Type;
 import com.petrpopov.cheatfood.service.ITypeService;

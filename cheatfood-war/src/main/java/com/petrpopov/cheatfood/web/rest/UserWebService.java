@@ -1,12 +1,13 @@
-package com.petrpopov.cheatfood.web;
+package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.UserCreate;
 import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.security.CheatRememberMeServices;
 import com.petrpopov.cheatfood.security.LoginManager;
+import com.petrpopov.cheatfood.service.IUserService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
-import com.petrpopov.cheatfood.service.UserService;
+import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,7 @@ import javax.validation.Valid;
 public class UserWebService {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
     private UserContextHandler userContextHandler;

@@ -4,6 +4,7 @@ import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.UserCreate;
 import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
+import com.petrpopov.cheatfood.service.impl.GenericService;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -27,7 +27,7 @@ import java.util.UUID;
  * Time: 13:33
  */
 @Component
-public class UserService {
+public class UserService extends GenericService<UserEntity> implements IUserService {
 
     @Autowired
     @Qualifier("mongoTemplate")
@@ -70,10 +70,7 @@ public class UserService {
 
     @Cacheable(value = "users", key = "#id")
     public UserEntity getUserById(String id) {
-        Criteria criteria = Criteria.where("_id").is(id);
-        Query query = new Query(criteria);
-
-        return op.findOne(query, UserEntity.class);
+        return this.findById(id);
     }
 
   //  @Cacheable("users")
@@ -197,9 +194,5 @@ public class UserService {
         Query query = new Query(Criteria.where(field).is(value));
         UserEntity u = op.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), UserEntity.class);
         return u;
-    }
-
-    public List<UserEntity> findAll() {
-        return op.findAll(UserEntity.class);
     }
 }

@@ -1,4 +1,4 @@
-package com.petrpopov.cheatfood.web;
+package com.petrpopov.cheatfood.web.controllers;
 
 import com.petrpopov.cheatfood.model.Location;
 import com.petrpopov.cheatfood.service.ILocationService;

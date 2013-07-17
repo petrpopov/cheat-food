@@ -1,7 +1,7 @@
 package com.petrpopov.cheatfood.security;
 
 import com.petrpopov.cheatfood.model.UserEntity;
-import com.petrpopov.cheatfood.service.UserService;
+import com.petrpopov.cheatfood.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class CheatUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
     private UserDetailsAssembler userDetailsAssembler;

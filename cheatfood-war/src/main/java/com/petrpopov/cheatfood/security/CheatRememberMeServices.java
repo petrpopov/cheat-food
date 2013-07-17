@@ -2,7 +2,7 @@ package com.petrpopov.cheatfood.security;
 
 import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
 import com.petrpopov.cheatfood.model.UserEntity;
-import com.petrpopov.cheatfood.service.UserService;
+import com.petrpopov.cheatfood.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,7 +43,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
     private UsersConnectionRepository usersConnectionRepository;
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
     private UserDetailsAssembler userDetailsAssembler;
@@ -254,7 +254,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
         name.setMaxAge(0);
         name.setPath(getCookiePath(request));
 
-        response.addCookie(cookie);
+        response.addCookie(name);
     }
 
     protected boolean checkConnectionsForUser(UserEntity userEntity, Class<?> apiClass)

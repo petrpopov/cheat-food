@@ -1,4 +1,4 @@
-package com.petrpopov.cheatfood.web;
+package com.petrpopov.cheatfood.web.other;
 
 /**
  * User: petrpopov

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class UserContextHandler {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     public UserEntity currentContextUser() {
 
