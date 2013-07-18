@@ -2,9 +2,10 @@ package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.model.Location;
 import com.petrpopov.cheatfood.service.ILocationService;
+import com.petrpopov.cheatfood.web.other.ErrorType;
 import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,25 +35,72 @@ public class LocationWebService {
         return list;
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+
     @RequestMapping(value="location", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody
-    public Location createLocation(@Valid @RequestBody Location location)
+    public MessageResult createLocation(@Valid @RequestBody Location location)
     {
-        Location result = locationService.createOrSave(location);
+        Location loc = null;
+        MessageResult result = new MessageResult();
+
+        try {
+            loc = locationService.createOrSave(location);
+        }
+        catch (AccessDeniedException e) {
+            e.printStackTrace();
+
+            result.setError(true);
+            result.setErrorType(ErrorType.access_denied);
+            result.setMessage("Access denied");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+
+            result.setError(true);
+            result.setErrorType(ErrorType.other);
+            result.setMessage("Unknown error");
+        }
+
+        if( loc != null )
+            result.setResult(loc);
 
         return result;
     }
 
- //   @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "location/{locationid}", method = RequestMethod.DELETE)
     @ResponseBody
     public MessageResult deleteLocation(@PathVariable String locationid) {
 
-        Location location = locationService.findById(locationid);
-        locationService.deleteLocation(location);
+        MessageResult result = new MessageResult();
 
-        MessageResult res = new MessageResult();
-        return res;
+        Location location = locationService.findById(locationid);
+        if( location == null ) {
+            result.setError(true);
+            result.setErrorType(ErrorType.unknown_location);
+            result.setMessage("There is no such location!");
+
+            return result;
+        }
+
+        try {
+            locationService.deleteLocation(location);
+        }
+        catch (AccessDeniedException e) {
+            e.printStackTrace();
+
+            result.setError(true);
+            result.setErrorType(ErrorType.access_denied);
+            result.setMessage("Access denied");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+
+            result.setError(true);
+            result.setErrorType(ErrorType.other);
+            result.setMessage("Unknown error");
+        }
+
+
+        return result;
     }
 }

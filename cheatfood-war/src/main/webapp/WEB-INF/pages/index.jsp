@@ -142,6 +142,11 @@
 <div id="map"></div>
 
 <div id="deleteModal" class="modal hide fade alert alert-error alert-block">
+    <div id="deleteAlert" class="alert" hidden="true" style="display: none;">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong id="deleteAlertBeginText">Ошибка!</strong><span class="spacer3" id="deleteAlertText">Произошла ошибка во время удаления!</span>
+    </div>
+
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <p>
         <strong>Удалить?</strong> Вот так просто взять и удалить весь нажитый опыт в области доступной еды и больше не

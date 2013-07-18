@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -31,6 +32,7 @@ public class LocationService extends GenericService<Location> implements ILocati
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Location createOrSave(@Valid Location location) {
 
         Type savedType = getTypeForLocation(location);
@@ -54,7 +56,7 @@ public class LocationService extends GenericService<Location> implements ILocati
     }
 
     @Override
-    //@PreAuthorize("hasRole('ROLE_USER') and #location.creator.id!=principal.username")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public void deleteLocation(Location location) {
         logger.info("Deleting location from database by object");
         op.remove(location);

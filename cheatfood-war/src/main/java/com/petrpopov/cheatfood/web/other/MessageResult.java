@@ -8,6 +8,7 @@ package com.petrpopov.cheatfood.web.other;
 public class MessageResult {
 
     private Boolean error = false;
+    private ErrorType errorType;
     private String message;
     private Object result;
 
@@ -40,5 +41,13 @@ public class MessageResult {
 
     public void setResult(Object result) {
         this.result = result;
+    }
+
+    public ErrorType getErrorType() {
+        return errorType;
+    }
+
+    public void setErrorType(ErrorType errorType) {
+        this.errorType = errorType;
     }
 }

@@ -10,6 +10,12 @@ $(document).ready(function(){
         realPath: null,
         types: []
     };
+
+    var errors = {
+        access_denied: "access_denied",
+        unknown_location: "unknown_location"
+    };
+
     var markers = new HashMap();
 
     var newMarker = false;
@@ -148,7 +154,7 @@ $(document).ready(function(){
         }
 
         buildLoginMenu(authorized);
-        buildInterface(authorized, location);
+        buildInterface(true, location);
     }
 
     function buildLoginMenu(auth) {
@@ -953,6 +959,7 @@ $(document).ready(function(){
 
         $('#deleteMarkerButton').off('click');
         $('#deleteMarkerButton').click(function() {
+            $('#deleteAlert').hide();
             $('#deleteModal').modal('show');
         });
 
@@ -975,6 +982,7 @@ $(document).ready(function(){
             deleteMarkerRequest(infoBoxObject);
         });
 
+        $('#deleteAlert').hide();
         $('#deleteModal').modal('show');
     }
 
@@ -982,15 +990,43 @@ $(document).ready(function(){
         $('#deleteMarkerButtonModal').button('loading');
 
 
-        console.log(infoBoxObject.location.id);
-
         $.ajax({
             type: "DELETE",
             url: params.realPath+'/api/location/'+infoBoxObject.location.id,
-            success: function(data) {
-                $('#deleteModal').modal('hide');
-                $('#deleteMarkerButtonModal').button('reset');
-                removeMarkerAndInfoBox(infoBoxObject);
+            complete: function(data) {
+
+                if( data.responseJSON ) {
+                    var res = data.responseJSON;
+
+                    if( res.error == false ) {
+                        $('#deleteModal').modal('hide');
+                        removeMarkerAndInfoBox(infoBoxObject);
+                    }
+                    else {
+                        if( res.errorType === errors.access_denied ) {
+                            $('#deleteAlert').show(EFFECTS_TIME);
+                            $('#deleteAlertText').text("Необходимо авторизоваться!");
+
+                            $('#loginModal').modal('show');
+                        }
+                        else if( res.errorType === errors.unknown_location ) {
+                            $('#deleteAlert').show(EFFECTS_TIME);
+                            $('#deleteAlertText').text("Такой локации не существует!");
+                        }
+                        else {
+                            $('#deleteAlert').show(EFFECTS_TIME);
+                            $('#deleteAlertBeginText').text("Упс..")
+                            $('#deleteAlertText').text("Извините, произошла какая-то ошибка..");
+                        }
+                    }
+
+                    $('#deleteMarkerButtonModal').button('reset');
+                }
+                else {
+                    $('#deleteAlert').show(EFFECTS_TIME);
+                    $('#deleteAlertBeginText').text("Упс..")
+                    $('#deleteAlertText').text("Извините, произошла какая-то ошибка..");
+                }
             }
         });
     }
@@ -1006,6 +1042,7 @@ $(document).ready(function(){
         infoBoxObject.infoBox.hide();
 
         $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
+            $('#editFormAlert').hide();
             initEditFormValidation();
             initEditFormWithData(infoBoxObject);
             initEditFormFocus();
@@ -1126,14 +1163,31 @@ $(document).ready(function(){
             },
             complete: function(data) {
 
-                if( data.responseText.indexOf("DOCTYPE") < 0 ) {
-                    var newLocation = JSON.parse(data.responseText);
-                    infoBoxObject.location = newLocation;
+                if( data.responseJSON ) {
+                    var res = data.responseJSON;
 
-                    $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
-                    showInfoBoxForMarker(infoBoxObject);
-                    enableEditMarkerMenu(infoBoxObject);
-                    enableDeleteMarkerMenu(infoBoxObject);
+                    if( res.error === false ) {
+                        var newLocation = res.result;
+                        infoBoxObject.location = newLocation;
+
+                        $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+                        showInfoBoxForMarker(infoBoxObject);
+                        enableEditMarkerMenu(infoBoxObject);
+                        enableDeleteMarkerMenu(infoBoxObject);
+                    }
+                    else {
+                        if( res.errorType === errors.access_denied) {
+                            $('#editFormAlertBeginText').text("Ошибка!");
+                            $('#editFormAlertText').text("Необходимо авторизоваться!");
+                            $('#editFormAlert').show(EFFECTS_TIME);
+
+                            $('#loginModal').modal('show');
+                        }
+                        else {
+                            //show error message
+                            $('#editFormAlert').show(EFFECTS_TIME);
+                        }
+                    }
                 }
                 else {
                     $('#loginModal').modal('show');
@@ -1445,6 +1499,19 @@ $(document).ready(function(){
 
         var res = $('<form/>').attr('id', 'editMarkerForm').addClass('infoWindowInner form-horizontal')
             .attr('autocomplete', 'off')
+            .append(
+                $('<div/>').attr("id", "editFormAlert").addClass("alert").attr("hidden", "true").attr("style", "display: none;")
+                    .append(
+                        $('<button/>').attr("type", "button").addClass("close").attr("data-dismiss", "alert").text('x')
+                    )
+                    .append(
+                        $('<strong/>').text("Упс..").attr("id", "editFormAlertBeginText")
+                    )
+                    .append(
+                        $('<span/>').attr("id", "editFormAlertText").addClass("spacer3")
+                            .text("Извините, произошла какая-то ошибка..")
+                    )
+            )
             .append(
                 $('<legend/>').text('Создание точки')
             )
