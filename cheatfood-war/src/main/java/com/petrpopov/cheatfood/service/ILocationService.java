@@ -1,6 +1,7 @@
 package com.petrpopov.cheatfood.service;
 
 import com.petrpopov.cheatfood.model.Location;
+import com.petrpopov.cheatfood.model.UserEntity;
 
 /**
  * User: petrpopov
@@ -9,7 +10,7 @@ import com.petrpopov.cheatfood.model.Location;
  */
 public interface ILocationService extends IGenericService<Location> {
 
-    public Location createOrSave(Location location);
+    public Location createOrSave(Location location, UserEntity userEntity);
     public void deleteLocation(String id);
     public void deleteLocation(Location location);
 }

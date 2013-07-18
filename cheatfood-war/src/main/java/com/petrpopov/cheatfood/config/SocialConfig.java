@@ -91,6 +91,7 @@ public class SocialConfig {
             throw new IllegalStateException("Unable to get a ConnectionRepository: no user signed");
         }
 
+        //this is a real mongodb _id userentity id, not a providerUserId
         String name = authentication.getName();
         ConnectionRepository repo = usersConnectionRepository().createConnectionRepository(name);
         return repo;

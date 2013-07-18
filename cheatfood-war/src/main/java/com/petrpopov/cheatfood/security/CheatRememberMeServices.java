@@ -169,6 +169,8 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
 
         //username is alwasy a real mongodb-id
         UserEntity entity = userService.getUserById(username);
+        if( entity == null )
+            return null;
 
         UserDetails userDetails;
         String providerType = cookieTokens[3];
@@ -262,16 +264,9 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
         if( apiClass == null )
             return false;
 
-        String username = null;
-        if(apiClass.equals(Facebook.class) ) {
-            username = userEntity.getFacebookId();
-        }
-        else if( apiClass.equals(Foursquare.class)) {
-            username = userEntity.getFoursquareId();
-        }
-
-        if( username == null )
-            return false;
+        //real _id, because we previously save a connection with ConnectionRepository bean with real _id
+        //not with providerUserId (SocialConfig.java)
+        String username = userEntity.getId();
 
         try {
             ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(username);

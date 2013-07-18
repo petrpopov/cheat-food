@@ -2,6 +2,7 @@ package com.petrpopov.cheatfood.service.impl;
 
 import com.petrpopov.cheatfood.model.Location;
 import com.petrpopov.cheatfood.model.Type;
+import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.service.ILocationService;
 import com.petrpopov.cheatfood.service.ITypeService;
 import org.apache.log4j.Logger;
@@ -33,13 +34,15 @@ public class LocationService extends GenericService<Location> implements ILocati
 
     @Override
     @PreAuthorize("hasRole('ROLE_USER')")
-    public Location createOrSave(@Valid Location location) {
+    public Location createOrSave(@Valid Location location, UserEntity userEntity) {
 
         Type savedType = getTypeForLocation(location);
         if( savedType != null ) {
             logger.info("Setting saved Type to location");
             location.setType(savedType);
         }
+
+        location.setCreator(userEntity);
 
         logger.info("Saving location to database");
 
@@ -56,7 +59,7 @@ public class LocationService extends GenericService<Location> implements ILocati
     }
 
     @Override
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER') and #location.creator.id!=principal.username")
     public void deleteLocation(Location location) {
         logger.info("Deleting location from database by object");
         op.remove(location);

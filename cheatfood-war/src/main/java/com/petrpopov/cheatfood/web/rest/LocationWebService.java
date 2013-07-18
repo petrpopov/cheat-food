@@ -1,7 +1,9 @@
 package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.model.Location;
+import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.service.ILocationService;
+import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.web.other.ErrorType;
 import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class LocationWebService {
     @Autowired
     private ILocationService locationService;
 
+    @Autowired
+    private UserContextHandler userContextHandler;
+
 
     @RequestMapping(value="locations", method = RequestMethod.GET)
     public @ResponseBody
@@ -44,7 +49,8 @@ public class LocationWebService {
         MessageResult result = new MessageResult();
 
         try {
-            loc = locationService.createOrSave(location);
+            UserEntity userEntity = userContextHandler.currentContextUser();
+            loc = locationService.createOrSave(location, userEntity);
         }
         catch (AccessDeniedException e) {
             e.printStackTrace();
