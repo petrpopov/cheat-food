@@ -1050,6 +1050,7 @@ $(document).ready(function(){
             initSwitch();
         });
 
+
         $('#currentActionForm').data("infoBoxObject", infoBoxObject);
         showCurrentActionForm("Редактирование точки...", cancelNewMarkerAddition, "infoBoxObject");
 
