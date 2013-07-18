@@ -2,4 +2,5 @@
 <ehcache>
     <defaultCache eternal="true" maxElementsInMemory="1000" overflowToDisk="false" />
     <cache name="users" maxElementsInMemory="1000" eternal="true" overflowToDisk="true" />
+    <cache name="locations" maxElementsInMemory="100000" eternal="true" overflowToDisk="true" />
 </ehcache>

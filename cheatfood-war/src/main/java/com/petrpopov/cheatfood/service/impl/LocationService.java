@@ -31,7 +31,7 @@ public class LocationService extends GenericService<Location> implements ILocati
     }
 
     @Override
-    public Location createOrSaveLocation(@Valid Location location) {
+    public Location createOrSave(@Valid Location location) {
 
         Type savedType = getTypeForLocation(location);
         if( savedType != null ) {
@@ -47,13 +47,25 @@ public class LocationService extends GenericService<Location> implements ILocati
     @Override
     public void deleteLocation(String id) {
 
-        logger.info("Deleting location from database");
+        logger.info("Deleting location from database by id");
 
         Query query = new Query(Criteria.where("_id").is(id));
         op.remove(query, Location.class);
     }
 
+    @Override
+    //@PreAuthorize("hasRole('ROLE_USER') and #location.creator.id!=principal.username")
+    public void deleteLocation(Location location) {
+        logger.info("Deleting location from database by object");
+        op.remove(location);
+    }
+
     private Location saveLocationObject(Location location) {
+        if( location.getId() != null ) {
+            if( location.getId().isEmpty() ) {
+                location.setId(null);
+            }
+        }
         op.save(location);
         return location;
     }

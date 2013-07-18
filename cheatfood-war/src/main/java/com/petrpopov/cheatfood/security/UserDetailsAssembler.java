@@ -5,8 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.foursquare.api.Foursquare;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -51,7 +49,7 @@ public class UserDetailsAssembler {
 
     private String getUsername(UserEntity user, Class<?> apiClass ) {
 
-        if( apiClass == null ) {
+      /*  if( apiClass == null ) {
             return user.getId();
         }
         else if( apiClass.equals(Foursquare.class) ) {
@@ -59,7 +57,7 @@ public class UserDetailsAssembler {
         }
         else if( apiClass.equals(Facebook.class) ) {
             return user.getFacebookId();
-        }
+        }  */
 
         return user.getId();
     }

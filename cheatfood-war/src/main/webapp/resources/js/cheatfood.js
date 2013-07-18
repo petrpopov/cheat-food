@@ -14,6 +14,9 @@ $(document).ready(function(){
 
     var newMarker = false;
 
+    var authorized = false;
+
+    var COOKIE_NAME = "CHEATFOOD";
     var GRID_SIZE = 50;
     var MAX_ZOOM = 15;
     var MAX_ZOOM_FOR_MARKER = 18;
@@ -33,6 +36,8 @@ $(document).ready(function(){
 
         params.realPath = $('#realPath').text().trim();
 
+        var login = $('#loginLabel').text();
+
         var location = $('#locationLabel').text();
         if( location ) {
             location = JSON.parse(location);
@@ -47,6 +52,13 @@ $(document).ready(function(){
                 //if location == null, wrong location, wrong id etc
                 //we change URL in address bar to main page URL
                 if( !location ) {
+                    window.history.pushState("", "", params.realPath );
+                }
+            }
+
+            var loginIndex = tempURL.indexOf("login");
+            if( loginIndex === 0 ) {
+                if(login) {
                     window.history.pushState("", "", params.realPath );
                 }
             }
@@ -67,32 +79,89 @@ $(document).ready(function(){
     }
 
     function init(location) {
+        checkCookies(location);
+    }
 
-        buildLoginMenu();
+    function buildInterface(auth, location) {
         createRegistrationAuthActions();
 
-        createMap();
-        createContextMenuForMap();
-        createContextMenuForMarker();
-        createMarkerEditFormOnMap();
-        createLocateMeButton();
-        createAddMarkerButton();
+        createMap(auth);
+
         createMainMenuBehavior();
         centerMapToLocation(location);
         createMarkersForLocations(location);
-
     }
 
-    function buildLoginMenu() {
+    function checkCookies(location) {
+        var cookie = $.cookie(COOKIE_NAME);
+
+        if( !cookie ) {
+            //non authorized
+            modifyInterface(false, location);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: params.realPath+"/api/checkcookie",
+                data: JSON.stringify( {cookie:cookie} ),
+                contentType: 'application/json',
+                mimeType: 'application/json',
+                dataType: 'json',
+                success: function() {
+
+                },
+                complete: function(result) {
+
+                    var res = result.responseJSON;
+                    if( res ) {
+                        if( res.error === false ) {
+                            //authorized
+                            modifyInterface(true, location);
+                        }
+                        else {
+                            //non authorized
+                            modifyInterface(false, location);
+                        }
+                    }
+                    else {
+                        //non authorized
+                        modifyInterface(false, location);
+                    }
+                }
+            });
+        }
+    }
+
+    function modifyInterface(auth, location) {
+
+        if( auth === true ) {
+            authorized = true;
+
+            $('#editMenu').show();
+            $('#addMarkerButton').show();
+        }
+        else {
+            authorized = false;
+
+            $('#editMenu').hide();
+            $('#addMarkerButton').hide();
+        }
+
+        buildLoginMenu(authorized);
+        buildInterface(authorized, location);
+    }
+
+    function buildLoginMenu(auth) {
+
+        if( auth === false ) {
+            showLoginMenuInfo(false, null);
+            return
+        }
+
         $.get(params.realPath+"/api/users/current", function(user) {
 
             if( !user ) {
-                $('#loginMenuLink').text('Вход');
-
-                $('#loginLink').show();
-                $('#registrationLink').hide();
-                $('#profileLink').hide();
-                $('#logoutLink').hide();
+                showLoginMenuInfo(auth, null);
             }
             else {
                 var email = user.email;
@@ -116,14 +185,28 @@ $(document).ready(function(){
                     name = email;
                 }
 
-                $('#loginMenuLink').text(name);
-
-                $('#loginLink').hide();
-                $('#registrationLink').hide();
-                $('#profileLink').show();
-                $('#logoutLink').show();
+                showLoginMenuInfo(auth, name);
             }
         });
+    }
+
+    function showLoginMenuInfo(auth, name) {
+        if( auth === true ) {
+            $('#loginMenuLink').text(name);
+
+            $('#loginLink').hide();
+            $('#registrationLink').hide();
+            $('#profileLink').show();
+            $('#logoutLink').show();
+        }
+        else if( auth === false ) {
+            $('#loginMenuLink').text('Вход');
+
+            $('#loginLink').show();
+            $('#registrationLink').hide();
+            $('#profileLink').hide();
+            $('#logoutLink').hide();
+        }
     }
 
     function createRegistrationAuthActions() {
@@ -171,7 +254,8 @@ $(document).ready(function(){
 
             },
             complete: function(data) {
-                buildLoginMenu();
+                modifyInterface(false);
+                disableContextMenu();
             }
         })
     }
@@ -247,7 +331,7 @@ $(document).ready(function(){
                     $('#registrationAlert').show(EFFECTS_TIME);
                 }
 
-                buildLoginMenu();
+                checkCookies();
                 $('#createUserSubmit').button('reset');
             },
             statusCode: {
@@ -258,7 +342,7 @@ $(document).ready(function(){
         });
     }
 
-    function createMap() {
+    function createMap(auth) {
         var mcOptions = {gridSize: GRID_SIZE, maxZoom: MAX_ZOOM};
         var styles = [
             {
@@ -308,6 +392,150 @@ $(document).ready(function(){
         transitLayer.setMap(map.map);
 
         setDefaultMapClickBehavior();
+
+        createMapControls(auth);
+    }
+
+    function createMapControls(auth) {
+        createContextMenuForMap(auth);
+        createContextMenuForMarker(auth);
+        createMarkerEditFormOnMap();
+        createLocateMeButton();
+        createAddMarkerButton(auth);
+    }
+
+    function createContextMenuForMap(auth) {
+
+        if( auth === true ) {
+            var title = $('<span/>')
+                .append(
+                    $('<img/>').attr('src', getImagePath('pin.png')).attr('width', 20)
+                )
+                .append(
+                    $('<span/>').addClass("spacer3").text("Создать точку здесь")
+                ).html();
+
+            map.setContextMenu({
+                control: 'map',
+                options: [
+                    {
+                        title: title,
+                        name: 'add_location',
+                        action: function(e) {
+                            createMarkerForContextMenu(e.latLng);
+                        }
+                    }
+                ]
+            });
+        }
+    }
+
+    function createContextMenuForMarker(auth) {
+
+        if( auth == true ) {
+            var show = $('<span/>')
+                .append(
+                    $('<i/>').addClass("icon-list-alt")
+                )
+                .append(
+                    $('<span/>').addClass("spacer3").text("Подробнее")
+                ).html();
+
+            var edit = $('<span/>')
+                .append(
+                    $('<i/>').addClass("icon-edit")
+                )
+                .append(
+                    $('<span/>').addClass("spacer3").text("Редактировать")
+                ).html();
+
+            var delete_ = $('<span/>')
+                .append(
+                    $('<i/>').addClass("icon-trash")
+                )
+                .append(
+                    $('<span/>').addClass("spacer3").text("Удалить")
+                ).html();
+
+            map.setContextMenu({
+                control: 'marker',
+                options: [
+                    {
+                        title: show,
+                        name: 'show_marker',
+                        action: function(e) {
+                            var infoBoxObject = markers.get(e.marker);
+                            initialShowInfoBoxForMarker(e.marker, infoBoxObject);
+                        }
+                    },
+                    {
+                        title: edit,
+                        name: 'edit_marker',
+                        action: function(e) {
+                            var infoBoxObject = markers.get(e.marker);
+                            infoBox.setPosition(e.latLng);
+                            initAndShowEditForm(infoBoxObject);
+                        }
+                    },
+                    {
+                        title: delete_,
+                        name: 'delete_marker',
+                        action: function(e) {
+                            var infoBoxObject = markers.get(e.marker);
+                            deleteMarkerAction(infoBoxObject);
+                        }
+                    }
+                ]
+            });
+        }
+
+    }
+
+    function createMarkerEditFormOnMap() {
+        var div = $('<div/>').attr('id','editMarkerFormDiv').attr('hidden', 'true')
+            .addClass('span6 transparent infoWindow').append(getMarkerEditContent());
+
+        var mapControls = map.map.controls[google.maps.ControlPosition.TOP_RIGHT];
+        map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(div.get(0));
+    }
+
+    function createLocateMeButton() {
+        var div = $('<div/>').attr('id','locateMeDiv').addClass("spacer28 infoWindow").append(
+            $('<a/>').attr('id', 'locateMe').append(
+                $('<img/>').attr('src', getImagePath('location.png')).attr('width', '32')
+            )
+        );
+
+        map.map.controls[google.maps.ControlPosition.LEFT_TOP].push( div.get(0) );
+
+        google.maps.event.addListener(map.map, 'idle', function(event) {
+            enableLocateMeButton();
+        });
+    }
+
+    function createAddMarkerButton(auth) {
+
+        if(auth === true) {
+            var div = $('<div/>').addClass('addMarker')
+                .append(
+                    $('<a/>').attr('id','addMarkerButton').addClass("btn btn-small")
+                        .append(
+                            $('<img/>').attr('src', getImagePath('pin.png')).attr('width', '20')
+                        )
+                        .append(
+                            $('<span/>').addClass("spacer3").text('Добавить точку')
+                        )
+                );
+
+            map.map.controls[google.maps.ControlPosition.TOP_LEFT].push( div.get(0) );
+
+            google.maps.event.addListener(map.map, 'idle', function(event) {
+                $('#addMarkerButton').click(function(){
+                    addMarkerOnMapByLeftClick();
+                });
+            });
+        }
+
     }
 
     function setDefaultMapClickBehavior() {
@@ -321,12 +549,11 @@ $(document).ready(function(){
         });
     }
 
-    function centerMapToLocation() {
+    function centerMapToLocation(location) {
         disableLocateMeButton();
 
         GMaps.geolocate({
             success: function(position) {
-
                 if( !location ) {
                     map.setCenter(position.coords.latitude, position.coords.longitude);
                 }
@@ -353,87 +580,6 @@ $(document).ready(function(){
 
     }
 
-    function createContextMenuForMap() {
-
-        var title = $('<span/>')
-            .append(
-                $('<img/>').attr('src', getImagePath('pin.png')).attr('width', 20)
-            )
-            .append(
-                $('<span/>').addClass("spacer3").text("Создать точку здесь")
-            ).html();
-
-        map.setContextMenu({
-            control: 'map',
-            options: [
-                {
-                    title: title,
-                    name: 'add_location',
-                    action: function(e) {
-                        createMarkerForContextMenu(e.latLng);
-                    }
-                }
-            ]
-        });
-    }
-
-    function createContextMenuForMarker() {
-
-        var show = $('<span/>')
-            .append(
-                $('<i/>').addClass("icon-list-alt")
-            )
-            .append(
-                $('<span/>').addClass("spacer3").text("Подробнее")
-            ).html();
-
-        var edit = $('<span/>')
-            .append(
-                $('<i/>').addClass("icon-edit")
-            )
-            .append(
-                $('<span/>').addClass("spacer3").text("Редактировать")
-            ).html();
-
-        var delete_ = $('<span/>')
-            .append(
-                $('<i/>').addClass("icon-trash")
-            )
-            .append(
-                $('<span/>').addClass("spacer3").text("Удалить")
-            ).html();
-
-        map.setContextMenu({
-            control: 'marker',
-            options: [
-                {
-                    title: show,
-                    name: 'show_marker',
-                    action: function(e) {
-                        var infoBoxObject = markers.get(e.marker);
-                        initialShowInfoBoxForMarker(e.marker, infoBoxObject);
-                    }
-                },
-                {
-                    title: edit,
-                    name: 'edit_marker',
-                    action: function(e) {
-                        var infoBoxObject = markers.get(e.marker);
-                        infoBox.setPosition(e.latLng);
-                        initAndShowEditForm(infoBoxObject);
-                    }
-                },
-                {
-                    title: delete_,
-                    name: 'delete_marker',
-                    action: function(e) {
-                        var infoBoxObject = markers.get(e.marker);
-                        deleteMarkerAction(infoBoxObject);
-                    }
-                }
-            ]
-        });
-    }
 
     function createMarkerForContextMenu(latLng) {
 
@@ -523,8 +669,7 @@ $(document).ready(function(){
             draggingCursor : "url("+cursorPath+"), auto"
         });
 
-        //disable context menu
-        google.maps.event.clearListeners(map.map, 'rightclick');
+        disableContextMenu();
 
         //create marker and edit-form on left click
         google.maps.event.addListener(map.map, 'click', function(event) {
@@ -532,6 +677,11 @@ $(document).ready(function(){
         });
 
         disableAddMarkerMenu();
+    }
+
+    function disableContextMenu() {
+        //disable context menu
+        google.maps.event.clearListeners(map.map, 'rightclick');
     }
 
     function setDefaultMouseBehavior() {
@@ -598,6 +748,7 @@ $(document).ready(function(){
 
         $.get(params.realPath+"/api/locations", function(data) {
             $.each(data, function(n, loadedLocation) {
+
                 var infoBoxObject = {
                     infoBox: infoBox,
                     location: loadedLocation
@@ -615,27 +766,6 @@ $(document).ready(function(){
         });
     }
 
-    function createMarkerEditFormOnMap() {
-        var div = $('<div/>').attr('id','editMarkerFormDiv').attr('hidden', 'true')
-            .addClass('span6 transparent infoWindow').append(getMarkerEditContent());
-
-        var mapControls = map.map.controls[google.maps.ControlPosition.TOP_RIGHT];
-        map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(div.get(0));
-    }
-
-    function createLocateMeButton() {
-        var div = $('<div/>').attr('id','locateMeDiv').addClass("spacer28 infoWindow").append(
-            $('<a/>').attr('id', 'locateMe').append(
-                $('<img/>').attr('src', getImagePath('location.png')).attr('width', '32')
-            )
-        );
-
-        map.map.controls[google.maps.ControlPosition.LEFT_TOP].push( div.get(0) );
-
-        google.maps.event.addListener(map.map, 'idle', function(event) {
-            enableLocateMeButton();
-        });
-    }
 
     function enableLocateMeButton() {
         $('#locateMe').click(function(){
@@ -646,27 +776,6 @@ $(document).ready(function(){
     function disableLocateMeButton() {
         $('#locateMe').off('click');
         $('#locateMe').addClass('disabled');
-    }
-
-    function createAddMarkerButton() {
-        var div = $('<div/>').addClass('addMarker')
-            .append(
-                $('<a/>').attr('id','addMarkerButton').addClass("btn btn-small")
-                    .append(
-                        $('<img/>').attr('src', getImagePath('pin.png')).attr('width', '20')
-                    )
-                    .append(
-                        $('<span/>').addClass("spacer3").text('Добавить точку')
-                    )
-            );
-
-        map.map.controls[google.maps.ControlPosition.TOP_LEFT].push( div.get(0) );
-
-        google.maps.event.addListener(map.map, 'idle', function(event) {
-            $('#addMarkerButton').click(function(){
-                addMarkerOnMapByLeftClick();
-            });
-        });
     }
 
     function createInfoBoxForMarkers(position) {
@@ -734,6 +843,7 @@ $(document).ready(function(){
     }
 
     function initialShowInfoBoxForMarker(marker, infoBoxObject) {
+
         if( !isEditMarkerFormActive() ) {
             var m = infoBoxObject.marker;
             if( !m ) {
@@ -756,6 +866,15 @@ $(document).ready(function(){
     }
 
     function setInfoBoxContentFromLocation(infoBoxObject) {
+
+        if( authorized === false ) {
+            $('#approveLocation').hide();
+            $('#editDeleteMarkerGroup').hide();
+        }
+        else {
+            $('#approveLocation').show();
+            $('#editDeleteMarkerGroup').show();
+        }
 
         var location = infoBoxObject.location;
 
@@ -861,6 +980,9 @@ $(document).ready(function(){
 
     function deleteMarkerRequest(infoBoxObject) {
         $('#deleteMarkerButtonModal').button('loading');
+
+
+        console.log(infoBoxObject.location.id);
 
         $.ajax({
             type: "DELETE",
@@ -969,6 +1091,7 @@ $(document).ready(function(){
         var street = $('#street').val();
         var zipcode = $('#zipcode').val();
 
+
         var param = {
             id: id,
             title: title,
@@ -1002,17 +1125,23 @@ $(document).ready(function(){
             success: function(data) {
             },
             complete: function(data) {
-                var newLocation = JSON.parse(data.responseText);
-                infoBoxObject.location = newLocation;
+
+                if( data.responseText.indexOf("DOCTYPE") < 0 ) {
+                    var newLocation = JSON.parse(data.responseText);
+                    infoBoxObject.location = newLocation;
+
+                    $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+                    showInfoBoxForMarker(infoBoxObject);
+                    enableEditMarkerMenu(infoBoxObject);
+                    enableDeleteMarkerMenu(infoBoxObject);
+                }
+                else {
+                    $('#loginModal').modal('show');
+                }
 
                 $('#submitEdit').button('reset');
-                $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
-
-                showInfoBoxForMarker(infoBoxObject);
-                newMarker = false;
-                enableEditMarkerMenu(infoBoxObject);
-                enableDeleteMarkerMenu(infoBoxObject);
                 setDefaultMouseBehavior();
+                newMarker = false;
             },
             statusCode: {
                 400: function(data) {
@@ -1242,7 +1371,7 @@ $(document).ready(function(){
 
                                     )
                                     .append(
-                                        $('<div/>').addClass('btn-group pull-right')
+                                        $('<div/>').addClass('btn-group pull-right').attr('id', "editDeleteMarkerGroup")
                                             .append(
                                                 $('<button/>').attr('id', 'editMarkerButton')
                                                     .addClass('btn btn-small')
@@ -1268,36 +1397,39 @@ $(document).ready(function(){
                     )
             )
             .append(
-                $('<hr/>')
-            )
-            .append(
-                $('<div/>').addClass('media-body')
+                $('<div/>').attr('id', 'approveLocation')
                     .append(
-                        $('<div/>').addClass('media')
+                        $('<hr/>')
+                    )
+                    .append(
+                        $('<div/>').addClass('media-body')
                             .append(
-                                $('<div/>').addClass('btn-toolbar')
+                                $('<div/>').addClass('media')
                                     .append(
-                                        $('<div/>').addClass('btn-group pull-left')
+                                        $('<div/>').addClass('btn-toolbar')
                                             .append(
-                                                $('<button/>').addClass('btn btn-small btn-success')
+                                                $('<div/>').addClass('btn-group pull-left')
                                                     .append(
-                                                        $('<i/>').addClass('icon-ok icon-white')
+                                                        $('<button/>').addClass('btn btn-small btn-success')
+                                                            .append(
+                                                                $('<i/>').addClass('icon-ok icon-white')
+                                                            )
+                                                            .append(
+                                                                $('<span/>').addClass("spacer3").text('Подтверждаю точку')
+                                                            )
                                                     )
-                                                    .append(
-                                                        $('<span/>').addClass("spacer3").text('Подтверждаю точку')
-                                                    )
-                                            )
 
-                                    )
-                                    .append(
-                                        $('<div/>').addClass('btn-group pull-right')
+                                            )
                                             .append(
-                                                $('<button/>').addClass('btn btn-small btn-warning')
+                                                $('<div/>').addClass('btn-group pull-right')
                                                     .append(
-                                                        $('<i/>').addClass('icon-remove icon-white')
-                                                    )
-                                                    .append(
-                                                        $('<span/>').addClass("spacer3").text('Точки здесь больше нет')
+                                                        $('<button/>').addClass('btn btn-small btn-warning')
+                                                            .append(
+                                                                $('<i/>').addClass('icon-remove icon-white')
+                                                            )
+                                                            .append(
+                                                                $('<span/>').addClass("spacer3").text('Точки здесь больше нет')
+                                                            )
                                                     )
                                             )
                                     )

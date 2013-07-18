@@ -9,6 +9,7 @@ import com.petrpopov.cheatfood.model.Location;
  */
 public interface ILocationService extends IGenericService<Location> {
 
-    public Location createOrSaveLocation(Location location);
+    public Location createOrSave(Location location);
     public void deleteLocation(String id);
+    public void deleteLocation(Location location);
 }

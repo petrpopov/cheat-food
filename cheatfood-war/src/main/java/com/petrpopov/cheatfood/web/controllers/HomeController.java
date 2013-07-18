@@ -45,4 +45,12 @@ public class HomeController {
         modelAndView.addObject("location", objectMapper.writeValueAsString(location));
         return modelAndView;
     }
+
+    @RequestMapping(value = "login")
+    public ModelAndView login() {
+
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("login", "needLogin");
+        return modelAndView;
+    }
 }

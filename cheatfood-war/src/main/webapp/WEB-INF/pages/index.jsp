@@ -21,6 +21,7 @@
 
 
     <script src="<s:url value="/resources"/>/js/jquery-1.10.1.min.js"></script>
+    <script src="<s:url value="/resources"/>/js/jquery.cookie-1.3.1.js"></script>
     <script src="<s:url value="/resources"/>/js/bootstrap.min.js"></script>
 
     <script src="<s:url value="/resources"/>/js/jquery.validate-1.11.1.min.js"></script>
@@ -47,6 +48,7 @@
 </label>
 
 <label id="locationLabel" hidden="true" style="display: none;">${location}</label>
+<label id="loginLabel" hidden="true" style="display: none;">${login}</label>
 
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -66,7 +68,7 @@
 
             <ul class="nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a id="editMenu" href="#" class="dropdown-toggle" data-toggle="dropdown">
                         Редактировать<b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">

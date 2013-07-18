@@ -293,7 +293,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
         if( authentication instanceof UsernamePasswordAuthenticationToken ) {
             Object details = authentication.getDetails();
 
-            if( details instanceof Class<?> ) {
+           /* if( details instanceof Class<?> ) {
                 Class<?> clazz = (Class<?>) details;
 
                 String id = ((UserDetails) authentication.getPrincipal()).getUsername();
@@ -308,7 +308,8 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
                 return id;
             }
             else
-                return super.retrieveUserName(authentication);
+                return super.retrieveUserName(authentication);  */
+            return super.retrieveUserName(authentication);
         }
         else
             return super.retrieveUserName(authentication);

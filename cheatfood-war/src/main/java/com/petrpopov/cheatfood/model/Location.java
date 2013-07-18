@@ -39,7 +39,6 @@ public class Location {
     @NotNull
     private Date actualDate;
 
-    private String creatorId;
     private Address address;
 
     @NotNull
@@ -49,17 +48,19 @@ public class Location {
     @DBRef
     private Type type;
 
+    @DBRef
+    private UserEntity creator;
+
     public Location() {
     }
 
-    public Location(String id, String title, String description, String addressDescription, GeoLocation geoLocation, Date actualDate, String creatorId, Address address, Boolean footype, Type type) {
+    public Location(String id, String title, String description, String addressDescription, GeoLocation geoLocation, Date actualDate, Address address, Boolean footype, Type type) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.addressDescription = addressDescription;
         this.geoLocation = geoLocation;
         this.actualDate = actualDate;
-        this.creatorId = creatorId;
         this.address = address;
         this.footype = footype;
         this.type = type;
@@ -122,12 +123,12 @@ public class Location {
         this.actualDate = actualDate;
     }
 
-    public String getCreatorId() {
-        return creatorId;
+    public UserEntity getCreator() {
+        return creator;
     }
 
-    public void setCreatorId(String creatorId) {
-        this.creatorId = creatorId;
+    public void setCreator(UserEntity creator) {
+        this.creator = creator;
     }
 
     public Boolean getFootype() {

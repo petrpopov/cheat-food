@@ -1,10 +1,10 @@
-package com.petrpopov.cheatfood.service;
+package com.petrpopov.cheatfood.service.impl;
 
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.UserCreate;
 import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
-import com.petrpopov.cheatfood.service.impl.GenericService;
+import com.petrpopov.cheatfood.service.IUserService;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;

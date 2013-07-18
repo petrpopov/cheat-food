@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.foursquare.api.Foursquare;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,8 +33,8 @@ public class UserContextHandler {
             if( username == null )
                 return null;
 
-            UserEntity entity = null;
-            if( isPasswordUser(authentication) ) {
+            UserEntity entity = userService.getUserById(username);
+            /*if( isPasswordUser(authentication) ) {
                 entity = userService.getUserById(username);
             }
             else {
@@ -47,7 +45,7 @@ public class UserContextHandler {
                 else if( apiClass.equals(Facebook.class) ) {
                     entity = userService.getUserByFacebookId(username);
                 }
-            }
+            }       */
 
             return entity;
         }

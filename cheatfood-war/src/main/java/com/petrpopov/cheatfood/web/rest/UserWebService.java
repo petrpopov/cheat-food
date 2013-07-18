@@ -48,7 +48,7 @@ public class UserWebService {
 
         MessageResult res = new MessageResult();
 
-        UserEntity entity = null;
+        UserEntity entity;
         try {
             entity = userService.createUser(user);
         } catch (CheatException e) {
@@ -63,7 +63,6 @@ public class UserWebService {
         res.setResult(entity);
         return res;
     }
-
 
     @RequestMapping(value = "users/current", method = RequestMethod.GET)
     @ResponseBody
