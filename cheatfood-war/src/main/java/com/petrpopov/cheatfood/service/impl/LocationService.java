@@ -7,8 +7,6 @@ import com.petrpopov.cheatfood.service.ILocationService;
 import com.petrpopov.cheatfood.service.ITypeService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
@@ -50,16 +48,7 @@ public class LocationService extends GenericService<Location> implements ILocati
     }
 
     @Override
-    public void deleteLocation(String id) {
-
-        logger.info("Deleting location from database by id");
-
-        Query query = new Query(Criteria.where("_id").is(id));
-        op.remove(query, Location.class);
-    }
-
-    @Override
-    @PreAuthorize("hasRole('ROLE_USER') and #location.creator.id!=principal.username")
+    @PreAuthorize("hasRole('ROLE_USER') and #location.creator.id==principal.username")
     public void deleteLocation(Location location) {
         logger.info("Deleting location from database by object");
         op.remove(location);

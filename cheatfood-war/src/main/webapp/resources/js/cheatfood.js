@@ -154,7 +154,7 @@ $(document).ready(function(){
         }
 
         buildLoginMenu(authorized);
-        buildInterface(true, location);
+        buildInterface(auth, location);
     }
 
     function buildLoginMenu(auth) {
@@ -1005,9 +1005,8 @@ $(document).ready(function(){
                     else {
                         if( res.errorType === errors.access_denied ) {
                             $('#deleteAlert').show(EFFECTS_TIME);
-                            $('#deleteAlertText').text("Необходимо авторизоваться!");
-
-                            $('#loginModal').modal('show');
+                            $('#deleteAlertBeginText').text("Сожалеем, но..");
+                            $('#deleteAlertText').text("У вас нет прав на удаление этой локации");
                         }
                         else if( res.errorType === errors.unknown_location ) {
                             $('#deleteAlert').show(EFFECTS_TIME);
@@ -1015,17 +1014,20 @@ $(document).ready(function(){
                         }
                         else {
                             $('#deleteAlert').show(EFFECTS_TIME);
-                            $('#deleteAlertBeginText').text("Упс..")
+                            $('#deleteAlertBeginText').text("Упс..");
                             $('#deleteAlertText').text("Извините, произошла какая-то ошибка..");
                         }
                     }
 
                     $('#deleteMarkerButtonModal').button('reset');
                 }
-                else {
+            },
+            statusCode: {
+                400: function(data) {
                     $('#deleteAlert').show(EFFECTS_TIME);
-                    $('#deleteAlertBeginText').text("Упс..")
-                    $('#deleteAlertText').text("Извините, произошла какая-то ошибка..");
+                    $('#deleteAlertBeginText').text("Не получилось.")
+                    $('#deleteAlertText').text("Извините, произошла какая-то ошибка. Скорее всего у вас нет прав на это действие");
+                    $('#deleteMarkerButtonModal').button('reset');
                 }
             }
         });
@@ -1073,6 +1075,7 @@ $(document).ready(function(){
     }
 
     function cancelNewMarkerAddition(infoBoxObject) {
+
         $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
 
         if( infoBoxObject ) {
@@ -1081,6 +1084,7 @@ $(document).ready(function(){
             enableDeleteMarkerMenu(infoBoxObject);
 
             if( newMarker === true ) {
+                console.log(infoBoxObject);
                 removeMarkerAndInfoBox(infoBoxObject);
             }
         }
@@ -1171,6 +1175,8 @@ $(document).ready(function(){
                         var newLocation = res.result;
                         infoBoxObject.location = newLocation;
 
+                        newMarker = false;
+
                         $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
                         showInfoBoxForMarker(infoBoxObject);
                         enableEditMarkerMenu(infoBoxObject);
@@ -1190,17 +1196,16 @@ $(document).ready(function(){
                         }
                     }
                 }
-                else {
-                    $('#loginModal').modal('show');
-                }
 
                 $('#submitEdit').button('reset');
                 setDefaultMouseBehavior();
-                newMarker = false;
             },
             statusCode: {
                 400: function(data) {
-
+                    $('#editFormAlert').show(EFFECTS_TIME);
+                    $('#editFormAlertBeginText').text("Не получилось.")
+                    $('#editFormAlertText').text("Извините, произошла какая-то ошибка. Скорее всего у вас нет прав на это действие");
+                    $('#submitEdit').button('reset');
                 }
             }
         });
@@ -1603,6 +1608,19 @@ $(document).ready(function(){
             .append(
                 $('<div/>').addClass('control-group')
                     .append(
+                        $('<label/>').addClass('control-label').attr('for', 'actualDate').text('Дата проверки')
+                    )
+                    .append(
+                        $('<div/>').addClass('controls')
+                            .append(
+                                $('<input/>').attr('id', 'actualDate').addClass('input-block-level span4')
+                                    .attr('type', 'text').attr('name', 'actualDate')
+                            )
+                    )
+            )
+            .append(
+                $('<div/>').addClass('control-group')
+                    .append(
                         $('<label/>').addClass('control-label').attr('for','addressDescription').text('Описание адреса')
                     )
                     .append(
@@ -1642,19 +1660,6 @@ $(document).ready(function(){
                             )
                     )
                 )
-            .append(
-                    $('<div/>').addClass('control-group')
-                        .append(
-                            $('<label/>').addClass('control-label').attr('for', 'actualDate').text('Дата проверки')
-                        )
-                        .append(
-                            $('<div/>').addClass('controls')
-                                .append(
-                                    $('<input/>').attr('id', 'actualDate').addClass('input-block-level span4')
-                                        .attr('type', 'text').attr('name', 'actualDate')
-                                )
-                        )
-            )
                 .append(
                     $('<hr/>')
                 )

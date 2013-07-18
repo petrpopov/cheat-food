@@ -3,28 +3,33 @@
   <component name="ChangeListManager">
     <list default="true" id="434e5c16-3b0c-4c80-ba5a-52c915010615" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/security/CheatRememberMeServices.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/security/CheatRememberMeServices.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/CookieRequest.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/CookieRequest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/CookieService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/CookieService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/controllers/HomeController.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/controllers/HomeController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/config/SocialConfig.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/config/SocialConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/resources/log4j.properties" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/resources/log4j.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/ParamsWebService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/ParamsWebService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/cheatfood-servlet.xml" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/cheatfood-servlet.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/resources/config.properties" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/resources/config.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cheatood.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374144952758" ignored="false" />
+    <file path="/Dummy.txt" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374163796335" ignored="false" />
     <file path="/AppSettings.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373884562247" ignored="false" />
     <file path="/SocialController.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374064794009" ignored="false" />
     <file path="/fragment.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374071043181" ignored="false" />
     <file path="/SocialConfig.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374163492217" ignored="false" />
-    <file path="/cheatfood-servlet.xml" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373970553702" ignored="false" />
+    <file path="/cheatfood-servlet.xml" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374164621994" ignored="false" />
     <file path="/MongoAccountConnectionSignUp.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374087778236" ignored="false" />
     <file path="/User.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373879661332" ignored="false" />
     <file path="/UserStorageService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373994727800" ignored="false" />
     <file path="/index.jsp" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374141948904" ignored="false" />
     <file path="/FoursquareConnectionService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373887540815" ignored="false" />
     <file path="/pom.xml" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373884064035" ignored="false" />
-    <file path="/cheatfood.js" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374142239391" ignored="false" />
+    <file path="/cheatfood.js" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374166979064" ignored="false" />
     <file path="/UserDetailsAssembler.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373993627142" ignored="false" />
     <file path="/security.xml" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374068834492" ignored="false" />
     <file path="/UserEntity.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373978542599" ignored="false" />
@@ -32,7 +37,7 @@
     <file path="/TracksRememberMeServices.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373881807623" ignored="false" />
     <file path="/NoFoursquareConnectionInterceptor.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373882276609" ignored="false" />
     <file path="/login.jsp" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373882427259" ignored="false" />
-    <file path="/config.properties" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373884479578" ignored="false" />
+    <file path="/config.properties" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374164662066" ignored="false" />
     <file path="/FacebookDefaultBean.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373884758426" ignored="false" />
     <file path="/FacebookConnectionService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373887347205" ignored="false" />
     <file path="/GenericConnectionService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373907765050" ignored="false" />
@@ -45,7 +50,7 @@
     <file path="/LoginManager.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373992823310" ignored="false" />
     <file path="/AuthProvider.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373993515754" ignored="false" />
     <file path="/CheatUserDetailsService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374087798151" ignored="false" />
-    <file path="/CheatRememberMeServices.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374163656284" ignored="false" />
+    <file path="/CheatRememberMeServices.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374164644792" ignored="false" />
     <file path="/AppConfig.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374063513940" ignored="false" />
     <file path="/ehcache.xml" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374091074276" ignored="false" />
     <file path="/log4j.properties" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374091587189" ignored="false" />
@@ -73,12 +78,12 @@
     <file path="$PROJECT_DIR$/spring-social-foursquare/src/main/java/org/springframework/social/foursquare/api/ContactInfo.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374088240444" ignored="false" />
     <file path="$PROJECT_DIR$/spring-social-mongo/src/main/resources/spring/spring-social-mongo.xml" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374088240444" ignored="false" />
     <file path="/Location.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374090676674" ignored="false" />
-    <file path="/LocationWebService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374162362193" ignored="false" />
+    <file path="/LocationWebService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374166411689" ignored="false" />
     <file path="/LocationService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374162387921" ignored="false" />
     <file path="/HomeController.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374132512926" ignored="false" />
     <file path="/ParamsWebService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374135696364" ignored="false" />
     <file path="/CookieRequest.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374133324112" ignored="false" />
-    <file path="/CookieService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374135724619" ignored="false" />
+    <file path="/CookieService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374166338574" ignored="false" />
     <file path="/MessageResult.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374140543185" ignored="false" />
     <file path="/ErrorType.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374141371383" ignored="false" />
     <file path="/ILocationService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374162325962" ignored="false" />
@@ -142,20 +147,60 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="LocationService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java">
+      <file leaf-file-name="cheatfood.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="18" selection-start="1374" selection-end="1374" vertical-scroll-proportion="0.0">
+            <state line="156" column="27" selection-start="4214" selection-end="4214" vertical-scroll-proportion="0.7033748">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CheatRememberMeServices.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="LocationService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="45" column="32" selection-start="1397" selection-end="1397" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CheatRememberMeServices.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/security/CheatRememberMeServices.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="121" column="0" selection-start="4199" selection-end="4199" vertical-scroll-proportion="0.079702444">
+            <state line="35" column="30" selection-start="1530" selection-end="1530" vertical-scroll-proportion="0.0">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HomeController.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/controllers/HomeController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="31" column="31" selection-start="968" selection-end="968" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LocationWebService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="62" column="9" selection-start="2072" selection-end="2072" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CookieService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/CookieService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="34" column="46" selection-start="1004" selection-end="1031" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -183,22 +228,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/UserWebService.java" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/controllers/HomeController.java" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/CookieRequest.java" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/UserContextHandler.java" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/ParamsWebService.java" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/CookieService.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/MessageResult.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/ErrorType.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/pages/index.jsp" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/resources/log4j.properties" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/config/SocialConfig.java" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/ParamsWebService.java" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/cheatfood-servlet.xml" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/resources/config.properties" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/controllers/HomeController.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/security/CheatRememberMeServices.java" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/CookieService.java" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/CookieRequest.java" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" />
       </list>
     </option>
   </component>
@@ -407,6 +452,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="webapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1037,7 +1086,11 @@
       <created>1374144956695</created>
       <updated>1374144956695</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="issue #23 fixed another stupid bug with autologin with cookies (connections are now checking with real user _id)">
+      <created>1374163799624</created>
+      <updated>1374163799624</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1070,7 +1123,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="JRebel Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35947046" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.398167" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.398167" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -1136,7 +1189,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="issue #23 error messages if not authorized or other server error" />
+    <option name="LAST_COMMIT_MESSAGE" value="issue #23 fixed another stupid bug with autologin with cookies (connections are now checking with real user _id)" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1162,6 +1215,7 @@
     <MESSAGE value="issue #22 remove authorization @ann" />
     <MESSAGE value="issue #23 change interface due to authorized user" />
     <MESSAGE value="issue #23 error messages if not authorized or other server error" />
+    <MESSAGE value="issue #23 fixed another stupid bug with autologin with cookies (connections are now checking with real user _id)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1175,92 +1229,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1051" column="8" selection-start="31685" selection-end="31685" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="73" selection-start="322" selection-end="343" vertical-scroll-proportion="0.2264151">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/resources/log4j.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="36" selection-start="985" selection-end="985" vertical-scroll-proportion="0.4716981">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="7" selection-start="549" selection-end="572" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spring-social-mongo/src/main/java/org/springframework/social/connect/mongo/ConnectionService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="18" selection-start="1203" selection-end="1203" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spring-social-mongo/src/main/java/org/springframework/social/connect/mongo/MongoConnectionService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="154" column="0" selection-start="5604" selection-end="5604" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="18" selection-start="1374" selection-end="1374" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/social/spring-social-core/1.0.2.RELEASE/spring-social-core-1.0.2.RELEASE-sources.jar!/org/springframework/social/connect/ConnectionRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="122" column="9" selection-start="6437" selection-end="6437" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spring-social-mongo/src/main/java/org/springframework/social/connect/mongo/MongoUsersConnectionRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="41" selection-start="2671" selection-end="2671" vertical-scroll-proportion="0.7">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/social/spring-social-core/1.0.2.RELEASE/spring-social-core-1.0.2.RELEASE-sources.jar!/org/springframework/social/connect/UsersConnectionRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="25" selection-start="2839" selection-end="2839" vertical-scroll-proportion="0.6925996">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/config/SocialConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="32" selection-start="3106" selection-end="3106" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/SocialConnectionService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="33" selection-start="1154" selection-end="1154" vertical-scroll-proportion="0.03773585">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/UserService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="107" column="0" selection-start="3528" selection-end="3528" vertical-scroll-proportion="0.18867925">
@@ -1282,9 +1250,99 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="75" selection-start="345" selection-end="345" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/ParamsWebService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="12" selection-start="1763" selection-end="1763" vertical-scroll-proportion="0.7169811">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/resources/config.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="0" selection-start="444" selection-end="444" vertical-scroll-proportion="0.20754717">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/cheatfood-servlet.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="4" selection-start="1622" selection-end="1622" vertical-scroll-proportion="0.3326157">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/controllers/HomeController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="31" selection-start="968" selection-end="968" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/security/CheatRememberMeServices.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="121" column="0" selection-start="4199" selection-end="4199" vertical-scroll-proportion="0.079702444">
+        <state line="35" column="30" selection-start="1530" selection-end="1530" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/CookieService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="46" selection-start="1004" selection-end="1031" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/CookieRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="41" selection-start="238" selection-end="238" vertical-scroll-proportion="0.24528302">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="62" column="9" selection-start="2072" selection-end="2072" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/UserWebService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="13" selection-start="1134" selection-end="1134" vertical-scroll-proportion="0.0754717">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="32" selection-start="1397" selection-end="1397" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="156" column="27" selection-start="4214" selection-end="4214" vertical-scroll-proportion="0.7033748">
           <folding />
         </state>
       </provider>

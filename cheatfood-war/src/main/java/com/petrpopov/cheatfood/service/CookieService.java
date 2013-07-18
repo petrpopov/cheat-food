@@ -32,7 +32,22 @@ public class CookieService {
     @Autowired
     private LoginManager loginManager;
 
-    public boolean isCookieValidForCurrentUser(CookieRequest cookieRequest, HttpServletRequest request, HttpServletResponse response) throws CheatException {
+    public boolean isCookieValidForCurrentUser(CookieRequest cookieRequest) {
+
+        UserEntity userEntity = userContextHandler.currentContextUser();
+
+        try {
+            checkCookie(cookieRequest, userEntity);
+        } catch (CheatException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isCookieValidForCurrentUser(CookieRequest cookieRequest, HttpServletRequest request, HttpServletResponse response)
+            throws CheatException {
 
         UserEntity userEntity = userContextHandler.currentContextUser();
 

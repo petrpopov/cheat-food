@@ -52,7 +52,7 @@ public class ParamsWebService {
         MessageResult res = new MessageResult();
 
         try {
-            boolean valid = cookieService.isCookieValidForCurrentUser(cookie, request, response);
+            cookieService.isCookieValidForCurrentUser(cookie, request, response);
         } catch (CheatException e) {
 
             res.setError(true);

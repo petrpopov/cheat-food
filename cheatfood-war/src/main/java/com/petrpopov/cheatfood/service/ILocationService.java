@@ -11,6 +11,5 @@ import com.petrpopov.cheatfood.model.UserEntity;
 public interface ILocationService extends IGenericService<Location> {
 
     public Location createOrSave(Location location, UserEntity userEntity);
-    public void deleteLocation(String id);
     public void deleteLocation(Location location);
 }

@@ -4,6 +4,7 @@ import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
 import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +32,8 @@ import java.util.Arrays;
 @Component
 public class CheatRememberMeServices extends TokenBasedRememberMeServices {
 
-    private String cookieName = "CHEATFOOD";
+    @Value("#{properties.cookie_name}")
+    private String cookieName;
     private String cookieName_name = "name";
     private String defaultProviderType = "default";
     private int cookieSize = 4;

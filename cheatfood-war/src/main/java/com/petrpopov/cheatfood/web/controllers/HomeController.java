@@ -5,14 +5,12 @@ import com.petrpopov.cheatfood.service.ILocationService;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * User: petrpopov
@@ -29,8 +27,7 @@ public class HomeController {
     private ObjectMapper objectMapper;
 
     @RequestMapping({"/","/home", "/index", "/main"})
-    public String showHomePage(@CookieValue(required = false, value = "guid") String cookie,
-                               Map<String, Object> model)
+    public String showHomePage()
     {
         return "index";
     }
