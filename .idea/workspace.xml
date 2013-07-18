@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="434e5c16-3b0c-4c80-ba5a-52c915010615" name="Default" comment="issue #23 error me">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/ErrorType.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/MessageResult.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/MessageResult.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/pages/index.jsp" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/pages/index.jsp" />
+    <list default="true" id="434e5c16-3b0c-4c80-ba5a-52c915010615" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cheatood.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374142183630" ignored="false" />
+    <file path="/Dummy.txt" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374142286228" ignored="false" />
     <file path="/AppSettings.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373884562247" ignored="false" />
     <file path="/SocialController.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374064794009" ignored="false" />
     <file path="/fragment.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374071043181" ignored="false" />
@@ -145,7 +139,7 @@
       <file leaf-file-name="cheatfood.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1044" column="39" selection-start="31496" selection-end="31496" vertical-scroll-proportion="0.37002096">
+            <state line="1038" column="42" selection-start="31235" selection-end="31235" vertical-scroll-proportion="0.2568134">
               <folding />
             </state>
           </provider>
@@ -1101,7 +1095,11 @@
       <created>1374139143785</created>
       <updated>1374139143785</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="issue #23 error messages if not authorized or other server error">
+      <created>1374142289183</created>
+      <updated>1374142289183</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1200,7 +1198,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="issue #23 change interface due to authorized user" />
+    <option name="LAST_COMMIT_MESSAGE" value="issue #23 error messages if not authorized or other server error" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1225,6 +1223,7 @@
     <MESSAGE value="issue #22 fixed stupid bug" />
     <MESSAGE value="issue #22 remove authorization @ann" />
     <MESSAGE value="issue #23 change interface due to authorized user" />
+    <MESSAGE value="issue #23 error messages if not authorized or other server error" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1351,7 +1350,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1044" column="39" selection-start="31496" selection-end="31496" vertical-scroll-proportion="0.37002096">
+        <state line="1038" column="42" selection-start="31235" selection-end="31235" vertical-scroll-proportion="0.2568134">
           <folding />
         </state>
       </provider>
