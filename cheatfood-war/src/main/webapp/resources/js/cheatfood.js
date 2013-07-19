@@ -84,6 +84,17 @@ $(document).ready(function(){
         });
     }
 
+    function showNote(text) {
+        var n = noty({
+            text: text,
+            layout: 'topRight',
+            theme: 'defaultTheme',
+            type: 'information',
+            closeWith: ['click','button'],
+            timeout: 4000
+        });
+    }
+
     function init(location) {
         checkCookies(location);
     }
@@ -122,6 +133,7 @@ $(document).ready(function(){
                     if( res ) {
                         if( res.error === false ) {
                             //authorized
+                            showNote("Вы вошли в систему. Привет!");
                             modifyInterface(true, location);
                         }
                         else {
@@ -260,6 +272,7 @@ $(document).ready(function(){
 
             },
             complete: function(data) {
+                showNote("Вы успешно вышли из системы");
                 modifyInterface(false);
                 disableContextMenu();
             }

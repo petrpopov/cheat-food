@@ -30,6 +30,12 @@
     <script src="<s:url value="/resources"/>/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="<s:url value="/resources"/>/js/jquery-ui.datepicker.ru.js"></script>
 
+    <script src="<s:url value="/resources"/>/js/jquery.noty-2.1.0.js"></script>
+    <script src="<s:url value="/resources"/>/js/jquery.noty.top-2.1.0.js"></script>
+    <script src="<s:url value="/resources"/>/js/jquery.noty.topCenter-2.1.0.js"></script>
+    <script src="<s:url value="/resources"/>/js/jquery.noty.topRight-2.1.0.js"></script>
+    <script src="<s:url value="/resources"/>/js/jquery.noty.default-theme-2.1.0.js"></script>
+
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script>
     <!--script src="https://www.google.com/jsapi?sensor=true&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script-->
 

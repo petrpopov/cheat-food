@@ -2,22 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="434e5c16-3b0c-4c80-ba5a-52c915010615" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/security/CheatRememberMeServices.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/security/CheatRememberMeServices.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/CookieRequest.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/CookieRequest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/CookieService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/CookieService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/controllers/HomeController.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/controllers/HomeController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/ParamsWebService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/ParamsWebService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/cheatfood-servlet.xml" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/cheatfood-servlet.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty-2.1.0.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.default-theme-2.1.0.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.top-2.1.0.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topCenter-2.1.0.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topRight-2.1.0.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/resources/config.properties" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/resources/config.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/pages/index.jsp" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/pages/index.jsp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/pom.xml" afterPath="$PROJECT_DIR$/cheatfood-war/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cheatood.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374163796335" ignored="false" />
+    <file path="/Dummy.txt" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374167435282" ignored="false" />
     <file path="/AppSettings.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373884562247" ignored="false" />
     <file path="/SocialController.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374064794009" ignored="false" />
     <file path="/fragment.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374071043181" ignored="false" />
@@ -29,7 +27,7 @@
     <file path="/index.jsp" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374141948904" ignored="false" />
     <file path="/FoursquareConnectionService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373887540815" ignored="false" />
     <file path="/pom.xml" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373884064035" ignored="false" />
-    <file path="/cheatfood.js" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374166979064" ignored="false" />
+    <file path="/cheatfood.js" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374169772125" ignored="false" />
     <file path="/UserDetailsAssembler.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373993627142" ignored="false" />
     <file path="/security.xml" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374068834492" ignored="false" />
     <file path="/UserEntity.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373978542599" ignored="false" />
@@ -87,6 +85,9 @@
     <file path="/MessageResult.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374140543185" ignored="false" />
     <file path="/ErrorType.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374141371383" ignored="false" />
     <file path="/ILocationService.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374162325962" ignored="false" />
+    <file path="/jquery.noty.default-theme-2.1.0.js" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374169157533" ignored="false" />
+    <file path="/jquery.noty.topCenter-2.1.0.js" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374169292917" ignored="false" />
+    <file path="/jquery.noty.topRight-2.1.0.js" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374169667602" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,7 +151,7 @@
       <file leaf-file-name="cheatfood.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="156" column="27" selection-start="4214" selection-end="4214" vertical-scroll-proportion="0.7033748">
+            <state line="135" column="28" selection-start="3639" selection-end="3639" vertical-scroll-proportion="0.35084033">
               <folding />
             </state>
           </provider>
@@ -159,8 +160,10 @@
       <file leaf-file-name="LocationService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="32" selection-start="1397" selection-end="1397" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="43" column="0" selection-start="1278" selection-end="1278" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -177,7 +180,7 @@
       <file leaf-file-name="HomeController.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/controllers/HomeController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="31" selection-start="968" selection-end="968" vertical-scroll-proportion="0.0">
+            <state line="29" column="31" selection-start="886" selection-end="886" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -228,12 +231,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/MessageResult.java" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/ErrorType.java" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/pages/index.jsp" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/resources/log4j.properties" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/config/SocialConfig.java" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/ParamsWebService.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/cheatfood-servlet.xml" />
@@ -243,7 +240,13 @@
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/CookieService.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/CookieRequest.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.default-theme-2.1.0.js" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topCenter-2.1.0.js" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topRight-2.1.0.js" />
+        <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/pages/index.jsp" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" />
+        <option value="$PROJECT_DIR$/cheatfood-war/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -264,7 +267,7 @@
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
     <option name="width" value="1920" />
-    <option name="height" value="1102" />
+    <option name="height" value="1100" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -426,6 +429,40 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="pages" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cheatood" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cheatfood" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cheatfood-war" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1090,7 +1127,15 @@
       <created>1374163799624</created>
       <updated>1374163799624</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="fixed #23 fixed some js stupid bugs, check cookie on server side">
+      <created>1374167394702</created>
+      <updated>1374167394702</updated>
+    </task>
+    <task id="LOCAL-00017" summary="fixed #23 versions">
+      <created>1374167437549</created>
+      <updated>1374167437549</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1114,7 +1159,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1920" height="1102" extended-state="6" />
+    <frame x="0" y="22" width="1920" height="1100" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45315683" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1123,14 +1168,14 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="JRebel Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35947046" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.398167" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39795917" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="JRebel" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32892057" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32857144" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32959184" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1138,7 +1183,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3299389" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.601833" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.6020408" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1189,7 +1234,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="issue #23 fixed another stupid bug with autologin with cookies (connections are now checking with real user _id)" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed #23 versions" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1216,6 +1261,8 @@
     <MESSAGE value="issue #23 change interface due to authorized user" />
     <MESSAGE value="issue #23 error messages if not authorized or other server error" />
     <MESSAGE value="issue #23 fixed another stupid bug with autologin with cookies (connections are now checking with real user _id)" />
+    <MESSAGE value="fixed #23 fixed some js stupid bugs, check cookie on server side" />
+    <MESSAGE value="fixed #23 versions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1229,71 +1276,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/UserService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="0" selection-start="3528" selection-end="3528" vertical-scroll-proportion="0.18867925">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/IUserService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="17" selection-start="272" selection-end="272" vertical-scroll-proportion="0.16981132">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spring-social-mongo/src/main/java/org/springframework/social/connect/mongo/MongoConnectionRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="0" selection-start="1973" selection-end="1973" vertical-scroll-proportion="0.3321492">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="75" selection-start="345" selection-end="345" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/ParamsWebService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="12" selection-start="1763" selection-end="1763" vertical-scroll-proportion="0.7169811">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/resources/config.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="444" selection-end="444" vertical-scroll-proportion="0.20754717">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/cheatfood-servlet.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="4" selection-start="1622" selection-end="1622" vertical-scroll-proportion="0.3326157">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/controllers/HomeController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="31" selection-start="968" selection-end="968" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/security/CheatRememberMeServices.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="35" column="30" selection-start="1530" selection-end="1530" vertical-scroll-proportion="0.0">
@@ -1335,14 +1317,79 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="32" selection-start="1397" selection-end="1397" vertical-scroll-proportion="0.0">
+        <state line="43" column="0" selection-start="1278" selection-end="1278" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.top-2.1.0.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty-2.1.0.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="447" column="23" selection-start="14524" selection-end="14524" vertical-scroll-proportion="0.33333334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.default-theme-2.1.0.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="94" column="22" selection-start="7189" selection-end="7189" vertical-scroll-proportion="0.6121673">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topCenter-2.1.0.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="21" selection-start="712" selection-end="712" vertical-scroll-proportion="0.6806723">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topRight-2.1.0.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="23" selection-start="55" selection-end="63" vertical-scroll-proportion="0.05672269">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/WEB-INF/pages/index.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="68" selection-start="1957" selection-end="1957" vertical-scroll-proportion="0.46052632">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/controllers/HomeController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="31" selection-start="886" selection-end="886" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="18" selection-start="380" selection-end="380" vertical-scroll-proportion="0.15126051">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="18" selection-start="376" selection-end="376" vertical-scroll-proportion="0.15126051">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="156" column="27" selection-start="4214" selection-end="4214" vertical-scroll-proportion="0.7033748">
+        <state line="135" column="28" selection-start="3639" selection-end="3639" vertical-scroll-proportion="0.35084033">
           <folding />
         </state>
       </provider>
