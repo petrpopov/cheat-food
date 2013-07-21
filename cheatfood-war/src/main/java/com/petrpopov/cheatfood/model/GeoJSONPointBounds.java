@@ -24,6 +24,13 @@ public class GeoJSONPointBounds {
     public GeoJSONPointBounds() {
     }
 
+    public GeoJSONPointBounds(double ne_latitude, double ne_longitude, double sw_latitude, double sw_longitude) {
+        this.ne_latitude = ne_latitude;
+        this.ne_longitude = ne_longitude;
+        this.sw_latitude = sw_latitude;
+        this.sw_longitude = sw_longitude;
+    }
+
     public GeoJSONPoint getNorthEast() {
         return new GeoJSONPoint(ne_latitude, ne_longitude);
     }

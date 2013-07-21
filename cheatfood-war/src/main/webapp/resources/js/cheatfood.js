@@ -17,6 +17,10 @@ $(document).ready(function(){
     };
 
     var markers = new HashMap();
+    var markersIds = new HashMap();
+
+    var curBounds;
+    var prevBounds;
 
     var newMarker = false;
 
@@ -129,11 +133,8 @@ $(document).ready(function(){
     function buildInterface(auth, location) {
         createRegistrationAuthActions();
 
-        createMap(auth);
-
+        createMap(auth, location);
         createMainMenuBehavior();
-        centerMapToLocation(location);
-        createMarkersForLocations(location);
     }
 
     function checkCookies(location) {
@@ -432,7 +433,7 @@ $(document).ready(function(){
         });
     }
 
-    function createMap(auth) {
+    function createMap(auth, location) {
         var mcOptions = {gridSize: GRID_SIZE, maxZoom: MAX_ZOOM};
         var styles = [
             {
@@ -484,41 +485,65 @@ $(document).ready(function(){
         setDefaultMapClickBehavior();
 
         createMapControls(auth);
-        checkLocationsForCurrentBounds();
+        loadDataAfterMapIsLoaded(location);
+
+        createMapBoundsChangedBehavior();
     }
 
-    function checkLocationsForCurrentBounds() {
+    function createMapBoundsChangedBehavior() {
 
-        google.maps.event.addListenerOnce(map.map, 'idle', function(){
-            var bounds = map.map.getBounds();
+        google.maps.event.addListener(map.map, 'dragend', function() {
+            console.log('map dragged');
+            createMarkersForLocationsInBounds();
+        } );
 
-            var ne = bounds.getNorthEast();
-            var sw = bounds.getSouthWest();
+        google.maps.event.addListener(map.map, 'zoom_changed', function() {
+            console.log('zoom_changed');
+            createMarkersForLocationsInBounds();
+        } );
+    }
 
-            $.ajax({
-                type: "GET",
-                url: params.realPath+"/api/locations/bounds",
-                data: {
-                    ne_latitude: ne.lat(),
-                    ne_longitude: ne.lng(),
-                    sw_latitude: sw.lat(),
-                    sw_longitude: sw.lng()
-                },
-                success: function(data) {
+    function loadDataAfterMapIsLoaded(location) {
 
-                    if( data ) {
-                        if( data.result === 0 ) {
+        google.maps.event.addListenerOnce(map.map, 'idle', function() {
+            getLocationsCountInCurrentBounds(location);
 
-                            if( needToShowNoLocations() === true ) {
-                                showNoLocationsNoteTopCenter();
-                            }
-                            sessionStorage.setItem('showNoLocations', true);
-                        }
-                    }
-                }
-            })
+            centerMapToLocation(location);
         });
 
+    }
+
+    function getLocationsCountInCurrentBounds(location) {
+        var bounds = map.map.getBounds();
+
+        var ne = bounds.getNorthEast();
+        var sw = bounds.getSouthWest();
+
+        $.ajax({
+            type: "GET",
+            url: params.realPath+"/api/locations/countinbounds",
+            data: {
+                ne_latitude: ne.lat(),
+                ne_longitude: ne.lng(),
+                sw_latitude: sw.lat(),
+                sw_longitude: sw.lng()
+            },
+            success: function(data) {
+
+                if( data ) {
+                    if( data.result === 0 ) {
+
+                        if( needToShowNoLocations() === true ) {
+                            showNoLocationsNoteTopCenter();
+                        }
+                        sessionStorage.setItem('showNoLocations', true);
+                    }
+                    else if( data.result > 0 ) {
+                        createMarkersForLocationsInBounds(location);
+                    }
+                }
+            }
+        });
     }
 
     function createMapControls(auth) {
@@ -705,7 +730,6 @@ $(document).ready(function(){
 
     }
 
-
     function createMarkerForContextMenu(latLng) {
 
         if( newMarker === true ) {
@@ -871,26 +895,70 @@ $(document).ready(function(){
 
         infoBox = createInfoBoxForMarkers();
 
-        $.get(params.realPath+"/api/locations", function(data) {
-            $.each(data, function(n, loadedLocation) {
-
-                var infoBoxObject = {
-                    infoBox: infoBox,
-                    location: loadedLocation
-                };
-
-                var zoomIn = false;
-                if( location ) {
-                    if(loadedLocation.id === location.id) {
-                        zoomIn = true;
-                    }
-                }
-
-                createMarkerWithInfoBoxForLocation(infoBoxObject, zoomIn);
-            });
+        $.ajax({
+            type: "GET",
+            url: params.realPath+"/api/locations",
+            success: function(data) {
+                renderMarkersForLocations(data, infoBox, location);
+            }
         });
     }
 
+    function renderMarkersForLocations(data, infoBox, location) {
+        $.each(data, function(n, loadedLocation) {
+            renderSingleMarkerForLocation(infoBox, loadedLocation, location);
+        });
+    }
+
+    function renderSingleMarkerForLocation(infoBox, locationToRender, singleLocationToZoomIn) {
+
+        var infoBoxObject = {
+            infoBox: infoBox,
+            location: locationToRender
+        };
+
+        var zoomIn = false;
+        if( singleLocationToZoomIn ) {
+            if(locationToRender.id === singleLocationToZoomIn.id) {
+                zoomIn = true;
+            }
+        }
+
+        createMarkerWithInfoBoxForLocation(infoBoxObject, zoomIn);
+    }
+
+    function createMarkersForLocationsInBounds(location) {
+
+        infoBox = createInfoBoxForMarkers();
+
+        var bounds = map.map.getBounds();
+        prevBounds = curBounds;
+        curBounds = bounds;
+
+        var data = {};
+        if( curBounds ) {
+            data.ne_latitude_cur = curBounds.getNorthEast().lat();
+            data.ne_longitude_cur = curBounds.getNorthEast().lng();
+            data.sw_latitude_cur = curBounds.getSouthWest().lat();
+            data.sw_longitude_cur = curBounds.getSouthWest().lng();
+        }
+        if( prevBounds ) {
+            data.ne_latitude_prev = prevBounds.getNorthEast().lat();
+            data.ne_longitude_prev = prevBounds.getNorthEast().lng();
+            data.sw_latitude_prev = prevBounds.getSouthWest().lat();
+            data.sw_longitude_prev = prevBounds.getSouthWest().lng();
+        }
+
+        $.ajax({
+            type: "GET",
+            url: params.realPath+"/api/locationsinbounds",
+            data: data,
+            success: function(result) {
+                console.log(result.length);
+                renderMarkersForLocations(result, infoBox, location);
+            }
+        });
+    }
 
     function enableLocateMeButton() {
         $('#locateMe').click(function(){
@@ -932,6 +1000,10 @@ $(document).ready(function(){
 
     function createMarkerWithInfoBoxForLocation(infoBoxObject, zoomIn) {
 
+        if( isMarkerAlreadyRendered(infoBoxObject.location) === true ) {
+            return;
+        }
+
         var pos = getLatLngFromGeoLocation(infoBoxObject.location.geoLocation);
 
         var marker = map.addMarker({
@@ -946,6 +1018,7 @@ $(document).ready(function(){
 
         infoBoxObject.marker = marker;
         markers.put(marker, infoBoxObject);
+        markersIds.put(infoBoxObject.location.id, infoBoxObject.location);
 
 
         if( zoomIn ) {
@@ -1164,6 +1237,7 @@ $(document).ready(function(){
         infoBoxObject.infoBox.hide();
         map.removeMarker(infoBoxObject.marker);
         markers.remove(infoBoxObject.marker);
+        markersIds.remove(infoBoxObject.location.id);
     }
 
     function initAndShowEditForm(infoBoxObject) {
@@ -2100,6 +2174,16 @@ $(document).ready(function(){
                 addressLine: ""
             }
         };
+    }
+
+    function isMarkerAlreadyRendered(location) {
+
+        var loaded = markersIds.get(location.id);
+        if( !loaded ) {
+            return false;
+        }
+
+        return true;
     }
 
     function getTypeById(id) {

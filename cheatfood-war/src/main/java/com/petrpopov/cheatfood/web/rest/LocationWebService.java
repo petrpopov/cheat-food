@@ -1,6 +1,7 @@
 package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.model.GeoJSONPointBounds;
+import com.petrpopov.cheatfood.model.GeoJSONPointBoundsDiff;
 import com.petrpopov.cheatfood.model.Location;
 import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.service.CookieService;
@@ -38,14 +39,25 @@ public class LocationWebService {
 
 
     @RequestMapping(value="locations", method = RequestMethod.GET)
-    public @ResponseBody
-    List<Location> getAllCheckins() throws Exception {
+    @ResponseBody
+    public List<Location> getAllLocations() throws Exception {
 
         List<Location> list = locationService.findAll();
         return list;
     }
 
-    @RequestMapping(value = "locations/bounds", method = RequestMethod.GET)
+    @RequestMapping(value = "locationsinbounds", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Location> getAllLocationsInDifferenceBetweenBounds(@Valid GeoJSONPointBoundsDiff diff) {
+
+        GeoJSONPointBounds current = diff.getCurrent();
+        GeoJSONPointBounds previous = diff.getPrevious();
+
+        List<Location> list = locationService.findAllInDifference(current, previous);
+        return list;
+    }
+
+    @RequestMapping(value = "locations/countinbounds", method = RequestMethod.GET)
     @ResponseBody
     public MessageResult getLocationsCountInBound(@Valid GeoJSONPointBounds bounds) {
 

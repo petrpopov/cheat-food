@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * User: petrpopov
@@ -41,6 +42,34 @@ public class LocationService extends GenericService<Location> implements ILocati
     }
 
     @Override
+    public List<Location> findAllInBounds(@Valid GeoJSONPointBounds bounds) {
+
+        Box box = this.getBoxFromBounds(bounds);
+        Query query = new Query(Criteria.where("geoLocation").within(box));
+
+        return op.find(query, Location.class);
+    }
+
+    @Override
+    public List<Location> findAllInDifference(@Valid GeoJSONPointBounds inBounds, GeoJSONPointBounds notInBounds) {
+
+        if( notInBounds == null ) {
+            return this.findAllInBounds(inBounds);
+        }
+
+        Box inBox = this.getBoxFromBounds(inBounds);
+        Box notInBox = this.getBoxFromBounds(notInBounds);
+
+        Criteria inCriteria = Criteria.where("geoLocation").within(inBox);
+        Criteria notInCriteria = Criteria.where("geoLocation").within(notInBox).not();
+
+        Criteria main = new Criteria().andOperator(inCriteria, notInCriteria);
+
+        Query query = new Query(main);
+        return op.find(query, Location.class);
+    }
+
+    @Override
     @PreAuthorize("hasRole('ROLE_USER')")
     public Location createOrSave(@Valid Location location, UserEntity userEntity) {
 
@@ -65,13 +94,11 @@ public class LocationService extends GenericService<Location> implements ILocati
     }
 
     @Override
-    public long getLocationsCountInBound(GeoJSONPointBounds bounds) {
+    public long getLocationsCountInBound(@Valid GeoJSONPointBounds bounds) {
 
-        GeoJSONPoint northEast = bounds.getNorthEast();
-        GeoJSONPoint southWest = bounds.getSouthWest();
-        Box box = new Box(southWest.getCoordinates(), northEast.getCoordinates());
-
+        Box box = this.getBoxFromBounds(bounds);
         Query query = new Query(Criteria.where("geoLocation").within(box) );
+
         long count = op.count(query, Location.class);
         return count;
     }
@@ -103,5 +130,13 @@ public class LocationService extends GenericService<Location> implements ILocati
 
         Type savedType = typeService.findById(typeId);
         return savedType;
+    }
+
+    private Box getBoxFromBounds(GeoJSONPointBounds bounds) {
+        GeoJSONPoint northEast = bounds.getNorthEast();
+        GeoJSONPoint southWest = bounds.getSouthWest();
+        Box box = new Box(southWest.getCoordinates(), northEast.getCoordinates());
+
+        return box;
     }
 }
