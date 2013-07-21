@@ -13,7 +13,7 @@
 					top: 20,
 					right: 20,
 					position: 'fixed',
-					width: '610px',
+					width: '510px',
 					height: 'auto',
 					margin: 0,
                     "margin-top": 40,
@@ -36,7 +36,7 @@
 		},
 		css: {
 			display: 'none',
-			width: '610px'
+			width: '510px'
 		},
 		addClass: ''
 	};

@@ -1,5 +1,6 @@
 package com.petrpopov.cheatfood.service;
 
+import com.petrpopov.cheatfood.model.GeoJSONPointBounds;
 import com.petrpopov.cheatfood.model.Location;
 import com.petrpopov.cheatfood.model.UserEntity;
 
@@ -12,4 +13,5 @@ public interface ILocationService extends IGenericService<Location> {
 
     public Location createOrSave(Location location, UserEntity userEntity);
     public void deleteLocation(Location location);
+    public long getLocationsCountInBound(GeoJSONPointBounds bounds);
 }

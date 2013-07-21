@@ -89,9 +89,36 @@ $(document).ready(function(){
             text: text,
             layout: 'topRight',
             theme: 'defaultTheme',
+            type: 'success',
+            closeWith: ['click','button'],
+            timeout: 2000
+        });
+    }
+
+    function showNoLocationsNoteTopCenter() {
+
+        var text = "Кажется, в этом районе никто еще не отметил ни одной локации. Вы можете быть первым!";
+
+        if(authorized === false ) {
+            text += " Только" + '<a id="noteLoginLink" href="#"> войдите</a>' + ' в систему для этого';
+        }
+
+        var n = noty({
+            text: text,
+            layout: 'topCenter',
+            theme: 'defaultTheme',
             type: 'information',
             closeWith: ['click','button'],
-            timeout: 4000
+            timeout: 4000,
+            callback: {
+                onShow: function() {
+                    $('#noteLoginLink').off('click');
+                    $('#noteLoginLink').click(function() {
+                        $.noty.closeAll();
+                        $('#loginModal').modal('show');
+                    });
+                }
+            }
         });
     }
 
@@ -114,6 +141,7 @@ $(document).ready(function(){
 
         if( !cookie ) {
             //non authorized
+            sessionStorage.setItem('showHello', false);
             modifyInterface(false, location);
         }
         else {
@@ -133,21 +161,60 @@ $(document).ready(function(){
                     if( res ) {
                         if( res.error === false ) {
                             //authorized
-                            showNote("Вы вошли в систему. Привет!");
+
+                            if( needToShowHello() === true ) {
+                                showNote("Вы вошли в систему. Привет!");
+                            }
+
+                            sessionStorage.setItem('showHello', true);
                             modifyInterface(true, location);
                         }
                         else {
                             //non authorized
+                            sessionStorage.setItem('showHello', false);
                             modifyInterface(false, location);
                         }
                     }
                     else {
                         //non authorized
+                        sessionStorage.setItem('showHello', false);
                         modifyInterface(false, location);
                     }
                 }
             });
         }
+    }
+
+    function needToShowHello() {
+        var show = sessionStorage.getItem('showHello');
+
+        if( !show ) {
+            return true;
+        }
+
+        show = JSON.parse(show);
+
+        if( show == true ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function needToShowNoLocations() {
+        var show = sessionStorage.getItem('showNoLocations');
+
+        if( !show ) {
+            return true;
+        }
+
+        show = JSON.parse(show);
+
+        if( show == true ) {
+            return false;
+        }
+
+        return true;
     }
 
     function modifyInterface(auth, location) {
@@ -234,6 +301,7 @@ $(document).ready(function(){
         });
 
         $('#loginLink').click(function() {
+            $.noty.closeAll();
             $('#loginModal').modal('show');
         });
 
@@ -272,7 +340,10 @@ $(document).ready(function(){
 
             },
             complete: function(data) {
+                $.noty.closeAll();
                 showNote("Вы успешно вышли из системы");
+
+                sessionStorage.setItem('showHello', false);
                 modifyInterface(false);
                 disableContextMenu();
             }
@@ -413,6 +484,41 @@ $(document).ready(function(){
         setDefaultMapClickBehavior();
 
         createMapControls(auth);
+        checkLocationsForCurrentBounds();
+    }
+
+    function checkLocationsForCurrentBounds() {
+
+        google.maps.event.addListenerOnce(map.map, 'idle', function(){
+            var bounds = map.map.getBounds();
+
+            var ne = bounds.getNorthEast();
+            var sw = bounds.getSouthWest();
+
+            $.ajax({
+                type: "GET",
+                url: params.realPath+"/api/locations/bounds",
+                data: {
+                    ne_latitude: ne.lat(),
+                    ne_longitude: ne.lng(),
+                    sw_latitude: sw.lat(),
+                    sw_longitude: sw.lng()
+                },
+                success: function(data) {
+
+                    if( data ) {
+                        if( data.result === 0 ) {
+
+                            if( needToShowNoLocations() === true ) {
+                                showNoLocationsNoteTopCenter();
+                            }
+                            sessionStorage.setItem('showNoLocations', true);
+                        }
+                    }
+                }
+            })
+        });
+
     }
 
     function createMapControls(auth) {
@@ -1156,8 +1262,8 @@ $(document).ready(function(){
             addressDescription: addressDescription,
             actualDate: actualDate,
             geoLocation: {
-                latitude: latitude,
-                longitude: longitude
+                type: "Point",
+                coordinates: [longitude, latitude]
             },
             address: {
                 country: country,
@@ -1201,6 +1307,7 @@ $(document).ready(function(){
                             $('#editFormAlertText').text("Необходимо авторизоваться!");
                             $('#editFormAlert').show(EFFECTS_TIME);
 
+                            $.noty.closeAll();
                             $('#loginModal').modal('show');
                         }
                         else {
@@ -1289,8 +1396,10 @@ $(document).ready(function(){
         }
 
         //hidden fields
-        $('#latitude').val( location.geoLocation.latitude );
-        $('#longitude').val( location.geoLocation.longitude );
+        $('#latitude').val( location.geoLocation.coordinates[1] );
+        $('#longitude').val( location.geoLocation.coordinates[0] );
+        //$('#latitude').val( location.geoLocation.latitude );
+        //$('#longitude').val( location.geoLocation.longitude );
 
         //unnecessary fields
         if( location.address ) {
@@ -1799,13 +1908,13 @@ $(document).ready(function(){
 
     ///  help functions
     function getLatLngFromGeoLocation(geoLocation) {
-        return new google.maps.LatLng( geoLocation.latitude, geoLocation.longitude );
+        return new google.maps.LatLng( geoLocation.coordinates[1], geoLocation.coordinates[0] );
     }
 
     function getGeoLocationFromLatLng(latLng) {
         return {
-            latitude: latLng.lat(),
-            longitude: latLng.lng()
+            type: "Point",
+            coordinates: [latLng.lng(), latLng.lat()]
         };
     }
 
@@ -1826,8 +1935,8 @@ $(document).ready(function(){
             addressDescription: "",
             actualDate: "",
             geoLocation: {
-                latitude: "",
-                longitude: ""
+                type: "Point",
+                coordinates: [0.0, 0.0]
             },
             address: {
                 country: "",

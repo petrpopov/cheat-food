@@ -9,4 +9,8 @@ public class CheatException extends Exception {
     public CheatException(String s) {
         super(s);
     }
+
+    public CheatException(Throwable throwable) {
+        super(throwable);
+    }
 }

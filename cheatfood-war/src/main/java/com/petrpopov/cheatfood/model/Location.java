@@ -4,6 +4,7 @@ import com.petrpopov.cheatfood.config.DateSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -34,7 +35,8 @@ public class Location {
     private String addressDescription;
 
     @Valid
-    private GeoLocation geoLocation;
+    @Indexed
+    private GeoJSONPoint geoLocation;
 
     @NotNull
     private Date actualDate;
@@ -54,7 +56,8 @@ public class Location {
     public Location() {
     }
 
-    public Location(String id, String title, String description, String addressDescription, GeoLocation geoLocation, Date actualDate, Address address, Boolean footype, Type type) {
+    public Location(String id, String title, String description, String addressDescription, GeoJSONPoint geoLocation,
+                    Date actualDate, Address address, Boolean footype, Type type) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -106,11 +109,11 @@ public class Location {
         this.address = address;
     }
 
-    public GeoLocation getGeoLocation() {
+    public GeoJSONPoint getGeoLocation() {
         return geoLocation;
     }
 
-    public void setGeoLocation(GeoLocation geoLocation) {
+    public void setGeoLocation(GeoJSONPoint geoLocation) {
         this.geoLocation = geoLocation;
     }
 

@@ -1,15 +1,18 @@
 package com.petrpopov.cheatfood.service.impl;
 
-import com.petrpopov.cheatfood.model.Location;
-import com.petrpopov.cheatfood.model.Type;
-import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.*;
 import com.petrpopov.cheatfood.service.ILocationService;
 import com.petrpopov.cheatfood.service.ITypeService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.IndexOperations;
+import org.springframework.data.mongodb.core.geo.Box;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 /**
@@ -28,6 +31,13 @@ public class LocationService extends GenericService<Location> implements ILocati
 
     public LocationService() {
         super(Location.class);
+    }
+
+    @PostConstruct
+    public void init() {
+        Geospatial2dsphereIndex index = new Geospatial2dsphereIndex("geoLocation");
+        IndexOperations indexOperations = op.indexOps(Location.class);
+        indexOperations.ensureIndex(index);
     }
 
     @Override
@@ -52,6 +62,18 @@ public class LocationService extends GenericService<Location> implements ILocati
     public void deleteLocation(Location location) {
         logger.info("Deleting location from database by object");
         op.remove(location);
+    }
+
+    @Override
+    public long getLocationsCountInBound(GeoJSONPointBounds bounds) {
+
+        GeoJSONPoint northEast = bounds.getNorthEast();
+        GeoJSONPoint southWest = bounds.getSouthWest();
+        Box box = new Box(southWest.getCoordinates(), northEast.getCoordinates());
+
+        Query query = new Query(Criteria.where("geoLocation").within(box) );
+        long count = op.count(query, Location.class);
+        return count;
     }
 
     private Location saveLocationObject(Location location) {

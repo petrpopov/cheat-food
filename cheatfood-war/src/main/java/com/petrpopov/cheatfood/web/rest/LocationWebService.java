@@ -1,5 +1,6 @@
 package com.petrpopov.cheatfood.web.rest;
 
+import com.petrpopov.cheatfood.model.GeoJSONPointBounds;
 import com.petrpopov.cheatfood.model.Location;
 import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.service.CookieService;
@@ -13,7 +14,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -39,10 +39,22 @@ public class LocationWebService {
 
     @RequestMapping(value="locations", method = RequestMethod.GET)
     public @ResponseBody
-    List<Location> getAllCheckins(HttpServletRequest request) throws Exception {
+    List<Location> getAllCheckins() throws Exception {
 
         List<Location> list = locationService.findAll();
         return list;
+    }
+
+    @RequestMapping(value = "locations/bounds", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageResult getLocationsCountInBound(@Valid GeoJSONPointBounds bounds) {
+
+        MessageResult res = new MessageResult();
+
+        long count = locationService.getLocationsCountInBound(bounds);
+        res.setResult(count);
+
+        return res;
     }
 
 

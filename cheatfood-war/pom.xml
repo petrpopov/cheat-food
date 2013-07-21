@@ -24,7 +24,7 @@
         <spring.social.facebook.version>1.0.3.RELEASE</spring.social.facebook.version>
         <spring.security.version>3.1.2.RELEASE</spring.security.version>
 
-        <spring.data.mongodb.version>1.0.4.RELEASE</spring.data.mongodb.version>
+        <spring.data.mongodb.version>1.2.1.RELEASE</spring.data.mongodb.version>
 
         <hibernate.validator.version>4.3.0.Final</hibernate.validator.version>
         <jackson.mapper.version>1.9.11</jackson.mapper.version>
@@ -38,7 +38,7 @@
         <!-- this is for @Configuration -->
         <dependency>
             <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
+            <artifactId>ehcache-core</artifactId>
             <version>2.4.6</version>
         </dependency>
 
@@ -201,7 +201,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.5.8</version>
+            <version>1.7.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.1</version>
         </dependency>
 
         <dependency>
