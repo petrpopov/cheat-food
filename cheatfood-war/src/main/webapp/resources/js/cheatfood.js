@@ -493,14 +493,12 @@ $(document).ready(function(){
     function createMapBoundsChangedBehavior() {
 
         google.maps.event.addListener(map.map, 'dragend', function() {
-            console.log('map dragged');
             createMarkersForLocationsInBounds();
         } );
 
         google.maps.event.addListener(map.map, 'zoom_changed', function() {
-            console.log('zoom_changed');
             createMarkersForLocationsInBounds();
-        } );
+        });
     }
 
     function loadDataAfterMapIsLoaded(location) {
@@ -887,19 +885,6 @@ $(document).ready(function(){
             }
             else {
                 callback();
-            }
-        });
-    }
-
-    function createMarkersForLocations(location) {
-
-        infoBox = createInfoBoxForMarkers();
-
-        $.ajax({
-            type: "GET",
-            url: params.realPath+"/api/locations",
-            success: function(data) {
-                renderMarkersForLocations(data, infoBox, location);
             }
         });
     }

@@ -53,6 +53,7 @@ public class LocationService extends GenericService<Location> implements ILocati
     @Override
     public List<Location> findAllInDifference(@Valid GeoJSONPointBounds inBounds, GeoJSONPointBounds notInBounds) {
 
+        /*
         if( notInBounds == null ) {
             return this.findAllInBounds(inBounds);
         }
@@ -62,11 +63,13 @@ public class LocationService extends GenericService<Location> implements ILocati
 
         Criteria inCriteria = Criteria.where("geoLocation").within(inBox);
         Criteria notInCriteria = Criteria.where("geoLocation").within(notInBox).not();
-
-        Criteria main = new Criteria().andOperator(inCriteria, notInCriteria);
-
+        Criteria main = new Criteria().andOperator(notInCriteria, inCriteria);
         Query query = new Query(main);
-        return op.find(query, Location.class);
+
+
+
+        return op.find(query, Location.class);       */
+        return this.findAllInBounds(inBounds);
     }
 
     @Override

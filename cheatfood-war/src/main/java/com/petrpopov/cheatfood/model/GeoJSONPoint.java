@@ -62,6 +62,14 @@ public class GeoJSONPoint {
         }
     }
 
+    public String getCoordinatesInString() {
+
+        String lat = String.valueOf(coordinates[1]);
+        String lng = String.valueOf(coordinates[0]);
+
+        return lat + "," + lng;
+    }
+
     public double getLatitude() {
         if( coordinates.length >= 2 )
             return coordinates[1];
