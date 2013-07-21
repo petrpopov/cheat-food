@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,7 +70,22 @@ public class LocationService extends GenericService<Location> implements ILocati
 
 
         return op.find(query, Location.class);       */
-        return this.findAllInBounds(inBounds);
+
+        if( notInBounds == null ) {
+            return this.findAllInBounds(inBounds);
+        }
+
+        //TODO: very shitty code !
+        List<Location> inList = this.findAllInBounds(inBounds);
+        List<Location> notInList = this.findAllInBounds(notInBounds);
+
+        List<Location> res = new ArrayList<Location>();
+        for (Location location : inList) {
+            if( !notInList.contains(location) )
+                res.add(location);
+        }
+
+        return res;
     }
 
     @Override
