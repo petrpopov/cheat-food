@@ -1,46 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="434e5c16-3b0c-4c80-ba5a-52c915010615" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/GeoJSONPoint.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/GeoJSONPointBounds.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/Geospatial2dsphereIndex.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__log4j_log4j_1_2_17.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_jcl_over_slf4j_1_7_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_simple_1_7_1.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__log4j_log4j_1_2_14.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_sf_ehcache_ehcache_2_4_6.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_sf_ehcache_ehcache_terracotta_2_4_6.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_terracotta_terracotta_toolkit_1_3_runtime_3_3_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/GeoLocation.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_mongodb_mongo_java_driver_2_7_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_mongodb_mongo_java_driver_2_10_1.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_5_10.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_6_1.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_5_8.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_1.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_5_8.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_1.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_commons_core_1_2_1_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_commons_1_5_1_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_mongodb_1_0_4_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_mongodb_1_2_1_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_tx_3_2_3_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_tx_3_1_4_RELEASE.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/config/CheatException.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/config/CheatException.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/Location.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/Location.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/cheatood-war.iml" afterPath="$PROJECT_DIR$/cheatfood-war/cheatood-war.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/cheatood_war_war_exploded.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/cheatood_war_war_exploded.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topCenter-2.1.0.js" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topCenter-2.1.0.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topRight-2.1.0.js" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topRight-2.1.0.js" />
+    <list default="true" id="434e5c16-3b0c-4c80-ba5a-52c915010615" name="Default" comment="fixed #27 geojson format for locations, checking count of locations in visible area, 2dsphere index for geoLocation, noty tooltip in topcenter if no locations found">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/pom.xml" afterPath="$PROJECT_DIR$/cheatfood-war/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spring-social-foursquare/pom.xml" afterPath="$PROJECT_DIR$/spring-social-foursquare/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spring-social-mongo/pom.xml" afterPath="$PROJECT_DIR$/spring-social-mongo/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spring-social-foursquare/spring-social-foursquare.iml" afterPath="$PROJECT_DIR$/spring-social-foursquare/spring-social-foursquare.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spring-social-mongo/spring-social-mongo.iml" afterPath="$PROJECT_DIR$/spring-social-mongo/spring-social-mongo.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/css/style.css" afterPath="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/css/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cheatood.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374393506184" ignored="false" />
+    <file path="/Dummy.txt" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374396551564" ignored="false" />
     <file path="/AppSettings.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1373884562247" ignored="false" />
     <file path="/SocialController.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374064794009" ignored="false" />
     <file path="/fragment.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374071043181" ignored="false" />
@@ -118,6 +87,9 @@
     <file path="/Geometry.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374246657435" ignored="false" />
     <file path="/GeoJSONPointBounds.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374252227759" ignored="false" />
     <file path="/Geospatial2dsphereIndex.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374388759641" ignored="false" />
+    <file path="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/GeoJSONPoint.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374396493983" ignored="false" />
+    <file path="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/Geospatial2dsphereIndex.java" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374396493983" ignored="false" />
+    <file path="/.gitignore" changelist="434e5c16-3b0c-4c80-ba5a-52c915010615" time="1374396544998" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,10 +150,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="cheatfood.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="cheatfood.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="125" column="31" selection-start="3451" selection-end="3451" vertical-scroll-proportion="0.1263048">
+            <state line="125" column="31" selection-start="3451" selection-end="3451" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/cheatfood-war/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="8" column="18" selection-start="380" selection-end="380" vertical-scroll-proportion="0.15031315">
               <folding />
             </state>
           </provider>
@@ -199,10 +180,8 @@
       <file leaf-file-name="LocationService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="42" column="31" selection-start="1488" selection-end="1488" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="39" column="31" selection-start="1301" selection-end="1301" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -211,7 +190,9 @@
         <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="54" column="0" selection-start="1669" selection-end="1669" vertical-scroll-proportion="0.0">
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -228,10 +209,8 @@
       <file leaf-file-name="GeoJSONPointBounds.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/GeoJSONPointBounds.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="31" selection-start="404" selection-end="416" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="21" column="31" selection-start="352" selection-end="364" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -268,8 +247,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/config/CheatException.java" />
-        <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/Geometry.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/Location.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/other/GeoJSONPointBounds.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java" />
@@ -277,13 +254,15 @@
         <option value="$PROJECT_DIR$/spring-social-mongo/pom.xml" />
         <option value="$PROJECT_DIR$/spring-social-foursquare/pom.xml" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/GeoJSONPoint.java" />
-        <option value="$PROJECT_DIR$/cheatfood-war/pom.xml" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/Geospatial2dsphereIndex.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/css/style.css" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topCenter-2.1.0.js" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/jquery.noty.topRight-2.1.0.js" />
         <option value="$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/cheatfood-war/pom.xml" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -499,40 +478,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="pages" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cheatood" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cheatfood" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cheatfood-war" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1210,7 +1155,11 @@
       <created>1374244201570</created>
       <updated>1374244201570</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="fixed #27 geojson format for locations, checking count of locations in visible area, 2dsphere index for geoLocation, noty tooltip in topcenter if no locations found">
+      <created>1374396493345</created>
+      <updated>1374396493345</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1235,7 +1184,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1920" height="1106" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45315683" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1258,7 +1207,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3299389" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.6024341" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.6024341" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1309,7 +1258,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed #26" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed #27 geojson format for locations, checking count of locations in visible area, 2dsphere index for geoLocation, noty tooltip in topcenter if no locations found" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1339,6 +1288,7 @@
     <MESSAGE value="fixed #23 fixed some js stupid bugs, check cookie on server side" />
     <MESSAGE value="fixed #23 versions" />
     <MESSAGE value="fixed #26" />
+    <MESSAGE value="fixed #27 geojson format for locations, checking count of locations in visible area, 2dsphere index for geoLocation, noty tooltip in topcenter if no locations found" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1352,27 +1302,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-aop/3.1.1.RELEASE/spring-aop-3.1.1.RELEASE-sources.jar!/org/springframework/aop/framework/Cglib2AopProxy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="592" column="0" selection-start="20389" selection-end="20389" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/ILocationService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="20" selection-start="347" selection-end="347" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/model/Location.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="7" selection-start="860" selection-end="860" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-mongodb/1.2.1.RELEASE/spring-data-mongodb-1.2.1.RELEASE-sources.jar!/org/springframework/data/mongodb/core/index/GeospatialIndex.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="30" column="4" selection-start="955" selection-end="982" vertical-scroll-proportion="0.0">
@@ -1384,7 +1313,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="21" column="34" selection-start="599" selection-end="622" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1399,7 +1328,9 @@
     <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/web/rest/LocationWebService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="54" column="0" selection-start="1669" selection-end="1669" vertical-scroll-proportion="0.0">
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1419,10 +1350,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/java/com/petrpopov/cheatfood/service/impl/LocationService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="31" selection-start="1488" selection-end="1488" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="39" column="31" selection-start="1301" selection-end="1301" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1463,9 +1392,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="18" selection-start="376" selection-end="376" vertical-scroll-proportion="0.15031315">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cheatfood-war/src/main/webapp/resources/js/cheatfood.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="125" column="31" selection-start="3451" selection-end="3451" vertical-scroll-proportion="0.1263048">
+        <state line="125" column="31" selection-start="3451" selection-end="3451" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="5" selection-start="81" selection-end="81" vertical-scroll-proportion="0.1691023">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cheatfood-war/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="18" selection-start="380" selection-end="380" vertical-scroll-proportion="0.15031315">
           <folding />
         </state>
       </provider>

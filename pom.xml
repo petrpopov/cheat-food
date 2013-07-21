@@ -6,7 +6,7 @@
     <artifactId>cheatood</artifactId>
     <packaging>pom</packaging>
 
-    <version>0.1.2-SNAPSHOT</version>
+    <version>0.1.3-SNAPSHOT</version>
     <name>cheatfood Maven Webapp</name>
 
     <modules>
