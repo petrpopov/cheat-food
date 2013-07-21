@@ -12,16 +12,20 @@ public class Address {
     private String region;
     private String city;
     private String street;
+    private String house;
+
+    private String addressLine;
 
     public Address() {
     }
 
-    public Address(String zipcode, String country, String region, String city, String street) {
+    public Address(String zipcode, String country, String region, String city, String street, String house) {
         this.zipcode = zipcode;
         this.country = country;
         this.region = region;
         this.city = city;
         this.street = street;
+        this.house = house;
     }
 
     public String getZipcode() {
@@ -64,6 +68,22 @@ public class Address {
         this.street = street;
     }
 
+    public String getHouse() {
+        return house;
+    }
+
+    public void setHouse(String house) {
+        this.house = house;
+    }
+
+    public String getAddressLine() {
+        return addressLine;
+    }
+
+    public void setAddressLine(String addressLine) {
+        this.addressLine = addressLine;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,6 +93,7 @@ public class Address {
 
         if (city != null ? !city.equals(address.city) : address.city != null) return false;
         if (country != null ? !country.equals(address.country) : address.country != null) return false;
+        if (house != null ? !house.equals(address.house) : address.house != null) return false;
         if (region != null ? !region.equals(address.region) : address.region != null) return false;
         if (street != null ? !street.equals(address.street) : address.street != null) return false;
         if (zipcode != null ? !zipcode.equals(address.zipcode) : address.zipcode != null) return false;
@@ -87,6 +108,7 @@ public class Address {
         result = 31 * result + (region != null ? region.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (street != null ? street.hashCode() : 0);
+        result = 31 * result + (house != null ? house.hashCode() : 0);
         return result;
     }
 }

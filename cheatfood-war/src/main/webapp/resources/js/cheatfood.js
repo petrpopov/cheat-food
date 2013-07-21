@@ -446,7 +446,7 @@ $(document).ready(function(){
                 featureType: "road",
                 elementType: "labels",
                 stylers: [
-                    { visibility: "off" }
+                    { visibility: "on" }
                 ]
             }
         ];
@@ -1025,7 +1025,15 @@ $(document).ready(function(){
         }
 
         if( location.address ) {
-            var address = addressToString(location.address);
+            var address = "";//addressToString(location.address);
+
+            if( location.address.addressLine ) {
+                address = location.address.addressLine;
+            }
+            else {
+                address = addressToString(location.address);
+            }
+
             if( stringIsNotEmpty(address) === true   ) {
                 $('#info_address').text(address);
             }
@@ -1164,6 +1172,7 @@ $(document).ready(function(){
 
         $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
             $('#editFormAlert').hide();
+            initEditFormAddressData(infoBoxObject);
             initEditFormValidation();
             initEditFormWithData(infoBoxObject);
             initEditFormFocus();
@@ -1203,7 +1212,6 @@ $(document).ready(function(){
             enableDeleteMarkerMenu(infoBoxObject);
 
             if( newMarker === true ) {
-                console.log(infoBoxObject);
                 removeMarkerAndInfoBox(infoBoxObject);
             }
         }
@@ -1250,7 +1258,9 @@ $(document).ready(function(){
         var region = $('#region').val();
         var city = $('#city').val();
         var street = $('#street').val();
+        var house = $('#house').val();
         var zipcode = $('#zipcode').val();
+        var addressLine = $('#addressLine').val();
 
 
         var param = {
@@ -1270,7 +1280,9 @@ $(document).ready(function(){
                 region: region,
                 city: city,
                 street: street,
-                zipcode: zipcode
+                house: house,
+                zipcode: zipcode,
+                addressLine: addressLine
             }
         };
 
@@ -1329,6 +1341,114 @@ $(document).ready(function(){
                 }
             }
         });
+    }
+
+    function initEditFormAddressData(infoBoxObject) {
+
+        var latLng = getLatLngFromGeoLocation(infoBoxObject.location.geoLocation);
+
+        geoCodeLatLngToAddress(latLng.lat(), latLng.lng());
+    }
+
+    function geoCodeLatLngToAddress(latitude, longitude) {
+        var myGeocoder = ymaps.geocode(latitude + ", " + longitude);
+        myGeocoder.then(
+            function (res) {
+                var geoObject = res.geoObjects.get(0);
+                if (!geoObject) {
+                    return;
+                }
+
+                var metaData = geoObject.properties.get("metaDataProperty").GeocoderMetaData;
+                if( !metaData ) {
+                    return;
+                }
+
+                var details = metaData.AddressDetails;
+
+                var address = {};
+
+                if( !details.hasOwnProperty("Country") ){
+                    return;
+                }
+
+                if( details.Country.hasOwnProperty("AddressLine") ) {
+                    address.addressLine = details.Country.AddressLine;
+                }
+
+                var country = details.Country.CountryName;
+                address.country = country;
+
+                if( details.Country.hasOwnProperty("AdministrativeArea") ) {
+                    address.region = details.Country.AdministrativeArea.AdministrativeAreaName;
+
+                    if( details.Country.AdministrativeArea.hasOwnProperty("Locality") ) {
+                        address.city = details.Country.AdministrativeArea.Locality.LocalityName;
+
+                        if( details.Country.AdministrativeArea.Locality.hasOwnProperty("Thoroughfare")) {
+                            address.street = details.Country.AdministrativeArea.Locality.Thoroughfare.ThoroughfareName;
+
+                            if( details.Country.AdministrativeArea.Locality.Thoroughfare.hasOwnProperty("Premise")) {
+                                address.house = details.Country.AdministrativeArea.Locality.Thoroughfare.Premise.PremiseNumber;
+                            }
+                        }
+                    }
+                }
+                else {
+                    if( details.Country.hasOwnProperty("Locality") ) {
+                        address.region = details.Country.Locality.LocalityName;
+                        address.city = details.Country.Locality.LocalityName;
+
+                        if( details.Country.Locality.hasOwnProperty("Thoroughfare") ) {
+                            address.street = details.Country.Locality.Thoroughfare.ThoroughfareName;
+
+                            if( details.Country.Locality.Thoroughfare.hasOwnProperty("Premise")) {
+                                address.house = details.Country.Locality.Thoroughfare.Premise.PremiseNumber;
+                            }
+                        }
+                    }
+                }
+
+                fillEditFormWithAddress(address);
+            },
+            function (err) {
+                // обработка ошибки
+            }
+        );
+    }
+
+    function fillEditFormWithAddress(address) {
+        if( !address ) {
+            return;
+        }
+
+        if( address.hasOwnProperty("country")) {
+            $('#country').val(address.country);
+        }
+
+        if( address.hasOwnProperty("region")) {
+            $('#region').val(address.region);
+        }
+
+        if( address.hasOwnProperty("city")) {
+            $('#city').val(address.city);
+        }
+
+        if( address.hasOwnProperty("street")) {
+            $('#street').val(address.street);
+        }
+
+        if( address.hasOwnProperty("house")) {
+            $('#house').val(address.house);
+        }
+
+        if( address.hasOwnProperty("zipcode")) {
+            $('#zipcode').val(address.zipcode);
+        }
+
+        if( address.hasOwnProperty("addressLine")) {
+            $('#addressLine').val(address.addressLine);
+        }
     }
 
     function initEditFormValidation() {
@@ -1407,7 +1527,9 @@ $(document).ready(function(){
             $('#region').val( location.address.region );
             $('#city').val( location.address.city );
             $('#street').val( location.address.street );
+            $('#house').val( location.address.house );
             $('#zipcode').val( location.address.zipcode );
+            $('#addressLine').val( location.address.addressLine );
         }
     }
 
@@ -1423,7 +1545,9 @@ $(document).ready(function(){
         $('#region').val( null );
         $('#city').val( null );
         $('#street').val( null );
+        $('#house').val( null );
         $('#zipcode').val( null );
+        $('#addressLine').val( null );
     }
 
     function initEditFormFocus() {
@@ -1786,7 +1910,7 @@ $(document).ready(function(){
                     $('<hr/>')
                 )
                 .append(
-                    $('<div/>').addClass('control-group')
+                    $('<div/>').addClass('control-group').attr('hidden', 'true')
                         .append(
                             $('<div/>').addClass('controls')
                                 .append(
@@ -1847,7 +1971,7 @@ $(document).ready(function(){
                         .append(
                             $('<div/>').addClass('control-group')
                                 .append(
-                                    $('<label/>').addClass('control-label').attr('for','street').text('Улица, дом итд')
+                                    $('<label/>').addClass('control-label').attr('for','street').text('Улица')
                                 )
                                 .append(
                                     $('<div/>').addClass('controls')
@@ -1860,6 +1984,34 @@ $(document).ready(function(){
                         )
                         .append(
                             $('<div/>').addClass('control-group')
+                                .append(
+                                    $('<label/>').addClass('control-label').attr('for','house').text('Дом, корпус итд.')
+                                )
+                                .append(
+                                    $('<div/>').addClass('controls')
+                                        .append(
+                                            $('<input/>').addClass('input-block-level span4')
+                                                .attr('id', 'house').attr('name', 'house')
+
+                                        )
+                                )
+                        )
+                        .append(
+                            $('<div/>').addClass('control-group').attr('hidden', 'true')
+                                .append(
+                                    $('<label/>').addClass('control-label').attr('for','addressLine').text('addressLine')
+                                )
+                                .append(
+                                    $('<div/>').addClass('controls')
+                                        .append(
+                                            $('<input/>').addClass('input-block-level span4')
+                                                .attr('id', 'addressLine').attr('name', 'addressLine')
+
+                                        )
+                                )
+                        )
+                        .append(
+                            $('<div/>').addClass('control-group').attr('hidden', 'true')
                                 .append(
                                     $('<label/>').addClass('control-label').attr('for','zipcode').text('Индекс')
                                 )
@@ -1943,7 +2095,9 @@ $(document).ready(function(){
                 region: "",
                 city: "",
                 street: "",
-                zipcode: ""
+                house: "",
+                zipcode: "",
+                addressLine: ""
             }
         };
     }

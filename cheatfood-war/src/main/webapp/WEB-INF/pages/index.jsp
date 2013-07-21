@@ -37,6 +37,7 @@
     <script src="<s:url value="/resources"/>/js/jquery.noty.default-theme-2.1.0.js"></script>
 
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script>
+    <script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
     <!--script src="https://www.google.com/jsapi?sensor=true&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script-->
 
     <script type="text/javascript" src="<s:url value="/resources"/>/js/markerclusterer-2.0.9.min.js"></script>
