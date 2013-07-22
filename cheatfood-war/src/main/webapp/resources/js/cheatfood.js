@@ -16,6 +16,7 @@ $(document).ready(function(){
         unknown_location: "unknown_location"
     };
 
+    var markersCount = 0;
     var markers = new HashMap();
     var markersIds = new HashMap();
 
@@ -134,7 +135,6 @@ $(document).ready(function(){
         createRegistrationAuthActions();
 
         createMap(auth, location);
-        createMainMenuBehavior();
     }
 
     function checkCookies(location) {
@@ -493,11 +493,11 @@ $(document).ready(function(){
     function createMapBoundsChangedBehavior() {
 
         google.maps.event.addListener(map.map, 'dragend', function() {
-            createMarkersForLocationsInBounds();
+            loadAndCreateMarkersForLocationsInBounds();
         } );
 
         google.maps.event.addListener(map.map, 'zoom_changed', function() {
-            createMarkersForLocationsInBounds();
+            loadAndCreateMarkersForLocationsInBounds();
         });
     }
 
@@ -537,7 +537,7 @@ $(document).ready(function(){
                         sessionStorage.setItem('showNoLocations', true);
                     }
                     else if( data.result > 0 ) {
-                        createMarkersForLocationsInBounds(location);
+                        loadAndCreateMarkersForLocationsInBounds(null, location);
                     }
                 }
             }
@@ -751,9 +751,64 @@ $(document).ready(function(){
     }
 
     function createMainMenuBehavior() {
+        createCategoryMenu();
         enableAddMarkerMenu();
         disableEditMarkerMenu();
         disableDeleteMarkerMenu();
+    }
+
+    function createCategoryMenu() {
+
+        $.each(params.types, function(n, type) {
+            $('#categoryMenu').append(
+                $('<li/>').append(
+                    $('<a/>').attr("id", "type_"+type.id).attr("href", "#").attr("type_id", type.id)
+                        .text( getTypeValueByLanguage(type, DATE_LANGUAGE) )
+                        .click(function(e) {
+                            categoryTypeMenuBehavior("type_"+type.id)
+                        })
+                )
+            )
+        });
+    }
+
+    function categoryTypeMenuBehavior(type_id) {
+
+        var id = $('#'+type_id).attr("type_id");
+
+        removeAllMarkers();
+        loadAndCreateMarkersByCategory(id);
+    }
+
+    function loadAndCreateMarkersByCategory(type_id) {
+
+        var type = getTypeById(type_id);
+        var text = "Показывается категория: " + getTypeValueByLanguage(type, DATE_LANGUAGE);
+
+        showCurrentActionForm(text, cancelLoadAndCreateMarkersByCategory);
+        loadAndCreateMarkersForLocationsInBounds(type_id);
+    }
+
+    function cancelLoadAndCreateMarkersByCategory() {
+        removeAllMarkers();
+        loadAndCreateMarkersForLocationsInBounds();
+    }
+
+    function enableCategoryMenu() {
+        $.each(params.types, function(n, type) {
+            $('#type_'+type.id).closest('li').removeClass('disabled');
+            $('#type_'+type.id).off('click');
+            $('#type_'+type.id).click( function() {
+                categoryTypeMenuBehavior(type.id);
+            });
+        });
+    }
+
+    function disableCategoryMenu() {
+        $.each(params.types, function(n, type) {
+            $('#type_'+type.id).closest('li').addClass('disabled');
+            $('#type_'+type.id).off('click');
+        });
     }
 
     function enableAddMarkerMenu() {
@@ -823,6 +878,7 @@ $(document).ready(function(){
             createMarkerForContextMenu(event.latLng);
         });
 
+        disableCategoryMenu();
         disableAddMarkerMenu();
     }
 
@@ -912,7 +968,7 @@ $(document).ready(function(){
         createMarkerWithInfoBoxForLocation(infoBoxObject, zoomIn);
     }
 
-    function createMarkersForLocationsInBounds(location) {
+    function loadAndCreateMarkersForLocationsInBounds(type_id, location) {
 
         infoBox = createInfoBoxForMarkers();
 
@@ -934,13 +990,19 @@ $(document).ready(function(){
             data.sw_longitude_prev = prevBounds.getSouthWest().lng();
         }
 
+        if( type_id ) {
+            if( type_id !== null ) {
+                data.typeId = type_id;
+            }
+        }
+
         $.ajax({
             type: "GET",
             url: params.realPath+"/api/locationsinbounds",
             data: data,
             success: function(result) {
-                console.log(result.length);
                 renderMarkersForLocations(result, infoBox, location);
+                createMainMenuBehavior();
             }
         });
     }
@@ -1004,6 +1066,7 @@ $(document).ready(function(){
         infoBoxObject.marker = marker;
         markers.put(marker, infoBoxObject);
         markersIds.put(infoBoxObject.location.id, infoBoxObject.location);
+        markersCount++;
 
 
         if( zoomIn ) {
@@ -1218,11 +1281,18 @@ $(document).ready(function(){
         });
     }
 
+    function removeAllMarkers() {
+        $.each(markers._dict, function(n, marker) {
+            removeMarkerAndInfoBox( {infoBox: marker.infoBox, location: marker.location, marker: marker.marker} );
+        });
+    }
+
     function removeMarkerAndInfoBox(infoBoxObject) {
         infoBoxObject.infoBox.hide();
         map.removeMarker(infoBoxObject.marker);
         markers.remove(infoBoxObject.marker);
         markersIds.remove(infoBoxObject.location.id);
+        markersCount--;
     }
 
     function initAndShowEditForm(infoBoxObject) {
@@ -1267,6 +1337,7 @@ $(document).ready(function(){
 
         if( infoBoxObject ) {
             infoBoxObject.infoBox.show();
+
             enableEditMarkerMenu(infoBoxObject);
             enableDeleteMarkerMenu(infoBoxObject);
 
@@ -1278,6 +1349,7 @@ $(document).ready(function(){
             disableEditMarkerMenu();
             disableDeleteMarkerMenu();
         }
+        enableCategoryMenu();
         setDefaultMouseBehavior();
 
         newMarker = false;
@@ -2262,6 +2334,5 @@ $(document).ready(function(){
         }
         delete this._dict[key];
     }
-
 });
 

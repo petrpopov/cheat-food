@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  */
 
 @Document(collection = "types")
-public class Type {
+public class Type implements Serializable {
 
     @Id
     private String id;

@@ -14,7 +14,8 @@ import java.util.List;
 public interface ILocationService extends IGenericService<Location> {
 
     public List<Location> findAllInBounds(GeoJSONPointBounds bounds);
-    public List<Location> findAllInDifference(GeoJSONPointBounds inBounds, GeoJSONPointBounds notInBounds);
+    public List<Location> findAllTypeInBounds(GeoJSONPointBounds bounds, String typeId);
+    public List<Location> findAllInDifference(GeoJSONPointBounds inBounds, GeoJSONPointBounds notInBounds, String typeId);
     public Location createOrSave(Location location, UserEntity userEntity);
     public void deleteLocation(Location location);
     public long getLocationsCountInBound(GeoJSONPointBounds bounds);

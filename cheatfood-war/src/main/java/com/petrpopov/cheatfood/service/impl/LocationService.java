@@ -4,6 +4,7 @@ import com.petrpopov.cheatfood.model.*;
 import com.petrpopov.cheatfood.service.ILocationService;
 import com.petrpopov.cheatfood.service.ITypeService;
 import org.apache.log4j.Logger;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.IndexOperations;
 import org.springframework.data.mongodb.core.geo.Box;
@@ -52,16 +53,44 @@ public class LocationService extends GenericService<Location> implements ILocati
     }
 
     @Override
-    public List<Location> findAllInDifference(@Valid GeoJSONPointBounds inBounds, GeoJSONPointBounds notInBounds) {
+    public List<Location> findAllTypeInBounds(@Valid GeoJSONPointBounds bounds, String typeId) {
 
+        Box box = this.getBoxFromBounds(bounds);
+        Query query = new Query();
+
+        Criteria criteria = new Criteria();
+        criteria.andOperator(Criteria.where("geoLocation").within(box), Criteria.where("type.$id").is(new ObjectId(typeId)));
+        query.addCriteria(criteria);
+
+        List<Location> locations = op.find(query, Location.class);
+        return locations;
+    }
+
+    @Override
+    public List<Location> findAllInDifference(@Valid GeoJSONPointBounds inBounds, GeoJSONPointBounds notInBounds, String typeId) {
 
         if( notInBounds == null ) {
             return this.findAllInBounds(inBounds);
         }
 
+        if( notInBounds.equals(inBounds) ) {
+            return this.findAllInBounds(inBounds);
+        }
+
+        Type type = null;
+        if( typeId != null ) {
+            if( !typeId.isEmpty() ) {
+                type = typeService.findById(typeId);
+            }
+        }
+
         //TODO: very shitty code !
-        List<Location> inList = this.findAllInBounds(inBounds);
-        List<Location> notInList = this.findAllInBounds(notInBounds);
+        List<Location> inList = type == null ? this.findAllInBounds(inBounds) : this.findAllTypeInBounds(inBounds, typeId);
+        List<Location> notInList = type == null ? this.findAllInBounds(notInBounds) :this.findAllTypeInBounds(notInBounds, typeId);
+
+        if( notInList.equals(inList) ) {
+            return inList;
+        }
 
         List<Location> res = new ArrayList<Location>();
         for (Location location : inList) {

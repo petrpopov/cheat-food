@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -19,7 +20,7 @@ import java.util.Date;
  */
 
 @Document(collection = "locations")
-public class Location {
+public class Location implements Serializable {
 
     @Id
     private String id;

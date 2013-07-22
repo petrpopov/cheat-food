@@ -680,6 +680,10 @@ GMaps.prototype.removeMarker = function(marker) {
 GMaps.prototype.removeMarkers = function(collection) {
   var collection = (collection || this.markers);
 
+    if( this.markerClusterer ) {
+        this.markerClusterer.removeMarkers( this.markers );
+    }
+
   for (var i = 0;i < this.markers.length; i++) {
     if(this.markers[i] === collection[i]) {
       this.markers[i].setMap(null);
@@ -695,6 +699,8 @@ GMaps.prototype.removeMarkers = function(collection) {
   }
 
   this.markers = new_markers;
+
+    GMaps.fire('all_markers_removed', this, this);
 };
 
 GMaps.prototype.drawOverlay = function(options) {
@@ -1786,7 +1792,7 @@ GMaps.prototype.off = function(event_name) {
   GMaps.off(event_name, this);
 };
 
-GMaps.custom_events = ['marker_added', 'marker_removed', 'polyline_added', 'polyline_removed', 'polygon_added', 'polygon_removed', 'geolocated', 'geolocation_failed'];
+GMaps.custom_events = ['marker_added', 'marker_removed', 'all_markers_removed', 'polyline_added', 'polyline_removed', 'polygon_added', 'polygon_removed', 'geolocated', 'geolocation_failed'];
 
 GMaps.on = function(event_name, object, handler) {
   if (GMaps.custom_events.indexOf(event_name) == -1) {

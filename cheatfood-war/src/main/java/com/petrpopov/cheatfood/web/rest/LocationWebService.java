@@ -48,12 +48,12 @@ public class LocationWebService {
 
     @RequestMapping(value = "locationsinbounds", method = RequestMethod.GET)
     @ResponseBody
-    public List<Location> getAllLocationsInDifferenceBetweenBounds(@Valid GeoJSONPointBoundsDiff diff) {
+    public List<Location> getAllLocationsInDifferenceBetweenBounds(@Valid GeoJSONPointBoundsDiff diff, String typeId) {
 
         GeoJSONPointBounds current = diff.getCurrent();
         GeoJSONPointBounds previous = diff.getPrevious();
 
-        List<Location> list = locationService.findAllInDifference(current, previous);
+        List<Location> list = locationService.findAllInDifference(current, previous, typeId);
         return list;
     }
 
