@@ -183,9 +183,6 @@
             <form id="twitterForm" class="pull-left spacer3" method="POST" action="<c:url value="/connect/twitter" />">
                 <button class="twitterImage" type="submit"></button>
             </form>
-            <form id="vkForm" class="pull-left spacer3" method="POST" action="<c:url value="/connect/vk" />">
-                <button class="vkImage" type="submit"></button>
-            </form>
         </div>
 
         <hr hidden="true" style="display: none;"/>
@@ -258,9 +255,6 @@
             </form>
             <form id="twitterFormReg" class="pull-left spacer3" method="POST" action="<c:url value="/connect/twitter" />">
                 <button class="twitterImage" type="submit"></button>
-            </form>
-            <form id="vkFormReg" class="pull-left spacer3" method="POST" action="<c:url value="/connect/vk" />">
-                <button class="vkImage" type="submit"></button>
             </form>
         </div>
     </div>

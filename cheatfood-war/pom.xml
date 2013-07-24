@@ -12,11 +12,11 @@
     <parent>
         <groupId>com.petrpopov</groupId>
         <artifactId>cheatood</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1.8-SNAPSHOT</version>
     </parent>
 
     <properties>
-        <spring.version>3.1.1.RELEASE</spring.version>
+        <spring.version>3.1.2.RELEASE</spring.version>
 
         <spring.social.version>1.0.2.RELEASE</spring.social.version>
         <spring.social.mongo.version>1.0.0-SNAPSHOT</spring.social.mongo.version>
@@ -168,6 +168,8 @@
             <artifactId>spring-social-mongo</artifactId>
             <version>${spring.social.mongo.version}</version>
         </dependency>
+
+
         <!-- Spring social ends -->
 
         <!-- Spring security starts -->

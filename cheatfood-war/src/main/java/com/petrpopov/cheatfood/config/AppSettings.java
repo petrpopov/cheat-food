@@ -39,6 +39,10 @@ public class AppSettings {
             TWITTER_CLIENT_SECRET = properties.getProperty("twitter_client_secret");
             TWITTER_CALLBACK_URL = properties.getProperty("twitter_callback_url");
 
+            VKONTAKTE_CLIENT_ID = properties.getProperty("vkontakte_client_id");
+            VKONTAKTE_CLIENT_SECRET = properties.getProperty("vkontakte_client_secret");
+            VKONTAKTE_CALLBACK_URL = properties.getProperty("vkontakte_callback_url");
+
             log().info("Config loaded successfully ! :)");
         } catch (FileNotFoundException e) {
             log().error("Config file not found !");
@@ -66,4 +70,7 @@ public class AppSettings {
     public static String TWITTER_CLIENT_ID;
     public static String TWITTER_CLIENT_SECRET;
     public static String TWITTER_CALLBACK_URL;
+    public static String VKONTAKTE_CLIENT_ID;
+    public static String VKONTAKTE_CLIENT_SECRET;
+    public static String VKONTAKTE_CALLBACK_URL;
 }
