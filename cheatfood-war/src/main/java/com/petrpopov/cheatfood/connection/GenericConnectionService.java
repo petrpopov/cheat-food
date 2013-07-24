@@ -2,13 +2,22 @@ package com.petrpopov.cheatfood.connection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.support.OAuth1ConnectionFactory;
 import org.springframework.social.connect.support.OAuth2ConnectionFactory;
+import org.springframework.social.oauth1.AuthorizedRequestToken;
+import org.springframework.social.oauth1.OAuth1Operations;
+import org.springframework.social.oauth1.OAuth1Parameters;
+import org.springframework.social.oauth1.OAuthToken;
 import org.springframework.social.oauth2.AccessGrant;
 import org.springframework.social.oauth2.GrantType;
 import org.springframework.social.oauth2.OAuth2Operations;
 import org.springframework.social.oauth2.OAuth2Parameters;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.WebRequest;
 
 /**
  * User: petrpopov
@@ -20,6 +29,8 @@ public class GenericConnectionService<T> implements ConnectionService {
 
     private Class domainClass;
     private String callbackUrl;
+
+    private static final String OAUTH_TOKEN_ATTRIBUTE = "oauthToken";
 
     @Autowired
     private ConnectionFactoryLocator registry;
@@ -40,37 +51,85 @@ public class GenericConnectionService<T> implements ConnectionService {
 
     @Override
     public String getProviderId() {
-        OAuth2ConnectionFactory<T> connectionFactory = getConnectionFactory();
+        ConnectionFactory<T> connectionFactory = getConnectionFactory();
         return connectionFactory.getProviderId();
     }
 
     @Override
-    public String getAuthorizeUrl(String scope) {
-        OAuth2ConnectionFactory<T> connectionFactory = getConnectionFactory();
+    public String getAuthorizeUrl(String scope, NativeWebRequest request) {
 
-        OAuth2Operations oauthOperations = connectionFactory.getOAuthOperations();
-        OAuth2Parameters params = getOAuth2Parameters(scope);
+        ConnectionFactory<T> connectionFactory = getConnectionFactory();
+        if( connectionFactory instanceof OAuth2ConnectionFactory) {
 
-        String url = oauthOperations.buildAuthorizeUrl(GrantType.AUTHORIZATION_CODE, params);
-        return url;
+            OAuth2ConnectionFactory oAuth2ConnectionFactory = (OAuth2ConnectionFactory) connectionFactory;
+
+            OAuth2Operations oauthOperations = oAuth2ConnectionFactory.getOAuthOperations();
+            OAuth2Parameters params = getOAuth2Parameters(scope);
+
+            String url = oauthOperations.buildAuthorizeUrl(GrantType.AUTHORIZATION_CODE, params);
+            return url;
+        }
+        else if( connectionFactory instanceof OAuth1ConnectionFactory) {
+
+            OAuth1ConnectionFactory oAuth1ConnectionFactory = (OAuth1ConnectionFactory) connectionFactory;
+            OAuth1Operations oAuthOperations = oAuth1ConnectionFactory.getOAuthOperations();
+            OAuth1Parameters params = getOAuth1Parameters();
+
+            OAuthToken requestToken = oAuthOperations.fetchRequestToken(callbackUrl, null);
+            request.setAttribute(OAUTH_TOKEN_ATTRIBUTE, requestToken, RequestAttributes.SCOPE_SESSION);
+
+            String url = oAuthOperations.buildAuthorizeUrl(requestToken.getValue(), params);
+            return url;
+        }
+
+        return null;
     }
 
     @Override
-    public Connection<T> getConnection(String code) {
-        OAuth2ConnectionFactory<T> connectionFactory = getConnectionFactory();
+    public Connection<T> getConnection(String code, String oauth_verifier, NativeWebRequest request) {
 
-        OAuth2Operations oauthOperations = connectionFactory.getOAuthOperations();
-        AccessGrant accessGrant = oauthOperations.exchangeForAccess(code, callbackUrl, null);
-        Connection<T> connection = connectionFactory.createConnection(accessGrant);
+        ConnectionFactory<T> connectionFactory = getConnectionFactory();
+        if( connectionFactory instanceof OAuth2ConnectionFactory) {
 
-        return connection;
+            OAuth2ConnectionFactory oAuth2ConnectionFactory = (OAuth2ConnectionFactory) connectionFactory;
+
+            OAuth2Operations oauthOperations = oAuth2ConnectionFactory.getOAuthOperations();
+            AccessGrant accessGrant = oauthOperations.exchangeForAccess(code, callbackUrl, null);
+            Connection<T> connection = oAuth2ConnectionFactory.createConnection(accessGrant);
+
+            return connection;
+        }
+        else if( connectionFactory instanceof OAuth1ConnectionFactory) {
+
+            OAuth1ConnectionFactory oAuth1ConnectionFactory = (OAuth1ConnectionFactory) connectionFactory;
+            OAuth1Operations oAuthOperations = oAuth1ConnectionFactory.getOAuthOperations();
+
+            AuthorizedRequestToken requestToken = new AuthorizedRequestToken(extractCachedRequestToken(request), oauth_verifier);
+            OAuthToken accessToken = oAuthOperations.exchangeForAccessToken(requestToken, null);
+            return oAuth1ConnectionFactory.createConnection(accessToken);
+        }
+
+        return null;
+    }
+
+    private OAuthToken extractCachedRequestToken(WebRequest request) {
+        OAuthToken requestToken = (OAuthToken) request.getAttribute(OAUTH_TOKEN_ATTRIBUTE, RequestAttributes.SCOPE_SESSION);
+        request.removeAttribute(OAUTH_TOKEN_ATTRIBUTE, RequestAttributes.SCOPE_SESSION);
+        return requestToken;
     }
 
 
+    private ConnectionFactory<T> getConnectionFactory() {
 
-    private OAuth2ConnectionFactory<T> getConnectionFactory() {
-        OAuth2ConnectionFactory<T> connectionFactory = (OAuth2ConnectionFactory<T>) registry.getConnectionFactory(domainClass);
-        return connectionFactory;
+        ConnectionFactory factory = registry.getConnectionFactory(domainClass);
+        return factory;
+    }
+
+    private OAuth1Parameters getOAuth1Parameters() {
+
+        OAuth1Parameters params = new OAuth1Parameters();
+        params.setCallbackUrl(callbackUrl);
+        return params;
     }
 
     private OAuth2Parameters getOAuth2Parameters(String scope) {

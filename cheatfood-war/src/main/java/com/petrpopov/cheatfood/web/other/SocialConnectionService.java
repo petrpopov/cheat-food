@@ -10,8 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.ConnectionSignUp;
-import org.springframework.social.connect.support.OAuth2Connection;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,21 +43,18 @@ public class SocialConnectionService {
     @Autowired
     private CheatRememberMeServices rememberMeServices;
 
-    public void apiCallback(String code, Class<?> apiClass, HttpServletRequest request, HttpServletResponse response) {
+    public void apiCallback(String code, String oauth_verifier, Class<?> apiClass, NativeWebRequest request, HttpServletResponse response) {
 
         ConnectionService<?> connectionService = registry.getConnectionService(apiClass);
-        Connection<?> connection = connectionService.getConnection(code);
+        Connection<?> connection = connectionService.getConnection(code, oauth_verifier, request);
 
         //first - save user or update it
-        if( connection instanceof OAuth2Connection<?> ) {
-            OAuth2Connection<?> oAuth2Connection = (OAuth2Connection<?>) connection;
-            connectionSignUp.execute(oAuth2Connection);
-        }
+        connectionSignUp.execute(connection);
 
         //second - use SpringSecurity auth services, because they use DB to retrieve user
         Authentication authentication = loginManager.authenticate(connection);
         //create cookies for remember-me shit
-        rememberMeServices.onLoginSuccess(request, response, authentication);
+        rememberMeServices.onLoginSuccess((HttpServletRequest) request.getNativeRequest(), response, authentication);
 
         //then play with connections
         try {
@@ -75,20 +72,20 @@ public class SocialConnectionService {
         loginManager.logout(request, response);
     }
 
-    public String getAuthorizeUrl(String providerId) {
+    public String getAuthorizeUrl(String providerId, NativeWebRequest request) {
 
         ConnectionService<?> connectionService = registry.getConnectionService(providerId);
-        return connectionService.getAuthorizeUrl(null);
+        return connectionService.getAuthorizeUrl(null, request);
     }
 
-    public String getAuthorizeUrl(Class<?> apiClass) {
+    public String getAuthorizeUrl(Class<?> apiClass, NativeWebRequest request) {
 
-        return this.getAuthorizeUrl(apiClass, null);
+        return this.getAuthorizeUrl(apiClass, null, request);
     }
 
-    public String getAuthorizeUrl(Class<?> apiClass, String scope) {
+    public String getAuthorizeUrl(Class<?> apiClass, String scope, NativeWebRequest request) {
 
         ConnectionService<?> connectionService = registry.getConnectionService(apiClass);
-        return connectionService.getAuthorizeUrl(scope);
+        return connectionService.getAuthorizeUrl(scope, request);
     }
 }

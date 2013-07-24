@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,7 @@ public class SocialController {
     private ObjectMapper objectMapper;
 
     @RequestMapping(value="connect/{providerId}", method= RequestMethod.POST)
-    public RedirectView foursquareConnect(@PathVariable String providerId, HttpServletRequest request) {
+    public RedirectView providerConnect(@PathVariable String providerId, NativeWebRequest request) {
 
         Class<?> apiClass = providerIdClassStorage.getProviderClassById(providerId);
 
@@ -43,18 +44,31 @@ public class SocialController {
             scope = this.getScope(request);
         }
 
-        String url = socialConnectionService.getAuthorizeUrl(apiClass, scope);
+        String url = socialConnectionService.getAuthorizeUrl(apiClass, scope, request);
 
         return new RedirectView(url);
     }
 
     @RequestMapping(value="connect/{providerId}", method=RequestMethod.GET, params="code")
-    public RedirectView foursquareCallback(@PathVariable String providerId, @RequestParam("code") String code,
-                                           HttpServletRequest request, HttpServletResponse response)
+    public RedirectView providerApiCallbackOAuth2(@PathVariable String providerId,
+                                                  @RequestParam("code") String code,
+                                                  NativeWebRequest request, HttpServletResponse response)
     {
         Class<?> apiClass = providerIdClassStorage.getProviderClassById(providerId);
 
-        socialConnectionService.apiCallback(code, apiClass, request, response);
+        socialConnectionService.apiCallback(code, null, apiClass, request, response);
+
+        return new RedirectView("/", true);
+    }
+
+    @RequestMapping(value="connect/{providerId}", method=RequestMethod.GET, params="oauth_verifier")
+    public RedirectView providerApiCallbackOAuth1(@PathVariable String providerId,
+                                                  @RequestParam("oauth_verifier") String oauth_verifier,
+                                                  NativeWebRequest request, HttpServletResponse response)
+    {
+        Class<?> apiClass = providerIdClassStorage.getProviderClassById(providerId);
+
+        socialConnectionService.apiCallback(null, oauth_verifier, apiClass, request, response);
 
         return new RedirectView("/", true);
     }
@@ -74,7 +88,7 @@ public class SocialController {
         return new MessageResult("ok");
     }
 
-    private String getScope(HttpServletRequest request) {
+    private String getScope(NativeWebRequest request) {
 
         String scope = request.getParameter("scope");
         return scope;

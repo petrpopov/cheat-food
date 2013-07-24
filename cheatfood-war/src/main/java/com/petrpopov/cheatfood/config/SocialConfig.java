@@ -17,6 +17,8 @@ import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.foursquare.api.Foursquare;
 import org.springframework.social.foursquare.connect.FoursquareConnectionFactory;
+import org.springframework.social.twitter.api.Twitter;
+import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import javax.inject.Inject;
 
@@ -50,9 +52,12 @@ public class SocialConfig {
                 AppSettings.FOURSQUARE_CLIENT_SECRET);
         FacebookConnectionFactory facebookFactory = new FacebookConnectionFactory(AppSettings.FACEBOOK_CLIENT_ID,
                 AppSettings.FACEBOOK_CLIENT_SECRET);
+        TwitterConnectionFactory twitterFactory = new TwitterConnectionFactory(AppSettings.TWITTER_CLIENT_ID,
+                AppSettings.TWITTER_CLIENT_SECRET);
 
         registry.addConnectionFactory(foursquareFactory);
         registry.addConnectionFactory(facebookFactory);
+        registry.addConnectionFactory(twitterFactory);
 
         return registry;
     }
@@ -69,6 +74,13 @@ public class SocialConfig {
     public FacebookConnectionFactory facebookConnectionFactory()
     {
         FacebookConnectionFactory factory = (FacebookConnectionFactory) connectionFactoryLocator().getConnectionFactory(Facebook.class);
+        return factory;
+    }
+
+    @Bean
+    public TwitterConnectionFactory twitterConnectionFactory()
+    {
+        TwitterConnectionFactory factory = (TwitterConnectionFactory) connectionFactoryLocator().getConnectionFactory(Twitter.class);
         return factory;
     }
 
@@ -127,6 +139,20 @@ public class SocialConfig {
     }
 
     @Bean
+    @Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)
+    public Twitter twitter() {
+        ConnectionRepository repo = connectionRepository();
+        try {
+            Connection<Twitter> connection = repo.getPrimaryConnection(Twitter.class);
+            Twitter api = connection.getApi();
+            return api;
+        }
+        catch (Exception e) {
+            return new TwitterDefaultBean();
+        }
+    }
+
+    @Bean
     public ProviderIdClassStorage providerIdClassStorage() {
         return new ProviderIdClassStorage();
     }
@@ -137,6 +163,7 @@ public class SocialConfig {
 
         serviceFactory.addConnectionService(new FacebookConnectionService(connectionFactoryLocator()));
         serviceFactory.addConnectionService(new FoursquareConnectionService(connectionFactoryLocator()));
+        serviceFactory.addConnectionService(new TwitterConnectionService(connectionFactoryLocator()));
 
         return serviceFactory;
     }

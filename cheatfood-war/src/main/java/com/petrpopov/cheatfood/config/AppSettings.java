@@ -35,6 +35,10 @@ public class AppSettings {
             FACEBOOK_CLIENT_SECRET = properties.getProperty("facebook_client_secret");
             FACEBOOK_CALLBACK_URL = properties.getProperty("facebook_callback_url");
 
+            TWITTER_CLIENT_ID = properties.getProperty("twitter_client_id");
+            TWITTER_CLIENT_SECRET = properties.getProperty("twitter_client_secret");
+            TWITTER_CALLBACK_URL = properties.getProperty("twitter_callback_url");
+
             log().info("Config loaded successfully ! :)");
         } catch (FileNotFoundException e) {
             log().error("Config file not found !");
@@ -59,4 +63,7 @@ public class AppSettings {
     public static String FACEBOOK_CLIENT_ID;
     public static String FACEBOOK_CLIENT_SECRET;
     public static String FACEBOOK_CALLBACK_URL;
+    public static String TWITTER_CLIENT_ID;
+    public static String TWITTER_CLIENT_SECRET;
+    public static String TWITTER_CALLBACK_URL;
 }

@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.support.OAuth2Connection;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,12 +40,9 @@ public class LoginManager {
 
     public Authentication authenticate(Connection connection)
     {
-        if( !(connection instanceof OAuth2Connection) )
-            return null;
-
         Class<?> apiClass = providerIdClassStorage.getProviderClassByConnection(connection);
 
-        String token = connectionAccessTokenFieldHandler.getAccessTokenFromConnection((OAuth2Connection) connection);
+        String token = connectionAccessTokenFieldHandler.getAccessTokenFromConnection(connection);
         Authentication authentication = this.doAuthenticate(connection.getKey().getProviderUserId(), token, apiClass);
 
         return authentication;

@@ -22,6 +22,7 @@
         <spring.social.mongo.version>1.0.0-SNAPSHOT</spring.social.mongo.version>
         <spring.social.foursquare.version>1.0.8-RELEASE</spring.social.foursquare.version>
         <spring.social.facebook.version>1.0.3.RELEASE</spring.social.facebook.version>
+        <spring.social.twitter.version>1.0.5.RELEASE</spring.social.twitter.version>
         <spring.security.version>3.1.2.RELEASE</spring.security.version>
 
         <spring.data.mongodb.version>1.2.1.RELEASE</spring.data.mongodb.version>
@@ -154,6 +155,12 @@
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-facebook</artifactId>
             <version>${spring.social.facebook.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-twitter</artifactId>
+            <version>${spring.social.twitter.version}</version>
         </dependency>
 
         <dependency>

@@ -15,7 +15,10 @@ public interface IUserService {
     public UserEntity getUserByEmail(String email);
     public UserEntity getUserById(String id);
     public UserEntity getUserByFoursquareId(String foursquareId);
+    public UserEntity getUserByFoursquareTwitterUsername(String foursquareTwitterUsername);
     public UserEntity getUserByFacebookId(String facebookId);
+    public UserEntity getUserByTwitterId(String twitterId);
+    public UserEntity getUserByTwitterUsername(String twitterUsername);
     public UserEntity getUserByCookieId(String cookie);
     public UserEntity saveOrUpdate(UserEntity userEntity);
 }

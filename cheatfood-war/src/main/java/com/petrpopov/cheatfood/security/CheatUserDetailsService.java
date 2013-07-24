@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.foursquare.api.Foursquare;
+import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Component;
 
 /**
@@ -42,6 +43,9 @@ public class CheatUserDetailsService implements UserDetailsService {
         else if( apiClass.equals(Facebook.class) ) {
             user = loadUserByFacebookId(id);
         }
+        else if( apiClass.equals(Twitter.class) ) {
+            user = loadUserByTwitterId(id);
+        }
         else {
             return loadUserByUsername(id);
         }
@@ -56,6 +60,11 @@ public class CheatUserDetailsService implements UserDetailsService {
 
     private UserEntity loadUserByFacebookId(String facebookId) {
         UserEntity user = userService.getUserByFacebookId(facebookId);
+        return user;
+    }
+
+    private UserEntity loadUserByTwitterId(String twitterId) {
+        UserEntity user = userService.getUserByTwitterId(twitterId);
         return user;
     }
 

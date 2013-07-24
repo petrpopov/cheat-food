@@ -85,7 +85,15 @@ public class UserService extends GenericService<UserEntity> implements IUserServ
         return op.findOne(query, UserEntity.class);
     }
 
-   // @Cacheable("users")
+    @Override
+    public UserEntity getUserByFoursquareTwitterUsername(String foursquareTwitterUsername) {
+        Criteria criteria = Criteria.where("foursquareTwitterUsername").is(foursquareTwitterUsername);
+        Query query = new Query(criteria);
+
+        return op.findOne(query, UserEntity.class);
+    }
+
+    // @Cacheable("users")
     public UserEntity getUserByFacebookId(String facebookId) {
         Criteria criteria = Criteria.where("facebookId").is(facebookId);
         Query query = new Query(criteria);
@@ -93,7 +101,23 @@ public class UserService extends GenericService<UserEntity> implements IUserServ
         return op.findOne(query, UserEntity.class);
     }
 
-  //  @Cacheable("users")
+    @Override
+    public UserEntity getUserByTwitterId(String twitterId) {
+        Criteria criteria = Criteria.where("twitterId").is(twitterId);
+        Query query = new Query(criteria);
+
+        return op.findOne(query, UserEntity.class);
+    }
+
+    @Override
+    public UserEntity getUserByTwitterUsername(String twitterUsername) {
+        Criteria criteria = Criteria.where("twitterUsername").is(twitterUsername);
+        Query query = new Query(criteria);
+
+        return op.findOne(query, UserEntity.class);
+    }
+
+    //  @Cacheable("users")
     public UserEntity getUserByCookieId(String cookie)
     {
         Criteria criteria = Criteria.where("cookieId").is(cookie);
@@ -111,6 +135,9 @@ public class UserService extends GenericService<UserEntity> implements IUserServ
         else if( userEntity.getFacebookId() != null ) {
             return saveOrUpdateFacebookUser(userEntity);
         }
+        else if( userEntity.getTwitterId() != null ) {
+            return saveOrUpdateTwitterUser(userEntity);
+        }
 
         return userEntity;
     }
@@ -125,18 +152,19 @@ public class UserService extends GenericService<UserEntity> implements IUserServ
                 u = this.getUserByEmail(userEntity.getEmail());
 
                 if( u == null )
-                    return justSave(userEntity);
+                    return saveOrUpdateByFoursquareTwitterUsername(userEntity);
                 else {
                     //found user with the same email. need to update only foursquare fields!
                     Update update = new Update()
                             .set("foursquareId", userEntity.getFoursquareId())
-                            .set("foursquareToken", userEntity.getFoursquareToken() );
+                            .set("foursquareToken", userEntity.getFoursquareToken() )
+                            .set("foursquareTwitterUsername", userEntity.getFoursquareTwitterUsername());
 
                     return findAndUpdate(userEntity, update, "email");
                 }
             }
             else
-                return justSave(userEntity); //did not found fs user and our email is null - cannot find this user in DB just save
+                return saveOrUpdateByFoursquareTwitterUsername(userEntity);
         }
         else {
             //found saved foursquare user. need to update
@@ -144,9 +172,33 @@ public class UserService extends GenericService<UserEntity> implements IUserServ
                     .set("firstName", userEntity.getFirstName())
                     .set("lastName", userEntity.getLastName())
                     .set("foursquareToken", userEntity.getFoursquareToken() )
+                    .set("foursquareTwitterUsername", userEntity.getFoursquareTwitterUsername())
                     .set("email", userEntity.getEmail());
 
             return findAndUpdate(userEntity, update, "foursquareId");
+        }
+    }
+
+    private UserEntity saveOrUpdateByFoursquareTwitterUsername(UserEntity userEntity) {
+        String foursquareTwitterUsername = userEntity.getFoursquareTwitterUsername();
+
+        if( foursquareTwitterUsername != null ) {
+            UserEntity userByTwitterUsername = this.getUserByTwitterUsername(foursquareTwitterUsername);
+
+            if( userByTwitterUsername == null )
+                return justSave(userEntity); //did not found fs user and our email is null - cannot find this user in DB just save
+            else {
+                Update update = new Update()
+                        .set("foursquareId", userEntity.getFoursquareId())
+                        .set("foursquareToken", userEntity.getFoursquareToken() )
+                        .set("foursquareTwitterUsername", userEntity.getFoursquareTwitterUsername())
+                        .set("email", userEntity.getEmail());
+
+                return findAndUpdate(userByTwitterUsername, update, "twitterUsername");
+            }
+        }
+        else {
+            return justSave(userEntity); //did not found fs user and our email is null - cannot find this user in DB just save
         }
     }
 
@@ -181,6 +233,64 @@ public class UserService extends GenericService<UserEntity> implements IUserServ
                     .set("email", userEntity.getEmail());
 
             return findAndUpdate(userEntity, update, "facebookId");
+        }
+    }
+
+    private UserEntity saveOrUpdateTwitterUser(UserEntity userEntity) {
+
+        UserEntity u = this.getUserByTwitterId(userEntity.getTwitterId());
+
+        if( u == null ) {
+            if( userEntity.getEmail() != null ) {
+                u = this.getUserByEmail(userEntity.getEmail());
+
+                if( u == null )
+                    return saveOrUpdateByTwitterUsername(userEntity);
+                else {
+                    //found user with the same email. need to update only twitter fields!
+                    Update update = new Update()
+                            .set("twitterId", userEntity.getTwitterId())
+                            .set("twitterToken", userEntity.getTwitterToken() )
+                            .set("twitterUsername", userEntity.getTwitterUsername() );
+
+                    return findAndUpdate(userEntity, update, "email");
+                }
+            }
+            else
+                return saveOrUpdateByTwitterUsername(userEntity);
+        }
+        else {
+            //found saved facebook user. need to update
+            Update update = new Update()
+                    .set("firstName", userEntity.getFirstName())
+                    .set("lastName", userEntity.getLastName())
+                    .set("twitterToken", userEntity.getTwitterToken() )
+                    .set("twitterUsername", userEntity.getTwitterUsername() )
+                    .set("email", userEntity.getEmail());
+
+            return findAndUpdate(userEntity, update, "twitterId");
+        }
+    }
+
+    private UserEntity saveOrUpdateByTwitterUsername(UserEntity userEntity) {
+        String twitterUsername = userEntity.getTwitterUsername();
+
+        if( twitterUsername != null ) {
+            UserEntity entity = this.getUserByFoursquareTwitterUsername(twitterUsername);
+
+            if( entity == null )
+                return justSave(userEntity);
+            else {
+                Update update = new Update()
+                        .set("twitterId", userEntity.getTwitterId())
+                        .set("twitterToken", userEntity.getTwitterToken() )
+                        .set("twitterUsername", userEntity.getTwitterUsername() );
+
+                return findAndUpdate(entity, update, "foursquareTwitterUsername");
+            }
+        }
+        else {
+            return justSave(userEntity);
         }
     }
 

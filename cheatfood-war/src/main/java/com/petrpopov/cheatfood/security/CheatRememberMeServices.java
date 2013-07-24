@@ -16,6 +16,7 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.foursquare.api.Foursquare;
+import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
@@ -223,6 +224,10 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
             else if( apiClass.equals(Foursquare.class)) {
                 token = entity.getFoursquareToken();
                 username = entity.getFoursquareId();
+            }
+            else if( apiClass.equals(Twitter.class)) {
+                token = entity.getTwitterToken();
+                username = entity.getTwitterToken();
             }
 
             if( apiClass != null ) {

@@ -20,7 +20,7 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
  */
 
 @Configuration
-public class SpringMongoConfig {
+public class MongoConfig {
 
     public @Bean
     MongoDbFactory mongoDbFactory() throws Exception {
@@ -45,7 +45,7 @@ public class SpringMongoConfig {
 
     private Logger log()
     {
-        return Logger.getLogger(SpringMongoConfig.class);
+        return Logger.getLogger(MongoConfig.class);
     }
 
     @Autowired

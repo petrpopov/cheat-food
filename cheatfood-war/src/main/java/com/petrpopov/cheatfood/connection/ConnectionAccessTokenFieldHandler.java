@@ -1,6 +1,6 @@
 package com.petrpopov.cheatfood.connection;
 
-import org.springframework.social.connect.support.OAuth2Connection;
+import org.springframework.social.connect.Connection;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -13,7 +13,7 @@ import java.lang.reflect.Field;
 @Component
 public class ConnectionAccessTokenFieldHandler {
 
-    public String getAccessTokenFromConnection(OAuth2Connection connection)
+    public String getAccessTokenFromConnection(Connection<?> connection)
     {
         try
         {

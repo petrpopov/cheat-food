@@ -17,9 +17,14 @@ public class UserEntity {
 
     private String foursquareId;
     private String foursquareToken;
+    private String foursquareTwitterUsername;
 
     private String facebookId;
     private String facebookToken;
+
+    private String twitterId;
+    private String twitterToken;
+    private String twitterUsername;
 
     private String firstName;
     private String lastName;
@@ -55,6 +60,14 @@ public class UserEntity {
         this.foursquareToken = foursquareToken;
     }
 
+    public String getFoursquareTwitterUsername() {
+        return foursquareTwitterUsername;
+    }
+
+    public void setFoursquareTwitterUsername(String foursquareTwitterUsername) {
+        this.foursquareTwitterUsername = foursquareTwitterUsername;
+    }
+
     public String getFacebookId() {
         return facebookId;
     }
@@ -69,6 +82,30 @@ public class UserEntity {
 
     public void setFacebookToken(String facebookToken) {
         this.facebookToken = facebookToken;
+    }
+
+    public String getTwitterId() {
+        return twitterId;
+    }
+
+    public void setTwitterId(String twitterId) {
+        this.twitterId = twitterId;
+    }
+
+    public String getTwitterToken() {
+        return twitterToken;
+    }
+
+    public void setTwitterToken(String twitterToken) {
+        this.twitterToken = twitterToken;
+    }
+
+    public String getTwitterUsername() {
+        return twitterUsername;
+    }
+
+    public void setTwitterUsername(String twitterUsername) {
+        this.twitterUsername = twitterUsername;
     }
 
     public String getFirstName() {
