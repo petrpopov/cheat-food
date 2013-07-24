@@ -545,6 +545,7 @@ $(document).ready(function(){
     }
 
     function createMapControls(auth) {
+        infoBox = createInfoBoxForMarkers();
         createContextMenuForMap(auth);
         createContextMenuForMarker(auth);
         createMarkerEditFormOnMap();
@@ -969,8 +970,6 @@ $(document).ready(function(){
     }
 
     function loadAndCreateMarkersForLocationsInBounds(type_id, location) {
-
-        infoBox = createInfoBoxForMarkers();
 
         var bounds = map.map.getBounds();
         prevBounds = curBounds;
