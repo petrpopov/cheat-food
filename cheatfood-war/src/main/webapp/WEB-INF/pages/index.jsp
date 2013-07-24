@@ -10,7 +10,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Cheat food</title>
+    <title>Cheat Food</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap -->
@@ -67,6 +67,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
+
+            <img src="<s:url value="/resources"/>/img/logo.png" width="35" class="pull-left"/>
 
             <!-- Be sure to leave the brand out there if you want it shown -->
             <a class="brand" href="<c:url value="/"/>">
