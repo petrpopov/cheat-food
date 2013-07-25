@@ -1,5 +1,7 @@
 package com.petrpopov.cheatfood.web.other;
 
+import com.petrpopov.cheatfood.model.ErrorType;
+
 /**
  * User: petrpopov
  * Date: 16.07.13

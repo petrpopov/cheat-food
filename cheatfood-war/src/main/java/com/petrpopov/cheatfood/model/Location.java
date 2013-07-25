@@ -4,6 +4,7 @@ import com.petrpopov.cheatfood.config.DateSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: petrpopov
@@ -53,6 +55,12 @@ public class Location implements Serializable {
 
     @DBRef
     private UserEntity creator;
+
+    @Valid
+    private List<Vote> votes;
+
+    @Transient
+    private Boolean alreadyVoted;
 
     public Location() {
     }
@@ -149,6 +157,22 @@ public class Location implements Serializable {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
+    }
+
+    public Boolean getAlreadyVoted() {
+        return alreadyVoted;
+    }
+
+    public void setAlreadyVoted(Boolean alreadyVoted) {
+        this.alreadyVoted = alreadyVoted;
     }
 
     @Override

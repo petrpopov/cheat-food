@@ -1,4 +1,4 @@
-package com.petrpopov.cheatfood.web.other;
+package com.petrpopov.cheatfood.model;
 
 /**
  * User: petrpopov
@@ -8,5 +8,6 @@ package com.petrpopov.cheatfood.web.other;
 public enum ErrorType {
     access_denied,
     unknown_location,
+    already_voted,
     other
 }

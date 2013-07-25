@@ -1,5 +1,6 @@
 package com.petrpopov.cheatfood.service.impl;
 
+import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.*;
 import com.petrpopov.cheatfood.service.ILocationService;
 import com.petrpopov.cheatfood.service.ITypeService;
@@ -113,6 +114,8 @@ public class LocationService extends GenericService<Location> implements ILocati
 
         location.setCreator(userEntity);
 
+        location.setVotes(this.getLocationVotes(location));
+
         logger.info("Saving location to database");
 
         return saveLocationObject(location);
@@ -133,6 +136,34 @@ public class LocationService extends GenericService<Location> implements ILocati
 
         long count = op.count(query, Location.class);
         return count;
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public void voteForLocation(Location location, Vote vote) throws CheatException {
+
+        List<Vote> votes = location.getVotes();
+        if( votes != null ) {
+            for (Vote vote1 : votes) {
+                if( vote1.getUserId().equals(vote.getUserId()))
+                    throw new CheatException(ErrorType.already_voted);
+            }
+        }
+        else {
+            votes = new ArrayList<Vote>();
+            location.setVotes(votes);
+        }
+
+        votes.add(vote);
+        saveLocationObject(location);
+    }
+
+    private List<Vote> getLocationVotes(Location location) {
+        Location location1 = this.findById(location.getId());
+        if( location1 == null )
+            return null;
+
+        return location1.getVotes();
     }
 
     private Location saveLocationObject(Location location) {

@@ -1,14 +1,11 @@
 package com.petrpopov.cheatfood.web.rest;
 
-import com.petrpopov.cheatfood.model.GeoJSONPointBounds;
-import com.petrpopov.cheatfood.model.GeoJSONPointBoundsDiff;
-import com.petrpopov.cheatfood.model.Location;
-import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.*;
 import com.petrpopov.cheatfood.service.CookieService;
 import com.petrpopov.cheatfood.service.ILocationService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
-import com.petrpopov.cheatfood.web.other.ErrorType;
+import com.petrpopov.cheatfood.web.other.LocationVoteService;
 import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -35,6 +32,9 @@ public class LocationWebService {
     private UserContextHandler userContextHandler;
 
     @Autowired
+    private LocationVoteService locationVoteService;
+
+    @Autowired
     private CookieService cookieService;
 
 
@@ -43,6 +43,7 @@ public class LocationWebService {
     public List<Location> getAllLocations() throws Exception {
 
         List<Location> list = locationService.findAll();
+        locationVoteService.setAlreadyVoted(list);
         return list;
     }
 
@@ -54,6 +55,7 @@ public class LocationWebService {
         GeoJSONPointBounds previous = diff.getPrevious();
 
         List<Location> list = locationService.findAllInDifference(current, previous, typeId);
+        locationVoteService.setAlreadyVoted(list);
         return list;
     }
 
@@ -104,6 +106,8 @@ public class LocationWebService {
             result.setErrorType(ErrorType.other);
             result.setMessage("Unknown error");
         }
+
+        locationVoteService.setAlreadyVoted(loc);
 
         if( loc != null )
             result.setResult(loc);

@@ -34,18 +34,6 @@ public class UserContextHandler {
                 return null;
 
             UserEntity entity = userService.getUserById(username);
-            /*if( isPasswordUser(authentication) ) {
-                entity = userService.getUserById(username);
-            }
-            else {
-                Class<?> apiClass = getUserSocialNetworkClass(authentication);
-                if( apiClass.equals(Foursquare.class) ) {
-                    entity = userService.getUserByFoursquareId(username);
-                }
-                else if( apiClass.equals(Facebook.class) ) {
-                    entity = userService.getUserByFacebookId(username);
-                }
-            }       */
 
             return entity;
         }

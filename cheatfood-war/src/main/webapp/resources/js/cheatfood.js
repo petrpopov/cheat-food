@@ -13,7 +13,9 @@ $(document).ready(function(){
 
     var errors = {
         access_denied: "access_denied",
-        unknown_location: "unknown_location"
+        unknown_location: "unknown_location",
+        already_voted: "already_voted",
+        other: "other"
     };
 
     var markersCount = 0;
@@ -97,6 +99,24 @@ $(document).ready(function(){
             type: 'success',
             closeWith: ['click','button'],
             timeout: 2000
+        });
+    }
+
+    function showNoteTopCenter(text, type, close) {
+
+        if( close ) {
+            if( close === true ) {
+                $.noty.closeAll();
+            }
+        }
+
+        var n = noty({
+            text: text,
+            layout: 'topCenter',
+            theme: 'defaultTheme',
+            type: type,
+            closeWith: ['click','button'],
+            timeout: 3000
         });
     }
 
@@ -545,12 +565,16 @@ $(document).ready(function(){
     }
 
     function createMapControls(auth) {
-        infoBox = createInfoBoxForMarkers();
+        createInfoBox(auth);
         createContextMenuForMap(auth);
         createContextMenuForMarker(auth);
         createMarkerEditFormOnMap();
         createLocateMeButton();
         createAddMarkerButton(auth);
+    }
+
+    function createInfoBox() {
+        infoBox = createInfoBoxForMarkers();
     }
 
     function createContextMenuForMap(auth) {
@@ -1112,16 +1136,23 @@ $(document).ready(function(){
 
     function setInfoBoxContentFromLocation(infoBoxObject) {
 
+        var location = infoBoxObject.location;
+
         if( authorized === false ) {
             $('#approveLocation').hide();
             $('#editDeleteMarkerGroup').hide();
         }
         else {
-            $('#approveLocation').show();
+            if( location.alreadyVoted === false ) {
+                $('#approveLocation').show();
+            }
+            else {
+                $('#approveLocation').hide();
+            }
+
             $('#editDeleteMarkerGroup').show();
         }
 
-        var location = infoBoxObject.location;
 
         $('#info_title').text(location.title);
         $('#info_type').text( getTypeValueByLanguage(location.type, DATE_LANGUAGE) );
@@ -1172,6 +1203,72 @@ $(document).ready(function(){
     function initInfoBoxButtonsBehavior(infoBoxObject) {
         initScrollInfoBoxBehavior();
         initToggleEditAndViewBehavior(infoBoxObject);
+        createVoteButtonsBehavior(infoBoxObject);
+    }
+
+    function createVoteButtonsBehavior(infoBoxObject) {
+        $('#approveButton').off('click');
+        $('#approveButton').click(function() {
+            voteForLocation(infoBoxObject, true, $('#approveButton') );
+        });
+
+        $('#notApproveButton').off('click');
+        $('#notApproveButton').click(function() {
+            voteForLocation(infoBoxObject, false, $('#notApproveButton') );
+        });
+    }
+
+    function voteForLocation(infoBoxObject, value, button) {
+
+        button.button('loading');
+
+        var id = infoBoxObject.location.id;
+
+        $.ajax({
+            type: "GET",
+            url: params.realPath + "/api/locationvote",
+            data: {
+                locationId: id,
+                value: value
+            },
+            success: function(data) {
+                console.log(data);
+
+                if( data.error == false ) {
+                    infoBoxObject.location.alreadyVoted = true;
+                    showNoteTopCenter("Спасибо!", "success", true);
+                    $('#approveLocation').hide();
+                }
+                else {
+                    if( data.errorType === errors.access_denied) {
+                        showNoteTopCenter("Извините, но у вас нет прав на это действие...", "warning", true);
+                        $('#approveLocation').hide();
+                    }
+                    else if( data.errorType === errors.already_voted ) {
+                        infoBoxObject.location.alreadyVoted = true;
+                        showNoteTopCenter("А вы уже голосовали за эту локацию. Давайте без вбросов,ок? =)", "warning", true);
+                        $('#approveLocation').hide();
+                    }
+                    else if( data.errorType === errors.unknown_location ) {
+                        infoBoxObject.location.alreadyVoted = true;
+                        showNoteTopCenter("Такой локации больше нет в базе. Обновите страничку!", "warning", true);
+                        $('#approveLocation').hide();
+                    }
+                    else {
+                        showNoteTopCenter("Какая-то странная ошибка на сервере..извините", "warning", true);
+                    }
+                }
+            },
+            complete: function() {
+                button.button('reset');
+            },
+            statusCode: {
+                400: function(data) {
+                    showNoteTopCenter("Какая-то ошибка на сервере, скорее всего у вас нет прав на это действие...", "warning", true);
+                    button.button('reset');
+                }
+            }
+        });
     }
 
     function initScrollInfoBoxBehavior() {
@@ -1846,7 +1943,9 @@ $(document).ready(function(){
                                             .append(
                                                 $('<div/>').addClass('btn-group pull-left')
                                                     .append(
-                                                        $('<button/>').addClass('btn btn-small btn-success')
+                                                        $('<button/>').attr("id", "approveButton")
+                                                            .addClass('btn btn-small btn-success')
+                                                            .attr('data-loading-text', 'Голосуем...')
                                                             .append(
                                                                 $('<i/>').addClass('icon-ok icon-white')
                                                             )
@@ -1859,7 +1958,9 @@ $(document).ready(function(){
                                             .append(
                                                 $('<div/>').addClass('btn-group pull-right')
                                                     .append(
-                                                        $('<button/>').addClass('btn btn-small btn-warning')
+                                                        $('<button/>').attr("id", "notApproveButton")
+                                                            .addClass('btn btn-small btn-warning')
+                                                            .attr('data-loading-text', 'Голосуем...')
                                                             .append(
                                                                 $('<i/>').addClass('icon-remove icon-white')
                                                             )
@@ -2228,7 +2329,8 @@ $(document).ready(function(){
                 house: "",
                 zipcode: "",
                 addressLine: ""
-            }
+            },
+            alreadyVoted: false
         };
     }
 
