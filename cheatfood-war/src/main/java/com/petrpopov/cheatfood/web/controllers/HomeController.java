@@ -31,9 +31,13 @@ public class HomeController {
     private ObjectMapper objectMapper;
 
     @RequestMapping({"/","/home", "/index", "/main"})
-    public String showHomePage()
-    {
+    public String showHomePage() {
         return "index";
+    }
+
+    @RequestMapping({"/manifest"})
+    public String showManifestPage() {
+        return "manifest";
     }
 
     @RequestMapping(value = "location/{locationid}")

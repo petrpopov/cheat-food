@@ -76,8 +76,8 @@
             </a>
 
             <ul class="nav">
-                <li class="dropdown">
-                <li><a href="#">Манифест</a></li>
+                <li><a href="<s:url value="/manifest"/>">Манифест</a></li>
+
                 <li><a href="#">Пользователям</a></li>
                 <li class="dropdown">
                     <a id="editMenu" href="#" class="dropdown-toggle" data-toggle="dropdown">

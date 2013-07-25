@@ -67,6 +67,14 @@ hr {
     min-height: 30px;
 }
 
+.textArticle {
+    font-size: 13pt;
+}
+
+.container100 {
+    height: 100%;
+}
+
 .facebookImage {
     background-image: url(images/facebook_login.png);
     width: 170px;
