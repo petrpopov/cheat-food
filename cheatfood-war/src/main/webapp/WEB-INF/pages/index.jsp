@@ -12,6 +12,7 @@
     <meta charset="utf-8">
     <title>Cheat Food</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/img/favicon.ico" />
 
     <!-- Bootstrap -->
     <link href="<s:url value="/resources" />/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css"/>
@@ -19,7 +20,7 @@
     <link href="<s:url value="/resources" />/css/style.css" rel="stylesheet" type="text/css"/>
     <link href="<s:url value="/resources" />/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
 
-
+    <!-- neccessary for every page scripts -->
     <script src="<s:url value="/resources"/>/js/jquery-1.10.1.min.js"></script>
     <script src="<s:url value="/resources"/>/js/jquery.cookie-1.3.1.js"></script>
     <script src="<s:url value="/resources"/>/js/bootstrap.min.js"></script>
@@ -27,14 +28,16 @@
     <script src="<s:url value="/resources"/>/js/jquery.validate-1.11.1.min.js"></script>
     <script src="<s:url value="/resources"/>/js/validation.messages_ru.js"></script>
 
-    <script src="<s:url value="/resources"/>/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="<s:url value="/resources"/>/js/jquery-ui.datepicker.ru.js"></script>
-
     <script src="<s:url value="/resources"/>/js/jquery.noty-2.1.0.js"></script>
     <script src="<s:url value="/resources"/>/js/jquery.noty.top-2.1.0.js"></script>
     <script src="<s:url value="/resources"/>/js/jquery.noty.topCenter-2.1.0.js"></script>
     <script src="<s:url value="/resources"/>/js/jquery.noty.topRight-2.1.0.js"></script>
     <script src="<s:url value="/resources"/>/js/jquery.noty.default-theme-2.1.0.js"></script>
+    <!-- end of neccessary for every page scripts -->
+
+    <!-- custom scripts -->
+    <script src="<s:url value="/resources"/>/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="<s:url value="/resources"/>/js/jquery-ui.datepicker.ru.js"></script>
 
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script>
     <script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
@@ -44,7 +47,11 @@
     <script type="text/javascript" src="<s:url value="/resources"/>/js/infobox-1.1.9.min.js"></script>
 
     <script src="<s:url value="/resources"/>/js/gmaps-0.4.4.js"></script>
-    <script src="<s:url value="/resources"/>/js/cheatfood.js"></script>
+    <!-- end of custom scripts -->
+
+    <!-- cheatfood part -->
+    <script src="<s:url value="/resources"/>/js/cheatfood-main.js"></script>
+    <!-- end of cheatfood part -->
 </head>
 
 <body>
@@ -53,9 +60,9 @@
     <%= request.getScheme()+"://"
             + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() %>
 </label>
+<label id="loginLabel" hidden="true" style="display: none;">${login}</label>
 
 <label id="locationLabel" hidden="true" style="display: none;">${location}</label>
-<label id="loginLabel" hidden="true" style="display: none;">${login}</label>
 
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -148,7 +155,7 @@
                     var h=d[g]('head')[0] || d[g]('body')[0];
                     h.appendChild(s);
                 })();</script>
-                <div class="pluso" data-options="medium,square,line,horizontal,counter,theme=03" data-services="facebook,twitter,vkontakte,google,odnoklassniki,livejournal,email,print" data-background="transparent" data-url="http://www.cheatfood.com" data-title="Cheat Food" data-description="Клевый сервис для поиска мест, где можно ну очень дешево поесть!"></div>
+                <div class="pluso" data-options="medium,square,line,horizontal,counter,theme=03" data-services="facebook,twitter,vkontakte,google,odnoklassniki,print" data-background="transparent" data-url="http://www.cheatfood.com" data-title="Cheat Food" data-description="Клевый сервис для поиска мест, где можно ну очень дешево поесть!"></div>
             </div>
 
         </div>
@@ -203,7 +210,8 @@
                 <p><input type="password" class="span3" name="passwd" placeholder="пароль"></p>
                 <p><label class="checkbox"><input type="checkbox" value="">
                     Запомнить меня</label></p>
-                <p><button type="submit" class="btn btn-primary">YARR!</button>
+                <p>
+                    <button type="submit" class="btn btn-primary">YARR!</button>
                     <a href="#">Забыли пароль?</a>
                 </p>
             </form>

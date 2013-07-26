@@ -2,14 +2,19 @@ $(document).ready(function(){
 
     "use strict";
 
-    var map;
-    var moscowCenter = {lat: 55.764283, lng: 37.606614};
-    var infoBox;
-
     var params = {
         realPath: null,
         types: []
     };
+    var authorized = false;
+    var COOKIE_NAME = "CHEATFOOD";
+    var EFFECTS_TIME = 250;
+
+
+    var map;
+    var moscowCenter = {lat: 55.764283, lng: 37.606614};
+    var infoBox;
+
 
     var errors = {
         access_denied: "access_denied",
@@ -27,9 +32,7 @@ $(document).ready(function(){
 
     var newMarker = false;
 
-    var authorized = false;
 
-    var COOKIE_NAME = "CHEATFOOD";
     var GRID_SIZE = 50;
     var MAX_ZOOM = 15;
     var MAX_ZOOM_FOR_MARKER = 18;
@@ -37,7 +40,6 @@ $(document).ready(function(){
     var ENTER_KEY = 13;
     var ZOOM_LEVEL = 10;
     var TYPE_IMAGE_WIDTH = 128;
-    var EFFECTS_TIME = 250;
     var DATE_FORMAT = 'yy-mm-dd';
     var DATE_FORMAT_DISPLAY = 'dd.mm.yy';
     var DATE_LANGUAGE = 'ru';
@@ -91,70 +93,9 @@ $(document).ready(function(){
         });
     }
 
-    function showNote(text) {
-        var n = noty({
-            text: text,
-            layout: 'topRight',
-            theme: 'defaultTheme',
-            type: 'success',
-            closeWith: ['click','button'],
-            timeout: 2000
-        });
-    }
-
-    function showNoteTopCenter(text, type, close) {
-
-        if( close ) {
-            if( close === true ) {
-                $.noty.closeAll();
-            }
-        }
-
-        var n = noty({
-            text: text,
-            layout: 'topCenter',
-            theme: 'defaultTheme',
-            type: type,
-            closeWith: ['click','button'],
-            timeout: 3000
-        });
-    }
-
-    function showNoLocationsNoteTopCenter() {
-
-        var text = "Кажется, в этом районе никто еще не отметил ни одной локации. Вы можете быть первым!";
-
-        if(authorized === false ) {
-            text += " Только" + '<a id="noteLoginLink" href="#"> войдите</a>' + ' в систему для этого';
-        }
-
-        var n = noty({
-            text: text,
-            layout: 'topCenter',
-            theme: 'defaultTheme',
-            type: 'information',
-            closeWith: ['click','button'],
-            timeout: 4000,
-            callback: {
-                onShow: function() {
-                    $('#noteLoginLink').off('click');
-                    $('#noteLoginLink').click(function() {
-                        $.noty.closeAll();
-                        $('#loginModal').modal('show');
-                    });
-                }
-            }
-        });
-    }
 
     function init(location) {
         checkCookies(location);
-    }
-
-    function buildInterface(auth, location) {
-        createRegistrationAuthActions();
-
-        createMap(auth, location);
     }
 
     function checkCookies(location) {
@@ -261,7 +202,7 @@ $(document).ready(function(){
 
         if( auth === false ) {
             showLoginMenuInfo(false, null);
-            return
+            return;
         }
 
         $.get(params.realPath+"/api/users/current", function(user) {
@@ -294,6 +235,14 @@ $(document).ready(function(){
                 showLoginMenuInfo(auth, name);
             }
         });
+    }
+
+    function buildInterface(auth, location) {
+        createRegistrationAuthActions();
+
+        if( $.fn.createMap !== undefined ) {
+            $().createMap(auth, location);
+        }
     }
 
     function showLoginMenuInfo(auth, name) {
@@ -342,7 +291,7 @@ $(document).ready(function(){
         $('#registrationAlert').hide();
 
         $('#createUserForm').ready(function() {
-            $('#emailCreate').focus()
+            $('#emailCreate').focus();
         });
 
         $('#createUserForm').off('submit');
@@ -366,9 +315,68 @@ $(document).ready(function(){
 
                 sessionStorage.setItem('showHello', false);
                 modifyInterface(false);
-                disableContextMenu();
+
+                if( $.fn.disableContextMenu !== undefined ) {
+                    $().disableContextMenu();
+                }
             }
-        })
+        });
+    }
+
+    function showNote(text) {
+        var n = noty({
+            text: text,
+            layout: 'topRight',
+            theme: 'defaultTheme',
+            type: 'success',
+            closeWith: ['click','button'],
+            timeout: 2000
+        });
+    }
+
+    function showNoteTopCenter(text, type, close) {
+
+        if( close ) {
+            if( close === true ) {
+                $.noty.closeAll();
+            }
+        }
+
+        var n = noty({
+            text: text,
+            layout: 'topCenter',
+            theme: 'defaultTheme',
+            type: type,
+            closeWith: ['click','button'],
+            timeout: 3000
+        });
+    }
+
+    function showNoLocationsNoteTopCenter() {
+
+        var text = "Кажется, в этом районе никто еще не отметил ни одной локации. Вы можете быть первым!";
+
+        if(authorized === false ) {
+            text += " Только" + '<a id="noteLoginLink" href="#"> войдите</a>' + ' в систему для этого';
+        }
+
+        var n = noty({
+            text: text,
+            layout: 'topCenter',
+            theme: 'defaultTheme',
+            type: 'information',
+            closeWith: ['click','button'],
+            timeout: 4000,
+            callback: {
+                onShow: function() {
+                    $('#noteLoginLink').off('click');
+                    $('#noteLoginLink').click(function() {
+                        $.noty.closeAll();
+                        $('#loginModal').modal('show');
+                    });
+                }
+            }
+        });
     }
 
     function clearCreateUserForm() {
@@ -453,7 +461,7 @@ $(document).ready(function(){
         });
     }
 
-    function createMap(auth, location) {
+    $.fn.createMap = function createMap(auth, location) {
         var mcOptions = {gridSize: GRID_SIZE, maxZoom: MAX_ZOOM};
         var styles = [
             {
@@ -508,7 +516,7 @@ $(document).ready(function(){
         loadDataAfterMapIsLoaded(location);
 
         createMapBoundsChangedBehavior();
-    }
+    };
 
     function createMapBoundsChangedBehavior() {
 
@@ -907,10 +915,10 @@ $(document).ready(function(){
         disableAddMarkerMenu();
     }
 
-    function disableContextMenu() {
+    $.fn.disableContextMenu = function disableContextMenu() {
         //disable context menu
         google.maps.event.clearListeners(map.map, 'rightclick');
-    }
+    };
 
     function setDefaultMouseBehavior() {
 
@@ -1056,7 +1064,7 @@ $(document).ready(function(){
             pane: "floatPane",
             infoBoxClearance: new google.maps.Size(50, 50),
             maxWidth: 800,
-            pixelOffset: new google.maps.Size(8, -190),
+            pixelOffset: new google.maps.Size(10, -170),
             enableEventPropagation: false
         };
         infoBox = new InfoBox(infoOptions);
