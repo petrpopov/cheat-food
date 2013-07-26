@@ -15,7 +15,6 @@ $(document).ready(function(){
     var moscowCenter = {lat: 55.764283, lng: 37.606614};
     var infoBox;
 
-
     var errors = {
         access_denied: "access_denied",
         unknown_location: "unknown_location",
@@ -31,7 +30,6 @@ $(document).ready(function(){
     var prevBounds;
 
     var newMarker = false;
-
 
     var GRID_SIZE = 50;
     var MAX_ZOOM = 15;
@@ -237,14 +235,6 @@ $(document).ready(function(){
         });
     }
 
-    function buildInterface(auth, location) {
-        createRegistrationAuthActions();
-
-        if( $.fn.createMap !== undefined ) {
-            $().createMap(auth, location);
-        }
-    }
-
     function showLoginMenuInfo(auth, name) {
         if( auth === true ) {
             $('#loginMenuLink').text(name);
@@ -261,6 +251,14 @@ $(document).ready(function(){
             $('#registrationLink').hide();
             $('#profileLink').hide();
             $('#logoutLink').hide();
+        }
+    }
+
+    function buildInterface(auth, location) {
+        createRegistrationAuthActions();
+
+        if( $.fn.createMap !== undefined ) {
+            $().createMap(auth, location);
         }
     }
 
@@ -301,6 +299,82 @@ $(document).ready(function(){
         });
     }
 
+    function checkCreateUserFormValidOrNot() {
+
+        $('#createUserSubmit').button('loading');
+        $('#registrationAlert').hide();
+
+        if( $("#createUserForm").valid() ) {
+            submitCreateUserForm();
+        }
+        else {
+            $('#createUserSubmit').button('reset');
+        }
+    }
+
+    function submitCreateUserForm() {
+
+        var formParams = {
+            email: $('#emailCreate').val().trim(),
+            password: $('#passwordCreate').val().trim()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: params.realPath + '/api/users/create',
+            data: JSON.stringify(formParams),
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+            },
+            complete: function(data) {
+                var result = JSON.parse(data.responseText);
+
+                if( result.error === false ) {
+                    $('#registrationModal').modal('hide');
+                }
+                else {
+                    $('#registrationAlert').show(EFFECTS_TIME);
+                }
+
+                checkCookies();
+                $('#createUserSubmit').button('reset');
+            },
+            statusCode: {
+                400: function(data) {
+
+                }
+            }
+        });
+    }
+
+    function initCreateUserFormValidation() {
+        $("#createUserForm").validate({
+            rules : {
+                email: {
+                    required: true,
+                    email: true,
+                    minlength: 3,
+                    maxlength: 50
+                },
+                password: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 50
+                }
+            },
+            success: function() {
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
+            }
+        });
+    }
+
     function logout() {
 
         $.ajax({
@@ -321,6 +395,12 @@ $(document).ready(function(){
                 }
             }
         });
+    }
+
+    function clearCreateUserForm() {
+        $('#emailCreate').val(null);
+        $('#passwordCreate').val(null);
+        $('#registrationAlert').hide();
     }
 
     function showNote(text) {
@@ -379,87 +459,13 @@ $(document).ready(function(){
         });
     }
 
-    function clearCreateUserForm() {
-        $('#emailCreate').val(null);
-        $('#passwordCreate').val(null);
-        $('#registrationAlert').hide();
-    }
 
-    function initCreateUserFormValidation() {
-        $("#createUserForm").validate({
-            rules : {
-                email: {
-                    required: true,
-                    email: true,
-                    minlength: 3,
-                    maxlength: 50
-                },
-                password: {
-                    required: true,
-                    minlength: 5,
-                    maxlength: 50
-                }
-            },
-            success: function() {
-            },
-            highlight: function (element, errorClass, validClass) {
-                $(element).closest('.control-group').addClass('error');
-            },
-            unhighlight: function (element, errorClass, validClass) {
-                $(element).closest('.control-group').removeClass('error');
-            }
-        });
-    }
 
-    function checkCreateUserFormValidOrNot() {
 
-        $('#createUserSubmit').button('loading');
-        $('#registrationAlert').hide();
 
-        if( $("#createUserForm").valid() ) {
-            submitCreateUserForm();
-        }
-        else {
-            $('#createUserSubmit').button('reset');
-        }
-    }
 
-    function submitCreateUserForm() {
 
-        var formParams = {
-            email: $('#emailCreate').val().trim(),
-            password: $('#passwordCreate').val().trim()
-        };
 
-        $.ajax({
-            type: "POST",
-            url: params.realPath + '/api/users/create',
-            data: JSON.stringify(formParams),
-            contentType: 'application/json',
-            mimeType: 'application/json',
-            dataType: 'json',
-            success: function(data) {
-            },
-            complete: function(data) {
-                var result = JSON.parse(data.responseText);
-
-                if( result.error === false ) {
-                    $('#registrationModal').modal('hide');
-                }
-                else {
-                    $('#registrationAlert').show(EFFECTS_TIME);
-                }
-
-                checkCookies();
-                $('#createUserSubmit').button('reset');
-            },
-            statusCode: {
-                400: function(data) {
-
-                }
-            }
-        });
-    }
 
     $.fn.createMap = function createMap(auth, location) {
         var mcOptions = {gridSize: GRID_SIZE, maxZoom: MAX_ZOOM};
@@ -2430,18 +2436,18 @@ $(document).ready(function(){
             this._dict[key] = value;
         }
         return this; // for chaining
-    }
+    };
     HashMap.prototype.get = function get(key){
         if(typeof key == "object"){
             return this._dict[key.hasOwnProperty._id];
         }
         return this._dict[key];
-    }
+    };
     HashMap.prototype.remove = function remove(key) {
         if(typeof key == "object"){
             delete this._dict[key.hasOwnProperty._id];
         }
         delete this._dict[key];
-    }
+    };
 });
 
