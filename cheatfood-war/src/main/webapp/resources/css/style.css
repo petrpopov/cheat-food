@@ -157,6 +157,19 @@ hr {
     padding: 25px;
 }
 
+#routeForm .control-group {
+    margin-bottom: 10px;
+}
+
+#routeFormDiv {
+    margin-top: 10px;
+}
+
+#routeFormDiv .close {
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
 .arrow_box {
     position: relative;
     background: #fafafa;

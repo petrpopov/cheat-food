@@ -12,8 +12,11 @@ $(document).ready(function(){
 
 
     var map;
+    var renderers = [];
+    var linesArray = [];
     var moscowCenter = {lat: 55.764283, lng: 37.606614};
     var infoBox;
+    var myPosition;
 
     var errors = {
         access_denied: "access_denied",
@@ -460,13 +463,6 @@ $(document).ready(function(){
     }
 
 
-
-
-
-
-
-
-
     $.fn.createMap = function createMap(auth, location) {
         var mcOptions = {gridSize: GRID_SIZE, maxZoom: MAX_ZOOM};
         var styles = [
@@ -585,6 +581,7 @@ $(document).ready(function(){
         createMarkerEditFormOnMap();
         createLocateMeButton();
         createAddMarkerButton(auth);
+        createRouteForm();
     }
 
     function createInfoBox() {
@@ -725,6 +722,244 @@ $(document).ready(function(){
 
     }
 
+    function createRouteForm() {
+        var div = $('<div/>').attr("id", "routeFormDiv").addClass("span7 infoWindow").attr("hidden", "true")
+            .append(
+                $('<button/>').attr("type", "button").addClass("close").text("x").attr("id", "closeRouteForm")
+            ).append(
+                $('<form/>').attr("id", "routeForm").addClass("form-horizontal span7")
+                    .append(
+                        $('<div/>').addClass("control-group")
+                            .append(
+                                $('<input/>').attr("type", "text").addClass("input-xxlarge").attr("name", "fromHere")
+                                    .attr("id", "fromHere").attr("placeholder", "откуда")
+                            )
+                    )
+                    .append(
+                        $('<div/>').addClass("control-group")
+                            .append(
+                                $('<input/>').attr("type", "text").addClass("input-xxlarge").attr("name", "toHere")
+                                    .attr("id", "toHere").attr("placeholder", "куда")
+                            )
+                    )
+                    .append(
+                        $('<div/>').addClass("control-group").attr("hidden", "true")
+                            .append(
+                                $('<input>').attr("id", "fromHereLatLng")
+                            )
+                    )
+                    .append(
+                        $('<div/>').addClass("control-group").attr("hidden", "true")
+                            .append(
+                                $('<input>').attr("id", "toHereLatLng")
+                            )
+                    )
+                    .append(
+                        $('<div/>').addClass("control-group")
+                            .append(
+                                $('<button/>').attr("type", "submit").addClass("btn btn-primary").text("Маршрут")
+                                    .attr("id", "submitRouteForm").attr('data-loading-text', 'Строим маршрут...')
+                            )
+                            .append(
+                                $('<button/>').attr("type", "button").addClass("btn").text("Отмена").attr("id", "cancelRouteForm")
+                            )
+                    )
+            );
+
+        map.map.controls[google.maps.ControlPosition.TOP_LEFT].push( div.get(0) );
+
+        google.maps.event.addListener(map.map, 'idle', function(event) {
+
+            initRouteFormValidation();
+            initRouteFormButtonsBehavior();
+            initSubmitRouteFormBehavior();
+        });
+
+    }
+
+    function initRouteFormValidation() {
+        $("#routeForm").validate({
+            rules : {
+                fromHere: {
+                    required: true
+                },
+                toHere: {
+                    required: true
+                }
+            },
+            success: function() {
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
+            }
+        });
+    }
+
+    function initRouteFormButtonsBehavior() {
+        $('#closeRouteForm').off('click');
+        $('#closeRouteForm').click(function() {
+            $('#routeFormDiv').hide(EFFECTS_TIME);
+            clearRouteForm();
+            clearMapRoutes();
+        });
+
+        $('#cancelRouteForm').off('click');
+        $('#cancelRouteForm').click(function() {
+            $('#routeFormDiv').hide(EFFECTS_TIME);
+            clearRouteForm();
+            clearMapRoutes();
+        });
+    }
+
+    function initSubmitRouteFormBehavior() {
+        $('#routeForm').off('submit');
+        $('#routeForm').submit(function(){
+            submitRouteForm();
+            return false;
+        });
+    }
+
+    function submitRouteForm() {
+        checkRouteFormValidOrNot();
+    }
+
+    function checkRouteFormValidOrNot() {
+        $('#submitRouteForm').button('loading');
+
+        if( $("#routeForm").valid() ) {
+            submitRouteFormCreateRotues();
+        }
+        else {
+            $('#submitRouteForm').button('reset');
+        }
+    }
+
+    function submitRouteFormCreateRotues() {
+
+        clearMapRoutes();
+
+        var renderer = getRouteRenderer();
+        var directionsService = new google.maps.DirectionsService();
+
+        var from = $('#fromHereLatLng').val();
+        var fromLatLng = sessionStorage.getItem('fromHerePos');
+        if( fromLatLng ) {
+            fromLatLng = JSON.parse(fromLatLng);
+            fromLatLng = new google.maps.LatLng(fromLatLng.lat, fromLatLng.lng);
+        }
+
+        var to = $('#toHereLatLng').val();
+        var toLatLng = sessionStorage.getItem('toHerePos', null);
+        if( toLatLng ) {
+            toLatLng = JSON.parse(toLatLng);
+            toLatLng = new google.maps.LatLng(toLatLng.lat, toLatLng.lng);
+        }
+
+        if( !stringIsNotEmpty(from) ) {
+            from = $('#fromHere').val();
+            fromLatLng = undefined;
+        }
+
+        if( !stringIsNotEmpty(to) ) {
+            to = $('#toHere').val();
+            toLatLng = undefined;
+        }
+
+        var request = {
+            origin:from,
+            destination:to,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+
+        directionsService.route(request, function(result, status) {
+            if (status == "OK") {
+                if( infoBox ) {
+                    infoBox.hide();
+                }
+                renderer.setDirections(result);
+                renderLinesForStartEndOfRoute(result, fromLatLng, toLatLng);
+            }
+            else if( status == "NOT_FOUND") {
+                showNoteTopCenter("Извините, ничего не найдено по вашему запросу", "warning", true);
+            }
+            else if(status == "ZERO_RESULTS") {
+                showNoteTopCenter("Извините, маршрут не удалось построить", "warning", true);
+            }
+            else {
+                showNoteTopCenter("Извините, произошла ошибка", "warning", true);
+            }
+
+            $('#submitRouteForm').button('reset');
+        });
+    }
+
+    function renderLinesForStartEndOfRoute(result, from, to) {
+
+        var start_location = result.routes[0].legs[0].start_location;
+        var end_location = result.routes[0].legs[0].end_location;
+
+        if( from ) {
+            if( from !== start_location ) {
+                renderLine(from, start_location);
+            }
+        }
+
+        if( to ) {
+            if( to !== end_location ) {
+                renderLine(to, end_location);
+            }
+        }
+    }
+
+    function getRouteLineOptions() {
+        return {
+            strokeColor: '#1918FA',
+            strokeOpacity: 0.8,
+            strokeWeight: 4
+        };
+    }
+
+    function getRouteRenderer() {
+
+        var rendererOptions = {
+            suppressMarkers:true,
+            polylineOptions: getRouteLineOptions(),
+            draggable: false,
+            suppressInfoWindows: true
+        };
+
+        var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+        directionsDisplay.setMap(map.map);
+        renderers.push(directionsDisplay);
+
+        return directionsDisplay;
+    }
+
+    function renderLine(start, end) {
+
+        var line = new google.maps.Polyline({
+            map: map.map,
+            editable: false,
+            draggable: false,
+            path: [start, end],
+            options: getRouteLineOptions()
+        });
+        linesArray.push(line);
+    }
+
+    function clearMapRoutes() {
+        $.each(renderers, function(n, rend) {
+            rend.setMap(null);
+        });
+
+        $.each(linesArray, function(n, line) {
+            line.setMap(null);
+        });
+    }
+
     function setDefaultMapClickBehavior() {
         google.maps.event.addListener(map.map, 'click', function(event) {
             map.hideContextMenu();
@@ -741,8 +976,10 @@ $(document).ready(function(){
 
         GMaps.geolocate({
             success: function(position) {
+                myPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
                 if( !location ) {
-                    map.setCenter(position.coords.latitude, position.coords.longitude);
+                    map.setCenter(myPosition.lat(), myPosition.lng());
                 }
 
                 enableLocateMeButton();
@@ -1217,10 +1454,112 @@ $(document).ready(function(){
     function initInfoBoxButtonsBehavior(infoBoxObject) {
         initScrollInfoBoxBehavior();
         initToggleEditAndViewBehavior(infoBoxObject);
-        createVoteButtonsBehavior(infoBoxObject);
+        initVoteButtonsBehavior(infoBoxObject);
+        initRouteButtonsBehavior(infoBoxObject);
     }
 
-    function createVoteButtonsBehavior(infoBoxObject) {
+    function initRouteButtonsBehavior(infoBoxObject) {
+        $('#routeToHere').off('click');
+        $('#routeToHere').click(function() {
+            getRouteAddresses(infoBoxObject, true);
+        });
+
+        $('#routeFromHere').off('click');
+        $('#routeFromHere').click(function() {
+            getRouteAddresses(infoBoxObject, false);
+        });
+    }
+
+    function getRouteAddresses(infoBoxObject, to) {
+
+        var routeAddress = {};
+        routeAddress.locationPosition = getLatLngFromGeoLocation(infoBoxObject.location.geoLocation);
+        routeAddress.locationAddress = infoBoxObject.location.address.addressLine;
+
+        if( myPosition ) {
+            routeAddress.myPosition = myPosition;
+            geoCodeLatLngToAddress(myPosition.lat(), myPosition.lng(), function(address) {
+                routeAddress.myAddress = address.addressLine;
+                showRouteFormAndBuildRoute(routeAddress, to);
+            });
+        }
+        else {
+            showRouteFormAndBuildRoute(routeAddress, to);
+        }
+    }
+
+    function clearRouteForm() {
+        $('#fromHere').val(null);
+        $('#toHere').val(null);
+        $('#fromHereLatLng').val(null);
+        $('#toHereLatLng').val(null);
+
+        sessionStorage.removeItem('fromHerePos');
+        sessionStorage.removeItem('toHerePos');
+    }
+
+    function showRouteFormAndBuildRoute(routeAddress, to) {
+
+        clearRouteForm();
+        $('#routeFormDiv').show(EFFECTS_TIME);
+
+        var myInput;
+        var myHideInput;
+        var markerInput;
+        var markerHideInput;
+
+        if( to === true ) {
+            myInput = $('#fromHere');
+            myHideInput = $('#fromHereLatLng');
+            markerInput = $('#toHere');
+            markerHideInput = $('#toHereLatLng');
+
+            sessionStorage.setItem('toHerePos', JSON.stringify( {
+                lat:  routeAddress.locationPosition.lat(),
+                lng:  routeAddress.locationPosition.lng()
+            }));
+            if( routeAddress.myPosition ) {
+                sessionStorage.setItem('fromHerePos', JSON.stringify( {
+                    lat:  routeAddress.myPosition.lat(),
+                    lng:  routeAddress.myPosition.lng()
+                }));
+            }
+        }
+        else if( to === false ) {
+            myInput = $('#toHere');
+            myHideInput = $('#toHereLatLng');
+            markerInput = $('#fromHere');
+            markerHideInput = $('#fromHereLatLng');
+
+            sessionStorage.setItem('fromHerePos', JSON.stringify( {
+                lat:  routeAddress.locationPosition.lat(),
+                lng:  routeAddress.locationPosition.lng()
+            }));
+            if( routeAddress.myPosition ) {
+                sessionStorage.setItem('toHerePos', JSON.stringify( {
+                    lat:  routeAddress.myPosition.lat(),
+                    lng:  routeAddress.myPosition.lng()
+                }));
+            }
+        }
+
+        markerInput.val(routeAddress.locationAddress);
+        markerHideInput.val(routeAddress.locationPosition);
+
+        if( routeAddress.myPosition ) {
+            myInput.val(routeAddress.myAddress);
+            myHideInput.val(routeAddress.myPosition);
+        }
+        else {
+            myInput.val(null);
+            myHideInput.val(null);
+            myInput.focus();
+        }
+
+        $('#submitRouteForm').click();
+    }
+
+    function initVoteButtonsBehavior(infoBoxObject) {
         $('#approveButton').off('click');
         $('#approveButton').click(function() {
             voteForLocation(infoBoxObject, true, $('#approveButton') );
@@ -1576,7 +1915,7 @@ $(document).ready(function(){
             statusCode: {
                 400: function(data) {
                     $('#editFormAlert').show(EFFECTS_TIME);
-                    $('#editFormAlertBeginText').text("Не получилось.")
+                    $('#editFormAlertBeginText').text("Не получилось.");
                     $('#editFormAlertText').text("Извините, произошла какая-то ошибка. Скорее всего у вас нет прав на это действие");
                     $('#submitEdit').button('reset');
                 }
@@ -1588,10 +1927,10 @@ $(document).ready(function(){
 
         var latLng = getLatLngFromGeoLocation(infoBoxObject.location.geoLocation);
 
-        geoCodeLatLngToAddress(latLng.lat(), latLng.lng());
+        geoCodeLatLngToAddress(latLng.lat(), latLng.lng(), fillEditFormWithAddress);
     }
 
-    function geoCodeLatLngToAddress(latitude, longitude) {
+    function geoCodeLatLngToAddress(latitude, longitude, callback) {
         var myGeocoder = ymaps.geocode(latitude + ", " + longitude);
         myGeocoder.then(
             function (res) {
@@ -1650,7 +1989,7 @@ $(document).ready(function(){
                     }
                 }
 
-                fillEditFormWithAddress(address);
+                callback(address);
             },
             function (err) {
                 // обработка ошибки
@@ -1911,9 +2250,11 @@ $(document).ready(function(){
                                         $('<div/>').addClass('btn-group')
                                             .append(
                                                 $('<button/>').addClass('btn btn-small').text('Маршрут сюда')
+                                                    .attr("id", "routeToHere")
                                             )
                                             .append(
                                                 $('<button/>').addClass('btn btn-small').text('Маршрут отсюда')
+                                                    .attr("id", "routeFromHere")
                                             )
 
                                     )
