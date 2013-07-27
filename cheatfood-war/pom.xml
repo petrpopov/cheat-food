@@ -229,7 +229,7 @@
     </dependencies>
 
     <build>
-        <finalName>cheatfood</finalName>
+        <finalName>cheatfood-${version}</finalName>
 
         <plugins>
             <plugin>
