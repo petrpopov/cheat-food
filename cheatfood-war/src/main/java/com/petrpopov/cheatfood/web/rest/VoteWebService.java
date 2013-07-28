@@ -6,8 +6,8 @@ import com.petrpopov.cheatfood.model.Location;
 import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.model.Vote;
 import com.petrpopov.cheatfood.service.CookieService;
-import com.petrpopov.cheatfood.service.ILocationService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
+import com.petrpopov.cheatfood.service.impl.LocationService;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
 import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +22,19 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/api/votes")
 public class VoteWebService {
 
     @Autowired
     private CookieService cookieService;
 
     @Autowired
-    private ILocationService locationService;
+    private LocationService locationService;
 
     @Autowired
     private UserContextHandler userContextHandler;
 
-    @RequestMapping(value="locationvote", method = RequestMethod.GET)
+    @RequestMapping(value="add", method = RequestMethod.GET)
     @ResponseBody
     public MessageResult voteForLocation(@CookieValue(required = true, value = "CHEATFOOD") String cookie,
                                          @RequestParam String locationId, @RequestParam Boolean value) {

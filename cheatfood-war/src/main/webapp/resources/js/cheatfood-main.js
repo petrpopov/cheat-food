@@ -324,7 +324,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "POST",
-            url: params.realPath + '/api/users/create',
+            url: params.realPath + '/api/users/add',
             data: JSON.stringify(formParams),
             contentType: 'application/json',
             mimeType: 'application/json',
@@ -549,7 +549,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "GET",
-            url: params.realPath+"/api/locations/countinbounds",
+            url: params.realPath+"/api/locations/count",
             data: {
                 ne_latitude: ne.lat(),
                 ne_longitude: ne.lng(),
@@ -1282,7 +1282,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "GET",
-            url: params.realPath+"/api/locationsinbounds",
+            url: params.realPath+"/api/locations/inbounds",
             data: data,
             success: function(result) {
                 renderMarkersForLocations(result, infoBox, location);
@@ -1598,7 +1598,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "GET",
-            url: params.realPath + "/api/locationvote",
+            url: params.realPath + "/api/votes/add",
             data: {
                 locationId: id,
                 value: value
@@ -1708,7 +1708,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "DELETE",
-            url: params.realPath+'/api/location/'+infoBoxObject.location.id,
+            url: params.realPath+'/api/locations/'+infoBoxObject.location.id+'/delete',
             complete: function(data) {
 
                 if( data.responseJSON ) {
@@ -1889,7 +1889,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "POST",
-            url: params.realPath+'/api/location',
+            url: params.realPath+'/api/locations/add',
             data: param = param,
             contentType: 'application/json',
             mimeType: 'application/json',

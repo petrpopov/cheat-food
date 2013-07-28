@@ -1,7 +1,7 @@
 package com.petrpopov.cheatfood.security;
 
 import com.petrpopov.cheatfood.model.UserEntity;
-import com.petrpopov.cheatfood.service.IUserService;
+import com.petrpopov.cheatfood.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class CheatSaltSource implements SaltSource {
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Override
     public Object getSalt(UserDetails user) {

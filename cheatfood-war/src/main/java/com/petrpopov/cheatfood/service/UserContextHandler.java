@@ -1,6 +1,7 @@
 package com.petrpopov.cheatfood.service;
 
 import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class UserContextHandler {
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     public UserEntity currentContextUser() {
 

@@ -1,7 +1,7 @@
 package com.petrpopov.cheatfood.connection;
 
 import com.petrpopov.cheatfood.model.UserEntity;
-import com.petrpopov.cheatfood.service.IUserService;
+import com.petrpopov.cheatfood.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
@@ -27,7 +27,7 @@ public class MongoAccountConnectionSignUp implements ConnectionSignUp {
     private ConnectionAccessTokenFieldHandler connectionAccessTokenFieldHandler;
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Autowired
     private ProviderIdClassStorage providerIdClassStorage;

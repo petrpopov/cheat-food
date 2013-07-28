@@ -5,8 +5,8 @@ import com.petrpopov.cheatfood.model.UserCreate;
 import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.security.CheatRememberMeServices;
 import com.petrpopov.cheatfood.security.LoginManager;
-import com.petrpopov.cheatfood.service.IUserService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
+import com.petrpopov.cheatfood.service.impl.UserService;
 import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,11 +27,11 @@ import javax.validation.Valid;
  */
 
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/api/users/")
 public class UserWebService {
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Autowired
     private UserContextHandler userContextHandler;
@@ -42,7 +42,7 @@ public class UserWebService {
     @Autowired
     private CheatRememberMeServices rememberMeServices;
 
-    @RequestMapping(value = "users/create", method = RequestMethod.POST, headers = "Accept=application/json")
+    @RequestMapping(value = "add", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody
     public MessageResult processSubmit(@Valid @RequestBody UserCreate user, HttpServletRequest request, HttpServletResponse response) {
 
@@ -64,7 +64,7 @@ public class UserWebService {
         return res;
     }
 
-    @RequestMapping(value = "users/current", method = RequestMethod.GET)
+    @RequestMapping(value = "current", method = RequestMethod.GET)
     @ResponseBody
     public UserEntity getCurrentUser() {
 

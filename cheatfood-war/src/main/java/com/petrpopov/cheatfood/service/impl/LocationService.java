@@ -2,8 +2,6 @@ package com.petrpopov.cheatfood.service.impl;
 
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.*;
-import com.petrpopov.cheatfood.service.ILocationService;
-import com.petrpopov.cheatfood.service.ITypeService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +25,10 @@ import java.util.List;
  */
 
 @Component
-public class LocationService extends GenericService<Location> implements ILocationService {
+public class LocationService extends GenericService<Location>{
 
     @Autowired
-    private ITypeService typeService;
+    private TypeService typeService;
 
     private Logger logger = Logger.getLogger(LocationService.class);
 
@@ -45,7 +43,6 @@ public class LocationService extends GenericService<Location> implements ILocati
         indexOperations.ensureIndex(index);
     }
 
-    @Override
     public List<Location> findAllInBounds(@Valid GeoPointBounds bounds) {
 
         Box box = this.getBoxFromBounds(bounds);
@@ -54,7 +51,6 @@ public class LocationService extends GenericService<Location> implements ILocati
         return op.find(query, Location.class);
     }
 
-    @Override
     public List<Location> findAllTypeInBounds(@Valid GeoPointBounds bounds, String typeId) {
 
         Box box = this.getBoxFromBounds(bounds);
@@ -68,7 +64,6 @@ public class LocationService extends GenericService<Location> implements ILocati
         return locations;
     }
 
-    @Override
     public List<Location> findAllInDifference(@Valid GeoPointBounds inBounds, GeoPointBounds notInBounds, String typeId) {
 
         if( notInBounds == null ) {
@@ -103,7 +98,6 @@ public class LocationService extends GenericService<Location> implements ILocati
         return res;
     }
 
-    @Override
     @PreAuthorize("hasRole('ROLE_USER')")
     public Location createOrSave(@Valid Location location, UserEntity userEntity) {
 
@@ -122,14 +116,12 @@ public class LocationService extends GenericService<Location> implements ILocati
         return saveLocationObject(location);
     }
 
-    @Override
     @PreAuthorize("hasRole('ROLE_USER') and #location.creator.id==principal.username")
     public void deleteLocation(Location location) {
         logger.info("Deleting location from database by object");
         op.remove(location);
     }
 
-    @Override
     public long getLocationsCountInBound(@Valid GeoPointBounds bounds) {
 
         Box box = this.getBoxFromBounds(bounds);
@@ -139,7 +131,6 @@ public class LocationService extends GenericService<Location> implements ILocati
         return count;
     }
 
-    @Override
     @PreAuthorize("hasRole('ROLE_USER')")
     public void voteForLocation(Location location, Vote vote) throws CheatException {
 

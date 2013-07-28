@@ -2,8 +2,8 @@ package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.model.*;
 import com.petrpopov.cheatfood.service.CookieService;
-import com.petrpopov.cheatfood.service.ILocationService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
+import com.petrpopov.cheatfood.service.impl.LocationService;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
 import com.petrpopov.cheatfood.web.other.LocationVoteService;
 import com.petrpopov.cheatfood.web.other.MessageResult;
@@ -22,11 +22,11 @@ import java.util.List;
  */
 
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/api/locations")
 public class LocationWebService {
 
     @Autowired
-    private ILocationService locationService;
+    private LocationService locationService;
 
     @Autowired
     private UserContextHandler userContextHandler;
@@ -38,7 +38,7 @@ public class LocationWebService {
     private CookieService cookieService;
 
 
-    @RequestMapping(value="locations", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<Location> getAllLocations() throws Exception {
 
@@ -47,7 +47,7 @@ public class LocationWebService {
         return list;
     }
 
-    @RequestMapping(value = "locationsinbounds", method = RequestMethod.GET)
+    @RequestMapping(value = "inbounds", method = RequestMethod.GET)
     @ResponseBody
     public List<Location> getAllLocationsInDifferenceBetweenBounds(@Valid GeoJSONPointBoundsDiff diff, String typeId) {
 
@@ -59,7 +59,7 @@ public class LocationWebService {
         return list;
     }
 
-    @RequestMapping(value = "locations/countinbounds", method = RequestMethod.GET)
+    @RequestMapping(value = "count", method = RequestMethod.GET)
     @ResponseBody
     public MessageResult getLocationsCountInBound(@Valid GeoPointBounds bounds) {
 
@@ -72,7 +72,7 @@ public class LocationWebService {
     }
 
 
-    @RequestMapping(value="location", method = RequestMethod.POST, headers = "Accept=application/json")
+    @RequestMapping(value="add", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody
     public MessageResult createLocation(@Valid @RequestBody Location location,
                                         @CookieValue(required = true, value = "CHEATFOOD") String cookie)
@@ -115,7 +115,7 @@ public class LocationWebService {
         return result;
     }
 
-    @RequestMapping(value = "location/{locationid}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "{locationid}/delete", method = RequestMethod.DELETE)
     @ResponseBody
     public MessageResult deleteLocation(@CookieValue(required = true, value = "CHEATFOOD") String cookie, @PathVariable String locationid) {
 

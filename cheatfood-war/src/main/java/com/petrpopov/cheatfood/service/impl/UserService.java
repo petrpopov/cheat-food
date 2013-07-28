@@ -4,7 +4,6 @@ import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.UserCreate;
 import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
-import com.petrpopov.cheatfood.service.IUserService;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ import java.util.UUID;
  * Time: 13:33
  */
 @Component
-public class UserService extends GenericService<UserEntity> implements IUserService {
+public class UserService extends GenericService<UserEntity> {
 
     @Autowired
     @Qualifier("mongoTemplate")
@@ -85,7 +84,6 @@ public class UserService extends GenericService<UserEntity> implements IUserServ
         return op.findOne(query, UserEntity.class);
     }
 
-    @Override
     public UserEntity getUserByFoursquareTwitterUsername(String foursquareTwitterUsername) {
         Criteria criteria = Criteria.where("foursquareTwitterUsername").is(foursquareTwitterUsername);
         Query query = new Query(criteria);
@@ -101,7 +99,6 @@ public class UserService extends GenericService<UserEntity> implements IUserServ
         return op.findOne(query, UserEntity.class);
     }
 
-    @Override
     public UserEntity getUserByTwitterId(String twitterId) {
         Criteria criteria = Criteria.where("twitterId").is(twitterId);
         Query query = new Query(criteria);
@@ -109,7 +106,6 @@ public class UserService extends GenericService<UserEntity> implements IUserServ
         return op.findOne(query, UserEntity.class);
     }
 
-    @Override
     public UserEntity getUserByTwitterUsername(String twitterUsername) {
         Criteria criteria = Criteria.where("twitterUsername").is(twitterUsername);
         Query query = new Query(criteria);

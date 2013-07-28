@@ -3,7 +3,6 @@ package com.petrpopov.cheatfood.service.impl;
 import com.mongodb.DBCollection;
 import com.petrpopov.cheatfood.model.Text;
 import com.petrpopov.cheatfood.model.Type;
-import com.petrpopov.cheatfood.service.ITypeService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 
 @Component
-public class TypeService extends GenericService<Type> implements ITypeService {
+public class TypeService extends GenericService<Type> {
 
     private String lang = "ru";
     private List<Type> types1 = new ArrayList<Type>();

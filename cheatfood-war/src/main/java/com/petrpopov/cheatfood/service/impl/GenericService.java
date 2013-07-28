@@ -1,6 +1,5 @@
 package com.petrpopov.cheatfood.service.impl;
 
-import com.petrpopov.cheatfood.service.IGenericService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +15,7 @@ import java.util.List;
  */
 
 @Component
-public class GenericService<T> implements IGenericService<T> {
+public class GenericService<T> {
 
     @Autowired
     @Qualifier("mongoTemplate")
@@ -35,13 +34,11 @@ public class GenericService<T> implements IGenericService<T> {
         logger = Logger.getLogger(domainClass);
     }
 
-    @Override
     public List findAll() {
         logger.info("Returning all entities " + domainClass.getSimpleName() + " from database");
         return op.findAll(domainClass);
     }
 
-    @Override
     public T findById(String id) {
         logger.info("Returning entity " + domainClass.getSimpleName() + " from database by ID");
         return op.findById(id, domainClass);
