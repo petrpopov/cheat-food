@@ -1852,8 +1852,8 @@ $(document).ready(function(){
             addressDescription: addressDescription,
             actualDate: actualDate,
             geoLocation: {
-                type: "Point",
-                coordinates: [longitude, latitude]
+                lng: longitude,
+                lat: latitude
             },
             address: {
                 country: country,
@@ -2096,10 +2096,8 @@ $(document).ready(function(){
         }
 
         //hidden fields
-        $('#latitude').val( location.geoLocation.coordinates[1] );
-        $('#longitude').val( location.geoLocation.coordinates[0] );
-        //$('#latitude').val( location.geoLocation.latitude );
-        //$('#longitude').val( location.geoLocation.longitude );
+        $('#latitude').val( location.geoLocation.lat );
+        $('#longitude').val( location.geoLocation.lng );
 
         //unnecessary fields
         if( location.address ) {
@@ -2111,6 +2109,8 @@ $(document).ready(function(){
             $('#zipcode').val( location.address.zipcode );
             $('#addressLine').val( location.address.addressLine );
         }
+
+        $('#title').focus();
     }
 
     function clearEditForm() {
@@ -2646,13 +2646,13 @@ $(document).ready(function(){
 
     ///  help functions
     function getLatLngFromGeoLocation(geoLocation) {
-        return new google.maps.LatLng( geoLocation.coordinates[1], geoLocation.coordinates[0] );
+        return new google.maps.LatLng( geoLocation.lat, geoLocation.lng );
     }
 
     function getGeoLocationFromLatLng(latLng) {
         return {
-            type: "Point",
-            coordinates: [latLng.lng(), latLng.lat()]
+            lng: latLng.lng(),
+            lat: latLng.lat()
         };
     }
 
@@ -2673,8 +2673,8 @@ $(document).ready(function(){
             addressDescription: "",
             actualDate: "",
             geoLocation: {
-                type: "Point",
-                coordinates: [0.0, 0.0]
+                lng: 0.0,
+                lat: 0.0
             },
             address: {
                 country: "",

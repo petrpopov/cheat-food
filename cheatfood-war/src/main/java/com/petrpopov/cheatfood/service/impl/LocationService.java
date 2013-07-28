@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.IndexOperations;
 import org.springframework.data.mongodb.core.geo.Box;
+import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,13 +40,13 @@ public class LocationService extends GenericService<Location> implements ILocati
 
     @PostConstruct
     public void init() {
-        Geospatial2dsphereIndex index = new Geospatial2dsphereIndex("geoLocation");
+        GeospatialIndex index = new GeospatialIndex("geoLocation");
         IndexOperations indexOperations = op.indexOps(Location.class);
         indexOperations.ensureIndex(index);
     }
 
     @Override
-    public List<Location> findAllInBounds(@Valid GeoJSONPointBounds bounds) {
+    public List<Location> findAllInBounds(@Valid GeoPointBounds bounds) {
 
         Box box = this.getBoxFromBounds(bounds);
         Query query = new Query(Criteria.where("geoLocation").within(box));
@@ -54,7 +55,7 @@ public class LocationService extends GenericService<Location> implements ILocati
     }
 
     @Override
-    public List<Location> findAllTypeInBounds(@Valid GeoJSONPointBounds bounds, String typeId) {
+    public List<Location> findAllTypeInBounds(@Valid GeoPointBounds bounds, String typeId) {
 
         Box box = this.getBoxFromBounds(bounds);
         Query query = new Query();
@@ -68,7 +69,7 @@ public class LocationService extends GenericService<Location> implements ILocati
     }
 
     @Override
-    public List<Location> findAllInDifference(@Valid GeoJSONPointBounds inBounds, GeoJSONPointBounds notInBounds, String typeId) {
+    public List<Location> findAllInDifference(@Valid GeoPointBounds inBounds, GeoPointBounds notInBounds, String typeId) {
 
         if( notInBounds == null ) {
             return this.findAllInBounds(inBounds);
@@ -129,7 +130,7 @@ public class LocationService extends GenericService<Location> implements ILocati
     }
 
     @Override
-    public long getLocationsCountInBound(@Valid GeoJSONPointBounds bounds) {
+    public long getLocationsCountInBound(@Valid GeoPointBounds bounds) {
 
         Box box = this.getBoxFromBounds(bounds);
         Query query = new Query(Criteria.where("geoLocation").within(box) );
@@ -195,9 +196,10 @@ public class LocationService extends GenericService<Location> implements ILocati
         return savedType;
     }
 
-    private Box getBoxFromBounds(GeoJSONPointBounds bounds) {
-        GeoJSONPoint northEast = bounds.getNorthEast();
-        GeoJSONPoint southWest = bounds.getSouthWest();
+    private Box getBoxFromBounds(GeoPointBounds bounds) {
+        Geo2DPoint northEast = bounds.getNorthEast2DPoint();
+        Geo2DPoint southWest = bounds.getSouthWest2DPoint();
+
         Box box = new Box(southWest.getCoordinates(), northEast.getCoordinates());
 
         return box;

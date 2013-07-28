@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
  * Date: 19.07.13
  * Time: 20:38
  */
-public class GeoJSONPointBounds {
+public class GeoPointBounds {
 
     @NotNull
     private double ne_latitude;
@@ -21,22 +21,30 @@ public class GeoJSONPointBounds {
     @NotNull
     private double sw_longitude;
 
-    public GeoJSONPointBounds() {
+    public GeoPointBounds() {
     }
 
-    public GeoJSONPointBounds(double ne_latitude, double ne_longitude, double sw_latitude, double sw_longitude) {
+    public GeoPointBounds(double ne_latitude, double ne_longitude, double sw_latitude, double sw_longitude) {
         this.ne_latitude = ne_latitude;
         this.ne_longitude = ne_longitude;
         this.sw_latitude = sw_latitude;
         this.sw_longitude = sw_longitude;
     }
 
-    public GeoJSONPoint getNorthEast() {
+    public GeoJSONPoint getNorthEastJSONPoint() {
         return new GeoJSONPoint(ne_latitude, ne_longitude);
     }
 
-    public GeoJSONPoint getSouthWest() {
+    public GeoJSONPoint getSouthWestJSONPoint() {
         return new GeoJSONPoint(sw_latitude, sw_longitude);
+    }
+
+    public Geo2DPoint getNorthEast2DPoint() {
+        return new Geo2DPoint(ne_longitude, ne_latitude);
+    }
+
+    public Geo2DPoint getSouthWest2DPoint() {
+        return new Geo2DPoint(sw_longitude, sw_latitude);
     }
 
     public double getNe_latitude() {
@@ -76,7 +84,7 @@ public class GeoJSONPointBounds {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GeoJSONPointBounds that = (GeoJSONPointBounds) o;
+        GeoPointBounds that = (GeoPointBounds) o;
 
         if (Double.compare(that.ne_latitude, ne_latitude) != 0) return false;
         if (Double.compare(that.ne_longitude, ne_longitude) != 0) return false;

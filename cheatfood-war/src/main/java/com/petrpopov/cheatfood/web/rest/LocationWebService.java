@@ -51,8 +51,8 @@ public class LocationWebService {
     @ResponseBody
     public List<Location> getAllLocationsInDifferenceBetweenBounds(@Valid GeoJSONPointBoundsDiff diff, String typeId) {
 
-        GeoJSONPointBounds current = diff.getCurrent();
-        GeoJSONPointBounds previous = diff.getPrevious();
+        GeoPointBounds current = diff.getCurrent();
+        GeoPointBounds previous = diff.getPrevious();
 
         List<Location> list = locationService.findAllInDifference(current, previous, typeId);
         locationVoteService.setAlreadyVoted(list);
@@ -61,7 +61,7 @@ public class LocationWebService {
 
     @RequestMapping(value = "locations/countinbounds", method = RequestMethod.GET)
     @ResponseBody
-    public MessageResult getLocationsCountInBound(@Valid GeoJSONPointBounds bounds) {
+    public MessageResult getLocationsCountInBound(@Valid GeoPointBounds bounds) {
 
         MessageResult res = new MessageResult();
 

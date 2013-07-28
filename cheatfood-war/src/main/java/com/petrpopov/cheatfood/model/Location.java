@@ -39,7 +39,7 @@ public class Location implements Serializable {
 
     @Valid
     @Indexed
-    private GeoJSONPoint geoLocation;
+    private Geo2DPoint geoLocation;
 
     @NotNull
     private Date actualDate;
@@ -65,7 +65,7 @@ public class Location implements Serializable {
     public Location() {
     }
 
-    public Location(String id, String title, String description, String addressDescription, GeoJSONPoint geoLocation,
+    public Location(String id, String title, String description, String addressDescription, Geo2DPoint geoLocation,
                     Date actualDate, Address address, Boolean footype, Type type) {
         this.id = id;
         this.title = title;
@@ -118,11 +118,11 @@ public class Location implements Serializable {
         this.address = address;
     }
 
-    public GeoJSONPoint getGeoLocation() {
+    public Geo2DPoint getGeoLocation() {
         return geoLocation;
     }
 
-    public void setGeoLocation(GeoJSONPoint geoLocation) {
+    public void setGeoLocation(Geo2DPoint geoLocation) {
         this.geoLocation = geoLocation;
     }
 

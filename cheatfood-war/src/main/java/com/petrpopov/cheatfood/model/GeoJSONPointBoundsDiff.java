@@ -29,16 +29,16 @@ public class GeoJSONPointBoundsDiff {
     public GeoJSONPointBoundsDiff() {
     }
 
-    public GeoJSONPointBounds getCurrent() {
-        return new GeoJSONPointBounds(ne_latitude_cur, ne_longitude_cur, sw_latitude_cur, sw_longitude_cur);
+    public GeoPointBounds getCurrent() {
+        return new GeoPointBounds(ne_latitude_cur, ne_longitude_cur, sw_latitude_cur, sw_longitude_cur);
     }
 
-    public GeoJSONPointBounds getPrevious() {
+    public GeoPointBounds getPrevious() {
         if( ne_latitude_prev == 0 || ne_longitude_prev == 0 || sw_latitude_prev == 0 || sw_longitude_prev == 0) {
             return null;
         }
 
-        return new GeoJSONPointBounds(ne_latitude_prev, ne_longitude_prev, sw_latitude_prev, sw_longitude_prev);
+        return new GeoPointBounds(ne_latitude_prev, ne_longitude_prev, sw_latitude_prev, sw_longitude_prev);
     }
 
     public double getNe_latitude_cur() {
