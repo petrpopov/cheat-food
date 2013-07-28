@@ -5,6 +5,7 @@ import com.petrpopov.cheatfood.service.CookieService;
 import com.petrpopov.cheatfood.service.LocationService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
+import com.petrpopov.cheatfood.web.other.LocationRateService;
 import com.petrpopov.cheatfood.web.other.LocationVoteService;
 import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class LocationWebService {
     private LocationVoteService locationVoteService;
 
     @Autowired
+    private LocationRateService locationRateService;
+
+    @Autowired
     private CookieService cookieService;
 
 
@@ -44,6 +48,7 @@ public class LocationWebService {
 
         List<Location> list = locationService.findAll();
         locationVoteService.setAlreadyVoted(list);
+        locationRateService.setAlreadyRated(list);
         return list;
     }
 
@@ -56,6 +61,7 @@ public class LocationWebService {
 
         List<Location> list = locationService.findAllInDifference(current, previous, typeId);
         locationVoteService.setAlreadyVoted(list);
+        locationRateService.setAlreadyRated(list);
         return list;
     }
 
@@ -108,6 +114,7 @@ public class LocationWebService {
         }
 
         locationVoteService.setAlreadyVoted(loc);
+        locationRateService.setAlreadyRated(loc);
 
         if( loc != null )
             result.setResult(loc);

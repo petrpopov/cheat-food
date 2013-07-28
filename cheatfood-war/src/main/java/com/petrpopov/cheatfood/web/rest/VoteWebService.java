@@ -1,10 +1,7 @@
 package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.config.CheatException;
-import com.petrpopov.cheatfood.model.ErrorType;
-import com.petrpopov.cheatfood.model.Location;
-import com.petrpopov.cheatfood.model.UserEntity;
-import com.petrpopov.cheatfood.model.Vote;
+import com.petrpopov.cheatfood.model.*;
 import com.petrpopov.cheatfood.service.CookieService;
 import com.petrpopov.cheatfood.service.LocationService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
@@ -22,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @Controller
-@RequestMapping("/api/votes")
+@RequestMapping("/api")
 public class VoteWebService {
 
     @Autowired
@@ -34,7 +31,7 @@ public class VoteWebService {
     @Autowired
     private UserContextHandler userContextHandler;
 
-    @RequestMapping(value="add", method = RequestMethod.GET)
+    @RequestMapping(value="votes/add", method = RequestMethod.GET)
     @ResponseBody
     public MessageResult voteForLocation(@CookieValue(required = true, value = "CHEATFOOD") String cookie,
                                          @RequestParam String locationId, @RequestParam Boolean value) {
@@ -91,6 +88,67 @@ public class VoteWebService {
 
 
         result.setResult("OK");
+
+        return result;
+    }
+
+    @RequestMapping(value="rates/add", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageResult rateForLocation(@CookieValue(required = true, value = "CHEATFOOD") String cookie,
+                                         @RequestParam String locationId, @RequestParam Integer value) {
+
+        MessageResult result = new MessageResult();
+
+        boolean valid = cookieService.isCookieValidForCurrentUser(new CookieRequest(cookie));
+        if( !valid ) {
+            result.setError(true);
+            result.setErrorType(ErrorType.access_denied);
+            result.setMessage("Access denied");
+            return result;
+        }
+
+        Location location = locationService.findById(locationId);
+        if( location == null ) {
+            result.setError(true);
+            result.setErrorType(ErrorType.unknown_location);
+            result.setMessage("Unknown location!");
+            return result;
+        }
+
+        UserEntity entity = userContextHandler.currentContextUser();
+
+        Rate rate = new Rate();
+        rate.setUserId(entity.getId());
+        rate.setValue(value);
+
+        try {
+            location = locationService.rateForLocation(location, rate);
+        }
+        catch (AccessDeniedException e) {
+            e.printStackTrace();
+
+            result.setError(true);
+            result.setErrorType(ErrorType.access_denied);
+            result.setMessage("Access denied");
+            return result;
+        }
+        catch (CheatException e) {
+            e.printStackTrace();
+
+            result.setError(true);
+            result.setErrorType(e.getErrorType());
+            return result;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+
+            result.setError(true);
+            result.setErrorType(ErrorType.other);
+            return result;
+        }
+
+
+        result.setResult(location);
 
         return result;
     }

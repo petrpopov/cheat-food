@@ -62,6 +62,14 @@ public class Location implements Serializable {
     @Transient
     private Boolean alreadyVoted;
 
+    @Valid
+    private List<Rate> rates;
+
+    @Transient
+    private Boolean alreadyRated;
+
+    private Double averageRate;
+
     public Location() {
     }
 
@@ -173,6 +181,30 @@ public class Location implements Serializable {
 
     public void setAlreadyVoted(Boolean alreadyVoted) {
         this.alreadyVoted = alreadyVoted;
+    }
+
+    public List<Rate> getRates() {
+        return rates;
+    }
+
+    public void setRates(List<Rate> rates) {
+        this.rates = rates;
+    }
+
+    public Boolean getAlreadyRated() {
+        return alreadyRated;
+    }
+
+    public void setAlreadyRated(Boolean alreadyRated) {
+        this.alreadyRated = alreadyRated;
+    }
+
+    public Double getAverageRate() {
+        return averageRate;
+    }
+
+    public void setAverageRate(Double averageRate) {
+        this.averageRate = averageRate;
     }
 
     @Override

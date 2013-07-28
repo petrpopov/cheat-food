@@ -2,6 +2,7 @@ package com.petrpopov.cheatfood.web.controllers;
 
 import com.petrpopov.cheatfood.model.Location;
 import com.petrpopov.cheatfood.service.LocationService;
+import com.petrpopov.cheatfood.web.other.LocationRateService;
 import com.petrpopov.cheatfood.web.other.LocationVoteService;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class HomeController {
     private LocationVoteService locationVoteService;
 
     @Autowired
+    private LocationRateService locationRateService;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @RequestMapping({"/","/home", "/index", "/main"})
@@ -46,6 +50,7 @@ public class HomeController {
 
         Location location = locationService.findById(locationid);
         locationVoteService.setAlreadyVoted(location);
+        locationRateService.setAlreadyRated(location);
 
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("location", objectMapper.writeValueAsString(location));

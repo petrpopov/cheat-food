@@ -150,6 +150,40 @@ public class LocationService extends GenericService<Location>{
         saveLocationObject(location);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public Location rateForLocation(Location location, Rate rate) throws CheatException {
+
+        List<Rate> rates = location.getRates();
+        if( rates != null ) {
+            for (Rate rate1 : rates) {
+                if( rate1.getUserId().equals(rate.getUserId()))
+                    throw new CheatException(ErrorType.already_rated);
+            }
+        }
+        else {
+            rates = new ArrayList<Rate>();
+            location.setRates(rates);
+        }
+
+        rates.add(rate);
+        location.setAverageRate( getNewAverageRate(rates) );
+        return saveLocationObject(location);
+    }
+
+    private Double getNewAverageRate(List<Rate> rates) {
+
+        if( rates == null )
+            return 0.0;
+
+        Double rate = 0.0;
+        for (Rate rate1 : rates) {
+            rate += rate1.getValue();
+        }
+
+        rate /= rates.size();
+        return rate;
+    }
+
     private List<Vote> getLocationVotes(Location location) {
         Location location1 = this.findById(location.getId());
         if( location1 == null )

@@ -22,6 +22,7 @@ $(document).ready(function(){
         access_denied: "access_denied",
         unknown_location: "unknown_location",
         already_voted: "already_voted",
+        already_rated: "already_rated",
         other: "other"
     };
 
@@ -1398,10 +1399,19 @@ $(document).ready(function(){
     function setInfoBoxContentFromLocation(infoBoxObject) {
 
         var location = infoBoxObject.location;
+        var ratyProperties = {
+            path: getImageDirPath(),
+            size: 24,
+            score: location.averageRate,
+            click: function(score, e) {
+                rateForLocation(infoBoxObject, score);
+            }
+        };
 
         if( authorized === false ) {
             $('#approveLocation').hide();
             $('#editDeleteMarkerGroup').hide();
+            $('#rateButtons').hide();
         }
         else {
             if( location.alreadyVoted === false ) {
@@ -1410,6 +1420,12 @@ $(document).ready(function(){
             else {
                 $('#approveLocation').hide();
             }
+
+            if( location.alreadyRated === true ) {
+                ratyProperties.readOnly = true;
+            }
+
+            $('#rateButtons').raty(ratyProperties);
 
             $('#editDeleteMarkerGroup').show();
         }
@@ -1604,7 +1620,6 @@ $(document).ready(function(){
                 value: value
             },
             success: function(data) {
-                console.log(data);
 
                 if( data.error == false ) {
                     infoBoxObject.location.alreadyVoted = true;
@@ -1638,6 +1653,53 @@ $(document).ready(function(){
                 400: function(data) {
                     showNoteTopCenter("Какая-то ошибка на сервере, скорее всего у вас нет прав на это действие...", "warning", true);
                     button.button('reset');
+                }
+            }
+        });
+    }
+
+    function rateForLocation(infoBoxObject, score) {
+
+        var id = infoBoxObject.location.id;
+
+        $.ajax({
+            type: "GET",
+            url: params.realPath + "/api/rates/add",
+            data: {
+                locationId: id,
+                value: score
+            },
+            success: function(data) {
+                if( data.error == false ) {
+                    var loc = data.result;
+
+                    infoBoxObject.location.alreadyRated = true;
+                    infoBoxObject.location.averageRate = loc.averageRate;
+                    $('#rateButtons').raty('readOnly', true);
+                    showNoteTopCenter("Спасибо!", "success", true);
+                }
+                else {
+                    if( data.errorType === errors.access_denied) {
+                        showNoteTopCenter("Извините, но у вас нет прав на это действие...", "warning", true);
+                    }
+                    else if( data.errorType === errors.already_rated ) {
+                        infoBoxObject.location.alreadyRated = true;
+                        $('#rateButtons').raty('readOnly', true);
+                        showNoteTopCenter("А вы уже голосовали за эту локацию. Давайте без вбросов,ок? =)", "warning", true);
+                    }
+                    else if( data.errorType === errors.unknown_location ) {
+                        infoBoxObject.location.alreadyVoted = true;
+                        $('#rateButtons').raty('readOnly', true);
+                        showNoteTopCenter("Такой локации больше нет в базе. Обновите страничку!", "warning", true);
+                    }
+                    else {
+                        showNoteTopCenter("Какая-то странная ошибка на сервере..извините", "warning", true);
+                    }
+                }
+            },
+            statusCode: {
+                400: function(data) {
+                    showNoteTopCenter("Какая-то ошибка на сервере, скорее всего у вас нет прав на это действие...", "warning", true);
                 }
             }
         });
@@ -2198,6 +2260,8 @@ $(document).ready(function(){
             .attr("data-description", "Классное дешевое местечко!")
             .attr("data-user", "1262715342");
 
+        var raty = $('<span/>').attr("id", "rateButtons");
+
         var exRes = $('<div/>');
 
         var res = $('<ul/>').attr('id', 'infoContent').addClass('media-list')
@@ -2314,10 +2378,21 @@ $(document).ready(function(){
                     )
             )
             .append(
-                $('<div/>').append(
-                    $('<hr/>')
-                ).append(
-                        pluso
+                $('<div/>').attr("id", "voteRateDiv")
+                    .append(
+                        $('<hr/>')
+                    )
+                    .append(
+                        $('<div/>')
+                            .append(
+                                $('<label/>').text("Оцените это место")
+                            )
+                            .append(
+                                raty.addClass("pull-left")
+                            )
+                            .append(
+                                pluso
+                            )
                     )
             )
             .append(
@@ -2721,7 +2796,9 @@ $(document).ready(function(){
                 zipcode: "",
                 addressLine: ""
             },
-            alreadyVoted: false
+            alreadyVoted: false,
+            alreadyRated: false,
+            averageRate: 0.0
         };
     }
 
@@ -2801,8 +2878,12 @@ $(document).ready(function(){
         return true;
     }
 
+    function getImageDirPath() {
+        return params.realPath + "/resources/img/";
+    }
+
     function getImagePath(imageName) {
-        return params.realPath + "/resources/img/" + imageName;
+        return getImageDirPath() + imageName;
     }
 
     function getMainlogoURL() {

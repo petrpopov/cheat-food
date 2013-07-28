@@ -9,5 +9,6 @@ public enum ErrorType {
     access_denied,
     unknown_location,
     already_voted,
+    already_rated,
     other
 }
