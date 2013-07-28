@@ -6,12 +6,22 @@
     <artifactId>cheatood</artifactId>
     <packaging>pom</packaging>
 
-    <version>0.1.10-SNAPSHOT</version>
-    <name>cheatfood Maven Webapp</name>
+    <version>0.1.11-SNAPSHOT</version>
+    <name>cheatfood</name>
 
     <modules>
         <module>cheatfood-war</module>
         <module>spring-social-foursquare</module>
         <module>spring-social-mongo</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
