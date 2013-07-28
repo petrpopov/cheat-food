@@ -1307,7 +1307,7 @@ $(document).ready(function(){
             pane: "floatPane",
             infoBoxClearance: new google.maps.Size(50, 50),
             maxWidth: 800,
-            pixelOffset: new google.maps.Size(10, -170),
+            pixelOffset: new google.maps.Size(10, -190),
             enableEventPropagation: false
         };
         infoBox = new InfoBox(infoOptions);
@@ -1448,6 +1448,15 @@ $(document).ready(function(){
             var parseDate = $.datepicker.parseDate( DATE_FORMAT, location.actualDate );
             var displayDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, parseDate );
             $('#info_actualDate').text(displayDate);
+        }
+
+        if( window.pluso ) {
+            if (typeof window.pluso.start === "function") {
+                var url = getLocationFullURL(location);
+                $('#shareLocationInSocial').attr("data-url", url);
+
+                window.pluso.start();
+            }
         }
     }
 
@@ -2169,6 +2178,16 @@ $(document).ready(function(){
 
     function getMarkerContentElementFromLocation() {
 
+        var pluso = $('<div/>').addClass("pluso").attr("id", "shareLocationInSocial")
+            .attr("data-options", "small,square,line,horizontal,counter,theme=03")
+            .attr("data-services", "facebook,twitter,vkontakte,google,odnoklassniki,moimir,print")
+            .attr("data-background", "transparent")
+            .attr("data-url", "")
+            .attr("data-image", getMainlogoURL() )
+            .attr("data-title", "Классное дешевое местечко!")
+            .attr("data-description", "Классное дешевое местечко!")
+            .attr("data-user", "1262715342");
+
         var exRes = $('<div/>');
 
         var res = $('<ul/>').attr('id', 'infoContent').addClass('media-list')
@@ -2282,6 +2301,13 @@ $(document).ready(function(){
                                             )
                                     )
                             )
+                    )
+            )
+            .append(
+                $('<div/>').append(
+                    $('<hr/>')
+                ).append(
+                        pluso
                     )
             )
             .append(
@@ -2719,6 +2745,15 @@ $(document).ready(function(){
         }
     }
 
+    function getLocationFullURL(location) {
+        if( params.realPath.indexOf("localhost") >= 0 ) {
+            return "www.cheatfood.com/location/" + location.id;
+        }
+        else {
+            return params.realPath + "/location/" + location.id;
+        }
+    }
+
     function addressToString(address) {
 
         var res = "";
@@ -2758,6 +2793,10 @@ $(document).ready(function(){
 
     function getImagePath(imageName) {
         return params.realPath + "/resources/img/" + imageName;
+    }
+
+    function getMainlogoURL() {
+        return getImagePath("mainlogo");
     }
 
     function HashMap(){

@@ -155,7 +155,12 @@
                     var h=d[g]('head')[0] || d[g]('body')[0];
                     h.appendChild(s);
                 })();</script>
-                <div class="pluso" data-options="medium,square,line,horizontal,counter,theme=03" data-services="facebook,twitter,vkontakte,google,odnoklassniki,print" data-background="transparent" data-url="http://www.cheatfood.com" data-title="Cheat Food" data-description="Клевый сервис для поиска мест, где можно ну очень дешево поесть!"></div>
+                <div class="pluso" data-options="medium,square,line,horizontal,counter,theme=03"
+                     data-services="facebook,twitter,vkontakte,google,odnoklassniki,moimir,email,print"
+                     data-background="transparent" data-url="http://www.cheatfood.com"
+                     data-title="Cheat Food" data-description="Клевый сервис для поиска мест, где можно ну очень дешево поесть!"
+                     data-user="1262715342"
+                     data-image="<s:url value="/resources"/>/img/mainlogo.png"></div>
             </div>
 
         </div>
