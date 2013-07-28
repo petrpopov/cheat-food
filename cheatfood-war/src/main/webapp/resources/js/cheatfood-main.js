@@ -799,6 +799,16 @@ $(document).ready(function(){
     }
 
     function initRouteFormButtonsBehavior() {
+        $('#fromHere').off('change');
+        $('#fromHere').change(function() {
+            $('#fromHereLatLng').val(null);
+        });
+
+        $('#toHere').off('change');
+        $('#toHere').change(function() {
+            $('#toHereLatLng').val(null);
+        });
+
         $('#closeRouteForm').off('click');
         $('#closeRouteForm').click(function() {
             $('#routeFormDiv').hide(EFFECTS_TIME);
