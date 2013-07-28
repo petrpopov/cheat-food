@@ -2382,7 +2382,7 @@ $(document).ready(function(){
                     .append(
                         $('<hr/>')
                     )
-                    .append(
+                    .append (
                         $('<div/>')
                             .append(
                                 $('<label/>').text("Оцените это место")
