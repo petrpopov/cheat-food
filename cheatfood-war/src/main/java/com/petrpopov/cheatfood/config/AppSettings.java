@@ -26,6 +26,10 @@ public class AppSettings {
 
             MONGODB_HOST = properties.getProperty("mongodb_host");
             MONGODB_DB = properties.getProperty("mongodb_db");
+            MONGODB_PORT = properties.getProperty("mongodb_port");
+
+            MONGODB_USERNAME = properties.getProperty("mongodb_username");
+            MONGODB_PASSWORD = properties.getProperty("mongodb_password");
 
             FOURSQUARE_CLIENT_ID = properties.getProperty("foursquare_client_id");
             FOURSQUARE_CLIENT_SECRET = properties.getProperty("foursquare_client_secret");
@@ -56,7 +60,10 @@ public class AppSettings {
     }
 
     public static String MONGODB_HOST;
+    public static String MONGODB_PORT;
     public static String MONGODB_DB;
+    public static String MONGODB_USERNAME;
+    public static String MONGODB_PASSWORD;
     public static String FOURSQUARE_CLIENT_ID;
     public static String FOURSQUARE_CLIENT_SECRET;
     public static String FOURSQUARE_CALLBACK_URL;
