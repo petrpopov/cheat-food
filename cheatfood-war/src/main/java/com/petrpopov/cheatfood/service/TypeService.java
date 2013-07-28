@@ -1,4 +1,4 @@
-package com.petrpopov.cheatfood.service.impl;
+package com.petrpopov.cheatfood.service;
 
 import com.mongodb.DBCollection;
 import com.petrpopov.cheatfood.model.Text;

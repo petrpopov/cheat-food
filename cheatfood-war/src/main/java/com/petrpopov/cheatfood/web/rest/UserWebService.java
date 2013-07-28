@@ -6,7 +6,7 @@ import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.security.CheatRememberMeServices;
 import com.petrpopov.cheatfood.security.LoginManager;
 import com.petrpopov.cheatfood.service.UserContextHandler;
-import com.petrpopov.cheatfood.service.impl.UserService;
+import com.petrpopov.cheatfood.service.UserService;
 import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

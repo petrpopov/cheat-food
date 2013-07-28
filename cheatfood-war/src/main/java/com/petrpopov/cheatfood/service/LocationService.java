@@ -1,4 +1,4 @@
-package com.petrpopov.cheatfood.service.impl;
+package com.petrpopov.cheatfood.service;
 
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.*;

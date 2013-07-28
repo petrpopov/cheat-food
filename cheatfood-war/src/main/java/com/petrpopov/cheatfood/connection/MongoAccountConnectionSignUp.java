@@ -1,7 +1,7 @@
 package com.petrpopov.cheatfood.connection;
 
 import com.petrpopov.cheatfood.model.UserEntity;
-import com.petrpopov.cheatfood.service.impl.UserService;
+import com.petrpopov.cheatfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;

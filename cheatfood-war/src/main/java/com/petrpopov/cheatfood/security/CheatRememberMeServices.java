@@ -2,7 +2,7 @@ package com.petrpopov.cheatfood.security;
 
 import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
 import com.petrpopov.cheatfood.model.UserEntity;
-import com.petrpopov.cheatfood.service.impl.UserService;
+import com.petrpopov.cheatfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

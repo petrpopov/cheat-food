@@ -3,7 +3,7 @@ package com.petrpopov.cheatfood.web.rest;
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.Type;
 import com.petrpopov.cheatfood.service.CookieService;
-import com.petrpopov.cheatfood.service.impl.TypeService;
+import com.petrpopov.cheatfood.service.TypeService;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
 import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.apache.log4j.Logger;

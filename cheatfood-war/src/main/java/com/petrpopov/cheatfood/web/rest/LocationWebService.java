@@ -2,8 +2,8 @@ package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.model.*;
 import com.petrpopov.cheatfood.service.CookieService;
+import com.petrpopov.cheatfood.service.LocationService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
-import com.petrpopov.cheatfood.service.impl.LocationService;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
 import com.petrpopov.cheatfood.web.other.LocationVoteService;
 import com.petrpopov.cheatfood.web.other.MessageResult;
