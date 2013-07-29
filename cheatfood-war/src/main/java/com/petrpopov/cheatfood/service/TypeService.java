@@ -27,18 +27,18 @@ public class TypeService extends GenericService<Type> {
 
     @PostConstruct
     public void init() {
-        types1.add( new Type(new Text(lang, "Шашлычная") ) );
-        types1.add( new Type(new Text(lang, "Чебуречная") ) );
-        types1.add( new Type(new Text(lang, "Шаверменная") ) );
-        types1.add( new Type(new Text(lang, "Чайхона") ) );
-        types1.add( new Type(new Text(lang, "Блинная") ) );
-        types1.add( new Type(new Text(lang, "Бутербродная") ) );
-        types1.add( new Type(new Text(lang, "Рюмочная") ) );
-        types1.add( new Type(new Text(lang, "Булочная") ) );
-        types1.add( new Type(new Text(lang, "Столовая") ) );
-        types1.add( new Type(new Text(lang, "Кафе") ) );
-        types1.add( new Type(new Text(lang, "Кулинария") ) );
-        types1.add( new Type(new Text(lang, "Другое") ) );
+        types1.add( new Type(new Text(lang, "Шашлычная"), "kebab" ));
+        types1.add( new Type(new Text(lang, "Чебуречная"), "meatpastry" ));
+        types1.add( new Type(new Text(lang, "Шаверменная"), "shawarma" ));
+        types1.add( new Type(new Text(lang, "Чайхона"), "chayhona" ));
+        types1.add( new Type(new Text(lang, "Блинная"), "pancake" ));
+        types1.add( new Type(new Text(lang, "Бутербродная"), "sandwich" ));
+        types1.add( new Type(new Text(lang, "Рюмочная"), "glass" ));
+        types1.add( new Type(new Text(lang, "Булочная"), "bread" ));
+        types1.add( new Type(new Text(lang, "Столовая"), "refectory" ));
+        types1.add( new Type(new Text(lang, "Кафе"), "cafe" ));
+        types1.add( new Type(new Text(lang, "Кулинария"), "gastronomy" ));
+        types1.add( new Type(new Text(lang, "Другое"), "other" ));
 
 
         if( !op.collectionExists(Type.class) ) {

@@ -32,7 +32,7 @@
 
     <util:properties id="properties" location="classpath:config.properties"/>
 
-    <mvc:annotation-driven validator="globbalValidator" />
+    <mvc:annotation-driven validator="globalValidator" />
 
     <mvc:resources mapping="/resources/**"
                    location="/resources/" />
@@ -44,7 +44,7 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-    <bean id="globbalValidator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+    <bean id="globalValidator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
     <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
     </bean>
@@ -53,6 +53,14 @@
         <property name="messageConverters">
             <list>
                 <ref bean="jacksonMessageConverter"/>
+                <bean id="byteArrayMessageConverter" class="org.springframework.http.converter.ByteArrayHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>image/jpeg</value>
+                            <value>image/png</value>
+                        </list>
+                    </property>
+                </bean>
             </list>
         </property>
     </bean>

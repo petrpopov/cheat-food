@@ -21,6 +21,8 @@ public class Type implements Serializable {
     @Id
     private String id;
 
+    private String code;
+
     @NotNull
     @Valid
     private List<Text> names;
@@ -28,7 +30,8 @@ public class Type implements Serializable {
     public Type() {
     }
 
-    public Type(Text name) {
+    public Type(Text name, String code) {
+        this.code = code;
         this.names = new ArrayList<Text>();
         this.names.add(name);
     }
@@ -46,6 +49,14 @@ public class Type implements Serializable {
 
     public String getId() {
         return id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public void setId(String id) {

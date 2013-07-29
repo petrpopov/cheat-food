@@ -32,6 +32,7 @@ $(document).ready(function(){
 
     var curBounds;
     var prevBounds;
+    var currentTypeId;
 
     var newMarker = false;
 
@@ -1072,11 +1073,17 @@ $(document).ready(function(){
         var type = getTypeById(type_id);
         var text = "Показывается категория: " + getTypeValueByLanguage(type, DATE_LANGUAGE);
 
+        if( infoBox ) {
+            infoBox.hide();
+        }
+
         showCurrentActionForm(text, cancelLoadAndCreateMarkersByCategory);
         loadAndCreateMarkersForLocationsInBounds(type_id);
     }
 
     function cancelLoadAndCreateMarkersByCategory() {
+        currentTypeId = undefined;
+
         removeAllMarkers();
         loadAndCreateMarkersForLocationsInBounds();
     }
@@ -1277,7 +1284,18 @@ $(document).ready(function(){
 
         if( type_id ) {
             if( type_id !== null ) {
+                currentTypeId = type_id;
                 data.typeId = type_id;
+            }
+            else {
+                currentTypeId = undefined;
+            }
+        }
+        else {
+            if(currentTypeId) {
+                if( currentTypeId !== null ) {
+                    data.typeId = currentTypeId;
+                }
             }
         }
 
@@ -1342,7 +1360,7 @@ $(document).ready(function(){
             lat: pos.lat(),
             lng: pos.lng(),
             title: location.title,
-            icon: getImagePath('bread.png'),
+            icon: getMarkerImagePath(infoBoxObject.location.type),
             click: function() {
                 markerClickBehavior(marker, infoBoxObject);
             }
@@ -1434,6 +1452,13 @@ $(document).ready(function(){
         $('#info_title').text(location.title);
         $('#info_type').text( getTypeValueByLanguage(location.type, DATE_LANGUAGE) );
         $('#info_description').text(location.description);
+        $('#info_type_icon').attr("src", getIconImagePath(location.type) );
+
+        $('#info_type_link').off('click');
+        $('#info_type_link').click(function() {
+            removeAllMarkers();
+            loadAndCreateMarkersByCategory(location.type.id);
+        });
 
         if(location.addressDescription) {
             $('#info_addressDescription').text(location.addressDescription);
@@ -2271,9 +2296,10 @@ $(document).ready(function(){
             .append(
                 $('<li/>').addClass('media')
                     .append(
-                        $('<a/>').addClass('pull-left img-with-text').attr('href', '#')
+                        $('<a/>').attr("id", "info_type_link").addClass('pull-left img-with-text').attr('href', '#')
                             .append(
-                                $('<img/>').addClass('media-object').attr('src', getImagePath('basic.png'))
+                                $('<img/>').attr("id", "info_type_icon").addClass('media-object')
+                                    .attr('src', getDefaultIconImagePath() )
                                     .attr('width', TYPE_IMAGE_WIDTH)
                             )
                             .append(
@@ -2886,6 +2912,18 @@ $(document).ready(function(){
         return getImageDirPath() + imageName;
     }
 
+    function getMarkerImagePath(type) {
+        return params.realPath + "/api/images/markers/" + type.code;
+    }
+
+    function getDefaultIconImagePath() {
+        return params.realPath + "/api/images/types/basic.png";
+    }
+
+    function getIconImagePath(type) {
+        return params.realPath + "/api/images/types/" + type.code;
+    }
+
     function getMainlogoURL() {
         return getImagePath("mainlogo");
     }
@@ -2897,9 +2935,9 @@ $(document).ready(function(){
     HashMap.prototype.put = function put(key, value){
         if(typeof key == "object"){
             if(!key.hasOwnProperty._id){
-                key.hasOwnProperty = function(key){
+                key.hasOwnProperty = function(key) {
                     return Object.prototype.hasOwnProperty.call(this, key);
-                }
+                };
                 key.hasOwnProperty._id = this._shared.id++;
             }
             this._dict[key.hasOwnProperty._id] = value;
