@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="cheatood-war:war exploded">
-    <output-path>$PROJECT_DIR$/cheatfood-war/target/cheatfood-1.0.0-SNAPSHOT</output-path>
+    <output-path>$PROJECT_DIR$/cheatfood-war/target/cheatfood-1.0.2-SNAPSHOT</output-path>
     <root id="root">
       <element id="javaee-facet-resources" facet="cheatood-war/web/Web" />
       <element id="directory" name="WEB-INF">
