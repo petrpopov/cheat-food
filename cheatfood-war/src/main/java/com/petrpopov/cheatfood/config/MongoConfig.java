@@ -37,7 +37,7 @@ public class MongoConfig {
 
         //Mongo mongo = new Mongo( AppSettings.MONGODB_HOST );
         MongoClient mongoClient = new MongoClient( AppSettings.MONGODB_HOST, Integer.parseInt(AppSettings.MONGODB_PORT) );
-        return new SimpleMongoDbFactory(mongoClient, AppSettings.MONGODB_DB );
+        return new SimpleMongoDbFactory(mongoClient, AppSettings.MONGODB_DB, userCredentials());
     }
 
     public @Bean
