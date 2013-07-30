@@ -164,7 +164,7 @@
         </dependency>
 
         <dependency>
-            <groupId>spring-social-mongo</groupId>
+            <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-mongo</artifactId>
             <version>${spring.social.mongo.version}</version>
         </dependency>
