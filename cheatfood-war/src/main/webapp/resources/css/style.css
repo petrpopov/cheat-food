@@ -1,5 +1,5 @@
 html { height: 100% }
-body { height: 100%; margin: 0px; padding: 0px }
+body { height: 100%; margin: 0px; padding: 0px; }
 
 .navbar {
     margin-bottom: 0;
@@ -15,9 +15,15 @@ body { height: 100%; margin: 0px; padding: 0px }
 /* http://stackoverflow.com/questions/8273041/marker-infowindow-and-shadow-not-rendering-correctly-in-google-maps-javascript */
 img { max-width: inherit; }
 
+.navbar .container { height: 3em; }
+
 hr {
     margin-bottom: 10px;
     margin-top: 7px;
+}
+
+.rightspacer3 {
+    margin-right: 3px;
 }
 
 .spacer3 {

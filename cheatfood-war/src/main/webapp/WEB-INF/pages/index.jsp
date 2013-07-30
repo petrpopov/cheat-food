@@ -76,10 +76,12 @@
                 <span class="icon-bar"></span>
             </a>
 
-            <img src="<s:url value="/resources"/>/img/logo.png" width="35" class="pull-left"/>
+            <a class="rightspacer3" href="<c:url value="/"/>">
+                <img src="<s:url value="/resources"/>/img/mainlogo_white.png" width="50" class="pull-left"/>
+            </a>
 
             <!-- Be sure to leave the brand out there if you want it shown -->
-            <a class="brand" href="<c:url value="/"/>">
+            <a class="brand spacer3" href="<c:url value="/"/>">
                 cheat food
             </a>
 
