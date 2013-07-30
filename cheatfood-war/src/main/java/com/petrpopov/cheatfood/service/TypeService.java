@@ -30,9 +30,10 @@ public class TypeService extends GenericService<Type> {
         types1.add( new Type(new Text(lang, "Шашлычная"), "kebab" ));
         types1.add( new Type(new Text(lang, "Чебуречная"), "meatpastry" ));
         types1.add( new Type(new Text(lang, "Шаверменная"), "shawarma" ));
-        types1.add( new Type(new Text(lang, "Чайхона"), "chayhona" ));
+        types1.add( new Type(new Text(lang, "Чайхона"), "tea" ));
         types1.add( new Type(new Text(lang, "Блинная"), "pancake" ));
         types1.add( new Type(new Text(lang, "Бутербродная"), "sandwich" ));
+        types1.add( new Type(new Text(lang, "Бургерная"), "burger" ));
         types1.add( new Type(new Text(lang, "Рюмочная"), "glass" ));
         types1.add( new Type(new Text(lang, "Булочная"), "bread" ));
         types1.add( new Type(new Text(lang, "Столовая"), "refectory" ));

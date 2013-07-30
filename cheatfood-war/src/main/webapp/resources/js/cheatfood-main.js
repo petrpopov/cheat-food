@@ -42,7 +42,7 @@ $(document).ready(function(){
     var MAX_POSSIBLE_ZOOM = 30;
     var ENTER_KEY = 13;
     var ZOOM_LEVEL = 10;
-    var TYPE_IMAGE_WIDTH = 128;
+    var TYPE_IMAGE_WIDTH = 192;
     var DATE_FORMAT = 'yy-mm-dd';
     var DATE_FORMAT_DISPLAY = 'dd.mm.yy';
     var DATE_LANGUAGE = 'ru';
@@ -1330,13 +1330,13 @@ $(document).ready(function(){
 
         var infoOptions = {
             content: boxText,
-            boxClass: "span6 transparent infoWindow",
+            boxClass: "span7 transparent infoWindow",
             disableAutoPan: false,
             isHidden: true,
             pane: "floatPane",
             infoBoxClearance: new google.maps.Size(50, 50),
-            maxWidth: 800,
-            pixelOffset: new google.maps.Size(10, -190),
+            maxWidth: 900,
+            pixelOffset: new google.maps.Size(13, -255),
             enableEventPropagation: false
         };
         infoBox = new InfoBox(infoOptions);
@@ -1410,6 +1410,7 @@ $(document).ready(function(){
 
     function showInfoBoxForMarker(infoBoxObject) {
         initInfoBoxButtonsBehavior(infoBoxObject);
+        infoBoxObject.infoBox.setPosition(getLatLngFromGeoLocation(infoBoxObject.location.geoLocation));
         infoBoxObject.infoBox.show();
         setInfoBoxContentFromLocation(infoBoxObject);
     }
@@ -1828,7 +1829,7 @@ $(document).ready(function(){
             statusCode: {
                 400: function(data) {
                     $('#deleteAlert').show(EFFECTS_TIME);
-                    $('#deleteAlertBeginText').text("Не получилось.")
+                    $('#deleteAlertBeginText').text("Не получилось.");
                     $('#deleteAlertText').text("Извините, произошла какая-то ошибка. Скорее всего у вас нет прав на это действие");
                     $('#deleteMarkerButtonModal').button('reset');
                 }
@@ -1875,8 +1876,13 @@ $(document).ready(function(){
 
         $('#editMarkerForm').off('submit');
         $('#editMarkerForm').submit(function(){
-            submitEditForm(infoBoxObject);
+            //submitEditForm(infoBoxObject);
             return false;
+        });
+
+        $('#submitEdit').off('click');
+        $('#submitEdit').click(function() {
+            submitEditForm(infoBoxObject);
         });
 
         $("#editMarkerForm :input").keypress(function(e) {
@@ -2751,7 +2757,7 @@ $(document).ready(function(){
             .append(
                 $('<div/>').addClass('form-actions')
                     .append(
-                        $('<button/>').attr('id','submitEdit').attr('type', 'submit').addClass('btn btn-primary')
+                        $('<button/>').attr('id','submitEdit').attr('type', 'button').addClass('btn btn-primary')
                             .attr('data-loading-text', 'Сохраняем...')
                             .text('Сохранить точку')
                     )
