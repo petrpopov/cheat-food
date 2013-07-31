@@ -6,13 +6,13 @@
     <artifactId>cheatood-war</artifactId>
     <packaging>war</packaging>
 
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <name>cheatfood webapp</name>
 
     <parent>
         <groupId>com.petrpopov</groupId>
         <artifactId>cheatood</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -164,7 +164,7 @@
         </dependency>
 
         <dependency>
-            <groupId>spring-social-mongo</groupId>
+            <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-mongo</artifactId>
             <version>${spring.social.mongo.version}</version>
         </dependency>
@@ -255,6 +255,21 @@
 
                 <configuration>
                     <packaging>war</packaging>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.jelastic</groupId>
+                <artifactId>jelastic-maven-plugin</artifactId>
+                <version>1.7-SNAPSHOT</version>
+
+                <configuration>
+                    <email>${jelastic.username}</email>
+                    <password>${jelastic.password}</password>
+                    <context>ROOT</context>
+                    <environment>firstwagon</environment>
+                    <comment>${project.version}</comment>
+                    <api_hoster>app.j.rsnx.ru</api_hoster>
                 </configuration>
             </plugin>
         </plugins>

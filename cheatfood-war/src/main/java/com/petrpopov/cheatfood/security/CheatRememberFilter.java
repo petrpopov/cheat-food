@@ -24,7 +24,7 @@ import java.io.IOException;
  * Time: 18:37
  */
 @Component
-public class CheatRememberFilter extends GenericFilterBean{
+public class CheatRememberFilter extends GenericFilterBean {
 
     @Autowired
     private CheatRememberMeServices rememberMeServices;
