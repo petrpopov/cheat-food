@@ -6,7 +6,7 @@
     <artifactId>cheatood</artifactId>
     <packaging>pom</packaging>
 
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.5-SNAPSHOT</version>
     <name>cheatfood</name>
 
     <modules>

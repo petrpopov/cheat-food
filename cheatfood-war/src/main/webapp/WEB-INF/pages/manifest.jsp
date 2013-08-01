@@ -130,6 +130,50 @@
         </div>
     </div>
 
+    <div id="loginModal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Вход</h3>
+        </div>
+        <div class="modal-body">
+            <p>Тут можно пришвартовать свой швербот с помощью разных соцсетей:</p>
+            <div class="form-inline clearfix">
+                <form id="foursquareForm" class="pull-left" method="POST" action="<c:url value="/connect/foursquare" />">
+                    <button class="foursquareImage" type="submit"></button>
+                </form>
+                <form id="facebookForm" class="pull-left spacer3" method="POST" action="<c:url value="/connect/facebook" />">
+                    <input type="hidden" name="scope" value="email,publish_stream,offline_access" />
+                    <button class="facebookImage" type="submit"></button>
+                </form>
+                <form id="twitterForm" class="pull-left spacer3" method="POST" action="<c:url value="/connect/twitter" />">
+                    <button class="twitterImage" type="submit"></button>
+                </form>
+            </div>
+
+            <hr hidden="true" style="display: none;"/>
+
+            <div class="form-horizontal" hidden="true" style="display: none;">
+                <div>Или войти с логином и паролем:</div>
+                <form class="form-horizontal" method="post" action='' name="login_form">
+                    <p><input type="text" class="span3" name="eid" id="email" placeholder="электропочта"></p>
+                    <p><input type="password" class="span3" name="passwd" placeholder="пароль"></p>
+                    <p><label class="checkbox"><input type="checkbox" value="">
+                        Запомнить меня</label></p>
+                    <p>
+                        <button type="submit" class="btn btn-primary">YARR!</button>
+                        <a href="#">Забыли пароль?</a>
+                    </p>
+                </form>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <span hidden="true" style="display: none;">Нет учетки в соцсетях? Ну, тогда можно и по-старинке:</span>
+            <a id="registrationButton" href="#" class="btn btn-primary" hidden="true" style="display: none;">Регистрация</a>
+            <a href="#" class="btn" data-dismiss="modal">Отмена</a>
+        </div>
+    </div>
+
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
