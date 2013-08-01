@@ -36,6 +36,7 @@ $(document).ready(function(){
 
     var newMarker = false;
 
+    var NEW_MARKER_ID = "";
     var GRID_SIZE = 50;
     var MAX_ZOOM = 15;
     var MAX_ZOOM_FOR_MARKER = 18;
@@ -1350,7 +1351,8 @@ $(document).ready(function(){
 
     function createMarkerWithInfoBoxForLocation(infoBoxObject, zoomIn) {
 
-        if( isMarkerAlreadyRendered(infoBoxObject.location) === true ) {
+        var renderRes = isMarkerAlreadyRendered(infoBoxObject.location);
+        if( renderRes === true ) {
             return;
         }
 
@@ -2006,7 +2008,12 @@ $(document).ready(function(){
 
                     if( res.error === false ) {
                         var newLocation = res.result;
+
                         infoBoxObject.location = newLocation;
+
+                        markers.put(infoBoxObject.marker, infoBoxObject);
+                        markersIds.remove(NEW_MARKER_ID);
+                        markersIds.put(newLocation.id, newLocation);
 
                         newMarker = false;
 
@@ -2811,6 +2818,7 @@ $(document).ready(function(){
 
     function createEmptyLocation() {
         return {
+            id: NEW_MARKER_ID,
             title: "",
             description: "",
             type: {
