@@ -1048,6 +1048,10 @@ $(document).ready(function(){
 
     function createCategoryMenu() {
 
+        if( $('#categoryMenu').children().length > 0 ) {
+            return;
+        }
+
         $.each(params.types, function(n, type) {
             $('#categoryMenu').append(
                 $('<li/>').append(
