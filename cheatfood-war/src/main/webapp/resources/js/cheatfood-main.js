@@ -1852,6 +1852,7 @@ $(document).ready(function(){
     }
 
     function initAndShowEditForm(infoBoxObject) {
+
         map.map.setCenter( infoBoxObject.infoBox.getPosition() );
         infoBoxObject.infoBox.hide();
 
@@ -1868,6 +1869,16 @@ $(document).ready(function(){
 
         $('#currentActionForm').data("infoBoxObject", infoBoxObject);
         showCurrentActionForm("Редактирование точки...", cancelNewMarkerAddition, "infoBoxObject");
+        initEditFormControlsBehavior(infoBoxObject);
+    }
+
+    function initEditFormControlsBehavior(infoBoxObject) {
+
+        $('#type').off('change');
+        $('#type').change(function() {
+            var path = getMarkerImagePathForCurrentType();
+            infoBoxObject.marker.setIcon(path);
+        });
 
         $('#cancelEdit').off('click');
         $('#cancelEdit').click(function() {
@@ -1938,8 +1949,7 @@ $(document).ready(function(){
         var title = $('#title').val();
         var description = $('#description').val();
 
-        var typeId = $('#type').val();
-        var type = getTypeById(typeId);
+        var type = getCurrentType();
 
         var footype = $("#editMarkerForm input[type='radio']:checked").val();
         var addressDescription = $('#addressDescription').val();
@@ -2842,6 +2852,20 @@ $(document).ready(function(){
         }
 
         return true;
+    }
+
+    function getMarkerImagePathForCurrentType() {
+        var type = getCurrentType();
+        var path = getMarkerImagePath(type);
+
+        return path;
+    }
+
+    function getCurrentType() {
+        var typeId = $('#type').val();
+        var type = getTypeById(typeId);
+
+        return type;
     }
 
     function getTypeById(id) {
