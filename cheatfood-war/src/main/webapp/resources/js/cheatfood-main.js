@@ -1876,6 +1876,28 @@ $(document).ready(function(){
         $('#currentActionForm').data("infoBoxObject", infoBoxObject);
         showCurrentActionForm("Редактирование точки...", cancelNewMarkerAddition, "infoBoxObject");
         initEditFormControlsBehavior(infoBoxObject);
+        initMarkerEditBehavior(infoBoxObject);
+    }
+
+    function initMarkerEditBehavior(infoBoxObject) {
+
+        var marker = infoBoxObject.marker;
+        marker.setDraggable(true);
+
+        google.maps.event.addListener(marker, 'dragend', function() {
+            var pos = getGeoLocationFromLatLng(marker.position);
+            infoBoxObject.location.geoLocation = pos;
+            initEditFormLatLngFields(infoBoxObject.location);
+            markers.put(marker, infoBoxObject);
+        });
+    }
+
+    function initMarkerDefaultNonEditBehavior(infoBoxObject) {
+
+        var marker = infoBoxObject.marker;
+        marker.setDraggable(false);
+
+        google.maps.event.clearListeners(marker, 'dragend');
     }
 
     function initEditFormControlsBehavior(infoBoxObject) {
@@ -2018,6 +2040,8 @@ $(document).ready(function(){
                         markers.put(infoBoxObject.marker, infoBoxObject);
                         markersIds.remove(NEW_MARKER_ID);
                         markersIds.put(newLocation.id, newLocation);
+
+                        initMarkerDefaultNonEditBehavior(infoBoxObject);
 
                         newMarker = false;
 
@@ -2228,9 +2252,7 @@ $(document).ready(function(){
             $('input:radio[name="footypeRadio"]').filter('[value="false"]').attr('checked', true);
         }
 
-        //hidden fields
-        $('#latitude').val( location.geoLocation.lat );
-        $('#longitude').val( location.geoLocation.lng );
+        initEditFormLatLngFields(location);
 
         //unnecessary fields
         if( location.address ) {
@@ -2244,6 +2266,12 @@ $(document).ready(function(){
         }
 
         $('#title').focus();
+    }
+
+    function initEditFormLatLngFields(location) {
+        //hidden fields
+        $('#latitude').val( location.geoLocation.lat );
+        $('#longitude').val( location.geoLocation.lng );
     }
 
     function clearEditForm() {
