@@ -1170,7 +1170,7 @@ $(document).ready(function(){
             draggingCursor : "url("+cursorPath+"), auto"
         });
 
-        disableContextMenu();
+        $().disableContextMenu();
 
         //create marker and edit-form on left click
         google.maps.event.addListener(map.map, 'click', function(event) {
