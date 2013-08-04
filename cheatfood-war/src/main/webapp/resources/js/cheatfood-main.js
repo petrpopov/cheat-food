@@ -680,7 +680,7 @@ $(document).ready(function(){
 
     function createMarkerEditFormOnMap() {
         var div = $('<div/>').attr('id','editMarkerFormDiv').attr('hidden', 'true')
-            .addClass('span6 transparent infoWindow').append(getMarkerEditContent());
+            .addClass('span7 transparent infoWindow').append(getEditFormMarkup());
 
         var mapControls = map.map.controls[google.maps.ControlPosition.TOP_RIGHT];
         map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(div.get(0));
@@ -1913,6 +1913,11 @@ $(document).ready(function(){
             cancelNewMarkerAddition(infoBoxObject);
         });
 
+        $('#closeEditForm').off('click');
+        $('#closeEditForm').click(function() {
+            cancelNewMarkerAddition(infoBoxObject);
+        });
+
         $('#editMarkerForm').off('submit');
         $('#editMarkerForm').submit(function(){
             //submitEditForm(infoBoxObject);
@@ -2534,10 +2539,13 @@ $(document).ready(function(){
         return exRes;
     }
 
-    function getMarkerEditContent() {
+    function getEditFormMarkup() {
 
-        var res = $('<form/>').attr('id', 'editMarkerForm').addClass('infoWindowInner form-horizontal')
+        var form = $('<form/>').attr('id', 'editMarkerForm').addClass('infoWindowInner form-horizontal')
             .attr('autocomplete', 'off')
+            .append(
+                $('<button/>').attr("type", "button").addClass("close").text("x").attr("id", "closeEditForm")
+            )
             .append(
                 $('<div/>').attr("id", "editFormAlert").addClass("alert").attr("hidden", "true").attr("style", "display: none;")
                     .append(
@@ -2554,6 +2562,66 @@ $(document).ready(function(){
             .append(
                 $('<legend/>').attr("id","editFormLegend").text('Создание точки')
             )
+            .append(
+                getEditFormTabbableMarkup()
+            )
+            .append(
+                $('<div/>').addClass('control-group')
+                    .append(
+                        $('<div/>').addClass('controls')
+                            .append(
+                                $('<button/>').attr('id','submitEdit').attr('type', 'button').addClass('btn btn-primary')
+                                    .attr('data-loading-text', 'Сохраняем...')
+                                    .text('Сохранить точку')
+                            )
+                            .append(
+                                $('<button/>').attr('id','cancelEdit').attr('type', 'button').addClass('btn').text('Отмена')
+                            )
+                    )
+            );
+
+        return form;
+    }
+
+    function getEditFormTabbableMarkup() {
+
+        var div = $('<div/>').addClass("tabbable")
+            .append(
+                $('<ul/>').addClass("nav nav-pills")
+                    .append(
+                        $('<li/>').addClass("active").append(
+                            $('<a/>').attr("href", "#editFormTab1").attr("data-toggle", "tab").text("Основное")
+                        )
+                    )
+                    .append(
+                        $('<li/>').append(
+                            $('<a/>').attr("href", "#editFormTab2").attr("data-toggle", "tab").text("Дополнительно")
+                        )
+                    )
+            )
+            .append(
+                $('<div/>').addClass("tab-content")
+                    .append(
+                        $('<div/>').addClass("tab-pane active").attr("id", "editFormTab1")
+                            .append(
+                                getEditFormTab1Markup()
+                            )
+                    )
+                    .append(
+                        $('<div/>').addClass("tab-pane").attr("id", "editFormTab2")
+                            .append(
+                                getEditFormTab2Markup()
+                            )
+                    )
+            );
+
+
+        return div;
+    }
+
+    function getEditFormTab1Markup() {
+
+        var div = $('<div/>')
             .append(
                 $('<div/>').addClass('control-group').attr('hidden', 'true')
                     .append(
@@ -2592,10 +2660,31 @@ $(document).ready(function(){
                                     .attr('id', 'description').attr('name', 'description')
                                     .attr('placeholder', 'Самые лучшие чебуреки и шаурма в городе!')
                                     .attr('required', 'true')
-                                    .attr("rows", 3)
+                                    .attr("rows", 3).addClass("span4")
                             )
                     )
             )
+            .append(
+                $('<div/>').addClass('control-group')
+                    .append(
+                        $('<label/>').addClass('control-label').attr('for','addressDescription').text('Описание адреса')
+                    )
+                    .append(
+                        $('<div/>').addClass('controls')
+                            .append(
+                                $('<input/>').addClass('input-block-level span4')
+                                    .attr('id', 'addressDescription').attr('name', 'addressDescription')
+                                    .attr('placeholder', 'Выходите с электрички и спускаетесь под мост')
+                            )
+                    )
+            );
+
+        return div;
+    }
+
+    function getEditFormTab2Markup() {
+
+        var div = $('<div/>')
             .append(
                 $('<div/>').addClass('control-group')
                     .append(
@@ -2653,20 +2742,6 @@ $(document).ready(function(){
                     )
             )
             .append(
-                $('<div/>').addClass('control-group')
-                    .append(
-                        $('<label/>').addClass('control-label').attr('for','addressDescription').text('Описание адреса')
-                    )
-                    .append(
-                        $('<div/>').addClass('controls')
-                            .append(
-                                $('<input/>').addClass('input-block-level span4')
-                                    .attr('id', 'addressDescription').attr('name', 'addressDescription')
-                                    .attr('placeholder', 'Выходите с электрички и спускаетесь под мост')
-                            )
-                    )
-            )
-            .append(
                 $('<div/>').addClass('control-group').attr('hidden', 'true')
                     .append(
                         $('<label/>').addClass('control-label').attr('for','latitude').text('Latitude')
@@ -2693,139 +2768,128 @@ $(document).ready(function(){
                                     .attr('required', 'true')
                             )
                     )
-                )
-                .append(
-                    $('<hr/>')
-                )
-                .append(
-                    $('<div/>').addClass('control-group').attr('hidden', 'true')
-                        .append(
-                            $('<div/>').addClass('controls')
-                                .append(
-                                    $('<label/>').addClass("checkbox inline")
-                                        .append(
-                                            $('<input/>').attr('type', 'checkbox').attr('id','createAddressSwitch')
-                                        )
-                                        .append(
-                                            $('<span/>').text('Знаете реальный адрес?')
-                                        )
-                                )
-                        )
-                )
-                .append(
-                    $('<div/>').attr('id', 'realAddress').attr('hidden', 'true')
-                        .append(
-                            $('<div/>').addClass('control-group')
-                                .append(
-                                    $('<label/>').addClass('control-label').attr('for','country').text('Страна')
-                                )
-                                .append(
-                                    $('<div/>').addClass('controls')
-                                        .append(
-                                            $('<input/>').addClass('input-block-level span4')
-                                                .attr('id', 'country').attr('name', 'country')
-
-                                        )
-                                )
-                        )
-                        .append(
-                            $('<div/>').addClass('control-group')
-                                .append(
-                                    $('<label/>').addClass('control-label').attr('for','region').text('Регион')
-                                )
-                                .append(
-                                    $('<div/>').addClass('controls')
-                                        .append(
-                                            $('<input/>').addClass('input-block-level span4')
-                                                .attr('id', 'region').attr('name', 'region')
-
-                                        )
-                                )
-                        )
-                        .append(
-                            $('<div/>').addClass('control-group')
-                                .append(
-                                    $('<label/>').addClass('control-label').attr('for','city').text('Город')
-                                )
-                                .append(
-                                    $('<div/>').addClass('controls')
-                                        .append(
-                                            $('<input/>').addClass('input-block-level span4')
-                                                .attr('id', 'city').attr('name', 'city')
-
-                                        )
-                                )
-                        )
-                        .append(
-                            $('<div/>').addClass('control-group')
-                                .append(
-                                    $('<label/>').addClass('control-label').attr('for','street').text('Улица')
-                                )
-                                .append(
-                                    $('<div/>').addClass('controls')
-                                        .append(
-                                            $('<input/>').addClass('input-block-level span4')
-                                                .attr('id', 'street').attr('name', 'street')
-
-                                        )
-                                )
-                        )
-                        .append(
-                            $('<div/>').addClass('control-group')
-                                .append(
-                                    $('<label/>').addClass('control-label').attr('for','house').text('Дом, корпус итд.')
-                                )
-                                .append(
-                                    $('<div/>').addClass('controls')
-                                        .append(
-                                            $('<input/>').addClass('input-block-level span4')
-                                                .attr('id', 'house').attr('name', 'house')
-
-                                        )
-                                )
-                        )
-                        .append(
-                            $('<div/>').addClass('control-group').attr('hidden', 'true')
-                                .append(
-                                    $('<label/>').addClass('control-label').attr('for','addressLine').text('addressLine')
-                                )
-                                .append(
-                                    $('<div/>').addClass('controls')
-                                        .append(
-                                            $('<input/>').addClass('input-block-level span4')
-                                                .attr('id', 'addressLine').attr('name', 'addressLine')
-
-                                        )
-                                )
-                        )
-                        .append(
-                            $('<div/>').addClass('control-group').attr('hidden', 'true')
-                                .append(
-                                    $('<label/>').addClass('control-label').attr('for','zipcode').text('Индекс')
-                                )
-                                .append(
-                                    $('<div/>').addClass('controls')
-                                        .append(
-                                            $('<input/>').addClass('input-block-level span4')
-                                                .attr('id', 'zipcode').attr('name', 'zipcode')
-
-                                        )
-                                )
-                        )
-                )
+            )
             .append(
-                $('<div/>').addClass('form-actions')
+                $('<hr/>').attr('hidden', 'true')
+            )
+            .append(
+                $('<div/>').addClass('control-group').attr('hidden', 'true')
                     .append(
-                        $('<button/>').attr('id','submitEdit').attr('type', 'button').addClass('btn btn-primary')
-                            .attr('data-loading-text', 'Сохраняем...')
-                            .text('Сохранить точку')
+                        $('<div/>').addClass('controls')
+                            .append(
+                                $('<label/>').addClass("checkbox inline")
+                                    .append(
+                                        $('<input/>').attr('type', 'checkbox').attr('id','createAddressSwitch')
+                                    )
+                                    .append(
+                                        $('<span/>').text('Знаете реальный адрес?')
+                                    )
+                            )
+                    )
+            )
+            .append(
+                $('<div/>').attr('id', 'realAddress').attr('hidden', 'true')
+                    .append(
+                        $('<div/>').addClass('control-group')
+                            .append(
+                                $('<label/>').addClass('control-label').attr('for','country').text('Страна')
+                            )
+                            .append(
+                                $('<div/>').addClass('controls')
+                                    .append(
+                                        $('<input/>').addClass('input-block-level span4')
+                                            .attr('id', 'country').attr('name', 'country')
+
+                                    )
+                            )
                     )
                     .append(
-                        $('<button/>').attr('id','cancelEdit').attr('type', 'button').addClass('btn').text('Отмена')
+                        $('<div/>').addClass('control-group')
+                            .append(
+                                $('<label/>').addClass('control-label').attr('for','region').text('Регион')
+                            )
+                            .append(
+                                $('<div/>').addClass('controls')
+                                    .append(
+                                        $('<input/>').addClass('input-block-level span4')
+                                            .attr('id', 'region').attr('name', 'region')
+
+                                    )
+                            )
+                    )
+                    .append(
+                        $('<div/>').addClass('control-group')
+                            .append(
+                                $('<label/>').addClass('control-label').attr('for','city').text('Город')
+                            )
+                            .append(
+                                $('<div/>').addClass('controls')
+                                    .append(
+                                        $('<input/>').addClass('input-block-level span4')
+                                            .attr('id', 'city').attr('name', 'city')
+
+                                    )
+                            )
+                    )
+                    .append(
+                        $('<div/>').addClass('control-group')
+                            .append(
+                                $('<label/>').addClass('control-label').attr('for','street').text('Улица')
+                            )
+                            .append(
+                                $('<div/>').addClass('controls')
+                                    .append(
+                                        $('<input/>').addClass('input-block-level span4')
+                                            .attr('id', 'street').attr('name', 'street')
+
+                                    )
+                            )
+                    )
+                    .append(
+                        $('<div/>').addClass('control-group')
+                            .append(
+                                $('<label/>').addClass('control-label').attr('for','house').text('Дом, корпус итд.')
+                            )
+                            .append(
+                                $('<div/>').addClass('controls')
+                                    .append(
+                                        $('<input/>').addClass('input-block-level span4')
+                                            .attr('id', 'house').attr('name', 'house')
+
+                                    )
+                            )
+                    )
+                    .append(
+                        $('<div/>').addClass('control-group').attr('hidden', 'true')
+                            .append(
+                                $('<label/>').addClass('control-label').attr('for','addressLine').text('addressLine')
+                            )
+                            .append(
+                                $('<div/>').addClass('controls')
+                                    .append(
+                                        $('<input/>').addClass('input-block-level span4')
+                                            .attr('id', 'addressLine').attr('name', 'addressLine')
+
+                                    )
+                            )
+                    )
+                    .append(
+                        $('<div/>').addClass('control-group').attr('hidden', 'true')
+                            .append(
+                                $('<label/>').addClass('control-label').attr('for','zipcode').text('Индекс')
+                            )
+                            .append(
+                                $('<div/>').addClass('controls')
+                                    .append(
+                                        $('<input/>').addClass('input-block-level span4')
+                                            .attr('id', 'zipcode').attr('name', 'zipcode')
+
+                                    )
+                            )
                     )
             );
 
-        return res;
+        return div;
     }
 
     function getOptionsElementsForType() {
