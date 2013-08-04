@@ -1023,6 +1023,10 @@ $(document).ready(function(){
             return;
         }
 
+        if( $.fn.disableContextMenu !== undefined ) {
+            $().disableContextMenu();
+        }
+
         newMarker = true;
         var location = createEmptyLocation();
         location.geoLocation = getGeoLocationFromLatLng(latLng);
@@ -1158,6 +1162,11 @@ $(document).ready(function(){
         $('#deleteMarkerMenu').off('click');
     }
 
+    $.fn.disableContextMenu = function disableContextMenu() {
+        //disable context menu
+        google.maps.event.clearListeners(map.map, 'rightclick');
+    };
+
     function addMarkerOnMapByLeftClick() {
 
         showCurrentActionForm('Добавление новой точки...', cancelNewMarkerAddition, "infoBoxObject");
@@ -1170,8 +1179,6 @@ $(document).ready(function(){
             draggingCursor : "url("+cursorPath+"), auto"
         });
 
-        $().disableContextMenu();
-
         //create marker and edit-form on left click
         google.maps.event.addListener(map.map, 'click', function(event) {
             createMarkerForContextMenu(event.latLng);
@@ -1180,11 +1187,6 @@ $(document).ready(function(){
         disableCategoryMenu();
         disableAddMarkerMenu();
     }
-
-    $.fn.disableContextMenu = function disableContextMenu() {
-        //disable context menu
-        google.maps.event.clearListeners(map.map, 'rightclick');
-    };
 
     function setDefaultMouseBehavior() {
 
@@ -1887,7 +1889,6 @@ $(document).ready(function(){
         initEditFormValidation();
         initEditFormWithData(infoBoxObject);
         initEditFormFocus();
-        initDatePicker();
         initSwitch();
     }
 
@@ -1916,8 +1917,7 @@ $(document).ready(function(){
 
         $('#type').off('change');
         $('#type').change(function() {
-            var path = getMarkerImagePathForCurrentType();
-            infoBoxObject.marker.setIcon(path);
+            setMarkerCurrentIcon(infoBoxObject);
         });
 
         $('#cancelEdit').off('click');
@@ -1946,6 +1946,11 @@ $(document).ready(function(){
                 $('#submitEdit').click();
             }
         });
+    }
+
+    function setMarkerCurrentIcon(infoBoxObject) {
+        var path = getMarkerImagePathForCurrentType();
+        infoBoxObject.marker.setIcon(path);
     }
 
     function cancelNewMarkerAddition(infoBoxObject) {
@@ -2299,7 +2304,14 @@ $(document).ready(function(){
         initDatePicker(location.actualDate);
 
         //types
-        $("#type").val(location.type.id);
+        if( location.type.id !== NEW_MARKER_ID ) {
+            $("#type").val(location.type.id);
+        }
+        else {
+            $('select#type option:first-child');
+            setMarkerCurrentIcon(infoBoxObject);
+        }
+
         if( location.footype === true ) {
             $('input:radio[name="footypeRadio"]').filter('[value="true"]').attr('checked', true);
         }
@@ -2363,6 +2375,9 @@ $(document).ready(function(){
         if( date ) {
             var parseDate = $.datepicker.parseDate( DATE_FORMAT, date );
             $('#actualDate').datepicker('setDate', parseDate );
+        }
+        else {
+            $('#actualDate').datepicker('setDate', "-0d");
         }
     }
 
@@ -2972,7 +2987,9 @@ $(document).ready(function(){
                     val = type.names[j].value;
                 }
             }
-            res.push($('<option/>').val(id).text(val));
+
+            var el = $('<option/>').val(id).text(val);
+            res.push(el);
         }
         return res;
     }
