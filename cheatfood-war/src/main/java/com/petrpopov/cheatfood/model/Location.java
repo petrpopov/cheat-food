@@ -70,6 +70,9 @@ public class Location implements Serializable {
 
     private Double averageRate;
 
+    @NotNull
+    private Double averagePrice;
+
     public Location() {
     }
 
@@ -205,6 +208,14 @@ public class Location implements Serializable {
 
     public void setAverageRate(Double averageRate) {
         this.averageRate = averageRate;
+    }
+
+    public Double getAveragePrice() {
+        return averagePrice;
+    }
+
+    public void setAveragePrice(Double averagePrice) {
+        this.averagePrice = averagePrice;
     }
 
     @Override

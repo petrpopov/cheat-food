@@ -39,6 +39,7 @@
     <script src="<s:url value="/resources"/>/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="<s:url value="/resources"/>/js/jquery-ui.datepicker.ru.js"></script>
     <script src="<s:url value="/resources"/>/js/jquery.raty-2.5.2.min.js"></script>
+    <script src="<s:url value="/resources"/>/js/jquery.numeric-1.3.1.js"></script>
 
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script>
     <script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>

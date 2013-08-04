@@ -1475,6 +1475,14 @@ $(document).ready(function(){
             $('#info_addressd_body').hide();
         }
 
+        if(location.averagePrice) {
+            $('#info_averagePrice').text(location.averagePrice + " RUB");
+            $('#info_averagePrice').show();
+        }
+        else {
+            $('#info_averagePrice').hide();
+        }
+
         if( location.footype === true ) {
             $('#info_footype').addClass('icon-warning-sign').removeClass('icon-ok-sign');
             $('#info_footype_text').text('Это тошняк или палатка');
@@ -1862,21 +1870,25 @@ $(document).ready(function(){
         map.map.setCenter( infoBoxObject.infoBox.getPosition() );
         infoBoxObject.infoBox.hide();
 
-        $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
-            $('#editFormAlert').hide();
-            initEditFormAddressData(infoBoxObject);
-            initEditFormValidation();
-            initEditFormWithData(infoBoxObject);
-            initEditFormFocus();
-            initDatePicker();
-            initSwitch();
-        });
 
+        initEditForm(infoBoxObject);
+        $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME);
 
         $('#currentActionForm').data("infoBoxObject", infoBoxObject);
         showCurrentActionForm("Редактирование точки...", cancelNewMarkerAddition, "infoBoxObject");
         initEditFormControlsBehavior(infoBoxObject);
         initMarkerEditBehavior(infoBoxObject);
+    }
+
+    function initEditForm(infoBoxObject) {
+        clearEditForm();
+        $('#editFormAlert').hide();
+        initEditFormAddressData(infoBoxObject);
+        initEditFormValidation();
+        initEditFormWithData(infoBoxObject);
+        initEditFormFocus();
+        initDatePicker();
+        initSwitch();
     }
 
     function initMarkerEditBehavior(infoBoxObject) {
@@ -1972,6 +1984,16 @@ $(document).ready(function(){
             submitEditFormPost(infoBoxObject);
         }
         else {
+            var tab1Errors = $('#editFormTab1 .error').filter(function() { return $(this).text() != ""; }).length;
+            var tab2Errors = $('#editFormTab2 .error').filter(function() { return $(this).text() != ""; }).length;
+
+            if( tab1Errors === 0 && tab2Errors !== 0 ) {
+                $('#editFormTab a:last').tab('show');
+            }
+            else if( tab1Errors !== 0 && tab2Errors === 0 ) {
+                $('#editFormTab a:first').tab('show');
+            }
+
             $('#submitEdit').button('reset');
         }
     }
@@ -1996,6 +2018,7 @@ $(document).ready(function(){
         var house = $('#house').val();
         var zipcode = $('#zipcode').val();
         var addressLine = $('#addressLine').val();
+        var averagePrice = $('#averagePrice').val();
 
 
         var param = {
@@ -2018,7 +2041,8 @@ $(document).ready(function(){
                 house: house,
                 zipcode: zipcode,
                 addressLine: addressLine
-            }
+            },
+            averagePrice: averagePrice
         };
 
         param = JSON.stringify(param);
@@ -2195,7 +2219,8 @@ $(document).ready(function(){
 
     function initEditFormValidation() {
         $("#editMarkerForm").validate({
-            rules : {
+            ignore: "",
+            rules: {
                 title: {
                     required: true,
                     minlength: 2,
@@ -2221,6 +2246,16 @@ $(document).ready(function(){
                 },
                 longitude: {
                     required: true
+                },
+                averagePrice: {
+                    required: false,
+                    max: 350,
+                    digits: true
+                }
+            },
+            messages: {
+                averagePrice: {
+                    max: "Цена выше 350 это уже высоковато. Давай лучше в какое-нибудь другое кафе?"
                 }
             },
             success: function() {
@@ -2235,8 +2270,6 @@ $(document).ready(function(){
     }
 
     function initEditFormWithData(infoBoxObject) {
-
-        clearEditForm();
 
         var location = infoBoxObject.location;
 
@@ -2254,6 +2287,14 @@ $(document).ready(function(){
         $('#title').val( location.title );
         $('#description').val( location.description );
         $('#addressDescription').val( location.addressDescription );
+
+        $('#averagePrice').numeric();
+        $('#averagePrice').val( location.averagePrice );
+        $('#averagePrice').typeahead({
+            source: ["100", "150", "200", "250", "300", "350"],
+            items: 8,
+            minlength: 0
+        });
 
         initDatePicker(location.actualDate);
 
@@ -2303,6 +2344,9 @@ $(document).ready(function(){
         $('#house').val( null );
         $('#zipcode').val( null );
         $('#addressLine').val( null );
+        $('#averagePrice').val(null);
+
+        $('#editFormTab a:first').tab('show');
     }
 
     function initEditFormFocus() {
@@ -2408,21 +2452,30 @@ $(document).ready(function(){
                                             )
                                     )
                                     .append(
-                                        $('<div/>').addClass('media-body').attr("id", "info_address_body")
-                                            .append(
-                                                $('<span/>').addClass('label').text('Реальный адрес')
-                                            )
-                                            .append(
-                                                $('<span/>').attr('id', 'info_address').addClass('spacer5')
-                                            )
-                                    )
-                                    .append(
                                         $('<div/>').addClass('media-body')
                                             .append(
                                                 $('<span/>').addClass('label').text('Дата проверки')
                                             )
                                             .append(
                                                 $('<span/>').attr('id', 'info_actualDate').addClass('spacer5')
+                                            )
+                                    )
+                                    .append(
+                                        $('<div/>').addClass('media-body')
+                                            .append(
+                                                $('<span/>').addClass('label').text('Средний чек')
+                                            )
+                                            .append(
+                                                $('<span/>').attr('id', 'info_averagePrice').addClass('spacer5')
+                                            )
+                                    )
+                                    .append(
+                                        $('<div/>').addClass('media-body').attr("id", "info_address_body")
+                                            .append(
+                                                $('<span/>').addClass('label').text('Реальный адрес')
+                                            )
+                                            .append(
+                                                $('<span/>').attr('id', 'info_address').addClass('spacer5')
                                             )
                                     )
                             )
@@ -2587,10 +2640,11 @@ $(document).ready(function(){
 
         var div = $('<div/>').addClass("tabbable")
             .append(
-                $('<ul/>').addClass("nav nav-pills")
+                $('<ul/>').addClass("nav nav-pills").attr("id", "editFormTab")
                     .append(
                         $('<li/>').addClass("active").append(
-                            $('<a/>').attr("href", "#editFormTab1").attr("data-toggle", "tab").text("Основное")
+                            $('<a/>')
+                                .attr("href", "#editFormTab1").attr("data-toggle", "tab").text("Основное")
                         )
                     )
                     .append(
@@ -2738,6 +2792,19 @@ $(document).ready(function(){
                             .append(
                                 $('<input/>').attr('id', 'actualDate').addClass('input-block-level span4')
                                     .attr('type', 'text').attr('name', 'actualDate')
+                            )
+                    )
+            )
+            .append(
+                $('<div/>').addClass('control-group')
+                    .append(
+                        $('<label/>').addClass('control-label').attr('for', 'averagePrice').text('Средний чек')
+                    )
+                    .append(
+                        $('<div/>').addClass('controls')
+                            .append(
+                                $('<input/>').attr('id', 'averagePrice').addClass('input-block-level span4')
+                                    .attr('type', 'text').attr('name', 'averagePrice')
                             )
                     )
             )
@@ -2954,7 +3021,8 @@ $(document).ready(function(){
             },
             alreadyVoted: false,
             alreadyRated: false,
-            averageRate: 0.0
+            averageRate: 0.0,
+            averagePrice: 250
         };
     }
 
