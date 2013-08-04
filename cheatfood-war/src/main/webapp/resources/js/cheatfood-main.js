@@ -2236,7 +2236,16 @@ $(document).ready(function(){
         var location = infoBoxObject.location;
 
         //main fields
-        $('#location-id').val( location.id );
+        var id = location.id;
+        $('#location-id').val(id);
+
+        if( id === NEW_MARKER_ID ) {
+            $('#editFormLegend').text("Создание точки");
+        }
+        else {
+            $('#editFormLegend').text("Редактирование точки");
+        }
+
         $('#title').val( location.title );
         $('#description').val( location.description );
         $('#addressDescription').val( location.addressDescription );
@@ -2543,7 +2552,7 @@ $(document).ready(function(){
                     )
             )
             .append(
-                $('<legend/>').text('Создание точки')
+                $('<legend/>').attr("id","editFormLegend").text('Создание точки')
             )
             .append(
                 $('<div/>').addClass('control-group').attr('hidden', 'true')
@@ -2574,15 +2583,16 @@ $(document).ready(function(){
             .append(
                 $('<div/>').addClass('control-group')
                     .append(
-                        $('<label/>').addClass('control-label').attr('for','description').text('Описание')
+                        $('<label/>').addClass('control-label').attr('for','description').text('Оставьте совет')
                     )
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span4')
+                                $('<textarea/>')//.addClass('input-block-level span4')
                                     .attr('id', 'description').attr('name', 'description')
                                     .attr('placeholder', 'Самые лучшие чебуреки и шаурма в городе!')
                                     .attr('required', 'true')
+                                    .attr("rows", 3)
                             )
                     )
             )
