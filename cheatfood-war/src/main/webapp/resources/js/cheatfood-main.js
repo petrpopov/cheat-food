@@ -3045,9 +3045,16 @@ $(document).ready(function(){
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').attr('id', 'averagePrice').addClass('input-block-level span4')
-                                    .attr('type', 'text').attr('name', 'averagePrice')
+                                $('<div/>').addClass("input-append")
+                                    .append(
+                                        $('<input/>').attr('id', 'averagePrice').addClass('span3')
+                                            .attr('type', 'text').attr('name', 'averagePrice')
+                                    )
+                                    .append(
+                                        $('<span/>').addClass("add-on").text("RUB")
+                                    )
                             )
+
                     )
             )
             .append(
