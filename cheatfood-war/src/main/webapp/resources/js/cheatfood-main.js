@@ -763,14 +763,26 @@ $(document).ready(function(){
         $('#searchBar').focus();
 
         var options = {
-            bounds: map.map.getBounds(),
-            componentRestrictions: {country: 'ru'}
+            //bounds: map.map.getBounds(),
+            //componentRestrictions: {country: 'ru'}
         };
 
         var address = document.getElementById("searchBar");
-        new google.maps.places.Autocomplete(address, options);
+        var autocomplete = new google.maps.places.Autocomplete(address, options);
 
+        initAutocompleteFirstResult(autocomplete);
         initSearchBarFormBehavior();
+    }
+
+    function initAutocompleteFirstResult(autocomplete) {
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                return;
+            }
+
+            initGeocodeResultMarkerBehavior(place.geometry.location);
+        });
     }
 
     function initSearchBarFormBehavior() {
@@ -810,28 +822,38 @@ $(document).ready(function(){
             if (status == google.maps.GeocoderStatus.OK) {
 
                 var position = results[0].geometry.location;
-
-                map.map.setCenter(position);
-                map.map.setZoom(MAX_ZOOM_FOR_MARKER);
-
-                var marker = map.addMarker({
-                    lat: position.lat(),
-                    lng: position.lng(),
-                    draggable: true,
-                    icon: getDefaultMarkerImagePath(),
-                    click: function() {
-                        createMarkerForContextMenuByMarker(marker);
-                    }
-                });
-
-                hideAllTempMarkers();
-                tempMarkers = [];
-                tempMarkers.push(marker);
+                initGeocodeResultMarkerBehavior(position);
+            }
+            else if( status == google.maps.GeocoderStatus.ZERO_RESULTS ) {
+                showNoteTopCenter("Извините, ничего не найдено", "warning", true);
+            }
+            else {
+                showNoteTopCenter("Извините, произошла ошибка", "warning", true);
             }
 
             $('#searchButton').button('reset');
             hideAutoCompleteResults();
         });
+    }
+
+    function initGeocodeResultMarkerBehavior(position) {
+
+        map.map.setCenter(position);
+        map.map.setZoom(MAX_ZOOM_FOR_MARKER);
+
+        var marker = map.addMarker({
+            lat: position.lat(),
+            lng: position.lng(),
+            draggable: true,
+            icon: getDefaultMarkerImagePath(),
+            click: function() {
+                createMarkerForContextMenuByMarker(marker);
+            }
+        });
+
+        hideAllTempMarkers();
+        tempMarkers = [];
+        tempMarkers.push(marker);
     }
 
     function hideAutoCompleteResults() {
