@@ -2293,6 +2293,7 @@ $(document).ready(function(){
                         showInfoBoxForMarker(infoBoxObject);
                         enableEditMarkerMenu(infoBoxObject);
                         enableDeleteMarkerMenu(infoBoxObject);
+                        showSearchForm();
                     }
                     else {
                         if( res.errorType === errors.access_denied) {
@@ -2685,7 +2686,7 @@ $(document).ready(function(){
                                     .append(
                                         $('<div/>').addClass('media-body').attr('id','info_addressd_body')
                                             .append(
-                                                $('<span/>').addClass('label label-info').text('Адрес')
+                                                $('<span/>').addClass('label label-info').text('Описание адреса')
                                             )
                                             .append(
                                                 $('<span/>').attr('id','info_addressDescription')
@@ -2713,7 +2714,7 @@ $(document).ready(function(){
                                     .append(
                                         $('<div/>').addClass('media-body').attr("id", "info_address_body")
                                             .append(
-                                                $('<span/>').addClass('label').text('Реальный адрес')
+                                                $('<span/>').addClass('label').text('Адрес')
                                             )
                                             .append(
                                                 $('<span/>').attr('id', 'info_address').addClass('spacer5')
