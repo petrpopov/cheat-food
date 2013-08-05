@@ -2291,6 +2291,12 @@ $(document).ready(function(){
 
         $('#title').val( location.title );
         $('#description').val( location.description );
+        $('#description').tooltip(
+            {
+                placement: "top",
+                title: "Короткое описание места - что здесь можно дешево поесть. " +
+                    "Если это кафе с большим выбором в меню, то - основное дешевое блюдо"
+            } );
         $('#addressDescription').val( location.addressDescription );
 
         $('#averagePrice').numeric();
@@ -2305,12 +2311,16 @@ $(document).ready(function(){
 
         //types
         if( location.type.id !== NEW_MARKER_ID ) {
-            $("#type").val(location.type.id);
+            $("select#type").val(location.type.id);
         }
         else {
             $('select#type option:first-child');
             setMarkerCurrentIcon(infoBoxObject);
         }
+        $("select#type").tooltip({
+            placement: "top",
+            title: "Если кафе предлагает разные блюда, то укажите тип основного дешевого блюда"
+        });
 
         if( location.footype === true ) {
             $('input:radio[name="footypeRadio"]').filter('[value="true"]').attr('checked', true);
