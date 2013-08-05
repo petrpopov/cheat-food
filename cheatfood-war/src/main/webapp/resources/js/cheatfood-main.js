@@ -36,6 +36,8 @@ $(document).ready(function(){
     var currentTypeId;
 
     var newMarker = false;
+    var searchMarker = false;
+
 
     var NEW_MARKER_ID = "";
     var GRID_SIZE = 50;
@@ -435,7 +437,9 @@ $(document).ready(function(){
             theme: 'defaultTheme',
             type: type,
             closeWith: ['click','button'],
-            timeout: 3000
+            timeout: 3000,
+            maxVisible: 1,
+            dismissQueue: true
         });
     }
 
@@ -738,7 +742,7 @@ $(document).ready(function(){
                     .attr("placeholder", "Введите адрес")
             )
             .append(
-                $('<button/>').attr("type", "button").addClass("btn btn-primary")
+                $('<button/>').attr("type", "submit").addClass("btn btn-primary")
                     .attr("data-loading-text", "Ищем...")
                     .attr("id", "searchButton")
                     .append(
@@ -747,6 +751,9 @@ $(document).ready(function(){
                     .append(
                         $('<span/>').addClass("spacer3").text("Найти")
                     )
+            )
+            .append(
+                $('<button/>').attr("id", "clearSearchButton").addClass("btn").text("Очистить")
             );
 
         var div = $('<div/>').attr("id", "searchBarDiv").addClass("infoWindow").append(form);
@@ -756,6 +763,14 @@ $(document).ready(function(){
         google.maps.event.addListener(map.map, 'idle', function(event) {
             initSearchBarBehavior();
         });
+    }
+
+    function showSearchForm() {
+        $('#searchBarDiv').show(EFFECTS_TIME);
+    }
+
+    function hideSearchForm() {
+        $('#searchBarDiv').hide(EFFECTS_TIME);
     }
 
     function initSearchBarBehavior() {
@@ -794,34 +809,48 @@ $(document).ready(function(){
 
         $('#searchButton').off('click');
         $('#searchButton').click(function() {
-
             $('#searchButton').button('loading');
             searchAddress();
         });
 
-        $("#searchBarForm :input").keypress(function(e) {
-            if(e.which === ENTER_KEY) {
-                $('#searchButton').click();
-            }
+        $("#clearSearchButton").off('click');
+        $("#clearSearchButton").click(function() {
+            $('#searchBar').val(null);
+            removeAllTempMarkers();
         });
     }
 
-    function searchAddress() {
+    function checkOrClearAutocompleteResultsOnMap() {
         var search = $('#searchBar').val();
         if( !search ) {
-            return;
+            removeAllTempMarkers();
+            $('#searchButton').button('reset');
+            return false;
         }
 
         if( !stringIsNotEmpty(search) ) {
+            removeAllTempMarkers();
+            $('#searchButton').button('reset');
+            return false;
+        }
+
+        return true;
+    }
+
+    function searchAddress() {
+
+        if( checkOrClearAutocompleteResultsOnMap() === false ) {
             return;
         }
 
+        var search = $('#searchBar').val();
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode( { 'address': search}, function(results, status) {
 
             if (status == google.maps.GeocoderStatus.OK) {
-
                 var position = results[0].geometry.location;
+                $('#searchBar').val(results[0].formatted_address);
+                hideAutoCompleteResults();
                 initGeocodeResultMarkerBehavior(position);
             }
             else if( status == google.maps.GeocoderStatus.ZERO_RESULTS ) {
@@ -851,13 +880,20 @@ $(document).ready(function(){
             }
         });
 
-        hideAllTempMarkers();
-        tempMarkers = [];
+        removeAllTempMarkers();
         tempMarkers.push(marker);
+
+        searchMarker = true;
     }
 
     function hideAutoCompleteResults() {
         $('.pac-container').hide();
+    }
+
+    function removeAllTempMarkers() {
+        hideAllTempMarkers();
+        tempMarkers = [];
+        searchMarker = false;
     }
 
     function hideAllTempMarkers() {
@@ -868,6 +904,7 @@ $(document).ready(function(){
     }
 
     function showAllTempMarkers() {
+
         $.each(tempMarkers, function(n, marker) {
             marker.setMap(map.map);
         });
@@ -962,7 +999,7 @@ $(document).ready(function(){
         $('#closeRouteForm').off('click');
         $('#closeRouteForm').click(function() {
             $('#routeFormDiv').hide(EFFECTS_TIME);
-            $('#searchBarDiv').show(EFFECTS_TIME);
+            showSearchForm();
             clearRouteForm();
             clearMapRoutes();
         });
@@ -970,7 +1007,7 @@ $(document).ready(function(){
         $('#cancelRouteForm').off('click');
         $('#cancelRouteForm').click(function() {
             $('#routeFormDiv').hide(EFFECTS_TIME);
-            $('#searchBarDiv').show(EFFECTS_TIME);
+            showSearchForm();
             clearRouteForm();
             clearMapRoutes();
         });
@@ -1176,6 +1213,7 @@ $(document).ready(function(){
             return;
         }
 
+        disableAddMarkerMenu();
         hideAllTempMarkers();
 
         if( $.fn.disableContextMenu !== undefined ) {
@@ -1734,7 +1772,7 @@ $(document).ready(function(){
 
         clearRouteForm();
         $('#routeFormDiv').show(EFFECTS_TIME);
-        $('#searchBarDiv').hide(EFFECTS_TIME);
+        hideSearchForm();
 
         var myInput;
         var myHideInput;
@@ -2025,6 +2063,8 @@ $(document).ready(function(){
 
     function initAndShowEditForm(infoBoxObject) {
 
+        hideSearchForm();
+
         map.map.setCenter( infoBoxObject.infoBox.getPosition() );
         infoBoxObject.infoBox.hide();
 
@@ -2127,12 +2167,19 @@ $(document).ready(function(){
             disableEditMarkerMenu();
             disableDeleteMarkerMenu();
         }
+
+        if( searchMarker === true ) {
+            disableEditMarkerMenu();
+            disableDeleteMarkerMenu();
+        }
+
         enableCategoryMenu();
         setDefaultMouseBehavior();
 
         newMarker = false;
 
         showAllTempMarkers();
+        showSearchForm();
     }
 
     function submitEditForm(infoBoxObject) {
@@ -2235,8 +2282,10 @@ $(document).ready(function(){
                         initMarkerDefaultNonEditBehavior(infoBoxObject);
 
                         newMarker = false;
+                        searchMarker = false;
 
                         $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+                        removeAllTempMarkers();
                         showInfoBoxForMarker(infoBoxObject);
                         enableEditMarkerMenu(infoBoxObject);
                         enableDeleteMarkerMenu(infoBoxObject);
