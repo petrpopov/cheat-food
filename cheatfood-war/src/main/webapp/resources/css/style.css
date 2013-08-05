@@ -167,8 +167,16 @@ hr {
     margin-bottom: 10px;
 }
 
-#routeFormDiv {
+#routeFormDiv, #searchBarDiv {
     margin-top: 10px;
+}
+
+#searchBarForm {
+    margin: 0;
+}
+
+.infoWindowForm {
+    padding: 10px;
 }
 
 #routeFormDiv .close {

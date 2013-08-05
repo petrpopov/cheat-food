@@ -29,6 +29,7 @@ $(document).ready(function(){
     var markersCount = 0;
     var markers = new HashMap();
     var markersIds = new HashMap();
+    var tempMarkers = [];
 
     var curBounds;
     var prevBounds;
@@ -526,10 +527,12 @@ $(document).ready(function(){
     function createMapBoundsChangedBehavior() {
 
         google.maps.event.addListener(map.map, 'dragend', function() {
+            hideAutoCompleteResults();
             loadAndCreateMarkersForLocationsInBounds();
         } );
 
         google.maps.event.addListener(map.map, 'zoom_changed', function() {
+            hideAutoCompleteResults();
             loadAndCreateMarkersForLocationsInBounds();
         });
     }
@@ -580,11 +583,12 @@ $(document).ready(function(){
     function createMapControls(auth) {
         createInfoBox(auth);
         createContextMenuForMap(auth);
-        createContextMenuForMarker(auth);
+//        createContextMenuForMarker(auth);
         createMarkerEditFormOnMap();
         createLocateMeButton();
         createAddMarkerButton(auth);
         createRouteForm();
+        createSearchBar();
     }
 
     function createInfoBox() {
@@ -725,6 +729,128 @@ $(document).ready(function(){
 
     }
 
+    function createSearchBar() {
+
+        var form = $('<form/>').attr("id", "searchBarForm").addClass("form-inline infoWindowForm")
+            .append(
+                $('<input/>').attr("id", "searchBar")
+                    .attr("type", "text").addClass("input-xxlarge")
+                    .attr("placeholder", "Введите адрес")
+            )
+            .append(
+                $('<button/>').attr("type", "button").addClass("btn btn-primary")
+                    .attr("data-loading-text", "Ищем...")
+                    .attr("id", "searchButton")
+                    .append(
+                        $('<i/>').addClass("icon-search icon-white")
+                    )
+                    .append(
+                        $('<span/>').addClass("spacer3").text("Найти")
+                    )
+            );
+
+        var div = $('<div/>').attr("id", "searchBarDiv").addClass("infoWindow").append(form);
+
+        map.map.controls[google.maps.ControlPosition.TOP_CENTER].push( div.get(0) );
+
+        google.maps.event.addListener(map.map, 'idle', function(event) {
+            initSearchBarBehavior();
+        });
+    }
+
+    function initSearchBarBehavior() {
+
+        $('#searchBar').focus();
+
+        var options = {
+            bounds: map.map.getBounds(),
+            componentRestrictions: {country: 'ru'}
+        };
+
+        var address = document.getElementById("searchBar");
+        new google.maps.places.Autocomplete(address, options);
+
+        initSearchBarFormBehavior();
+    }
+
+    function initSearchBarFormBehavior() {
+
+        $('#searchBarForm').off("submit");
+        $('#searchBarForm').submit(function() {
+            return false;
+        });
+
+        $('#searchButton').off('click');
+        $('#searchButton').click(function() {
+
+            $('#searchButton').button('loading');
+            searchAddress();
+        });
+
+        $("#searchBarForm :input").keypress(function(e) {
+            if(e.which === ENTER_KEY) {
+                $('#searchButton').click();
+            }
+        });
+    }
+
+    function searchAddress() {
+        var search = $('#searchBar').val();
+        if( !search ) {
+            return;
+        }
+
+        if( !stringIsNotEmpty(search) ) {
+            return;
+        }
+
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode( { 'address': search}, function(results, status) {
+
+            if (status == google.maps.GeocoderStatus.OK) {
+
+                var position = results[0].geometry.location;
+
+                map.map.setCenter(position);
+                map.map.setZoom(MAX_ZOOM_FOR_MARKER);
+
+                var marker = map.addMarker({
+                    lat: position.lat(),
+                    lng: position.lng(),
+                    draggable: true,
+                    icon: getDefaultMarkerImagePath(),
+                    click: function() {
+                        createMarkerForContextMenuByMarker(marker);
+                    }
+                });
+
+                hideAllTempMarkers();
+                tempMarkers = [];
+                tempMarkers.push(marker);
+            }
+
+            $('#searchButton').button('reset');
+            hideAutoCompleteResults();
+        });
+    }
+
+    function hideAutoCompleteResults() {
+        $('.pac-container').hide();
+    }
+
+    function hideAllTempMarkers() {
+        $.each(tempMarkers, function(n, marker) {
+            marker.setMap(null);
+            map.removeMarker(marker);
+        });
+    }
+
+    function showAllTempMarkers() {
+        $.each(tempMarkers, function(n, marker) {
+            marker.setMap(map.map);
+        });
+    }
+
     function createRouteForm() {
         var div = $('<div/>').attr("id", "routeFormDiv").addClass("span7 infoWindow").attr("hidden", "true")
             .append(
@@ -772,7 +898,6 @@ $(document).ready(function(){
         map.map.controls[google.maps.ControlPosition.TOP_LEFT].push( div.get(0) );
 
         google.maps.event.addListener(map.map, 'idle', function(event) {
-
             initRouteFormValidation();
             initRouteFormButtonsBehavior();
             initSubmitRouteFormBehavior();
@@ -815,6 +940,7 @@ $(document).ready(function(){
         $('#closeRouteForm').off('click');
         $('#closeRouteForm').click(function() {
             $('#routeFormDiv').hide(EFFECTS_TIME);
+            $('#searchBarDiv').show(EFFECTS_TIME);
             clearRouteForm();
             clearMapRoutes();
         });
@@ -822,6 +948,7 @@ $(document).ready(function(){
         $('#cancelRouteForm').off('click');
         $('#cancelRouteForm').click(function() {
             $('#routeFormDiv').hide(EFFECTS_TIME);
+            $('#searchBarDiv').show(EFFECTS_TIME);
             clearRouteForm();
             clearMapRoutes();
         });
@@ -1017,11 +1144,17 @@ $(document).ready(function(){
 
     }
 
+    function createMarkerForContextMenuByMarker(marker) {
+        createMarkerForContextMenu(marker.position);
+    }
+
     function createMarkerForContextMenu(latLng) {
 
         if( newMarker === true ) {
             return;
         }
+
+        hideAllTempMarkers();
 
         if( $.fn.disableContextMenu !== undefined ) {
             $().disableContextMenu();
@@ -1169,11 +1302,11 @@ $(document).ready(function(){
 
     function addMarkerOnMapByLeftClick() {
 
+        hideAllTempMarkers();
+
         showCurrentActionForm('Добавление новой точки...', cancelNewMarkerAddition, "infoBoxObject");
 
         var cursorPath = getImagePath('pin.png');
-
-        //change cursor
         map.setOptions( {
             draggableCursor : "url("+cursorPath+"), auto",
             draggingCursor : "url("+cursorPath+"), auto"
@@ -1579,6 +1712,7 @@ $(document).ready(function(){
 
         clearRouteForm();
         $('#routeFormDiv').show(EFFECTS_TIME);
+        $('#searchBarDiv').hide(EFFECTS_TIME);
 
         var myInput;
         var myHideInput;
@@ -1976,6 +2110,7 @@ $(document).ready(function(){
 
         newMarker = false;
 
+        showAllTempMarkers();
     }
 
     function submitEditForm(infoBoxObject) {
@@ -3149,6 +3284,10 @@ $(document).ready(function(){
 
     function getImagePath(imageName) {
         return getImageDirPath() + imageName;
+    }
+
+    function getDefaultMarkerImagePath() {
+        return params.realPath + "/api/images/markers/basic.png";
     }
 
     function getMarkerImagePath(type) {
