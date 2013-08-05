@@ -771,11 +771,12 @@ $(document).ready(function(){
 
     function hideSearchForm() {
         $('#searchBarDiv').hide(EFFECTS_TIME);
+        hideAutoCompleteResults();
     }
 
     function initSearchBarBehavior() {
 
-        $('#searchBar').focus();
+        //$('#searchBar').focus();
 
         var options = {
             //bounds: map.map.getBounds(),
@@ -791,6 +792,9 @@ $(document).ready(function(){
 
     function initAutocompleteFirstResult(autocomplete) {
         google.maps.event.addListener(autocomplete, 'place_changed', function() {
+
+            hideAutoCompleteResults();
+
             var place = autocomplete.getPlace();
             if (!place.geometry) {
                 return;
