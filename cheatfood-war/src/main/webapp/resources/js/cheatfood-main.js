@@ -2507,7 +2507,13 @@ $(document).ready(function(){
                 title: "Короткое описание места - что здесь можно дешево поесть. " +
                     "Если это кафе с большим выбором в меню, то - основное дешевое блюдо"
             } );
+
+
         $('#addressDescription').val( location.addressDescription );
+        $('#addressDescription').tooltip({
+            placement: "top",
+            title: "Оставьте короткий совет о том, как найти это место"
+        });
 
         $('#averagePrice').numeric();
         $('#averagePrice').val( location.averagePrice );
@@ -2963,7 +2969,7 @@ $(document).ready(function(){
                             .append(
                                 $('<input/>').addClass('input-block-level span4')
                                     .attr('id', 'addressDescription').attr('name', 'addressDescription')
-                                    .attr('placeholder', 'Выходите с электрички и спускаетесь под мост')
+                                    .attr('placeholder', 'Выходите из электрички и спускайтесь под мост')
                             )
                     )
             );
