@@ -51,7 +51,15 @@ public class LocationService extends GenericService<Location>{
         return op.find(query, Location.class);
     }
 
-    public List<Location> findAllTypeInBounds(@Valid GeoPointBounds bounds, String typeId) {
+    public List<Location> findAllInBounds(@Valid GeoPointBounds bounds, String typeId) {
+
+        if(typeId == null ) {
+            return this.findAllInBounds(bounds);
+        }
+
+        if(typeId.isEmpty()) {
+            return this.findAllInBounds(bounds);
+        }
 
         Box box = this.getBoxFromBounds(bounds);
         Query query = new Query();
@@ -67,11 +75,11 @@ public class LocationService extends GenericService<Location>{
     public List<Location> findAllInDifference(@Valid GeoPointBounds inBounds, GeoPointBounds notInBounds, String typeId) {
 
         if( notInBounds == null ) {
-            return this.findAllInBounds(inBounds);
+            return this.findAllInBounds(inBounds, typeId);
         }
 
         if( notInBounds.equals(inBounds) ) {
-            return this.findAllInBounds(inBounds);
+            return this.findAllInBounds(inBounds, typeId);
         }
 
         Type type = null;
@@ -82,8 +90,8 @@ public class LocationService extends GenericService<Location>{
         }
 
         //TODO: very shitty code !
-        List<Location> inList = type == null ? this.findAllInBounds(inBounds) : this.findAllTypeInBounds(inBounds, typeId);
-        List<Location> notInList = type == null ? this.findAllInBounds(notInBounds) :this.findAllTypeInBounds(notInBounds, typeId);
+        List<Location> inList = type == null ? this.findAllInBounds(inBounds) : this.findAllInBounds(inBounds, typeId);
+        List<Location> notInList = type == null ? this.findAllInBounds(notInBounds) :this.findAllInBounds(notInBounds, typeId);
 
         if( notInList.equals(inList) ) {
             return inList;
