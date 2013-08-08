@@ -22,6 +22,10 @@ public class LocationVoteService {
     private UserContextHandler userContextHandler;
 
     public void setAlreadyVoted(Location location) {
+
+        if( location == null )
+            return;
+
         UserEntity userEntity = userContextHandler.currentContextUser();
         if( userEntity == null )
             location.setAlreadyVoted(false);
@@ -40,6 +44,10 @@ public class LocationVoteService {
         UserEntity userEntity = userContextHandler.currentContextUser();
 
         for (Location location : list) {
+
+            if( location == null )
+                continue;
+
             if( userEntity == null ) {
                 location.setAlreadyVoted(false);
             }
@@ -53,12 +61,28 @@ public class LocationVoteService {
     }
 
     private boolean hasLocationVotedByUser(Location location, UserEntity userEntity) {
+
+        if( location == null || userEntity == null )
+            return false;
+
         List<Vote> votes = location.getVotes();
         if( votes == null )
             return false;
 
         for (Vote vote : votes) {
-            if( vote.getUserId().equals(userEntity.getId() ))
+
+            if( vote == null )
+                continue;
+
+            String voteUserId = vote.getUserId();
+            if( voteUserId == null )
+                continue;
+
+            String userEntityId = userEntity.getId();
+            if( userEntityId == null )
+                continue;
+
+            if( voteUserId.equals(userEntityId))
                 return true;
         }
 

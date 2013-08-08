@@ -12,6 +12,11 @@
     <meta charset="utf-8">
     <title>Cheat Food</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="Cheat Food"/>
+    <meta property="og:url" content="http://www.cheatfood.com"/>
+    <meta property="og:image" content="http://www.cheatfood.com/resources/img/mainlogo.png"/>
+    <meta property="og:description" content="Секретные места, где можно дешево и вкусно поесть"/>
     <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/img/favicon.ico" />
 
     <!-- Bootstrap -->

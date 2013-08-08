@@ -22,6 +22,10 @@ public class LocationRateService {
     private UserContextHandler userContextHandler;
 
     public void setAlreadyRated(Location location) {
+
+        if( location == null )
+            return;
+
         UserEntity userEntity = userContextHandler.currentContextUser();
         if( userEntity == null )
             location.setAlreadyRated(false);
@@ -40,6 +44,10 @@ public class LocationRateService {
         UserEntity userEntity = userContextHandler.currentContextUser();
 
         for (Location location : list) {
+
+            if( location == null )
+                continue;
+
             if( userEntity == null ) {
                 location.setAlreadyRated(false);
             }
@@ -53,12 +61,28 @@ public class LocationRateService {
     }
 
     private boolean hasLocationRatedByUser(Location location, UserEntity userEntity) {
+
+        if( location == null || userEntity == null )
+            return false;
+
         List<Rate> rates = location.getRates();
         if( rates == null )
             return false;
 
         for (Rate rate : rates) {
-            if( rate.getUserId().equals(userEntity.getId() ))
+
+            if( rate == null )
+                continue;
+
+            String rateUserId = rate.getUserId();
+            if( rateUserId == null )
+                continue;
+
+            String userEntityId = userEntity.getId();
+            if( userEntityId == null )
+                continue;
+
+            if( rateUserId.equals(userEntityId))
                 return true;
         }
 
