@@ -2137,7 +2137,17 @@ $(document).ready(function(){
         });
 
         $('#submitEdit').off('click');
-        $('#submitEdit').click(function() {
+        $('#submitEdit').click(function(e) {
+
+            if( $('#submitEdit').data('submitted') === true ) {
+                console.log('prevented submit');
+                e.preventDefault();
+                return;
+            }
+            else {
+                $('#submitEdit').data('submitted', true);
+            }
+
             submitEditForm(infoBoxObject);
         });
 
@@ -2187,6 +2197,7 @@ $(document).ready(function(){
     }
 
     function submitEditForm(infoBoxObject) {
+        console.log('submit edit form');
         checkEditFormValidOrNot(infoBoxObject);
     }
 
@@ -2288,7 +2299,9 @@ $(document).ready(function(){
                         newMarker = false;
                         searchMarker = false;
 
-                        $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+                        $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME, function() {
+                            resetSubmitEditButtonBehavior();
+                        });
                         removeAllTempMarkers();
                         showInfoBoxForMarker(infoBoxObject);
                         enableEditMarkerMenu(infoBoxObject);
@@ -2308,21 +2321,29 @@ $(document).ready(function(){
                             //show error message
                             $('#editFormAlert').show(EFFECTS_TIME);
                         }
+
+                        resetSubmitEditButtonBehavior();
                     }
                 }
-
-                $('#submitEdit').button('reset');
-                setDefaultMouseBehavior();
+                else {
+                    resetSubmitEditButtonBehavior
+                }
             },
             statusCode: {
                 400: function(data) {
                     $('#editFormAlert').show(EFFECTS_TIME);
                     $('#editFormAlertBeginText').text("Не получилось.");
                     $('#editFormAlertText').text("Извините, произошла какая-то ошибка. Скорее всего у вас нет прав на это действие");
-                    $('#submitEdit').button('reset');
+                    resetSubmitEditButtonBehavior();
                 }
             }
         });
+    }
+
+    function resetSubmitEditButtonBehavior() {
+        $('#submitEdit').button('reset');
+        $('#submitEdit').data('submitted', false);
+        setDefaultMouseBehavior();
     }
 
     function initEditFormAddressData(infoBoxObject) {
