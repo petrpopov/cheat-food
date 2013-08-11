@@ -27,20 +27,8 @@ public class TypeService extends GenericService<Type> {
 
     @PostConstruct
     public void init() {
-        types1.add( new Type(new Text(lang, "Шашлычная"), "kebab" ));
-        types1.add( new Type(new Text(lang, "Чебуречная"), "meatpastry" ));
-        types1.add( new Type(new Text(lang, "Шаверменная"), "shawarma" ));
-        types1.add( new Type(new Text(lang, "Чайхона"), "tea" ));
-        types1.add( new Type(new Text(lang, "Блинная"), "pancake" ));
-        types1.add( new Type(new Text(lang, "Бутербродная"), "sandwich" ));
-        types1.add( new Type(new Text(lang, "Бургерная"), "burger" ));
-        types1.add( new Type(new Text(lang, "Рюмочная"), "glass" ));
-        types1.add( new Type(new Text(lang, "Булочная"), "bread" ));
-        types1.add( new Type(new Text(lang, "Столовая"), "refectory" ));
-        types1.add( new Type(new Text(lang, "Кафе"), "cafe" ));
-        types1.add( new Type(new Text(lang, "Кулинария"), "gastronomy" ));
-        types1.add( new Type(new Text(lang, "Другое"), "other" ));
 
+        types1 = getAllConstantTypes();
 
         if( !op.collectionExists(Type.class) ) {
             String name = op.getCollectionName(Type.class);
@@ -50,9 +38,99 @@ public class TypeService extends GenericService<Type> {
                 return;
             }
 
+            saveAllTypes(types1);
+        }
+        else {
+            List<Type> savedTypeList = this.findAll();
+
+            if( savedTypeList == null ) {
+                saveAllTypes(types1);
+                return;
+            }
+
+            if( savedTypeList.isEmpty() ) {
+                saveAllTypes(types1);
+                return;
+            }
+
             for (Type type : types1) {
-                op.save(type);
+                if( ifTypeIsInList(type, savedTypeList) == false ) {
+                    op.save(type);
+                }
             }
         }
+    }
+
+    @Override
+    public List<Type> findAll() {
+        List<Type> types = super.findAll();
+
+        List<Type> sorted = new ArrayList<Type>();
+        for (Type type : types1) {
+            Type byCode = getTypeByCode(type.getCode(), types);
+            if( byCode != null ) {
+                sorted.add(byCode);
+            }
+        }
+
+        return sorted;
+    }
+
+    private void saveAllTypes(List<Type> types) {
+        for (Type type : types) {
+            op.save(type);
+        }
+    }
+
+    private List<Type> getAllConstantTypes() {
+
+        List<Type> types = new ArrayList<Type>();
+
+        types.add( new Type(new Text(lang, "Лапшичная"), "noodle" ));
+        types.add( new Type(new Text(lang, "Шашлычная"), "kebab" ));
+        types.add( new Type(new Text(lang, "Чебуречная"), "meatpastry" ));
+        types.add( new Type(new Text(lang, "Пельменная"), "ravioli" ));
+        types.add( new Type(new Text(lang, "Хинкальная"), "hinkali" ));
+        types.add( new Type(new Text(lang, "Шаверменная"), "shawarma" ));
+        types.add( new Type(new Text(lang, "Чайхона"), "tea" ));
+        types.add( new Type(new Text(lang, "Блинная"), "pancake" ));
+        types.add( new Type(new Text(lang, "Бутербродная"), "sandwich" ));
+        types.add( new Type(new Text(lang, "Бургерная"), "burger" ));
+        types.add( new Type(new Text(lang, "Пироги"), "pie" ));
+        types.add( new Type(new Text(lang, "Лепешки"), "tandoor" ));
+        types.add( new Type(new Text(lang, "Рюмочная"), "glass" ));
+        types.add( new Type(new Text(lang, "Булочная"), "bread" ));
+        types.add( new Type(new Text(lang, "Столовая"), "refectory" ));
+        types.add( new Type(new Text(lang, "Кафе"), "cafe" ));
+        types.add( new Type(new Text(lang, "Кулинария"), "gastronomy" ));
+        types.add( new Type(new Text(lang, "Другое"), "other" ));
+
+        return types;
+    }
+
+    private Type getTypeByCode(String code, List<Type> types) {
+
+        if( types == null )
+            return null;
+
+        for (Type type : types) {
+            if( type.getCode().equals(code) )
+                return type;
+        }
+
+        return null;
+    }
+
+    private boolean ifTypeIsInList(Type type, List<Type> types) {
+
+        if( types == null )
+            return false;
+
+        for (Type type1 : types) {
+            if( type1.getCode().equals(type.getCode()) )
+                return true;
+        }
+
+        return false;
     }
 }

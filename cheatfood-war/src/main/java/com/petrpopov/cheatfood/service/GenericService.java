@@ -34,7 +34,7 @@ public class GenericService<T> {
         logger = Logger.getLogger(domainClass);
     }
 
-    public List findAll() {
+    public List<T> findAll() {
         logger.info("Returning all entities " + domainClass.getSimpleName() + " from database");
         return op.findAll(domainClass);
     }
