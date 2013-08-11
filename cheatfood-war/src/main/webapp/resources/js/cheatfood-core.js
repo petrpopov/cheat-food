@@ -392,7 +392,7 @@ $(document).ready(function(){
 
         var n = noty({
             text: text,
-            layout: 'topCenter',
+            layout: 'topRight',
             theme: 'defaultTheme',
             type: type,
             closeWith: ['click','button'],
@@ -410,7 +410,7 @@ $(document).ready(function(){
 
         var n = noty({
             text: text,
-            layout: 'topCenter',
+            layout: 'topRight',
             theme: 'defaultTheme',
             type: 'information',
             closeWith: ['click','button'],
