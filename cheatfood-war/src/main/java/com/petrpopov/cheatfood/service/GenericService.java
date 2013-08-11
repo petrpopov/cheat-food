@@ -23,7 +23,7 @@ public class GenericService<T> {
 
     protected Class<T> domainClass;
 
-    private Logger logger;
+    protected Logger logger;
 
     public GenericService() {
         logger = Logger.getLogger(GenericService.class);

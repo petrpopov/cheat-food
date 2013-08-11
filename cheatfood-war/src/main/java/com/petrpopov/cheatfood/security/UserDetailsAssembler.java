@@ -1,6 +1,7 @@
 package com.petrpopov.cheatfood.security;
 
 import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * User: petrpopov
@@ -17,6 +19,7 @@ import java.util.Collection;
  */
 @Component
 public class UserDetailsAssembler {
+
 
     public UserDetails fromUserToUserDetails(UserEntity user)
     {
@@ -39,12 +42,38 @@ public class UserDetailsAssembler {
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
 
-        Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority( "ROLE_USER") );
+        Collection<GrantedAuthority> authorities = getAuthoritiesFromUserEntity(user);
 
         User userDetails = new User(username, password, enabled,
                 accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         return userDetails;
+    }
+
+    private Collection<GrantedAuthority> getAuthoritiesFromUserEntity(UserEntity user) {
+
+        List<UserRole> roles = user.getRoles();
+
+        if( roles == null )
+            return getDefaultAuthorities();
+
+        if( roles.isEmpty() )
+            return getDefaultAuthorities();
+
+        Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+
+        for (UserRole role : roles) {
+            authorities.add( new SimpleGrantedAuthority(role.getName()));
+        }
+
+        return authorities;
+    }
+
+    private Collection<GrantedAuthority> getDefaultAuthorities() {
+
+        Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority( UserRole.ROLE_USER ) );
+
+        return authorities;
     }
 
     private String getUsername(UserEntity user, Class<?> apiClass ) {

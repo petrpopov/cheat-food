@@ -30,10 +30,9 @@ public class LocationService extends GenericService<Location>{
     @Autowired
     private TypeService typeService;
 
-    private Logger logger = Logger.getLogger(LocationService.class);
-
     public LocationService() {
         super(Location.class);
+        logger = Logger.getLogger(LocationService.class);
     }
 
     @PostConstruct

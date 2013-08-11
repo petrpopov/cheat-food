@@ -3,6 +3,8 @@ package com.petrpopov.cheatfood.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 /**
  * User: petrpopov
  * Date: 15.07.13
@@ -32,6 +34,8 @@ public class UserEntity {
     private String email;
     private String passwordHash;
     private String salt;
+
+    private List<UserRole> roles;
 
     public UserEntity() {
     }
@@ -154,5 +158,13 @@ public class UserEntity {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public List<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<UserRole> roles) {
+        this.roles = roles;
     }
 }

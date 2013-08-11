@@ -1,9 +1,12 @@
 package com.petrpopov.cheatfood.service;
 
+import com.mongodb.*;
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.UserCreate;
 import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.UserRole;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
+import org.apache.log4j.Logger;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.util.UUID;
 
@@ -37,6 +41,43 @@ public class UserService extends GenericService<UserEntity> {
 
     public UserService() {
         super(UserEntity.class);
+        logger = Logger.getLogger(UserService.class);
+    }
+
+    @PostConstruct
+    public void init() {
+
+        if( !op.collectionExists(UserEntity.class) )
+            return;
+
+        logger.info("Checking all users for having default " + UserRole.ROLE_USER + " role" );
+
+        String collectionName = op.getCollectionName(UserEntity.class);
+        DBCollection collection = op.getCollection(collectionName);
+        DBCursor cursor = collection.find();
+
+        while (cursor.hasNext()) {
+            DBObject user = cursor.next();
+
+            if( !(user instanceof BasicDBObject) ) {
+                continue;
+            }
+
+            BasicDBObject dbo = (BasicDBObject) user;
+            Object roles = dbo.get("roles");
+
+            if( roles != null ) {
+                continue;
+            }
+
+            logger.info("Updating user " + dbo.get("_id") + " with default roles");
+
+            //need to insert default roles
+            BasicDBList rolesList = new BasicDBList();
+            rolesList.put(0, UserRole.getRoleUser().getBasicDBObject() );
+            dbo.put("roles", rolesList);
+            collection.save(dbo);
+        }
     }
 
     @CacheEvict(value = "users", allEntries = true)
