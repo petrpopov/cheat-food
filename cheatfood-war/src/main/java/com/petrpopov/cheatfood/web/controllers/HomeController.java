@@ -44,6 +44,11 @@ public class HomeController {
         return "manifest";
     }
 
+    @RequestMapping({"/users"})
+    public String showUsersPage() {
+        return "users";
+    }
+
     @RequestMapping(value = "location/{locationid}")
     @ResponseBody
     public ModelAndView getLocation(@PathVariable String locationid) throws IOException {

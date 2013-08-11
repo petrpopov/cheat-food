@@ -6,13 +6,13 @@
     <artifactId>cheatood-war</artifactId>
     <packaging>war</packaging>
 
-    <version>1.0.25-SNAPSHOT</version>
+    <version>1.0.26-SNAPSHOT</version>
     <name>cheatfood webapp</name>
 
     <parent>
         <groupId>com.petrpopov</groupId>
         <artifactId>cheatood</artifactId>
-        <version>1.0.25-SNAPSHOT</version>
+        <version>1.0.26-SNAPSHOT</version>
     </parent>
 
     <properties>
