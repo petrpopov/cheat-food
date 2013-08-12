@@ -85,7 +85,7 @@
                                 <a id="loginLink" href="#">Вход</a>
                             </li>
                             <li>
-                                <a id="registrationLink" href="#" hidden="true" style="display: none;">Регистрация</a>
+                                <a id="registrationLink">Регистрация</a>
                             </li>
                             <li>
                                 <a id="profileLink" href="#">Профиль</a>
@@ -159,9 +159,9 @@
                 </form>
             </div>
 
-            <hr hidden="true" style="display: none;"/>
+            <hr/>
 
-            <div class="form-horizontal" hidden="true" style="display: none;">
+            <div class="form-horizontal">
                 <div>Или войти с логином и паролем:</div>
                 <form class="form-horizontal" method="post" action='' name="login_form">
                     <p><input type="text" class="span3" name="eid" id="email" placeholder="электропочта"></p>
@@ -177,8 +177,8 @@
 
         </div>
         <div class="modal-footer">
-            <span hidden="true" style="display: none;">Нет учетки в соцсетях? Ну, тогда можно и по-старинке:</span>
-            <a id="registrationButton" href="#" class="btn btn-primary" hidden="true" style="display: none;">Регистрация</a>
+            <span>Нет учетки в соцсетях? Ну, тогда можно и по-старинке:</span>
+            <a id="registrationButton" href="#" class="btn btn-primary">Регистрация</a>
             <a href="#" class="btn" data-dismiss="modal">Отмена</a>
         </div>
     </div>

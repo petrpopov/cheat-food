@@ -23,6 +23,10 @@ $(document).ready(function(){
         unknown_location: "unknown_location",
         already_voted: "already_voted",
         already_rated: "already_rated",
+        no_such_user: "no_such_user",
+        no_password_data: "no_password_data",
+        wrong_password: "wrong_password",
+        login_error: "login_error",
         other: "other"
     };
 
@@ -257,7 +261,7 @@ $(document).ready(function(){
             $('#loginMenuLink').text('Вход');
 
             $('#loginLink').show();
-            $('#registrationLink').hide();
+            $('#registrationLink').show();
             $('#profileLink').hide();
             $('#logoutLink').hide();
         }
@@ -278,6 +282,7 @@ $(document).ready(function(){
         });
 
         $('#loginLink').click(function() {
+            clearLoginUserForm();
             $.noty.closeAll();
             $('#loginModal').modal('show');
         });
@@ -293,9 +298,11 @@ $(document).ready(function(){
             $('#registrationModal').modal('show');
         });
 
+        initLoginUserFormValidation();
         initCreateUserFormValidation();
 
         $('#registrationAlert').hide();
+        $('#loginAlert').hide();
 
         $('#createUserForm').ready(function() {
             $('#emailCreate').focus();
@@ -303,9 +310,58 @@ $(document).ready(function(){
 
         $('#createUserForm').off('submit');
         $('#createUserForm').submit(function() {
-            checkCreateUserFormValidOrNot();
             return false;
         });
+
+        $('#createUserSubmit').off('click');
+        $('#createUserSubmit').click( function(e) {
+            if( $('#createUserForm').data('submitted') === true ) {
+                console.log('prevented submit');
+                e.preventDefault();
+                return;
+            }
+            else {
+                $('#createUserForm').data('submitted', true);
+            }
+
+            checkCreateUserFormValidOrNot();
+        });
+
+
+        //login
+        $('#loginForm').ready( function() {
+            $('#emailLogin').focus();
+        });
+        $('#loginForm').off('submit');
+        $('#loginForm').submit(function() {
+            return false;
+        });
+
+        $('#loginUserSubmit').off('click');
+        $('#loginUserSubmit').click(function(e) {
+            if( $('#loginForm').data('submitted') === true ) {
+                console.log('prevented submit');
+                e.preventDefault();
+                return;
+            }
+            else {
+                $('#loginForm').data('submitted', true);
+            }
+
+            checkLoginFormValidOrNot();
+        });
+    }
+
+    function checkLoginFormValidOrNot() {
+        $('#loginUserSubmit').button('loading');
+        $('#loginAlert').hide();
+
+        if( $("#loginForm").valid() ) {
+            submitLoginUserForm();
+        }
+        else {
+            $('#loginUserSubmit').button('reset');
+        }
     }
 
     function checkCreateUserFormValidOrNot() {
@@ -319,6 +375,57 @@ $(document).ready(function(){
         else {
             $('#createUserSubmit').button('reset');
         }
+    }
+
+    function submitLoginUserForm() {
+        var formParams = {
+            email: $('#emailLogin').val().trim(),
+            password: $('#passwordLogin').val().trim()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: params.realPath + '/api/users/login',
+            data: JSON.stringify(formParams),
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+            },
+            complete: function(data) {
+                if( data.responseJSON ) {
+                    var result = JSON.parse(data.responseText);
+
+                    if( result.error === false ) {
+                        $('#loginModal').modal('hide');
+                        checkCookies();
+                        resetLoginUserButtonSubmitBehavior();
+                    }
+                    else {
+                        if( result.errorType === errors.no_such_user ) {
+                            showLoginError("Пользователя с таким email не существует");
+                        }
+                        else if( result.errorType === errors.no_password_data ) {
+                            showLoginError("Вы заходили сюда, используя соц.сети? Пройдите регистрацию, чтобы установить пароль.");
+                        }
+                        else if( result.errorType === errors.wrong_password ) {
+                            showLoginError("Неправильный пароль!");
+                        }
+                        else {
+                            showLoginError("Ошибка авторизации...");
+                        }
+                    }
+                }
+                else {
+                    showLoginError("Извините, у нас на сервере какая-то ошибка :(");
+                }
+            },
+            statusCode: {
+                400: function(data) {
+                    showLoginError("Извините, у нас на сервере какая-то ошибка :(");
+                }
+            }
+        });
     }
 
     function submitCreateUserForm() {
@@ -338,22 +445,74 @@ $(document).ready(function(){
             success: function(data) {
             },
             complete: function(data) {
-                var result = JSON.parse(data.responseText);
 
-                if( result.error === false ) {
-                    $('#registrationModal').modal('hide');
+                if( data.responseJSON ) {
+                    var result = JSON.parse(data.responseText);
+
+                    if( result.error === false ) {
+                        $('#registrationModal').modal('hide');
+                        checkCookies();
+                        resetCreateUserSubmitButtonBehavior();
+                    }
+                    else {
+                        showRegistrationError("Пользователь с таким email уже существует.");
+                    }
                 }
                 else {
-                    $('#registrationAlert').show(EFFECTS_TIME);
+                    showRegistrationError("Извините, у нас на сервере какая-то ошибка :(");
                 }
 
-                checkCookies();
-                $('#createUserSubmit').button('reset');
             },
             statusCode: {
                 400: function(data) {
-
+                    showRegistrationError("Извините, у нас на сервере какая-то ошибка :(");
                 }
+            }
+        });
+    }
+
+    function showLoginError(text) {
+        $('#loginAlert').fadeIn(EFFECTS_TIME, function() {
+            $('#loginError').text(text);
+            resetLoginUserButtonSubmitBehavior();
+        });
+    }
+
+    function showRegistrationError(text) {
+        $('#registrationAlert').fadeIn(EFFECTS_TIME, function() {
+            $('#registrationError').text(text);
+            resetCreateUserSubmitButtonBehavior();
+        });
+    }
+
+    function resetLoginUserButtonSubmitBehavior() {
+        $('#loginForm').data('submitted', false);
+        $('#loginUserSubmit').button('reset');
+    }
+
+    function resetCreateUserSubmitButtonBehavior() {
+        $('#createUserForm').data('submitted', false);
+        $('#createUserSubmit').button('reset');
+    }
+
+    function initLoginUserFormValidation() {
+        $("#loginForm").validate({
+            rules : {
+                emailLogin: {
+                    required: true,
+                    email: true
+                },
+                passwordLogin: {
+                    required: true,
+                }
+            },
+            success: function() {
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
             }
         });
     }
@@ -404,6 +563,12 @@ $(document).ready(function(){
                 }
             }
         });
+    }
+
+    function clearLoginUserForm() {
+        $('#emailLogin').val(null);
+        $('#passwordLogin').val(null);
+        $('#loginAlert').hide();
     }
 
     function clearCreateUserForm() {

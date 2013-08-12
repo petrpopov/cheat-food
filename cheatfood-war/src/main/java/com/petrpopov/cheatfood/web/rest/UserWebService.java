@@ -1,8 +1,10 @@
 package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.config.CheatException;
+import com.petrpopov.cheatfood.model.ErrorType;
 import com.petrpopov.cheatfood.model.UserCreate;
 import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
 import com.petrpopov.cheatfood.security.CheatRememberMeServices;
 import com.petrpopov.cheatfood.security.LoginManager;
 import com.petrpopov.cheatfood.service.UserContextHandler;
@@ -42,6 +44,9 @@ public class UserWebService {
     @Autowired
     private CheatRememberMeServices rememberMeServices;
 
+    @Autowired
+    private CheatPasswordEncoder cheatPasswordEncoder;
+
     @RequestMapping(value = "add", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody
     public MessageResult processSubmit(@Valid @RequestBody UserCreate user, HttpServletRequest request, HttpServletResponse response) {
@@ -61,6 +66,50 @@ public class UserWebService {
         rememberMeServices.onLoginSuccess(request, response, authenticate);
 
         res.setResult(entity);
+        return res;
+    }
+
+    @RequestMapping(value = "login", method = RequestMethod.POST, headers = "Accept=application/json")
+    @ResponseBody
+    public MessageResult processLogin(@Valid @RequestBody UserCreate user, HttpServletRequest request, HttpServletResponse response) {
+
+        MessageResult res = new MessageResult();
+
+        UserEntity userByEmail = userService.getUserByEmail(user.getEmail());
+        if( userByEmail == null ) {
+            res.setError(true);
+            res.setErrorType(ErrorType.no_such_user);
+            res.setMessage("There is no such user");
+            return res;
+        }
+
+        String salt = userByEmail.getSalt();
+        String passwordHash = userByEmail.getPasswordHash();
+
+        //only social registration
+        if( passwordHash == null ) {
+            res.setError(true);
+            res.setErrorType(ErrorType.no_password_data);
+            res.setMessage("No password data");
+            return res;
+        }
+
+        if( !cheatPasswordEncoder.isPasswordValid(passwordHash, user.getPassword(), salt) ) {
+            res.setError(true);
+            res.setErrorType(ErrorType.wrong_password);
+            res.setMessage("Wrong password");
+            return res;
+        }
+
+        try {
+            Authentication authenticate = loginManager.authenticate(userByEmail.getId(), user.getPassword());
+            rememberMeServices.onLoginSuccess(request, response, authenticate);
+        }
+        catch (Exception e) {
+            res.setError(true);
+            res.setErrorType(ErrorType.login_error);
+        }
+
         return res;
     }
 

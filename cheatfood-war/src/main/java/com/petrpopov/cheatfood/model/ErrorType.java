@@ -10,5 +10,9 @@ public enum ErrorType {
     unknown_location,
     already_voted,
     already_rated,
+    no_such_user,
+    no_password_data,
+    wrong_password,
+    login_error,
     other
 }

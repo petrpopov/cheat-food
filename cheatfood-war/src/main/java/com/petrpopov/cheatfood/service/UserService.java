@@ -42,23 +42,31 @@ public class UserService extends GenericService<UserEntity> {
     @CacheEvict(value = "users", allEntries = true)
     public UserEntity createUser(@Valid UserCreate user) throws CheatException {
 
+        UserEntity userToSave = new UserEntity();
         UserEntity userByEmail = this.getUserByEmail(user.getEmail());
 
-        if( userByEmail != null )
-            throw new CheatException("User is already exists!");
+        if( userByEmail != null ) {
+            String passwordHash = userByEmail.getPasswordHash();
+
+            if(passwordHash != null ) {
+                //user already registered with password-email
+                throw new CheatException("User is already exists!");
+            }
+
+            userToSave = userByEmail;
+        }
 
         //generate random salt
         UUID randomUUID = UUID.randomUUID();
         String newSalt = randomUUID.toString();
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmail(user.getEmail());
+        userToSave.setEmail(user.getEmail());
 
         String encodePassword = encoder.encodePassword(user.getPassword(), newSalt);
-        userEntity.setPasswordHash(encodePassword);
-        userEntity.setSalt(newSalt);
+        userToSave.setPasswordHash(encodePassword);
+        userToSave.setSalt(newSalt);
 
-        op.save(userEntity);
+        op.save(userToSave);
         return getUserByEmail(user.getEmail());
     }
 

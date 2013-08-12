@@ -214,7 +214,7 @@ $(document).ready(function(){
             $('#loginMenuLink').text('Вход');
 
             $('#loginLink').show();
-            $('#registrationLink').hide();
+            $('#registrationLink').show();
             $('#profileLink').hide();
             $('#logoutLink').hide();
         }

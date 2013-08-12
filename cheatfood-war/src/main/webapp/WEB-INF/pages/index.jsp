@@ -138,7 +138,7 @@
                             <a id="loginLink" href="#">Вход</a>
                         </li>
                         <li>
-                            <a id="registrationLink" href="#" hidden="true" style="display: none;">Регистрация</a>
+                            <a id="registrationLink">Регистрация</a>
                         </li>
                         <li>
                             <a id="profileLink" href="#">Профиль</a>
@@ -197,6 +197,12 @@
         <h3>Вход</h3>
     </div>
     <div class="modal-body">
+
+        <div id="loginAlert" class="alert" >
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Ошибка! </strong><span id="loginError">Ошибка на сервере</span>
+        </div>
+
         <p>Тут можно пришвартовать свой швербот с помощью разных соцсетей:</p>
         <div class="form-inline clearfix">
             <form id="foursquareForm" class="pull-left" method="POST" action="<c:url value="/connect/foursquare" />">
@@ -211,17 +217,17 @@
             </form>
         </div>
 
-        <hr hidden="true" style="display: none;"/>
+        <hr/>
 
-        <div class="form-horizontal" hidden="true" style="display: none;">
+        <div class="form-horizontal">
             <div>Или войти с логином и паролем:</div>
-            <form class="form-horizontal" method="post" action='' name="login_form">
-                <p><input type="text" class="span3" name="eid" id="email" placeholder="электропочта"></p>
-                <p><input type="password" class="span3" name="passwd" placeholder="пароль"></p>
-                <p><label class="checkbox"><input type="checkbox" value="">
+            <form class="form-horizontal" method="post" action='' name="loginForm" id="loginForm">
+                <p><input type="text" class="span3" name="emailLogin" id="emailLogin" placeholder="электропочта"></p>
+                <p><input type="password" class="span3" name="passwordLogin" id="passwordLogin" placeholder="пароль"></p>
+                <p style="display: none" hidden="true"><label class="checkbox"><input type="checkbox" value="">
                     Запомнить меня</label></p>
                 <p>
-                    <button type="submit" class="btn btn-primary">YARR!</button>
+                    <button type="submit" id="loginUserSubmit" data-loading-text="Подождите..." class="btn btn-primary">YARR!</button>
                     <a href="#">Забыли пароль?</a>
                 </p>
             </form>
@@ -229,8 +235,8 @@
 
     </div>
     <div class="modal-footer">
-        <span hidden="true" style="display: none;">Нет учетки в соцсетях? Ну, тогда можно и по-старинке:</span>
-        <a id="registrationButton" href="#" class="btn btn-primary" hidden="true" style="display: none;">Регистрация</a>
+        <span>Нет учетки в соцсетях? Ну, тогда можно и по-старинке:</span>
+        <a id="registrationButton" href="#" class="btn btn-primary">Регистрация</a>
         <a href="#" class="btn" data-dismiss="modal">Отмена</a>
     </div>
 </div>
@@ -243,9 +249,9 @@
 
     <div class="modal-body">
         <div>
-            <div id="registrationAlert" class="alert" hidden="true" style="display: none;">
+            <div id="registrationAlert" class="alert" >
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Ошибка!</strong> Пользователь с таким email уже существует.
+                <strong>Ошибка! </strong><span id="registrationError">Пользователь с таким email уже существует.</span>
             </div>
 
             <p>Регистрация нового пользователя</p>
