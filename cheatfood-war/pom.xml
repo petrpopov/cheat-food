@@ -6,13 +6,13 @@
     <artifactId>cheatood-war</artifactId>
     <packaging>war</packaging>
 
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.2.2-SNAPSHOT</version>
     <name>cheatfood webapp</name>
 
     <parent>
         <groupId>com.petrpopov</groupId>
         <artifactId>cheatood</artifactId>
-        <version>1.2.1-SNAPSHOT</version>
+        <version>1.2.2-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -219,12 +219,6 @@
         <dependency>
             <groupId>org.apache.tiles</groupId>
             <artifactId>tiles-core</artifactId>
-            <version>${tiles.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tiles</groupId>
-            <artifactId>tiles-request-api</artifactId>
             <version>${tiles.version}</version>
         </dependency>
 
