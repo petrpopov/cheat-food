@@ -1,0 +1,29 @@
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+
+    <definition name="main" template="/WEB-INF/pages/main_template.jsp">
+        <put-attribute name="header" value="/WEB-INF/pages/header.jsp"/>
+        <put-attribute name="deleteModal" value="/WEB-INF/pages/deleteModal.jsp"/>
+        <put-attribute name="loginModal" value="/WEB-INF/pages/loginModal.jsp"/>
+        <put-attribute name="registrationModal" value="/WEB-INF/pages/registrationModal.jsp"/>
+        <put-attribute name="forgetPasswordModal" value="/WEB-INF/pages/forgetPasswordModal.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/pages/footer.jsp"/>
+        <put-attribute name="googleAnalytics" value="/WEB-INF/pages/googleAnalytics.jsp"/>
+    </definition>
+
+    <definition name="index" extends="main">
+        <put-attribute name="content" value="/WEB-INF/pages/index.jsp" />
+    </definition>
+
+    <definition name="users" extends="main">
+        <put-attribute name="content" value="/WEB-INF/pages/users.jsp" />
+    </definition>
+
+    <definition name="manifest" extends="main">
+        <put-attribute name="content" value="/WEB-INF/pages/manifest.jsp" />
+    </definition>
+
+</tiles-definitions>

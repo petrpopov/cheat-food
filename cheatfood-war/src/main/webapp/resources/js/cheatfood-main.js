@@ -281,14 +281,17 @@ $(document).ready(function(){
             logout();
         });
 
+        $('#loginLink').off('click');
         $('#loginLink').click(function() {
             clearLoginUserForm();
             $.noty.closeAll();
             $('#loginModal').modal('show');
         });
 
+        $('#registrationLink').off('click');
         $('#registrationLink').click(function() {
             clearCreateUserForm();
+            $.noty.closeAll();
             $('#registrationModal').modal('show');
         });
 
@@ -298,9 +301,20 @@ $(document).ready(function(){
             $('#registrationModal').modal('show');
         });
 
+        $('#forgetPasswordLink').off('click');
+        $('#forgetPasswordLink').click(function() {
+            clearForgetPasswordForm();
+            $.noty.closeAll();
+            $('#loginModal').modal('hide');
+            $('#registrationModal').modal('hide');
+            $('#forgetPasswordModal').modal('show');
+        });
+
+        initForgetPasswordFormValidation();
         initLoginUserFormValidation();
         initCreateUserFormValidation();
 
+        $('#forgetAlert').hide();
         $('#registrationAlert').hide();
         $('#loginAlert').hide();
 
@@ -350,6 +364,41 @@ $(document).ready(function(){
 
             checkLoginFormValidOrNot();
         });
+
+        //forget password
+        $('#forgetPasswordForm').ready( function() {
+            $('#emailForget').focus();
+        });
+        $('#forgetPasswordForm').off('submit');
+        $('#forgetPasswordForm').submit(function() {
+            return false;
+        });
+
+        $('#forgetPasswordSubmit').off('click');
+        $('#forgetPasswordSubmit').click(function(e) {
+            if( $('#forgetPasswordForm').data('submitted') === true ) {
+                console.log('prevented submit');
+                e.preventDefault();
+                return;
+            }
+            else {
+                $('#forgetPasswordForm').data('submitted', true);
+            }
+
+            checkForgetPasswordFormValidOrNot();
+        });
+    }
+
+    function checkForgetPasswordFormValidOrNot() {
+        $('#forgetPasswordSubmit').button('loading');
+        $('#forgetAlert').hide();
+
+        if( $("#forgetPasswordForm").valid() ) {
+            submitForgetPasswordUserForm();
+        }
+        else {
+            $('#forgetPasswordSubmit').button('reset');
+        }
     }
 
     function checkLoginFormValidOrNot() {
@@ -375,6 +424,43 @@ $(document).ready(function(){
         else {
             $('#createUserSubmit').button('reset');
         }
+    }
+
+    function submitForgetPasswordUserForm() {
+        var formParams = {
+            email: $('#emailForget').val().trim()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: params.realPath + '/api/users/forget',
+            data: JSON.stringify(formParams),
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+            },
+            complete: function(data) {
+                if( data.responseJSON ) {
+                    var result = JSON.parse(data.responseText);
+
+                    if( result.error === false ) {
+                        //show message about email
+                    }
+                    else {
+
+                    }
+                }
+                else {
+                    showForgetPasswordMessage("Извините, у нас на сервере какая-то ошибка :(");
+                }
+            },
+            statusCode: {
+                400: function(data) {
+                    showForgetPasswordMessage("Извините, у нас на сервере какая-то ошибка :(");
+                }
+            }
+        });
     }
 
     function submitLoginUserForm() {
@@ -471,6 +557,13 @@ $(document).ready(function(){
         });
     }
 
+    function showForgetPasswordMessage(text) {
+        $('#forgetAlert').fadeIn(EFFECTS_TIME, function() {
+            $('#forgetError').text(text);
+            resetForgetPasswordButtonSubmitBehavior
+        });
+    }
+
     function showLoginError(text) {
         $('#loginAlert').fadeIn(EFFECTS_TIME, function() {
             $('#loginError').text(text);
@@ -485,6 +578,11 @@ $(document).ready(function(){
         });
     }
 
+    function resetForgetPasswordButtonSubmitBehavior() {
+        $('#forgetPasswordForm').data('submitted', false);
+        $('#forgetPasswordSubmit').button('reset');
+    }
+
     function resetLoginUserButtonSubmitBehavior() {
         $('#loginForm').data('submitted', false);
         $('#loginUserSubmit').button('reset');
@@ -493,6 +591,25 @@ $(document).ready(function(){
     function resetCreateUserSubmitButtonBehavior() {
         $('#createUserForm').data('submitted', false);
         $('#createUserSubmit').button('reset');
+    }
+
+    function initForgetPasswordFormValidation() {
+        $("#forgetPasswordForm").validate({
+            rules : {
+                emailForget: {
+                    required: true,
+                    email: true
+                }
+            },
+            success: function() {
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
+            }
+        });
     }
 
     function initLoginUserFormValidation() {
@@ -563,6 +680,11 @@ $(document).ready(function(){
                 }
             }
         });
+    }
+
+    function clearForgetPasswordForm() {
+        $('#emailForget').val(null);
+        $('#forgetAlert').hide();
     }
 
     function clearLoginUserForm() {

@@ -113,6 +113,15 @@ public class UserWebService {
         return res;
     }
 
+    @RequestMapping(value = "forget", method = RequestMethod.POST, headers = "Accept=application/json")
+    @ResponseBody
+    public MessageResult processForgetPassword(@RequestBody String email, HttpServletRequest request, HttpServletResponse response) {
+
+        MessageResult res = new MessageResult();
+
+        return res;
+    }
+
     @RequestMapping(value = "current", method = RequestMethod.GET)
     @ResponseBody
     public UserEntity getCurrentUser() {

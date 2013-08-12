@@ -66,13 +66,23 @@
     </bean>
 
 
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+    <!--bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
         <property name="prefix">
             <value>/WEB-INF/pages/</value>
         </property>
 
         <property name="suffix">
             <value>.jsp</value>
+        </property>
+    </bean-->
+
+    <bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver"/>
+
+    <bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/pages/views.xml</value>
+            </list>
         </property>
     </bean>
 
