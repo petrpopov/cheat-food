@@ -16,5 +16,8 @@ public enum ErrorType {
     login_error,
     password_mismatch,
     wrong_token,
+    user_already_exists,
+    email_is_empty,
+    no_user_with_such_email,
     other
 }

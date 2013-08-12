@@ -69,11 +69,19 @@ public class UserWebService {
         } catch (CheatException e) {
             res.setError(true);
             res.setMessage("User is already exists !");
+            res.setErrorType(ErrorType.user_already_exists);
             return res;
         }
 
-        Authentication authenticate = loginManager.authenticate(entity.getId(), user.getPassword());
-        rememberMeServices.onLoginSuccess(request, response, authenticate);
+        try {
+            Authentication authenticate = loginManager.authenticate(entity.getId(), user.getPassword());
+            rememberMeServices.onLoginSuccess(request, response, authenticate);
+        }
+        catch (Exception e) {
+            res.setError(true);
+            res.setErrorType(ErrorType.login_error);
+            return res;
+        }
 
         res.setResult(entity);
         return res;
@@ -118,6 +126,7 @@ public class UserWebService {
         catch (Exception e) {
             res.setError(true);
             res.setErrorType(ErrorType.login_error);
+            return res;
         }
 
         return res;
@@ -129,7 +138,26 @@ public class UserWebService {
 
         MessageResult res = new MessageResult();
 
-        PasswordForgetToken tokenForEmail = tokenService.createTokenForEmail(email);
+        if( email == null ) {
+            res.setError(true);
+            res.setErrorType(ErrorType.email_is_empty);
+            return res;
+        }
+
+        if( email.isEmpty() ) {
+            res.setError(true);
+            res.setErrorType(ErrorType.email_is_empty);
+            return res;
+        }
+
+        PasswordForgetToken tokenForEmail = null;
+        try {
+            tokenForEmail = tokenService.createTokenForEmail(email);
+        } catch (CheatException e) {
+            res.setError(true);
+            res.setErrorType(ErrorType.no_user_with_such_email);
+            return res;
+        }
 
         mailService.sendMail(email, tokenForEmail.getValue(), request);
 
@@ -138,6 +166,12 @@ public class UserWebService {
 
     @RequestMapping(value = "forget/{tokenid}", method = RequestMethod.GET)
     public ModelAndView processForgetRecovery(@PathVariable String tokenid) {
+
+        UserEntity userEntity = userContextHandler.currentContextUser();
+        if( userEntity != null ) {
+            RedirectView view = new RedirectView("/", true);
+            return new ModelAndView(view);
+        }
 
         PasswordForgetToken byToken = tokenService.findByToken(tokenid);
         if( byToken == null ) {

@@ -29,6 +29,9 @@ $(document).ready(function(){
         login_error: "login_error",
         password_mismatch: "password_mismatch",
         wrong_token: "wrong_token",
+        user_already_exists: "user_already_exists",
+        email_is_empty: "email_is_empty",
+        no_user_with_such_email: "no_user_with_such_email",
         other: "other"
     };
 
@@ -534,18 +537,20 @@ $(document).ready(function(){
 
                     if( result.error === false ) {
                         //show message about email
-
                         $('#forgetPasswordForm').fadeOut(EFFECTS_TIME, function() {
                             $('#forgetEmailLinkInfo').fadeIn(EFFECTS_TIME, function() {
                                 $('#forgetPasswordCancel').text("Закрыть");
                                 resetForgetPasswordButtonSubmitBehavior();
                             });
                         });
-
-
                     }
                     else {
-
+                        if( result.errorType === errors.email_is_empty ) {
+                            showForgetPasswordMessage("Введите что-нибудь в поле email.")
+                        }
+                        else if( result.errorType === errors.no_user_with_such_email ) {
+                            showForgetPasswordMessage("Нет пользователя в системе с таким email!")
+                        }
                     }
                 }
                 else {
@@ -638,7 +643,12 @@ $(document).ready(function(){
                         resetCreateUserSubmitButtonBehavior();
                     }
                     else {
-                        showRegistrationError("Пользователь с таким email уже существует.");
+                        if( result.errorType === errors.user_already_exists ) {
+                            showRegistrationError("Пользователь с таким email уже существует.");
+                        }
+                        else {
+                            showRegistrationError("Извините, у нас на сервере какая-то ошибка :(");
+                        }
                     }
                 }
                 else {

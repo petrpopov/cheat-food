@@ -1,7 +1,10 @@
 package com.petrpopov.cheatfood.service;
 
+import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.PasswordForgetToken;
+import com.petrpopov.cheatfood.model.UserEntity;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -21,6 +24,9 @@ public class PasswordForgetTokenService extends GenericService<PasswordForgetTok
 
     private Logger logger = Logger.getLogger(PasswordForgetTokenService.class);
 
+    @Autowired
+    private UserService userService;
+
     public PasswordForgetTokenService() {
         super(PasswordForgetToken.class);
     }
@@ -34,7 +40,12 @@ public class PasswordForgetTokenService extends GenericService<PasswordForgetTok
         return list;
     }
 
-    public PasswordForgetToken createTokenForEmail(String email) {
+    public PasswordForgetToken createTokenForEmail(String email) throws CheatException{
+
+        UserEntity userByEmail = userService.getUserByEmail(email);
+        if( userByEmail == null ) {
+            throw new CheatException("There is no user with such an email!");
+        }
 
         //paranoia style
         boolean ok = false;
