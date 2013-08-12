@@ -209,7 +209,7 @@
 <div class="navbar navbar-fixed-bottom navbar-inverse">
     <div class="navbar-inner">
         <ul class="nav">
-            <li><a href="mailto:popov.petr@gmail.com">Разработка и поддержка - Петр Попов, &copy; 2013</a></li>
+            <li><a href="mailto:info@cheatfood.com">Разработка и поддержка - Петр Попов, &copy; 2013</a></li>
         </ul>
     </div>
 </div>
