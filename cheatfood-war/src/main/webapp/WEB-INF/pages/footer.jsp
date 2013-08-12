@@ -16,5 +16,17 @@
             </label>
             <button id="cancelCurrentAction" class="btn">Отмена</button>
         </form>
+
+        <div class="nav-collapse collapse pull-right">
+            <ul class="nav">
+                <li>
+                    <a href="https://www.facebook.com/cheatfood" target="_blank">
+                        <img width="32" src="<s:url value="/resources"/>/img/facebook_small.png">
+                        <span class="spacer3">Мы на Facebook</span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
     </div>
 </div>
