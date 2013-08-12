@@ -27,6 +27,8 @@ $(document).ready(function(){
         no_password_data: "no_password_data",
         wrong_password: "wrong_password",
         login_error: "login_error",
+        password_mismatch: "password_mismatch",
+        wrong_token: "wrong_token",
         other: "other"
     };
 
@@ -61,6 +63,9 @@ $(document).ready(function(){
     function loadParams() {
 
         params.realPath = $('#realPath').text().trim();
+
+        var token = $('#tokenLabel').text();
+        params.token = token;
 
         var login = $('#loginLabel').text();
 
@@ -136,7 +141,7 @@ $(document).ready(function(){
                             //authorized
 
                             if( needToShowHello() === true ) {
-                                showNote("Вы вошли в систему. Привет!");
+                                showNoteTopCenter("Вы вошли в систему. Привет!", "success", true);
                             }
 
                             sessionStorage.setItem('showHello', true);
@@ -310,6 +315,28 @@ $(document).ready(function(){
             $('#forgetPasswordModal').modal('show');
         });
 
+        $('#restorePasswordForm').off('submit');
+        $('#restorePasswordForm').submit(function() {
+            return false;
+        });
+        $('#restorePasswordForm').ready(function() {
+            $('#passwordRestore').focus();
+        });
+        $('#restorePasswordSubmit').off('click');
+        $('#restorePasswordSubmit').click(function() {
+            /*if( $('#restorePasswordForm').data('submitted') === true ) {
+                console.log('prevented submit');
+                e.preventDefault();
+                return;
+            }
+            else {
+                $('#restorePasswordForm').data('submitted', true);
+            } */
+
+            checkRestorePasswordFormValidOrNot();
+        });
+
+        initRestorePasswordFormValidation();
         initForgetPasswordFormValidation();
         initLoginUserFormValidation();
         initCreateUserFormValidation();
@@ -413,6 +440,17 @@ $(document).ready(function(){
         }
     }
 
+    function checkRestorePasswordFormValidOrNot() {
+        $('#restorePasswordSubmit').button('loading');
+
+        if( $("#restorePasswordForm").valid() ) {
+            submitRestorePasswordForm();
+        }
+        else {
+            $('#restorePasswordSubmit').button('reset');
+        }
+    }
+
     function checkCreateUserFormValidOrNot() {
 
         $('#createUserSubmit').button('loading');
@@ -425,6 +463,57 @@ $(document).ready(function(){
             $('#createUserSubmit').button('reset');
         }
     }
+
+    function submitRestorePasswordForm() {
+
+        var formParams = {
+            password: $('#passwordRestore').val().trim(),
+            passwordCopy: $('#passwordRestoreCopy').val().trim(),
+            token: params.token
+        };
+
+        $.ajax({
+            type: "POST",
+            url: params.realPath + '/api/users/restore',
+            data: JSON.stringify(formParams),
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+            },
+            complete: function(data) {
+
+                if( data.responseJSON ) {
+                    var result = JSON.parse(data.responseText);
+
+                    if( result.error === false ) {
+                        window.location.replace(params.realPath);
+                    }
+                    else {
+                        if( result.errorType === errors.password_mismatch ) {
+                            showRestoreError("Введенные пароли не совпадают!");
+                        }
+                        else if( result.errorType === errors.wrong_token ) {
+                            showRestoreError("Вы пытаетесь восстановить чужой пароль?");
+                        }
+                        else if( result.errorType === errors.login_error ) {
+                            showRestoreError("Извините, произошла ошибка.");
+                        }
+                    }
+                }
+                else {
+                    showRestoreError("Извините, произошла ошибка.");
+                }
+            },
+            statusCode: {
+                400: function(data) {
+                    showRestoreError("Извините, произошла ошибка.");
+                }
+            }
+        });
+    }
+
+
 
     function submitForgetPasswordUserForm() {
 
@@ -445,7 +534,15 @@ $(document).ready(function(){
 
                     if( result.error === false ) {
                         //show message about email
-                        resetForgetPasswordButtonSubmitBehavior();
+
+                        $('#forgetPasswordForm').fadeOut(EFFECTS_TIME, function() {
+                            $('#forgetEmailLinkInfo').fadeIn(EFFECTS_TIME, function() {
+                                $('#forgetPasswordCancel').text("Закрыть");
+                                resetForgetPasswordButtonSubmitBehavior();
+                            });
+                        });
+
+
                     }
                     else {
 
@@ -578,6 +675,17 @@ $(document).ready(function(){
         });
     }
 
+    function showRestoreError(text) {
+        $('#restoreAlert').fadeIn(EFFECTS_TIME, function() {
+            $('#restoreError').text(text);
+            resetRestorePasswordButtonBehavior();
+        });
+    }
+
+    function resetRestorePasswordButtonBehavior() {
+        $('#restorePasswordSubmit').button('reset');
+    }
+
     function resetForgetPasswordButtonSubmitBehavior() {
         $('#forgetPasswordForm').data('submitted', false);
         $('#forgetPasswordSubmit').button('reset');
@@ -591,6 +699,32 @@ $(document).ready(function(){
     function resetCreateUserSubmitButtonBehavior() {
         $('#createUserForm').data('submitted', false);
         $('#createUserSubmit').button('reset');
+    }
+
+    function initRestorePasswordFormValidation() {
+        $("#restorePasswordForm").validate({
+            rules : {
+                passwordRestore: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 50
+                },
+                passwordRestoreCopy: {
+                    required: true,
+                    equalTo: "#passwordRestore",
+                    minlength: 3,
+                    maxlength: 50
+                }
+            },
+            success: function() {
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
+            }
+        });
     }
 
     function initForgetPasswordFormValidation() {
@@ -670,7 +804,7 @@ $(document).ready(function(){
             },
             complete: function(data) {
                 $.noty.closeAll();
-                showNote("Вы успешно вышли из системы");
+                showNoteTopCenter("Вы успешно вышли из системы", "success", true);
 
                 sessionStorage.setItem('showHello', false);
                 modifyInterface(false);
@@ -697,17 +831,6 @@ $(document).ready(function(){
         $('#emailCreate').val(null);
         $('#passwordCreate').val(null);
         $('#registrationAlert').hide();
-    }
-
-    function showNote(text) {
-        var n = noty({
-            text: text,
-            layout: 'topRight',
-            theme: 'defaultTheme',
-            type: 'success',
-            closeWith: ['click','button'],
-            timeout: 2000
-        });
     }
 
     function showNoteTopCenter(text, type, close) {

@@ -13,13 +13,13 @@ import com.petrpopov.cheatfood.service.PasswordForgetTokenService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.service.UserService;
 import com.petrpopov.cheatfood.web.other.MessageResult;
+import com.petrpopov.cheatfood.web.other.RestorePassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -132,6 +132,78 @@ public class UserWebService {
         PasswordForgetToken tokenForEmail = tokenService.createTokenForEmail(email);
 
         mailService.sendMail(email, tokenForEmail.getValue(), request);
+
+        return res;
+    }
+
+    @RequestMapping(value = "forget/{tokenid}", method = RequestMethod.GET)
+    public ModelAndView processForgetRecovery(@PathVariable String tokenid) {
+
+        PasswordForgetToken byToken = tokenService.findByToken(tokenid);
+        if( byToken == null ) {
+            RedirectView view = new RedirectView("/", true);
+            return new ModelAndView(view);
+        }
+
+        if( byToken.getValid().equals(Boolean.FALSE) ) {
+            RedirectView view = new RedirectView("/", true);
+            return new ModelAndView(view);
+        }
+
+        ModelAndView modelAndView = new ModelAndView("restore");
+        modelAndView.addObject("token", tokenid);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "restore", method = RequestMethod.POST, headers = "Accept=application/json")
+    @ResponseBody
+    public MessageResult restorePassword(@Valid @RequestBody RestorePassword restorePassword, HttpServletRequest request, HttpServletResponse response) {
+
+        MessageResult res = new MessageResult();
+
+        if( !restorePassword.getPassword().equals(restorePassword.getPasswordCopy())) {
+            res.setError(true);
+            res.setErrorType(ErrorType.password_mismatch);
+            return res;
+        }
+
+        PasswordForgetToken byToken = tokenService.findByToken(restorePassword.getToken());
+        if( byToken == null ) {
+            res.setError(true);
+            res.setErrorType(ErrorType.wrong_token);
+            return res;
+        }
+
+        if( byToken.getEmail() == null ) {
+            res.setError(true);
+            res.setErrorType(ErrorType.wrong_token);
+            return res;
+        }
+
+        if(byToken.getValid().equals(Boolean.FALSE)) {
+            res.setError(true);
+            res.setErrorType(ErrorType.wrong_token);
+            return res;
+        }
+
+        UserEntity userByEmail = userService.getUserByEmail(byToken.getEmail());
+        if( userByEmail == null ) {
+            res.setError(true);
+            res.setErrorType(ErrorType.wrong_token);
+            return res;
+        }
+
+        userService.updatePasswordForUser(userByEmail, restorePassword.getPassword());
+        tokenService.invalidateTokensForEmail(userByEmail.getEmail());
+
+        try {
+            Authentication authenticate = loginManager.authenticate(userByEmail.getId(), restorePassword.getPassword());
+            rememberMeServices.onLoginSuccess(request, response, authenticate);
+        }
+        catch (Exception e) {
+            res.setError(true);
+            res.setErrorType(ErrorType.login_error);
+        }
 
         return res;
     }

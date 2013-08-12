@@ -14,5 +14,7 @@ public enum ErrorType {
     no_password_data,
     wrong_password,
     login_error,
+    password_mismatch,
+    wrong_token,
     other
 }

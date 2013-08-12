@@ -48,12 +48,16 @@ public class MailService {
 
     private String getContent(String url, HttpServletRequest request) {
 
-        String address = getGlobalUrl(request) + "/forget/" + url;
+        String address = getGlobalUrl(request) + "/api/users/forget/" + url;
 
         String res = "<html><body></body><p>Привет!</p>"
-                + "<p>Кто-то (скорее всего это были вы) запрашивал восстановление пароля на сервисе Cheat Food.</p>"
+                + "<p>Кто-то (скорее всего это были вы) запрашивал восстановление пароля на сервисе "
+                + "<a href=\"" + getGlobalUrl(request) + "\">Cheat Food</a>"
+                + "</p>"
                 + "<p>Если это были вы, пройдите, пожалуйста, по ссылке:</p>"
-                + "<p><a href=\"" + address + "\"/>" + address + "</p>"
+                + "<p><a href=\"" + address + "\">" + address + "</a></p>"
+                + "<p>Если это были не вы - удалите же скорее это письмо!</p>"
+                + "<p>Пока-пока!</p>"
                 + "</html>";
 
         return res;

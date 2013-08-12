@@ -26,4 +26,8 @@
         <put-attribute name="content" value="/WEB-INF/pages/manifest.jsp" />
     </definition>
 
+    <definition name="restore" extends="main">
+        <put-attribute name="content" value="/WEB-INF/pages/restore.jsp" />
+    </definition>
+
 </tiles-definitions>

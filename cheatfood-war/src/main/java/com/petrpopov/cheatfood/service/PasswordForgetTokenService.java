@@ -67,6 +67,14 @@ public class PasswordForgetTokenService extends GenericService<PasswordForgetTok
         return op.findOne(query, PasswordForgetToken.class);
     }
 
+    public void invalidateTokensForEmail(String email) {
+
+        List<PasswordForgetToken> list = findTokensForEmail(email);
+        for (PasswordForgetToken token : list) {
+            token.setValid(false);
+            op.save(token);
+        }
+    }
 
 
     private boolean tokenListContains(List<PasswordForgetToken> list, String token) {

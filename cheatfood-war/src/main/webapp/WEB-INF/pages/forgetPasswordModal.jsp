@@ -18,19 +18,26 @@
                 <strong>Ошибка! </strong><span id="forgetError">Нет такого пользователя</span>
             </div>
 
+            <p id="forgetEmailLinkInfo" style="display: none" hidden="true">
+                На ваш электронный адрес была отправлена секретная ссылка для восстановления пароля. Проверьте ваш почтовый ящик,
+                обычно письмо приходит в течении нескольких секунд.
+            </p>
+
             <form id="forgetPasswordForm" class="form-horizontal">
                 <div class="control-group">
                     <div class="controls">
                         <input type="email" name="email" class="span3" id="emailForget" placeholder="электропочта" required />
                     </div>
+                </div>
 
                     <div class="control-group">
                         <div class="controls">
                             <button id="forgetPasswordSubmit" data-loading-text="Подождите..." type="submit" class="btn btn-primary">Напомнить</button>
-                            <button class="btn" data-dismiss="modal">Отмена</button>
+                            <button class="btn" data-dismiss="modal">
+                                <span id="forgetPasswordCancel">Отмена</span>
+                            </button>
                         </div>
                     </div>
-                </div>
             </form>
         </div>
     </div>
