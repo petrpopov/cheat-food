@@ -585,9 +585,10 @@ $(document).ready(function(){
                     var result = JSON.parse(data.responseText);
 
                     if( result.error === false ) {
-                        $('#loginModal').modal('hide');
+                        window.location.replace(params.realPath);
+                        /*$('#loginModal').modal('hide');
                         checkCookies();
-                        resetLoginUserButtonSubmitBehavior();
+                        resetLoginUserButtonSubmitBehavior();*/
                     }
                     else {
                         if( result.errorType === errors.no_such_user ) {
@@ -638,9 +639,10 @@ $(document).ready(function(){
                     var result = JSON.parse(data.responseText);
 
                     if( result.error === false ) {
-                        $('#registrationModal').modal('hide');
+                        /*$('#registrationModal').modal('hide');
                         checkCookies();
-                        resetCreateUserSubmitButtonBehavior();
+                        resetCreateUserSubmitButtonBehavior();*/
+                        window.location.replace(params.realPath);
                     }
                     else {
                         if( result.errorType === errors.user_already_exists ) {
@@ -822,6 +824,8 @@ $(document).ready(function(){
                 if( $.fn.disableContextMenu !== undefined ) {
                     $().disableContextMenu();
                 }
+
+                window.location.replace(params.realPath);
             }
         });
     }
