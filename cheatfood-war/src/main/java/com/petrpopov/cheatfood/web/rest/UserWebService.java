@@ -2,11 +2,14 @@ package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.ErrorType;
+import com.petrpopov.cheatfood.model.PasswordForgetToken;
 import com.petrpopov.cheatfood.model.UserCreate;
 import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
 import com.petrpopov.cheatfood.security.CheatRememberMeServices;
 import com.petrpopov.cheatfood.security.LoginManager;
+import com.petrpopov.cheatfood.service.MailService;
+import com.petrpopov.cheatfood.service.PasswordForgetTokenService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.service.UserService;
 import com.petrpopov.cheatfood.web.other.MessageResult;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -46,6 +50,12 @@ public class UserWebService {
 
     @Autowired
     private CheatPasswordEncoder cheatPasswordEncoder;
+
+    @Autowired
+    private PasswordForgetTokenService tokenService;
+
+    @Autowired
+    private MailService mailService;
 
     @RequestMapping(value = "add", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody
@@ -115,9 +125,13 @@ public class UserWebService {
 
     @RequestMapping(value = "forget", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody
-    public MessageResult processForgetPassword(@RequestBody String email, HttpServletRequest request, HttpServletResponse response) {
+    public MessageResult processForgetPassword(@RequestBody String email, HttpServletRequest request) throws MessagingException {
 
         MessageResult res = new MessageResult();
+
+        PasswordForgetToken tokenForEmail = tokenService.createTokenForEmail(email);
+
+        mailService.sendMail(email, tokenForEmail.getValue(), request);
 
         return res;
     }

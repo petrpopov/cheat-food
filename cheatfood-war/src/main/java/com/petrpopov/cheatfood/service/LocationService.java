@@ -25,7 +25,7 @@ import java.util.List;
  */
 
 @Component
-public class LocationService extends GenericService<Location>{
+public class LocationService extends GenericService<Location> {
 
     @Autowired
     private TypeService typeService;

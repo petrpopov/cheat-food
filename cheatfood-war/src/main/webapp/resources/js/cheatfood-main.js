@@ -427,14 +427,13 @@ $(document).ready(function(){
     }
 
     function submitForgetPasswordUserForm() {
-        var formParams = {
-            email: $('#emailForget').val().trim()
-        };
+
+        var email = $('#emailForget').val().trim();
 
         $.ajax({
             type: 'POST',
             url: params.realPath + '/api/users/forget',
-            data: JSON.stringify(formParams),
+            data: email,
             contentType: 'application/json',
             mimeType: 'application/json',
             dataType: 'json',
@@ -446,6 +445,7 @@ $(document).ready(function(){
 
                     if( result.error === false ) {
                         //show message about email
+                        resetForgetPasswordButtonSubmitBehavior();
                     }
                     else {
 
@@ -560,7 +560,7 @@ $(document).ready(function(){
     function showForgetPasswordMessage(text) {
         $('#forgetAlert').fadeIn(EFFECTS_TIME, function() {
             $('#forgetError').text(text);
-            resetForgetPasswordButtonSubmitBehavior
+            resetForgetPasswordButtonSubmitBehavior();
         });
     }
 
