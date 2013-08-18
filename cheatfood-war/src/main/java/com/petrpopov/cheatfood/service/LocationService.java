@@ -42,12 +42,20 @@ public class LocationService extends GenericService<Location> {
         indexOperations.ensureIndex(index);
     }
 
+    @Override
+    public List<Location> findAll() {
+
+        List<Location> all = super.findAll();
+        return filterListForHiddenLocations(all);
+    }
+
     public List<Location> findAllInBounds(@Valid GeoPointBounds bounds) {
 
         Box box = this.getBoxFromBounds(bounds);
         Query query = new Query(Criteria.where("geoLocation").within(box));
 
-        return op.find(query, Location.class);
+        List<Location> all = op.find(query, Location.class);
+        return filterListForHiddenLocations(all);
     }
 
     public List<Location> findAllInBounds(@Valid GeoPointBounds bounds, String typeId) {
@@ -67,8 +75,8 @@ public class LocationService extends GenericService<Location> {
         criteria.andOperator(Criteria.where("geoLocation").within(box), Criteria.where("type.$id").is(new ObjectId(typeId)));
         query.addCriteria(criteria);
 
-        List<Location> locations = op.find(query, Location.class);
-        return locations;
+        List<Location> all = op.find(query, Location.class);
+        return filterListForHiddenLocations(all);
     }
 
     public List<Location> findAllInDifference(@Valid GeoPointBounds inBounds, GeoPointBounds notInBounds, String typeId) {
@@ -102,7 +110,7 @@ public class LocationService extends GenericService<Location> {
                 res.add(location);
         }
 
-        return res;
+        return filterListForHiddenLocations(res);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -123,16 +131,25 @@ public class LocationService extends GenericService<Location> {
         return saveLocationObject(location);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') and #location.creator.id==principal.username")
+    @PreAuthorize("(hasRole('ROLE_USER') and #location.creator.id==principal.username) or hasRole('ROLE_ADMIN')")
     public void deleteLocation(Location location) {
         logger.info("Deleting location from database by object");
         op.remove(location);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void hideLocation(Location location) {
+        logger.info("Hiding location from database by object");
+
+        location.setHidden(true);
+        op.save(location);
+    }
+
     public long getLocationsCountInBound(@Valid GeoPointBounds bounds) {
 
         Box box = this.getBoxFromBounds(bounds);
-        Query query = new Query(Criteria.where("geoLocation").within(box) );
+        Criteria hidden = Criteria.where("hidden").ne(Boolean.TRUE);
+        Query query = new Query(Criteria.where("geoLocation").within(box).andOperator(hidden) );
 
         long count = op.count(query, Location.class);
         return count;
@@ -175,6 +192,25 @@ public class LocationService extends GenericService<Location> {
         rates.add(rate);
         location.setAverageRate( getNewAverageRate(rates) );
         return saveLocationObject(location);
+    }
+
+    private List<Location> filterListForHiddenLocations(List<Location> all) {
+
+        List<Location> res = new ArrayList<Location>();
+
+        for (Location location : all) {
+            Boolean hidden = location.getHidden();
+            if( hidden != null ) {
+                if( hidden.equals(Boolean.TRUE) ) {
+                    continue;
+                }
+            }
+
+            res.add(location);
+        }
+
+
+        return res;
     }
 
     private Double getNewAverageRate(List<Rate> rates) {

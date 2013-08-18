@@ -72,6 +72,8 @@
 
     <t:insertAttribute name="deleteModal" />
 
+    <t:insertAttribute name="hideModal" />
+
     <t:insertAttribute name="loginModal" />
 
     <t:insertAttribute name="registrationModal" />

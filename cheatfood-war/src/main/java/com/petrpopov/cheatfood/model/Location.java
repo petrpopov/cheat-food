@@ -49,6 +49,8 @@ public class Location implements Serializable {
     @NotNull
     private Boolean footype;
 
+    private Boolean hidden;
+
     @Valid
     @DBRef
     private Type type;
@@ -216,6 +218,14 @@ public class Location implements Serializable {
 
     public void setAveragePrice(Double averagePrice) {
         this.averagePrice = averagePrice;
+    }
+
+    public Boolean getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
     }
 
     @Override

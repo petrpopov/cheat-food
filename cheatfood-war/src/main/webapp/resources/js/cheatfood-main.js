@@ -1587,6 +1587,7 @@ $(function() {
             if( !$('#infoBox').is(":visible") ) {
                 disableEditMarkerMenu();
                 disableDeleteMarkerMenu();
+                disableHideMarkerMenu();
             }
         });
     }
@@ -1662,6 +1663,7 @@ $(function() {
         enableAddMarkerMenu();
         disableEditMarkerMenu();
         disableDeleteMarkerMenu();
+        disableHideMarkerMenu();
     }
 
     function createCategoryMenu() {
@@ -1775,6 +1777,21 @@ $(function() {
         $('#deleteMarkerMenu').closest('li').addClass('disabled');
         $('#deleteMarkerMenu').off('click');
     }
+
+    function enableHideMarkerMenu(infoBoxObject) {
+        $('#hideMarkerMenu').closest('li').removeClass('disabled');
+        $('#hideMarkerMenu').off('click');
+        $('#hideMarkerMenu').click(function() {
+            hideMarkerAction(infoBoxObject);
+        });
+    }
+
+    function disableHideMarkerMenu() {
+        $('#hideMarkerMenu').closest('li').addClass('disabled');
+        $('#hideMarkerMenu').off('click');
+    }
+
+
 
     $.fn.disableContextMenu = function disableContextMenu() {
         //disable context menu
@@ -2011,6 +2028,7 @@ $(function() {
         initialShowInfoBoxForMarker(marker, infoBoxObject);
         enableEditMarkerMenu(infoBoxObject);
         enableDeleteMarkerMenu(infoBoxObject);
+        enableHideMarkerMenu(infoBoxObject);
     }
 
     function initialShowInfoBoxForMarker(marker, infoBoxObject) {
@@ -2398,9 +2416,20 @@ $(function() {
             $('#deleteModal').modal('show');
         });
 
+        $('#hideMarkerButton').off('click');
+        $('#hideMarkerButton').click(function() {
+            $('#hideAlert').hide();
+            $('#hideModal').modal('show');
+        });
+
         $('#deleteMarkerButtonModal').off('click');
         $('#deleteMarkerButtonModal').click( function() {
             deleteMarkerRequest(infoBoxObject);
+        });
+
+        $('#hideMarkerButtonModal').off('click');
+        $('#hideMarkerButtonModal').click( function() {
+            hideMarkerRequest(infoBoxObject);
         });
 
         $('#closeInfoBox').off('click');
@@ -2408,6 +2437,7 @@ $(function() {
             infoBoxObject.infoBox.hide();
             disableEditMarkerMenu();
             disableDeleteMarkerMenu();
+            disableHideMarkerMenu();
         });
     }
 
@@ -2421,9 +2451,19 @@ $(function() {
         $('#deleteModal').modal('show');
     }
 
-    function deleteMarkerRequest(infoBoxObject) {
-        $('#deleteMarkerButtonModal').button('loading');
+    function hideMarkerAction(infoBoxObject) {
+        $('#hideMarkerButtonModal').off('click');
+        $('#hideMarkerButtonModal').click( function() {
+            hideMarkerRequest(infoBoxObject);
+        });
 
+        $('#hideAlert').hide();
+        $('#hideModal').modal('show');
+    }
+
+    function deleteMarkerRequest(infoBoxObject) {
+
+        $('#deleteMarkerButtonModal').button('loading');
 
         $.ajax({
             type: "DELETE",
@@ -2463,6 +2503,53 @@ $(function() {
                     $('#deleteAlertBeginText').text("Не получилось.");
                     $('#deleteAlertText').text("Извините, произошла какая-то ошибка. Скорее всего у вас нет прав на это действие");
                     $('#deleteMarkerButtonModal').button('reset');
+                }
+            }
+        });
+    }
+
+    function hideMarkerRequest(infoBoxObject) {
+
+        $('#hideMarkerButtonModal').button('loading');
+
+        $.ajax({
+            type: "DELETE",
+            url: params.realPath+'/api/locations/'+infoBoxObject.location.id+'/hide',
+            complete: function(data) {
+
+                if( data.responseJSON ) {
+                    var res = data.responseJSON;
+
+                    if( res.error == false ) {
+                        $('#hideModal').modal('hide');
+                        removeMarkerAndInfoBox(infoBoxObject);
+                    }
+                    else {
+                        if( res.errorType === errors.access_denied ) {
+                            $('#hideAlert').show(EFFECTS_TIME);
+                            $('#hideAlertBeginText').text("Сожалеем, но..");
+                            $('#hideAlertText').text("У вас нет прав на удаление этой локации");
+                        }
+                        else if( res.errorType === errors.unknown_location ) {
+                            $('#hideAlert').show(EFFECTS_TIME);
+                            $('#hideAlertText').text("Такой локации не существует!");
+                        }
+                        else {
+                            $('#hideAlert').show(EFFECTS_TIME);
+                            $('#hideAlertBeginText').text("Упс..");
+                            $('#hideAlertText').text("Извините, произошла какая-то ошибка..");
+                        }
+                    }
+
+                    $('#hideMarkerButtonModal').button('reset');
+                }
+            },
+            statusCode: {
+                400: function(data) {
+                    $('#hideAlert').show(EFFECTS_TIME);
+                    $('#hideAlertBeginText').text("Не получилось.");
+                    $('#hideAlertText').text("Извините, произошла какая-то ошибка. Скорее всего у вас нет прав на это действие");
+                    $('#hideMarkerButtonModal').button('reset');
                 }
             }
         });
@@ -2589,6 +2676,7 @@ $(function() {
 
             enableEditMarkerMenu(infoBoxObject);
             enableDeleteMarkerMenu(infoBoxObject);
+            enableHideMarkerMenu(infoBoxObject);
 
             if( newMarker === true ) {
                 removeMarkerAndInfoBox(infoBoxObject);
@@ -2597,11 +2685,13 @@ $(function() {
         else {
             disableEditMarkerMenu();
             disableDeleteMarkerMenu();
+            disableHideMarkerMenu();
         }
 
         if( searchMarker === true ) {
             disableEditMarkerMenu();
             disableDeleteMarkerMenu();
+            disableHideMarkerMenu();
         }
 
         enableCategoryMenu();
@@ -2725,6 +2815,7 @@ $(function() {
                         showInfoBoxForMarker(infoBoxObject);
                         enableEditMarkerMenu(infoBoxObject);
                         enableDeleteMarkerMenu(infoBoxObject);
+                        enableHideMarkerMenu(infoBoxObject);
                         showSearchForm();
                     }
                     else {
@@ -3201,6 +3292,16 @@ $(function() {
                                                     )
                                                     .append(
                                                         $('<span/>').addClass("spacer3").text('Удалить')
+                                                    )
+                                            )
+                                            .append(
+                                                $('<button/>').attr('id', 'hideMarkerButton')
+                                                    .addClass('btn btn-small')
+                                                    .append(
+                                                        $('<i/>').addClass('icon-trash')
+                                                    )
+                                                    .append(
+                                                        $('<span/>').addClass("spacer3").text('Скрыть')
                                                     )
                                             )
                                     )

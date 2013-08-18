@@ -59,6 +59,12 @@
                                 <span class="spacer3">Удалить точку</span>
                             </a>
                         </li>
+                        <li>
+                            <a id="hideMarkerMenu">
+                                <i class="icon-remove"></i>
+                                <span class="spacer3">Скрыть точку</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">

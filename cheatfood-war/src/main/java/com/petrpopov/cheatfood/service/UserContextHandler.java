@@ -2,6 +2,7 @@ package com.petrpopov.cheatfood.service;
 
 import com.petrpopov.cheatfood.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,9 @@ public class UserContextHandler {
     @Autowired
     private UserService userService;
 
+    @Value("#{properties.admin_username}")
+    private String adminUsername;
+
     public UserEntity currentContextUser() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -33,6 +37,11 @@ public class UserContextHandler {
             if( username == null )
                 return null;
 
+            if( username.equals(adminUsername)) {
+                UserEntity adminUserEntity = userService.getAdminUserEntity();
+                return adminUserEntity;
+            }
+
             UserEntity entity = userService.getUserById(username);
 
             return entity;
@@ -41,29 +50,4 @@ public class UserContextHandler {
         return null;
     }
 
-    public boolean isPasswordUser(Authentication authentication) {
-
-        boolean paswordUser;
-
-        Object details = authentication.getDetails();
-
-        if( details instanceof Class<?> ) {
-            paswordUser = false;
-        }
-        else {
-            paswordUser = true;
-        }
-
-        return paswordUser;
-    }
-
-    public Class<?> getUserSocialNetworkClass(Authentication authentication) {
-
-        Object details = authentication.getDetails();
-        if( details instanceof Class<?> ) {
-            return (Class<?>) details;
-        }
-
-        return null;
-    }
 }

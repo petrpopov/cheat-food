@@ -20,7 +20,7 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd">
     <authentication-manager alias="authenticationManager" erase-credentials="false">
         <authentication-provider>
             <user-service id="inMemoryUserService">
-                <user name="kalabashka" password="123456" authorities="ROLE_USER,ROLE_ADMIN"/>
+                <user name="#{properties.admin_username}" password="#{properties.admin_password}" authorities="ROLE_USER,ROLE_ADMIN"/>
             </user-service>
         </authentication-provider>
         <authentication-provider ref="authProvider"/>

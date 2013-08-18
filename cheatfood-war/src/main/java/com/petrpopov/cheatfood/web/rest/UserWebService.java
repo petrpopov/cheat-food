@@ -74,13 +74,11 @@ public class UserWebService {
         }
 
         try {
-            Authentication authenticate = loginManager.authenticate(entity.getId(), user.getPassword());
-            rememberMeServices.onLoginSuccess(request, response, authenticate);
+            this.authenticate(entity.getId(), user.getPassword(), request, response);
         }
-        catch (Exception e) {
+        catch (CheatException e) {
             res.setError(true);
-            res.setErrorType(ErrorType.login_error);
-            return res;
+            res.setErrorType(e.getErrorType());
         }
 
         res.setResult(entity);
@@ -92,6 +90,13 @@ public class UserWebService {
     public MessageResult processLogin(@Valid @RequestBody UserCreate user, HttpServletRequest request, HttpServletResponse response) {
 
         MessageResult res = new MessageResult();
+
+        try {
+            Authentication authenticate = this.authenticate(user.getEmail(), user.getPassword(), request, response);
+            return res;
+        }
+        catch (CheatException e) {
+        }
 
         UserEntity userByEmail = userService.getUserByEmail(user.getEmail());
         if( userByEmail == null ) {
@@ -120,13 +125,11 @@ public class UserWebService {
         }
 
         try {
-            Authentication authenticate = loginManager.authenticate(userByEmail.getId(), user.getPassword());
-            rememberMeServices.onLoginSuccess(request, response, authenticate);
+            this.authenticate(userByEmail.getId(), user.getPassword(), request, response);
         }
-        catch (Exception e) {
+        catch (CheatException e) {
             res.setError(true);
-            res.setErrorType(ErrorType.login_error);
-            return res;
+            res.setErrorType(e.getErrorType());
         }
 
         return res;
@@ -231,12 +234,11 @@ public class UserWebService {
         tokenService.invalidateTokensForEmail(userByEmail.getEmail());
 
         try {
-            Authentication authenticate = loginManager.authenticate(userByEmail.getId(), restorePassword.getPassword());
-            rememberMeServices.onLoginSuccess(request, response, authenticate);
+            this.authenticate(userByEmail.getId(), restorePassword.getPassword(), request, response);
         }
-        catch (Exception e) {
+        catch (CheatException e) {
             res.setError(true);
-            res.setErrorType(ErrorType.login_error);
+            res.setErrorType(e.getErrorType());
         }
 
         return res;
@@ -250,4 +252,16 @@ public class UserWebService {
         return entity;
     }
 
+
+    private Authentication authenticate(String name, String password, HttpServletRequest request, HttpServletResponse response) throws CheatException {
+
+        try {
+            Authentication authenticate = loginManager.authenticate(name, password);
+            rememberMeServices.onLoginSuccess(request, response, authenticate);
+            return authenticate;
+        }
+        catch (Exception e) {
+            throw new CheatException(ErrorType.login_error);
+        }
+    }
 }

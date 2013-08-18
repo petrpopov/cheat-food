@@ -11,6 +11,7 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -35,6 +36,9 @@ public class UserService extends GenericService<UserEntity> {
     @Autowired
     @Qualifier("mongoTemplate")
     private MongoOperations op;
+
+    @Value("#{properties.admin_username}")
+    private String adminUsername;
 
     @Autowired
     private CheatPasswordEncoder encoder;
@@ -83,8 +87,13 @@ public class UserService extends GenericService<UserEntity> {
     @CacheEvict(value = "users", allEntries = true)
     public UserEntity createUser(@Valid UserCreate user) throws CheatException {
 
+        String email = user.getEmail();
+        if( email.equals(adminUsername) ) {
+            throw new CheatException("User is already exists!");
+        }
+
         UserEntity userToSave = new UserEntity();
-        UserEntity userByEmail = this.getUserByEmail(user.getEmail());
+        UserEntity userByEmail = this.getUserByEmail(email);
 
         if( userByEmail != null ) {
             String passwordHash = userByEmail.getPasswordHash();
@@ -97,7 +106,7 @@ public class UserService extends GenericService<UserEntity> {
             userToSave = userByEmail;
         }
 
-        userToSave.setEmail(user.getEmail());
+        userToSave.setEmail(email);
         return updatePasswordForUser(userToSave, user.getPassword());
     }
 
@@ -122,6 +131,15 @@ public class UserService extends GenericService<UserEntity> {
         Query query = new Query(criteria);
 
         return op.findOne(query, UserEntity.class);
+    }
+
+    public UserEntity getAdminUserEntity() {
+
+        UserEntity entity = new UserEntity();
+        entity.setId(adminUsername);
+        entity.setEmail(adminUsername);
+
+        return entity;
     }
 
     @Cacheable(value = "users", key = "#id")

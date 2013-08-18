@@ -7,6 +7,7 @@
     <definition name="main" template="/WEB-INF/pages/main_template.jsp">
         <put-attribute name="header" value="/WEB-INF/pages/header.jsp"/>
         <put-attribute name="deleteModal" value="/WEB-INF/pages/deleteModal.jsp"/>
+        <put-attribute name="hideModal" value="/WEB-INF/pages/hideModal.jsp"/>
         <put-attribute name="loginModal" value="/WEB-INF/pages/loginModal.jsp"/>
         <put-attribute name="registrationModal" value="/WEB-INF/pages/registrationModal.jsp"/>
         <put-attribute name="forgetPasswordModal" value="/WEB-INF/pages/forgetPasswordModal.jsp"/>

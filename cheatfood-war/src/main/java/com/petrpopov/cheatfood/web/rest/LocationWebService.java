@@ -49,6 +49,7 @@ public class LocationWebService {
         List<Location> list = locationService.findAll();
         locationVoteService.setAlreadyVoted(list);
         locationRateService.setAlreadyRated(list);
+
         return list;
     }
 
@@ -147,6 +148,51 @@ public class LocationWebService {
 
         try {
             locationService.deleteLocation(location);
+        }
+        catch (AccessDeniedException e) {
+            e.printStackTrace();
+
+            result.setError(true);
+            result.setErrorType(ErrorType.access_denied);
+            result.setMessage("Access denied");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+
+            result.setError(true);
+            result.setErrorType(ErrorType.other);
+            result.setMessage("Unknown error");
+        }
+
+
+        return result;
+    }
+
+    @RequestMapping(value = "{locationid}/hide", method = RequestMethod.DELETE)
+    @ResponseBody
+    public MessageResult hideLocation(@CookieValue(required = true, value = "CHEATFOOD") String cookie, @PathVariable String locationid) {
+
+        MessageResult result = new MessageResult();
+
+        boolean valid = cookieService.isCookieValidForCurrentUser(new CookieRequest(cookie));
+        if( !valid ) {
+            result.setError(true);
+            result.setErrorType(ErrorType.access_denied);
+            result.setMessage("Access denied");
+            return result;
+        }
+
+        Location location = locationService.findById(locationid);
+        if( location == null ) {
+            result.setError(true);
+            result.setErrorType(ErrorType.unknown_location);
+            result.setMessage("There is no such location!");
+
+            return result;
+        }
+
+        try {
+            locationService.hideLocation(location);
         }
         catch (AccessDeniedException e) {
             e.printStackTrace();
