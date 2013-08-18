@@ -1,9 +1,9 @@
 package com.petrpopov.cheatfood.web.controllers;
 
 import com.petrpopov.cheatfood.model.Location;
+import com.petrpopov.cheatfood.service.LocationRateService;
 import com.petrpopov.cheatfood.service.LocationService;
-import com.petrpopov.cheatfood.web.other.LocationRateService;
-import com.petrpopov.cheatfood.web.other.LocationVoteService;
+import com.petrpopov.cheatfood.service.LocationVoteService;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

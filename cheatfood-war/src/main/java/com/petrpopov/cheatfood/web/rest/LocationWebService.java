@@ -1,12 +1,8 @@
 package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.model.*;
-import com.petrpopov.cheatfood.service.CookieService;
-import com.petrpopov.cheatfood.service.LocationService;
-import com.petrpopov.cheatfood.service.UserContextHandler;
+import com.petrpopov.cheatfood.service.*;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
-import com.petrpopov.cheatfood.web.other.LocationRateService;
-import com.petrpopov.cheatfood.web.other.LocationVoteService;
 import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;

@@ -1,6 +1,8 @@
 package com.petrpopov.cheatfood.service;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.UserCreate;
 import com.petrpopov.cheatfood.model.UserEntity;
@@ -56,32 +58,7 @@ public class UserService extends GenericService<UserEntity> {
 
         logger.info("Checking all users for having default " + UserRole.ROLE_USER + " role" );
 
-        String collectionName = op.getCollectionName(UserEntity.class);
-        DBCollection collection = op.getCollection(collectionName);
-        DBCursor cursor = collection.find();
-
-        while (cursor.hasNext()) {
-            DBObject user = cursor.next();
-
-            if( !(user instanceof BasicDBObject) ) {
-                continue;
-            }
-
-            BasicDBObject dbo = (BasicDBObject) user;
-            Object roles = dbo.get("roles");
-
-            if( roles != null ) {
-                continue;
-            }
-
-            logger.info("Updating user " + dbo.get("_id") + " with default roles");
-
-            //need to insert default roles
-            BasicDBList rolesList = new BasicDBList();
-            rolesList.put(0, UserRole.getRoleUser().getBasicDBObject() );
-            dbo.put("roles", rolesList);
-            collection.save(dbo);
-        }
+        batchUpdateAllCollectionObjects();
     }
 
     @CacheEvict(value = "users", allEntries = true)
@@ -208,6 +185,24 @@ public class UserService extends GenericService<UserEntity> {
         }
 
         return userEntity;
+    }
+
+    @Override
+    protected void updateEntityForBatchOperation(DBCollection collection, BasicDBObject entity) {
+        Object roles = entity.get("roles");
+
+        if( roles != null ) {
+            return;
+        }
+
+        logger.info("Updating user " + entity.get("_id") + " with default roles");
+
+        //need to insert default roles
+        BasicDBList rolesList = new BasicDBList();
+        rolesList.put(0, UserRole.getRoleUser().getBasicDBObject() );
+        entity.put("roles", rolesList);
+
+        collection.save(entity);
     }
 
     private UserEntity saveOrUpdateFoursquareUser(UserEntity userEntity) {

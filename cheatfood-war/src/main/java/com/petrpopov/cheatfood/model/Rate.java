@@ -1,6 +1,7 @@
 package com.petrpopov.cheatfood.model;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * User: petrpopov
@@ -14,6 +15,8 @@ public class Rate {
 
     @NotNull
     private Integer value;
+
+    private Date date;
 
     public Rate() {
     }
@@ -37,5 +40,13 @@ public class Rate {
 
     public void setValue(Integer value) {
         this.value = value;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

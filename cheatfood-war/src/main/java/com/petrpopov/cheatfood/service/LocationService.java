@@ -1,5 +1,8 @@
 package com.petrpopov.cheatfood.service;
 
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.*;
 import org.apache.log4j.Logger;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +34,16 @@ public class LocationService extends GenericService<Location> {
     @Autowired
     private TypeService typeService;
 
+    @Autowired
+    private LocationVoteService locationVoteService;
+
+    @Autowired
+    private LocationRateService locationRateService;
+
+    @Autowired
+    private UserService userService;
+
+
     public LocationService() {
         super(Location.class);
         logger = Logger.getLogger(LocationService.class);
@@ -40,6 +54,8 @@ public class LocationService extends GenericService<Location> {
         GeospatialIndex index = new GeospatialIndex("geoLocation");
         IndexOperations indexOperations = op.indexOps(Location.class);
         indexOperations.ensureIndex(index);
+
+        batchUpdateAllCollectionObjects();
     }
 
     @Override
@@ -160,14 +176,19 @@ public class LocationService extends GenericService<Location> {
 
         List<Vote> votes = location.getVotes();
         if( votes != null ) {
-            for (Vote vote1 : votes) {
-                if( vote1.getUserId().equals(vote.getUserId()))
-                    throw new CheatException(ErrorType.already_voted);
-            }
+            UserEntity userById = userService.getUserById(vote.getUserId());
+            boolean canVote = locationVoteService.canUserVoteForLocation(location, userById);
+
+            if( !canVote )
+                throw new CheatException(ErrorType.already_voted);
         }
         else {
             votes = new ArrayList<Vote>();
             location.setVotes(votes);
+        }
+
+        if( vote.getDate() == null ) {
+            vote.setDate(new Date());
         }
 
         votes.add(vote);
@@ -179,20 +200,85 @@ public class LocationService extends GenericService<Location> {
 
         List<Rate> rates = location.getRates();
         if( rates != null ) {
-            for (Rate rate1 : rates) {
-                if( rate1.getUserId().equals(rate.getUserId()))
-                    throw new CheatException(ErrorType.already_rated);
-            }
+            UserEntity userById = userService.getUserById(rate.getUserId());
+            boolean canRate = locationRateService.canUserRateForLocation(location, userById);
+
+            if( !canRate )
+                throw new CheatException(ErrorType.already_rated);
         }
         else {
             rates = new ArrayList<Rate>();
             location.setRates(rates);
         }
 
+        if( rate.getDate() == null ) {
+            rate.setDate(new Date());
+        }
+
         rates.add(rate);
-        location.setAverageRate( getNewAverageRate(rates) );
+        location.setAverageRate(getNewAverageRate(rates));
         return saveLocationObject(location);
     }
+
+    @Override
+    protected void updateEntityForBatchOperation(DBCollection collection, BasicDBObject entity) {
+
+        updateLocationWithCurrentVotesDate(entity);
+        updateLocationWithCurrentRatesDate(entity);
+
+        collection.save(entity);
+    }
+
+    private void updateLocationWithCurrentVotesDate(BasicDBObject entity) {
+
+        Object votes = entity.get("votes");
+        if( votes == null ) {
+            return;
+        }
+
+        if( !(votes instanceof BasicDBList) ) {
+            return;
+        }
+
+        BasicDBList votesList = (BasicDBList) votes;
+        for (Object o : votesList) {
+            if( !(o instanceof BasicDBObject) )
+                continue;
+
+            BasicDBObject obj = (BasicDBObject) o;
+            Object date = obj.get("date");
+            if( date == null ) {
+                logger.info("Updating location " + entity.get("_id") + " setting today date for votes");
+                obj.put("date", new Date());
+            }
+        }
+    }
+
+    private void updateLocationWithCurrentRatesDate(BasicDBObject entity) {
+
+        Object rates = entity.get("rates");
+        if( rates == null ) {
+            return;
+        }
+
+        if( !(rates instanceof BasicDBList) ) {
+            return;
+        }
+
+        BasicDBList votesList = (BasicDBList) rates;
+        for (Object o : votesList) {
+            if( !(o instanceof BasicDBObject) )
+                continue;
+
+            BasicDBObject obj = (BasicDBObject) o;
+            Object date = obj.get("date");
+            if( date == null ) {
+                logger.info("Updating location " + entity.get("_id") + " setting today date for rates");
+                obj.put("date", new Date());
+            }
+        }
+    }
+
 
     private List<Location> filterListForHiddenLocations(List<Location> all) {
 

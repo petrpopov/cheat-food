@@ -1,6 +1,7 @@
 package com.petrpopov.cheatfood.model;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * User: petrpopov
@@ -14,6 +15,8 @@ public class Vote {
 
     @NotNull
     private Boolean value;
+
+    private Date date;
 
     public Vote() {
     }
@@ -32,5 +35,13 @@ public class Vote {
 
     public void setValue(Boolean value) {
         this.value = value;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
