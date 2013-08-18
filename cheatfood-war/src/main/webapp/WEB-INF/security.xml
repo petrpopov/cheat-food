@@ -14,9 +14,15 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd">
         <!--intercept-url pattern="/profile*" access="hasRole('ROLE_USER')" /-->
 
         <custom-filter ref="cheatRememberFilter" position="REMEMBER_ME_FILTER"/>
+
     </http>
 
     <authentication-manager alias="authenticationManager" erase-credentials="false">
+        <authentication-provider>
+            <user-service id="inMemoryUserService">
+                <user name="kalabashka" password="123456" authorities="ROLE_USER,ROLE_ADMIN"/>
+            </user-service>
+        </authentication-provider>
         <authentication-provider ref="authProvider"/>
     </authentication-manager>
 

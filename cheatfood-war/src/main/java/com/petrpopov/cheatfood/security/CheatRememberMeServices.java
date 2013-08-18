@@ -4,6 +4,7 @@ import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
 import com.petrpopov.cheatfood.model.UserEntity;
 import com.petrpopov.cheatfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,7 +54,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
     private ProviderIdClassStorage providerIdClassStorage;
 
     @Autowired
-    public CheatRememberMeServices(UserDetailsService userDetailsService) {
+    public CheatRememberMeServices(@Qualifier("cheatUserDetailsService") UserDetailsService userDetailsService) {
         super("cheatfood", userDetailsService);
     }
 
