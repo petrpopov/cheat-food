@@ -3406,7 +3406,7 @@ $(function() {
                                                                 $('<i/>').addClass('icon-remove icon-white')
                                                             )
                                                             .append(
-                                                                $('<span/>').addClass("spacer3").text('Точки здесь больше нет')
+                                                                $('<span/>').addClass("spacer3").text('Точки здесь нет или она не подходит')
                                                             )
                                                     )
                                             )
