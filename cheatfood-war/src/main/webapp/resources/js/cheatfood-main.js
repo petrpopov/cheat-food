@@ -1769,16 +1769,19 @@ $(function() {
 
     function enableDeleteMarkerMenu(infoBoxObject) {
 
-        if( infoBoxObject.location.creator.id !== params.currentUser.id ) {
-            $('#deleteMarkerMenu').closest('li').hide();
-        }
-        else {
-            $('#deleteMarkerMenu').closest('li').show();
-            $('#deleteMarkerMenu').closest('li').removeClass('disabled');
-            $('#deleteMarkerMenu').off('click');
-            $('#deleteMarkerMenu').click(function() {
-                deleteMarkerAction(infoBoxObject);
-            });
+        $('#deleteMarkerMenu').closest('li').hide();
+
+        if( params.hasOwnProperty('currentUser') ) {
+            if( params.currentUser.hasOwnProperty('id') ) {
+                if( infoBoxObject.location.creator.id === params.currentUser.id ) {
+                    $('#deleteMarkerMenu').closest('li').show();
+                    $('#deleteMarkerMenu').closest('li').removeClass('disabled');
+                    $('#deleteMarkerMenu').off('click');
+                    $('#deleteMarkerMenu').click(function() {
+                        deleteMarkerAction(infoBoxObject);
+                    });
+                }
+            }
         }
     }
 
@@ -1791,17 +1794,19 @@ $(function() {
 
     function enableHideMarkerMenu(infoBoxObject) {
 
-        if( params.currentUser.admin !== true ) {
+        $('#hideMarkerMenu').closest('li').hide();
 
-            $('#hideMarkerMenu').closest('li').hide();
-        }
-        else {
-            $('#hideMarkerMenu').closest('li').show();
-            $('#hideMarkerMenu').closest('li').removeClass('disabled');
-            $('#hideMarkerMenu').off('click');
-            $('#hideMarkerMenu').click(function() {
-                hideMarkerAction(infoBoxObject);
-            });
+        if( params.hasOwnProperty('currentUser') ) {
+            if( params.currentUser.hasOwnProperty('admin')) {
+                if( params.currentUser.admin === true ) {
+                    $('#hideMarkerMenu').closest('li').show();
+                    $('#hideMarkerMenu').closest('li').removeClass('disabled');
+                    $('#hideMarkerMenu').off('click');
+                    $('#hideMarkerMenu').click(function() {
+                        hideMarkerAction(infoBoxObject);
+                    });
+                }
+            }
         }
     }
 
@@ -1810,8 +1815,18 @@ $(function() {
         $('#hideMarkerMenu').closest('li').addClass('disabled');
         $('#hideMarkerMenu').off('click');
 
-        if( params.currentUser.admin !== true ) {
-            $('#hideMarkerMenu').closest('li').hide();
+        if( params.hasOwnProperty('currentUser') ) {
+            if( params.currentUser.hasOwnProperty('admin') ) {
+                if( params.currentUser.admin !== true ) {
+                    $('#hideMarkerMenu').closest('li').hide();
+                }
+                else {
+                    $('#hideMarkerMenu').closest('li').show();
+                }
+            }
+            else {
+                $('#hideMarkerMenu').closest('li').show();
+            }
         }
         else {
             $('#hideMarkerMenu').closest('li').show();
@@ -2092,6 +2107,7 @@ $(function() {
             score: location.averageRate,
             readOnly: true
         };
+        $('#rateViewButtons').raty(ratyViewProperties);
 
         var ratyActionProperties = {
             path: getImageDirPath(),
@@ -2105,7 +2121,7 @@ $(function() {
         if( authorized === false ) {
             $('#approveLocation').hide();
             $('#editDeleteMarkerGroup').hide();
-            $('#rateActionButtons').hide();
+            $('#rateActionsDiv').hide();
         }
         else {
             if( location.alreadyVoted === false ) {
@@ -2130,19 +2146,22 @@ $(function() {
                 $('#deleteMarkerButton').show();
             }
 
-            $('#rateViewButtons').raty(ratyViewProperties);
             $('#rateActionButtons').raty(ratyActionProperties);
 
             $('#editDeleteMarkerGroup').show();
         }
 
-        if( params.currentUser.admin === false ) {
-            $('#hideMarkerButton').hide();
-        }
-        else {
-            $('#hideMarkerButton').show();
+        $('#hideMarkerButton').hide();
+        if( params.hasOwnProperty('currentUser') ) {
+            if(params.currentUser.hasOwnProperty('admin') ) {
+                if( params.currentUser.admin === true ) {
+                    $('#hideMarkerButton').show();
+                }
+            }
         }
 
+        $('#voteUpLabel').text(location.votesUpCount);
+        $('#voteDownLabel').text(location.votesDownCount);
 
         $('#info_title').text(location.title);
         $('#info_type').text( getTypeValueByLanguage(location.type, DATE_LANGUAGE) );
@@ -2351,7 +2370,8 @@ $(function() {
             success: function(data) {
 
                 if( data.error == false ) {
-                    infoBoxObject.location.alreadyVoted = true;
+                    infoBoxObject.location = data.result;
+                    setInfoBoxContentFromLocation(infoBoxObject);
                     showNoteTopCenter("Спасибо!", "success", true);
                     $('#approveLocation').hide();
                 }
@@ -2402,14 +2422,9 @@ $(function() {
                 if( data.error == false ) {
                     var loc = data.result;
 
-                    infoBoxObject.location.alreadyRated = true;
-                    infoBoxObject.location.averageRate = loc.averageRate;
+                    infoBoxObject.location = loc;
+                    setInfoBoxContentFromLocation(infoBoxObject);
 
-                    $('#rateViewButtons').raty('readOnly', false);
-                    $('#rateViewButtons').raty('score', loc.averageRate);
-                    $('#rateViewButtons').raty('readOnly', true);
-
-                    $('#rateActionButtons').raty('readOnly', true);
                     $('#rateActionsDiv').hide(EFFECTS_TIME);
 
                     showNoteTopCenter("Спасибо!", "success", true);
@@ -3224,7 +3239,7 @@ $(function() {
 
     function getMarkerContentElementFromLocation() {
 
-        var pluso = $('<div/>').addClass("pluso spacer3").attr("id", "shareLocationInSocial")
+        var pluso = $('<div/>').addClass("pluso pull-left").attr("id", "shareLocationInSocial")
             .attr("data-options", "small,square,line,horizontal,counter,theme=03")
             .attr("data-services", "facebook,twitter,vkontakte,google,odnoklassniki,moimir,print")
             .attr("data-background", "transparent")
@@ -3400,10 +3415,26 @@ $(function() {
                     )
             )
             .append(
-                $('<div/>').attr('id', 'shareDiv').addClass("clearfix")
+                $('<div/>').attr('id', 'shareDiv').addClass("clearfix form-inline")
                     .append(
-                        $('<div/>').addClass("pull-left")
+                        $('<div/>').addClass("form-inline pull-left")
                             .append(pluso)
+                            .append(
+                                $('<div/>').addClass("spacer28 pull-left")
+                                    .append(
+                                        $('<label/>').text("53K").attr("width", "32").attr("id", "voteUpLabel")
+                                    )
+                                    .append(
+                                        $('<img/>').attr('src', getImagePath('up.png')).attr('width', 24)
+                                    )
+                                    .append(
+                                        $('<img/>').attr('src', getImagePath('down.png')).attr('width', 24)
+                                            .addClass("spacer10")
+                                    )
+                                    .append(
+                                        $('<label/>').text("53K").attr("width", "32").attr("id", "voteDownLabel")
+                                    )
+                            )
                     )
             )
             .append(
@@ -3418,13 +3449,13 @@ $(function() {
                                     .append(
                                         $('<div/>').addClass('btn-toolbar')
                                             .append(
-                                                $('<div/>').addClass('btn-group pull-left')
+                                                $('<div/>').addClass('btn-group')
                                                     .append(
                                                         $('<button/>').attr("id", "approveButton")
                                                             .addClass('btn btn-small btn-success')
                                                             .attr('data-loading-text', 'Голосуем...')
                                                             .append(
-                                                                $('<i/>').addClass('icon-ok icon-white')
+                                                                $('<img/>').attr('src', getImagePath('up_white.png')).attr('width', 20)
                                                             )
                                                             .append(
                                                                 $('<span/>').addClass("spacer3").text('Подтверждаю точку')
@@ -3439,7 +3470,7 @@ $(function() {
                                                             .addClass('btn btn-small btn-warning')
                                                             .attr('data-loading-text', 'Голосуем...')
                                                             .append(
-                                                                $('<i/>').addClass('icon-remove icon-white')
+                                                                $('<img/>').attr('src', getImagePath('down_white.png')).attr('width', 20)
                                                             )
                                                             .append(
                                                                 $('<span/>').addClass("spacer3").text('Точки здесь нет или она не подходит')

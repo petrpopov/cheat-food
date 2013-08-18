@@ -1,7 +1,12 @@
 package com.petrpopov.cheatfood.web.rest;
 
+import com.petrpopov.cheatfood.filters.LocationFilterService;
+import com.petrpopov.cheatfood.filters.LocationRateService;
+import com.petrpopov.cheatfood.filters.LocationVoteService;
 import com.petrpopov.cheatfood.model.*;
-import com.petrpopov.cheatfood.service.*;
+import com.petrpopov.cheatfood.service.CookieService;
+import com.petrpopov.cheatfood.service.LocationService;
+import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
 import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +40,9 @@ public class LocationWebService {
     private LocationRateService locationRateService;
 
     @Autowired
+    private LocationFilterService locationFilterService;
+
+    @Autowired
     private CookieService cookieService;
 
 
@@ -46,7 +54,9 @@ public class LocationWebService {
 
         locationVoteService.setAlreadyVoted(list);
         locationRateService.setAlreadyRated(list);
-        filterLocations(list);
+        locationFilterService.filterCreator(list);
+        locationFilterService.filterRates(list);
+        locationFilterService.filterVotes(list);
 
         return list;
     }
@@ -62,7 +72,9 @@ public class LocationWebService {
 
         locationVoteService.setAlreadyVoted(list);
         locationRateService.setAlreadyRated(list);
-        filterLocations(list);
+        locationFilterService.filterCreator(list);
+        locationFilterService.filterRates(list);
+        locationFilterService.filterVotes(list);
 
         return list;
     }
@@ -117,9 +129,12 @@ public class LocationWebService {
 
         locationVoteService.setAlreadyVoted(loc);
         locationRateService.setAlreadyRated(loc);
+        locationFilterService.filterCreator(loc);
+        locationFilterService.filterRates(loc);
+        locationFilterService.filterVotes(loc);
 
         if( loc != null )
-            result.setResult(filterLocation(loc));
+            result.setResult(loc);
 
         return result;
     }
@@ -212,21 +227,5 @@ public class LocationWebService {
 
 
         return result;
-    }
-
-    private void filterLocations(List<Location> list) {
-        for (Location location : list) {
-            filterLocation(location);
-        }
-    }
-
-    private Location filterLocation(Location location) {
-
-        UserEntity creator = location.getCreator();
-        if( creator == null )
-            return location;
-
-        location.setCreator( new UserEntity(creator.getId() ) );
-        return location;
     }
 }

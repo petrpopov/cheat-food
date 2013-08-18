@@ -61,6 +61,10 @@ public class Location implements Serializable {
     @Valid
     private List<Vote> votes;
 
+    private long votesUpCount;
+
+    private long votesDownCount;
+
     @Transient
     private Boolean alreadyVoted;
 
@@ -226,6 +230,22 @@ public class Location implements Serializable {
 
     public void setHidden(Boolean hidden) {
         this.hidden = hidden;
+    }
+
+    public long getVotesUpCount() {
+        return votesUpCount;
+    }
+
+    public void setVotesUpCount(long votesUpCount) {
+        this.votesUpCount = votesUpCount;
+    }
+
+    public long getVotesDownCount() {
+        return votesDownCount;
+    }
+
+    public void setVotesDownCount(long votesDownCount) {
+        this.votesDownCount = votesDownCount;
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.config.CheatException;
+import com.petrpopov.cheatfood.filters.LocationFilterService;
+import com.petrpopov.cheatfood.filters.LocationRateService;
+import com.petrpopov.cheatfood.filters.LocationVoteService;
 import com.petrpopov.cheatfood.model.*;
 import com.petrpopov.cheatfood.service.CookieService;
 import com.petrpopov.cheatfood.service.LocationService;
@@ -27,6 +30,15 @@ public class VoteWebService {
 
     @Autowired
     private LocationService locationService;
+
+    @Autowired
+    private LocationFilterService locationFilterService;
+
+    @Autowired
+    private LocationVoteService locationVoteService;
+
+    @Autowired
+    private LocationRateService locationRateService;
 
     @Autowired
     private UserContextHandler userContextHandler;
@@ -61,7 +73,7 @@ public class VoteWebService {
         vote.setValue(value);
 
         try {
-            locationService.voteForLocation(location, vote);
+            location = locationService.voteForLocation(location, vote);
         }
         catch (AccessDeniedException e) {
             e.printStackTrace();
@@ -87,7 +99,12 @@ public class VoteWebService {
         }
 
 
-        result.setResult("OK");
+        locationVoteService.setAlreadyVoted(location);
+        locationRateService.setAlreadyRated(location);
+        locationFilterService.filterCreator(location);
+        locationFilterService.filterRates(location);
+        locationFilterService.filterVotes(location);
+        result.setResult(location);
 
         return result;
     }
@@ -148,6 +165,11 @@ public class VoteWebService {
         }
 
 
+        locationVoteService.setAlreadyVoted(location);
+        locationRateService.setAlreadyRated(location);
+        locationFilterService.filterCreator(location);
+        locationFilterService.filterRates(location);
+        locationFilterService.filterVotes(location);
         result.setResult(location);
 
         return result;

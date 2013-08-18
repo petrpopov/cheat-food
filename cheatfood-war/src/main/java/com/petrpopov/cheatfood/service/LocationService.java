@@ -4,6 +4,8 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.petrpopov.cheatfood.config.CheatException;
+import com.petrpopov.cheatfood.filters.LocationRateService;
+import com.petrpopov.cheatfood.filters.LocationVoteService;
 import com.petrpopov.cheatfood.model.*;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -172,7 +174,7 @@ public class LocationService extends GenericService<Location> {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    public void voteForLocation(Location location, Vote vote) throws CheatException {
+    public Location voteForLocation(Location location, Vote vote) throws CheatException {
 
         List<Vote> votes = location.getVotes();
         if( votes != null ) {
@@ -192,7 +194,13 @@ public class LocationService extends GenericService<Location> {
         }
 
         votes.add(vote);
-        saveLocationObject(location);
+
+        long votesUpCount = this.getVotesUpCount(location);
+        long votesDownCount = this.getVotesDownCount(location);
+        location.setVotesUpCount(votesUpCount);
+        location.setVotesDownCount(votesDownCount);
+
+        return saveLocationObject(location);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -220,11 +228,39 @@ public class LocationService extends GenericService<Location> {
         return saveLocationObject(location);
     }
 
+    public long getVotesUpCount(Location location) {
+
+        List<Vote> votes = location.getVotes();
+
+        long count = 0;
+        for (Vote vote : votes) {
+            if( vote.getValue().equals(Boolean.TRUE) )
+                count++;
+        }
+
+        return count;
+    }
+
+    public long getVotesDownCount(Location location) {
+
+        List<Vote> votes = location.getVotes();
+
+        long count = 0;
+        for (Vote vote : votes) {
+            if( vote.getValue().equals(Boolean.FALSE) )
+                count++;
+        }
+
+        return count;
+    }
+
+
     @Override
     protected void updateEntityForBatchOperation(DBCollection collection, BasicDBObject entity) {
 
         updateLocationWithCurrentVotesDate(entity);
         updateLocationWithCurrentRatesDate(entity);
+        updateLocationWithVotesCount(entity);
 
         collection.save(entity);
     }
@@ -277,6 +313,41 @@ public class LocationService extends GenericService<Location> {
                 obj.put("date", new Date());
             }
         }
+    }
+
+    private void updateLocationWithVotesCount(BasicDBObject entity) {
+
+        Object votes = entity.get("votes");
+        if( votes == null ) {
+            return;
+        }
+
+        if( !(votes instanceof BasicDBList) ) {
+            return;
+        }
+
+        int upCount = 0;
+        int downCount = 0;
+        BasicDBList votesList = (BasicDBList) votes;
+        for (Object obj : votesList) {
+            if( !(obj instanceof BasicDBObject) )
+                continue;
+
+            BasicDBObject vote = (BasicDBObject) obj;
+            Object value = vote.get("value");
+
+            if( !(value instanceof Boolean) )
+                continue;
+
+            Boolean val = (Boolean) value;
+            if( val.equals(Boolean.TRUE) )
+                upCount++;
+            else
+                downCount++;
+        }
+
+        entity.put("votesUpCount", upCount);
+        entity.put("votesDownCount", downCount);
     }
 
 

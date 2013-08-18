@@ -1,8 +1,9 @@
-package com.petrpopov.cheatfood.service;
+package com.petrpopov.cheatfood.filters;
 
 import com.petrpopov.cheatfood.model.Location;
-import com.petrpopov.cheatfood.model.Rate;
 import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.Vote;
+import com.petrpopov.cheatfood.service.UserContextHandler;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,33 +16,33 @@ import java.util.List;
 
 /**
  * User: petrpopov
- * Date: 28.07.13
- * Time: 12:38
+ * Date: 25.07.13
+ * Time: 20:52
  */
 
 @Component
-public class LocationRateService {
+public class LocationVoteService {
 
     @Autowired
     private UserContextHandler userContextHandler;
 
-    @Value("#{properties.rate_days_delay}")
-    private int rateDaysDelay;
+    @Value("#{properties.vote_days_delay}")
+    private int voteDaysDelay;
 
-    public void setAlreadyRated(Location location) {
+    public void setAlreadyVoted(Location location) {
 
         if( location == null )
             return;
 
         UserEntity userEntity = userContextHandler.currentContextUser();
         if( userEntity == null )
-            location.setAlreadyRated(false);
+            location.setAlreadyVoted(false);
 
-        boolean canVote = canUserRateForLocation(location, userEntity);
-        location.setAlreadyRated(!canVote);
+        boolean canVote = canUserVoteForLocation(location, userEntity);
+        location.setAlreadyVoted(!canVote);
     }
 
-    public void setAlreadyRated(List<Location> list) {
+    public void setAlreadyVoted(List<Location> list) {
 
         if( list == null )
             return;
@@ -54,62 +55,62 @@ public class LocationRateService {
                 continue;
 
             if( userEntity == null ) {
-                location.setAlreadyRated(false);
+                location.setAlreadyVoted(false);
             }
             else {
-                boolean canVote = canUserRateForLocation(location, userEntity);
-                location.setAlreadyRated(!canVote);
+                boolean canVote = canUserVoteForLocation(location, userEntity);
+                location.setAlreadyVoted(!canVote);
             }
         }
     }
 
-    public boolean canUserRateForLocation(Location location, UserEntity userEntity) {
+    public boolean canUserVoteForLocation(Location location, UserEntity userEntity) {
 
-        Rate lastRate = this.getLastRate(location, userEntity);
-        if( lastRate == null )
+        Vote lastVote = this.getLastVote(location, userEntity);
+        if( lastVote == null )
             return true;
 
-        Date date = lastRate.getDate();
+        Date date = lastVote.getDate();
         if( date == null )
             return true;
 
-        DateTime rateDate = new DateTime(date);
+        DateTime voteDate = new DateTime(date);
         DateTime currentDate = new DateTime(new Date());
 
-        Days days = Days.daysBetween(currentDate, rateDate);
+        Days days = Days.daysBetween(currentDate, voteDate);
         int diff = days.getDays();
-        if( diff >= rateDaysDelay )
+        if( diff >= voteDaysDelay )
             return true;
 
         return false;
     }
 
-    private Rate getLastRate(Location location, UserEntity userEntity) {
+    private Vote getLastVote(Location location, UserEntity userEntity) {
 
         if( location == null || userEntity == null )
             return null;
 
-        List<Rate> rates = location.getRates();
-        if( rates == null )
+        List<Vote> votes = location.getVotes();
+        if( votes == null )
             return null;
 
-        List<Rate> list = new ArrayList<Rate>();
-        for (Rate rate : rates) {
-            if( rate.getUserId().equals(userEntity.getId())) {
-                list.add(rate);
+        List<Vote> list = new ArrayList<Vote>();
+        for (Vote vote : votes) {
+            if( vote.getUserId().equals(userEntity.getId())) {
+                list.add(vote);
             }
         }
 
         if(list.size() <= 0 )
             return null;
 
-        Rate last = list.get(0);
-        for (Rate rate : list) {
+        Vote last = list.get(0);
+        for (Vote vote : list) {
 
-            if( rate == null )
+            if( vote == null )
                 continue;
 
-            Date date = rate.getDate();
+            Date date = vote.getDate();
             if( date == null )
                 continue;
 
@@ -117,11 +118,11 @@ public class LocationRateService {
             if( lastDate == null )
                 continue;
 
-            DateTime rateDateTime = new DateTime(date);
+            DateTime voteDateTime = new DateTime(date);
             DateTime lastDateTime = new DateTime(lastDate);
 
-            if( lastDateTime.isAfter(rateDateTime) ) {
-                last = rate;
+            if( lastDateTime.isAfter(voteDateTime) ) {
+                last = vote;
             }
         }
 
