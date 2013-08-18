@@ -47,8 +47,10 @@ public class LocationWebService {
     public List<Location> getAllLocations() throws Exception {
 
         List<Location> list = locationService.findAll();
+
         locationVoteService.setAlreadyVoted(list);
         locationRateService.setAlreadyRated(list);
+        filterLocations(list);
 
         return list;
     }
@@ -61,8 +63,11 @@ public class LocationWebService {
         GeoPointBounds previous = diff.getPrevious();
 
         List<Location> list = locationService.findAllInDifference(current, previous, typeId);
+
         locationVoteService.setAlreadyVoted(list);
         locationRateService.setAlreadyRated(list);
+        filterLocations(list);
+
         return list;
     }
 
@@ -118,7 +123,7 @@ public class LocationWebService {
         locationRateService.setAlreadyRated(loc);
 
         if( loc != null )
-            result.setResult(loc);
+            result.setResult(filterLocation(loc));
 
         return result;
     }
@@ -211,5 +216,21 @@ public class LocationWebService {
 
 
         return result;
+    }
+
+    private void filterLocations(List<Location> list) {
+        for (Location location : list) {
+            filterLocation(location);
+        }
+    }
+
+    private Location filterLocation(Location location) {
+
+        UserEntity creator = location.getCreator();
+        if( creator == null )
+            return location;
+
+        location.setCreator( new UserEntity(creator.getId() ) );
+        return location;
     }
 }

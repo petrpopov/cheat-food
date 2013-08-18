@@ -251,6 +251,8 @@ $(function() {
                     name = email;
                 }
 
+                params.currentUser = {id: user.id, name: name, admin: isUserAdmin(user)};
+
                 showLoginMenuInfo(auth, name);
             }
         });
@@ -1766,29 +1768,54 @@ $(function() {
     }
 
     function enableDeleteMarkerMenu(infoBoxObject) {
-        $('#deleteMarkerMenu').closest('li').removeClass('disabled');
-        $('#deleteMarkerMenu').off('click');
-        $('#deleteMarkerMenu').click(function() {
-            deleteMarkerAction(infoBoxObject);
-        });
+
+        if( infoBoxObject.location.creator.id !== params.currentUser.id ) {
+            $('#deleteMarkerMenu').closest('li').hide();
+        }
+        else {
+            $('#deleteMarkerMenu').closest('li').show();
+            $('#deleteMarkerMenu').closest('li').removeClass('disabled');
+            $('#deleteMarkerMenu').off('click');
+            $('#deleteMarkerMenu').click(function() {
+                deleteMarkerAction(infoBoxObject);
+            });
+        }
     }
 
     function disableDeleteMarkerMenu() {
+
         $('#deleteMarkerMenu').closest('li').addClass('disabled');
         $('#deleteMarkerMenu').off('click');
+        $('#deleteMarkerMenu').closest('li').hide();
     }
 
     function enableHideMarkerMenu(infoBoxObject) {
-        $('#hideMarkerMenu').closest('li').removeClass('disabled');
-        $('#hideMarkerMenu').off('click');
-        $('#hideMarkerMenu').click(function() {
-            hideMarkerAction(infoBoxObject);
-        });
+
+        if( params.currentUser.admin !== true ) {
+
+            $('#hideMarkerMenu').closest('li').hide();
+        }
+        else {
+            $('#hideMarkerMenu').closest('li').show();
+            $('#hideMarkerMenu').closest('li').removeClass('disabled');
+            $('#hideMarkerMenu').off('click');
+            $('#hideMarkerMenu').click(function() {
+                hideMarkerAction(infoBoxObject);
+            });
+        }
     }
 
     function disableHideMarkerMenu() {
+
         $('#hideMarkerMenu').closest('li').addClass('disabled');
         $('#hideMarkerMenu').off('click');
+
+        if( params.currentUser.admin !== true ) {
+            $('#hideMarkerMenu').closest('li').hide();
+        }
+        else {
+            $('#hideMarkerMenu').closest('li').show();
+        }
     }
 
 
@@ -2084,9 +2111,25 @@ $(function() {
                 ratyProperties.readOnly = true;
             }
 
+            console.log(location);
+            console.log(params);
+            if( location.creator.id != params.currentUser.id ) {
+                $('#deleteMarkerButton').hide();
+            }
+            else {
+                $('#deleteMarkerButton').show();
+            }
+
             $('#rateButtons').raty(ratyProperties);
 
             $('#editDeleteMarkerGroup').show();
+        }
+
+        if( params.currentUser.admin === false ) {
+            $('#hideMarkerButton').hide();
+        }
+        else {
+            $('#hideMarkerButton').show();
         }
 
 
@@ -3893,6 +3936,26 @@ $(function() {
         }
 
         return res;
+    }
+
+    function isUserAdmin(user) {
+
+        if( !user.roles ) {
+            return false;
+        }
+
+        if( user.roles.length < 1 ) {
+            return false;
+        }
+
+        for(var i = 0; i < user.roles; i++) {
+            var role = user.roles[i];
+            if( role.name === "ROLE_ADMIN" ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     function stringIsNotEmpty(str) {

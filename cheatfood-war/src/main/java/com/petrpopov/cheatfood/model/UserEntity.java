@@ -40,6 +40,10 @@ public class UserEntity {
     public UserEntity() {
     }
 
+    public UserEntity(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }
