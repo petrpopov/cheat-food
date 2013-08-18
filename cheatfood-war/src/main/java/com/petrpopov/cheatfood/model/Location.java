@@ -65,6 +65,8 @@ public class Location implements Serializable {
 
     private long votesDownCount;
 
+    private Boolean adminChecked;
+
     @Transient
     private Boolean alreadyVoted;
 
@@ -246,6 +248,14 @@ public class Location implements Serializable {
 
     public void setVotesDownCount(long votesDownCount) {
         this.votesDownCount = votesDownCount;
+    }
+
+    public Boolean getAdminChecked() {
+        return adminChecked;
+    }
+
+    public void setAdminChecked(Boolean adminChecked) {
+        this.adminChecked = adminChecked;
     }
 
     @Override

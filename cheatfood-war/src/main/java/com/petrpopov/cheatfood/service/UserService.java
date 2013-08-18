@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -122,6 +123,25 @@ public class UserService extends GenericService<UserEntity> {
     @Cacheable(value = "users", key = "#id")
     public UserEntity getUserById(String id) {
         return this.findById(id);
+    }
+
+    public boolean isUserAdmin(String id) {
+
+        UserEntity userById = this.getUserById(id);
+        return isUserAdmin(userById);
+    }
+
+    public boolean isUserAdmin(UserEntity entity) {
+        List<UserRole> roles = entity.getRoles();
+        if( roles == null )
+            return false;
+
+        for (UserRole role : roles) {
+            if( role.getName().equals(UserRole.ROLE_ADMIN) )
+                return true;
+        }
+
+        return false;
     }
 
   //  @Cacheable("users")

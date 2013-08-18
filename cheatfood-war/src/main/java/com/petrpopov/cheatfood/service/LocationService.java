@@ -177,8 +177,10 @@ public class LocationService extends GenericService<Location> {
     public Location voteForLocation(Location location, Vote vote) throws CheatException {
 
         List<Vote> votes = location.getVotes();
+        UserEntity userById = userService.getUserById(vote.getUserId());
+        boolean isAdmin = userService.isUserAdmin(userById);
+
         if( votes != null ) {
-            UserEntity userById = userService.getUserById(vote.getUserId());
             boolean canVote = locationVoteService.canUserVoteForLocation(location, userById);
 
             if( !canVote )
@@ -199,6 +201,16 @@ public class LocationService extends GenericService<Location> {
         long votesDownCount = this.getVotesDownCount(location);
         location.setVotesUpCount(votesUpCount);
         location.setVotesDownCount(votesDownCount);
+
+        Boolean adminChecked = location.getAdminChecked();
+        if( adminChecked == null ) {
+            location.setAdminChecked(isAdmin);
+        }
+        else {
+            if( adminChecked.equals(Boolean.FALSE) ) {
+                location.setAdminChecked(isAdmin);
+            }
+        }
 
         return saveLocationObject(location);
     }
@@ -261,6 +273,7 @@ public class LocationService extends GenericService<Location> {
         updateLocationWithCurrentVotesDate(entity);
         updateLocationWithCurrentRatesDate(entity);
         updateLocationWithVotesCount(entity);
+        updateLocationWithAdminChecked(entity);
 
         collection.save(entity);
     }
@@ -348,6 +361,43 @@ public class LocationService extends GenericService<Location> {
 
         entity.put("votesUpCount", upCount);
         entity.put("votesDownCount", downCount);
+    }
+
+    private void updateLocationWithAdminChecked(BasicDBObject entity) {
+        Object votes = entity.get("votes");
+        if( votes == null ) {
+            return;
+        }
+
+        if( !(votes instanceof BasicDBList) ) {
+            return;
+        }
+
+        boolean admin = false;
+        BasicDBList votesList = (BasicDBList) votes;
+        for (Object obj : votesList) {
+            if( !(obj instanceof BasicDBObject) )
+                continue;
+
+            BasicDBObject vote = (BasicDBObject) obj;
+            Object value = vote.get("value");
+
+            if( !(value instanceof Boolean) )
+                continue;
+
+            Boolean val = (Boolean) value;
+            if( val.equals(Boolean.FALSE) )
+                continue;
+
+            String userId = (String) vote.get("userId");
+            boolean isAdmin = userService.isUserAdmin(userId);
+            if( isAdmin == true ) {
+                admin = true;
+                break;
+            }
+        }
+
+        entity.put("adminChecked", admin);
     }
 
 

@@ -2160,6 +2160,13 @@ $(function() {
             }
         }
 
+        $('#adminCheckedRibbon').hide();
+        if( location.hasOwnProperty('adminChecked') ) {
+            if( location.adminChecked === true ) {
+                $('#adminCheckedRibbon').show();
+            }
+        }
+
         $('#voteUpLabel').text(location.votesUpCount);
         $('#voteDownLabel').text(location.votesDownCount);
 
@@ -3253,6 +3260,16 @@ $(function() {
         var rateActionButtons = $('<span/>').attr("id", "rateActionButtons").addClass("spacer3");
 
         var exRes = $('<div/>');
+
+        exRes.append(
+            $('<div/>').attr("id", "adminCheckedRibbon").addClass("ribbon-outer").attr("style", "display: none")
+                .append(
+                    $('<div/>').addClass("ribbon-inner")
+                        .append(
+                            $('<a/>').attr("href", params.realPath + "/users#moderation").text("ПРОВЕРЕНО!")
+                        )
+                )
+        );
 
         var res = $('<ul/>').attr('id', 'infoContent').addClass('media-list')
             .append(
