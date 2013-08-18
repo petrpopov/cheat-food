@@ -327,15 +327,6 @@ $(function() {
         });
         $('#restorePasswordSubmit').off('click');
         $('#restorePasswordSubmit').click(function() {
-            /*if( $('#restorePasswordForm').data('submitted') === true ) {
-                console.log('prevented submit');
-                e.preventDefault();
-                return;
-            }
-            else {
-                $('#restorePasswordForm').data('submitted', true);
-            } */
-
             checkRestorePasswordFormValidOrNot();
         });
 
@@ -427,7 +418,7 @@ $(function() {
             submitForgetPasswordUserForm();
         }
         else {
-            $('#forgetPasswordSubmit').button('reset');
+            resetForgetPasswordButtonSubmitBehavior();
         }
     }
 
@@ -439,7 +430,7 @@ $(function() {
             submitLoginUserForm();
         }
         else {
-            $('#loginUserSubmit').button('reset');
+            resetLoginUserButtonSubmitBehavior();
         }
     }
 
@@ -463,7 +454,7 @@ $(function() {
             submitCreateUserForm();
         }
         else {
-            $('#createUserSubmit').button('reset');
+            resetCreateUserSubmitButtonBehavior();
         }
     }
 
@@ -585,6 +576,7 @@ $(function() {
                     var result = JSON.parse(data.responseText);
 
                     if( result.error === false ) {
+                        resetLoginUserButtonSubmitBehavior();
                         window.location.replace(params.realPath);
                         /*$('#loginModal').modal('hide');
                         checkCookies();
@@ -642,6 +634,7 @@ $(function() {
                         /*$('#registrationModal').modal('hide');
                         checkCookies();
                         resetCreateUserSubmitButtonBehavior();*/
+                        resetCreateUserSubmitButtonBehavior();
                         window.location.replace(params.realPath);
                     }
                     else {
