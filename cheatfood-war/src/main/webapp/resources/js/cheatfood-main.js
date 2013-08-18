@@ -1820,6 +1820,7 @@ $(function() {
 
 
 
+
     $.fn.disableContextMenu = function disableContextMenu() {
         //disable context menu
         google.maps.event.clearListeners(map.map, 'rightclick');
