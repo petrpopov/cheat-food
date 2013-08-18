@@ -83,24 +83,37 @@ public class UserService extends GenericService<UserEntity> {
     @CacheEvict(value = "users", allEntries = true)
     public UserEntity createUser(@Valid UserCreate user) throws CheatException {
 
+        UserEntity userToSave = new UserEntity();
         UserEntity userByEmail = this.getUserByEmail(user.getEmail());
 
-        if( userByEmail != null )
-            throw new CheatException("User is already exists!");
+        if( userByEmail != null ) {
+            String passwordHash = userByEmail.getPasswordHash();
+
+            if(passwordHash != null ) {
+                //user already registered with password-email
+                throw new CheatException("User is already exists!");
+            }
+
+            userToSave = userByEmail;
+        }
+
+        userToSave.setEmail(user.getEmail());
+        return updatePasswordForUser(userToSave, user.getPassword());
+    }
+
+    public UserEntity updatePasswordForUser(UserEntity userToSave, String password) {
 
         //generate random salt
         UUID randomUUID = UUID.randomUUID();
         String newSalt = randomUUID.toString();
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmail(user.getEmail());
 
-        String encodePassword = encoder.encodePassword(user.getPassword(), newSalt);
-        userEntity.setPasswordHash(encodePassword);
-        userEntity.setSalt(newSalt);
+        String encodePassword = encoder.encodePassword(password, newSalt);
+        userToSave.setPasswordHash(encodePassword);
+        userToSave.setSalt(newSalt);
 
-        op.save(userEntity);
-        return getUserByEmail(user.getEmail());
+        op.save(userToSave);
+        return getUserByEmail(userToSave.getEmail());
     }
 
     //@Cacheable("users")

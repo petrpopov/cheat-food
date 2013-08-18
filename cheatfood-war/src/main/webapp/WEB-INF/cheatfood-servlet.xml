@@ -32,6 +32,14 @@
 
     <util:properties id="properties" location="classpath:config.properties"/>
 
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+            </list>
+        </property>
+    </bean>
+
     <mvc:annotation-driven validator="globalValidator" />
 
     <mvc:resources mapping="/resources/**"
@@ -66,13 +74,40 @@
     </bean>
 
 
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+    <!--bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
         <property name="prefix">
             <value>/WEB-INF/pages/</value>
         </property>
 
         <property name="suffix">
             <value>.jsp</value>
+        </property>
+    </bean-->
+
+    <bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver"/>
+
+    <bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/pages/views.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail_server_host}" />
+        <property name="port" value="${mail_server_port}" />
+        <property name="username" value="${mail_server_username}" />
+        <property name="password" value="${mail_server_password}" />
+        <property name="protocol" value="smtps"/>
+
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtps.auth">true</prop>
+                <prop key="mail.smtp.ssl.enable">true</prop>
+                <prop key="mail.transport.protocol">smtps</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
         </property>
     </bean>
 

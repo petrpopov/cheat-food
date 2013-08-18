@@ -49,6 +49,11 @@ public class HomeController {
         return "users";
     }
 
+    @RequestMapping({"/restore"})
+    public String showRestorePage() {
+        return "restore";
+    }
+
     @RequestMapping(value = "location/{locationid}")
     @ResponseBody
     public ModelAndView getLocation(@PathVariable String locationid) throws IOException {

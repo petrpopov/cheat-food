@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(function() {
 
     "use strict";
 
@@ -23,6 +23,15 @@ $(document).ready(function(){
         unknown_location: "unknown_location",
         already_voted: "already_voted",
         already_rated: "already_rated",
+        no_such_user: "no_such_user",
+        no_password_data: "no_password_data",
+        wrong_password: "wrong_password",
+        login_error: "login_error",
+        password_mismatch: "password_mismatch",
+        wrong_token: "wrong_token",
+        user_already_exists: "user_already_exists",
+        email_is_empty: "email_is_empty",
+        no_user_with_such_email: "no_user_with_such_email",
         other: "other"
     };
 
@@ -57,6 +66,9 @@ $(document).ready(function(){
     function loadParams() {
 
         params.realPath = $('#realPath').text().trim();
+
+        var token = $('#tokenLabel').text();
+        params.token = token;
 
         var login = $('#loginLabel').text();
 
@@ -132,7 +144,7 @@ $(document).ready(function(){
                             //authorized
 
                             if( needToShowHello() === true ) {
-                                showNote("Вы вошли в систему. Привет!");
+                                showNoteTopCenter("Вы вошли в систему. Привет!", "success", true);
                             }
 
                             sessionStorage.setItem('showHello', true);
@@ -257,7 +269,7 @@ $(document).ready(function(){
             $('#loginMenuLink').text('Вход');
 
             $('#loginLink').show();
-            $('#registrationLink').hide();
+            $('#registrationLink').show();
             $('#profileLink').hide();
             $('#logoutLink').hide();
         }
@@ -277,13 +289,17 @@ $(document).ready(function(){
             logout();
         });
 
+        $('#loginLink').off('click');
         $('#loginLink').click(function() {
+            clearLoginUserForm();
             $.noty.closeAll();
             $('#loginModal').modal('show');
         });
 
+        $('#registrationLink').off('click');
         $('#registrationLink').click(function() {
             clearCreateUserForm();
+            $.noty.closeAll();
             $('#registrationModal').modal('show');
         });
 
@@ -293,9 +309,44 @@ $(document).ready(function(){
             $('#registrationModal').modal('show');
         });
 
+        $('#forgetPasswordLink').off('click');
+        $('#forgetPasswordLink').click(function() {
+            clearForgetPasswordForm();
+            $.noty.closeAll();
+            $('#loginModal').modal('hide');
+            $('#registrationModal').modal('hide');
+            $('#forgetPasswordModal').modal('show');
+        });
+
+        $('#restorePasswordForm').off('submit');
+        $('#restorePasswordForm').submit(function() {
+            return false;
+        });
+        $('#restorePasswordForm').ready(function() {
+            $('#passwordRestore').focus();
+        });
+        $('#restorePasswordSubmit').off('click');
+        $('#restorePasswordSubmit').click(function() {
+            /*if( $('#restorePasswordForm').data('submitted') === true ) {
+                console.log('prevented submit');
+                e.preventDefault();
+                return;
+            }
+            else {
+                $('#restorePasswordForm').data('submitted', true);
+            } */
+
+            checkRestorePasswordFormValidOrNot();
+        });
+
+        initRestorePasswordFormValidation();
+        initForgetPasswordFormValidation();
+        initLoginUserFormValidation();
         initCreateUserFormValidation();
 
+        $('#forgetAlert').hide();
         $('#registrationAlert').hide();
+        $('#loginAlert').hide();
 
         $('#createUserForm').ready(function() {
             $('#emailCreate').focus();
@@ -303,9 +354,104 @@ $(document).ready(function(){
 
         $('#createUserForm').off('submit');
         $('#createUserForm').submit(function() {
-            checkCreateUserFormValidOrNot();
             return false;
         });
+
+        $('#createUserSubmit').off('click');
+        $('#createUserSubmit').click( function(e) {
+            if( $('#createUserForm').data('submitted') === true ) {
+                console.log('prevented submit');
+                e.preventDefault();
+                return;
+            }
+            else {
+                $('#createUserForm').data('submitted', true);
+            }
+
+            checkCreateUserFormValidOrNot();
+        });
+
+
+        //login
+        $('#loginForm').ready( function() {
+            $('#emailLogin').focus();
+        });
+        $('#loginForm').off('submit');
+        $('#loginForm').submit(function() {
+            return false;
+        });
+
+        $('#loginUserSubmit').off('click');
+        $('#loginUserSubmit').click(function(e) {
+            if( $('#loginForm').data('submitted') === true ) {
+                console.log('prevented submit');
+                e.preventDefault();
+                return;
+            }
+            else {
+                $('#loginForm').data('submitted', true);
+            }
+
+            checkLoginFormValidOrNot();
+        });
+
+        //forget password
+        $('#forgetPasswordForm').ready( function() {
+            $('#emailForget').focus();
+        });
+        $('#forgetPasswordForm').off('submit');
+        $('#forgetPasswordForm').submit(function() {
+            return false;
+        });
+
+        $('#forgetPasswordSubmit').off('click');
+        $('#forgetPasswordSubmit').click(function(e) {
+            if( $('#forgetPasswordForm').data('submitted') === true ) {
+                console.log('prevented submit');
+                e.preventDefault();
+                return;
+            }
+            else {
+                $('#forgetPasswordForm').data('submitted', true);
+            }
+
+            checkForgetPasswordFormValidOrNot();
+        });
+    }
+
+    function checkForgetPasswordFormValidOrNot() {
+        $('#forgetPasswordSubmit').button('loading');
+        $('#forgetAlert').hide();
+
+        if( $("#forgetPasswordForm").valid() ) {
+            submitForgetPasswordUserForm();
+        }
+        else {
+            $('#forgetPasswordSubmit').button('reset');
+        }
+    }
+
+    function checkLoginFormValidOrNot() {
+        $('#loginUserSubmit').button('loading');
+        $('#loginAlert').hide();
+
+        if( $("#loginForm").valid() ) {
+            submitLoginUserForm();
+        }
+        else {
+            $('#loginUserSubmit').button('reset');
+        }
+    }
+
+    function checkRestorePasswordFormValidOrNot() {
+        $('#restorePasswordSubmit').button('loading');
+
+        if( $("#restorePasswordForm").valid() ) {
+            submitRestorePasswordForm();
+        }
+        else {
+            $('#restorePasswordSubmit').button('reset');
+        }
     }
 
     function checkCreateUserFormValidOrNot() {
@@ -319,6 +465,156 @@ $(document).ready(function(){
         else {
             $('#createUserSubmit').button('reset');
         }
+    }
+
+    function submitRestorePasswordForm() {
+
+        var formParams = {
+            password: $('#passwordRestore').val().trim(),
+            passwordCopy: $('#passwordRestoreCopy').val().trim(),
+            token: params.token
+        };
+
+        $.ajax({
+            type: "POST",
+            url: params.realPath + '/api/users/restore',
+            data: JSON.stringify(formParams),
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+            },
+            complete: function(data) {
+
+                if( data.responseJSON ) {
+                    var result = JSON.parse(data.responseText);
+
+                    if( result.error === false ) {
+                        window.location.replace(params.realPath);
+                    }
+                    else {
+                        if( result.errorType === errors.password_mismatch ) {
+                            showRestoreError("Введенные пароли не совпадают!");
+                        }
+                        else if( result.errorType === errors.wrong_token ) {
+                            showRestoreError("Вы пытаетесь восстановить чужой пароль?");
+                        }
+                        else if( result.errorType === errors.login_error ) {
+                            showRestoreError("Извините, произошла ошибка.");
+                        }
+                    }
+                }
+                else {
+                    showRestoreError("Извините, произошла ошибка.");
+                }
+            },
+            statusCode: {
+                400: function(data) {
+                    showRestoreError("Извините, произошла ошибка.");
+                }
+            }
+        });
+    }
+
+
+
+    function submitForgetPasswordUserForm() {
+
+        var email = $('#emailForget').val().trim();
+
+        $.ajax({
+            type: 'POST',
+            url: params.realPath + '/api/users/forget',
+            data: email,
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+            },
+            complete: function(data) {
+                if( data.responseJSON ) {
+                    var result = JSON.parse(data.responseText);
+
+                    if( result.error === false ) {
+                        //show message about email
+                        $('#forgetPasswordForm').fadeOut(EFFECTS_TIME, function() {
+                            $('#forgetEmailLinkInfo').fadeIn(EFFECTS_TIME, function() {
+                                $('#forgetPasswordCancel').text("Закрыть");
+                                resetForgetPasswordButtonSubmitBehavior();
+                            });
+                        });
+                    }
+                    else {
+                        if( result.errorType === errors.email_is_empty ) {
+                            showForgetPasswordMessage("Введите что-нибудь в поле email.")
+                        }
+                        else if( result.errorType === errors.no_user_with_such_email ) {
+                            showForgetPasswordMessage("Нет пользователя в системе с таким email!")
+                        }
+                    }
+                }
+                else {
+                    showForgetPasswordMessage("Извините, у нас на сервере какая-то ошибка :(");
+                }
+            },
+            statusCode: {
+                400: function(data) {
+                    showForgetPasswordMessage("Извините, у нас на сервере какая-то ошибка :(");
+                }
+            }
+        });
+    }
+
+    function submitLoginUserForm() {
+        var formParams = {
+            email: $('#emailLogin').val().trim(),
+            password: $('#passwordLogin').val().trim()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: params.realPath + '/api/users/login',
+            data: JSON.stringify(formParams),
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+            },
+            complete: function(data) {
+                if( data.responseJSON ) {
+                    var result = JSON.parse(data.responseText);
+
+                    if( result.error === false ) {
+                        window.location.replace(params.realPath);
+                        /*$('#loginModal').modal('hide');
+                        checkCookies();
+                        resetLoginUserButtonSubmitBehavior();*/
+                    }
+                    else {
+                        if( result.errorType === errors.no_such_user ) {
+                            showLoginError("Пользователя с таким email не существует");
+                        }
+                        else if( result.errorType === errors.no_password_data ) {
+                            showLoginError("Вы заходили сюда, используя соц.сети? Пройдите регистрацию, чтобы установить пароль.");
+                        }
+                        else if( result.errorType === errors.wrong_password ) {
+                            showLoginError("Неправильный пароль!");
+                        }
+                        else {
+                            showLoginError("Ошибка авторизации...");
+                        }
+                    }
+                }
+                else {
+                    showLoginError("Извините, у нас на сервере какая-то ошибка :(");
+                }
+            },
+            statusCode: {
+                400: function(data) {
+                    showLoginError("Извините, у нас на сервере какая-то ошибка :(");
+                }
+            }
+        });
     }
 
     function submitCreateUserForm() {
@@ -338,22 +634,148 @@ $(document).ready(function(){
             success: function(data) {
             },
             complete: function(data) {
-                var result = JSON.parse(data.responseText);
 
-                if( result.error === false ) {
-                    $('#registrationModal').modal('hide');
+                if( data.responseJSON ) {
+                    var result = JSON.parse(data.responseText);
+
+                    if( result.error === false ) {
+                        /*$('#registrationModal').modal('hide');
+                        checkCookies();
+                        resetCreateUserSubmitButtonBehavior();*/
+                        window.location.replace(params.realPath);
+                    }
+                    else {
+                        if( result.errorType === errors.user_already_exists ) {
+                            showRegistrationError("Пользователь с таким email уже существует.");
+                        }
+                        else {
+                            showRegistrationError("Извините, у нас на сервере какая-то ошибка :(");
+                        }
+                    }
                 }
                 else {
-                    $('#registrationAlert').show(EFFECTS_TIME);
+                    showRegistrationError("Извините, у нас на сервере какая-то ошибка :(");
                 }
 
-                checkCookies();
-                $('#createUserSubmit').button('reset');
             },
             statusCode: {
                 400: function(data) {
-
+                    showRegistrationError("Извините, у нас на сервере какая-то ошибка :(");
                 }
+            }
+        });
+    }
+
+    function showForgetPasswordMessage(text) {
+        $('#forgetAlert').fadeIn(EFFECTS_TIME, function() {
+            $('#forgetError').text(text);
+            resetForgetPasswordButtonSubmitBehavior();
+        });
+    }
+
+    function showLoginError(text) {
+        $('#loginAlert').fadeIn(EFFECTS_TIME, function() {
+            $('#loginError').text(text);
+            resetLoginUserButtonSubmitBehavior();
+        });
+    }
+
+    function showRegistrationError(text) {
+        $('#registrationAlert').fadeIn(EFFECTS_TIME, function() {
+            $('#registrationError').text(text);
+            resetCreateUserSubmitButtonBehavior();
+        });
+    }
+
+    function showRestoreError(text) {
+        $('#restoreAlert').fadeIn(EFFECTS_TIME, function() {
+            $('#restoreError').text(text);
+            resetRestorePasswordButtonBehavior();
+        });
+    }
+
+    function resetRestorePasswordButtonBehavior() {
+        $('#restorePasswordSubmit').button('reset');
+    }
+
+    function resetForgetPasswordButtonSubmitBehavior() {
+        $('#forgetPasswordForm').data('submitted', false);
+        $('#forgetPasswordSubmit').button('reset');
+    }
+
+    function resetLoginUserButtonSubmitBehavior() {
+        $('#loginForm').data('submitted', false);
+        $('#loginUserSubmit').button('reset');
+    }
+
+    function resetCreateUserSubmitButtonBehavior() {
+        $('#createUserForm').data('submitted', false);
+        $('#createUserSubmit').button('reset');
+    }
+
+    function initRestorePasswordFormValidation() {
+        $("#restorePasswordForm").validate({
+            rules : {
+                passwordRestore: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 50
+                },
+                passwordRestoreCopy: {
+                    required: true,
+                    equalTo: "#passwordRestore",
+                    minlength: 3,
+                    maxlength: 50
+                }
+            },
+            success: function() {
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
+            }
+        });
+    }
+
+    function initForgetPasswordFormValidation() {
+        $("#forgetPasswordForm").validate({
+            rules : {
+                emailForget: {
+                    required: true,
+                    email: true
+                }
+            },
+            success: function() {
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
+            }
+        });
+    }
+
+    function initLoginUserFormValidation() {
+        $("#loginForm").validate({
+            rules : {
+                emailLogin: {
+                    required: true,
+                    email: true
+                },
+                passwordLogin: {
+                    required: true,
+                }
+            },
+            success: function() {
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
             }
         });
     }
@@ -394,7 +816,7 @@ $(document).ready(function(){
             },
             complete: function(data) {
                 $.noty.closeAll();
-                showNote("Вы успешно вышли из системы");
+                showNoteTopCenter("Вы успешно вышли из системы", "success", true);
 
                 sessionStorage.setItem('showHello', false);
                 modifyInterface(false);
@@ -402,25 +824,27 @@ $(document).ready(function(){
                 if( $.fn.disableContextMenu !== undefined ) {
                     $().disableContextMenu();
                 }
+
+                window.location.replace(params.realPath);
             }
         });
+    }
+
+    function clearForgetPasswordForm() {
+        $('#emailForget').val(null);
+        $('#forgetAlert').hide();
+    }
+
+    function clearLoginUserForm() {
+        $('#emailLogin').val(null);
+        $('#passwordLogin').val(null);
+        $('#loginAlert').hide();
     }
 
     function clearCreateUserForm() {
         $('#emailCreate').val(null);
         $('#passwordCreate').val(null);
         $('#registrationAlert').hide();
-    }
-
-    function showNote(text) {
-        var n = noty({
-            text: text,
-            layout: 'topRight',
-            theme: 'defaultTheme',
-            type: 'success',
-            closeWith: ['click','button'],
-            timeout: 2000
-        });
     }
 
     function showNoteTopCenter(text, type, close) {
@@ -433,7 +857,7 @@ $(document).ready(function(){
 
         var n = noty({
             text: text,
-            layout: 'topCenter',
+            layout: 'topRight',
             theme: 'defaultTheme',
             type: type,
             closeWith: ['click','button'],
@@ -453,7 +877,7 @@ $(document).ready(function(){
 
         var n = noty({
             text: text,
-            layout: 'topCenter',
+            layout: 'topRight',
             theme: 'defaultTheme',
             type: 'information',
             closeWith: ['click','button'],
@@ -2137,7 +2561,17 @@ $(document).ready(function(){
         });
 
         $('#submitEdit').off('click');
-        $('#submitEdit').click(function() {
+        $('#submitEdit').click(function(e) {
+
+            if( $('#submitEdit').data('submitted') === true ) {
+                console.log('prevented submit');
+                e.preventDefault();
+                return;
+            }
+            else {
+                $('#submitEdit').data('submitted', true);
+            }
+
             submitEditForm(infoBoxObject);
         });
 
@@ -2184,9 +2618,12 @@ $(document).ready(function(){
 
         showAllTempMarkers();
         showSearchForm();
+
+        resetSubmitEditButtonBehavior();
     }
 
     function submitEditForm(infoBoxObject) {
+        console.log('submit edit form');
         checkEditFormValidOrNot(infoBoxObject);
     }
 
@@ -2207,7 +2644,7 @@ $(document).ready(function(){
                 $('#editFormTab a:first').tab('show');
             }
 
-            $('#submitEdit').button('reset');
+            resetSubmitEditButtonBehavior();
         }
     }
 
@@ -2288,7 +2725,9 @@ $(document).ready(function(){
                         newMarker = false;
                         searchMarker = false;
 
-                        $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+                        $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME, function() {
+                            resetSubmitEditButtonBehavior();
+                        });
                         removeAllTempMarkers();
                         showInfoBoxForMarker(infoBoxObject);
                         enableEditMarkerMenu(infoBoxObject);
@@ -2308,21 +2747,29 @@ $(document).ready(function(){
                             //show error message
                             $('#editFormAlert').show(EFFECTS_TIME);
                         }
+
+                        resetSubmitEditButtonBehavior();
                     }
                 }
-
-                $('#submitEdit').button('reset');
-                setDefaultMouseBehavior();
+                else {
+                    resetSubmitEditButtonBehavior
+                }
             },
             statusCode: {
                 400: function(data) {
                     $('#editFormAlert').show(EFFECTS_TIME);
                     $('#editFormAlertBeginText').text("Не получилось.");
                     $('#editFormAlertText').text("Извините, произошла какая-то ошибка. Скорее всего у вас нет прав на это действие");
-                    $('#submitEdit').button('reset');
+                    resetSubmitEditButtonBehavior();
                 }
             }
         });
+    }
+
+    function resetSubmitEditButtonBehavior() {
+        $('#submitEdit').button('reset');
+        $('#submitEdit').data('submitted', false);
+        setDefaultMouseBehavior();
     }
 
     function initEditFormAddressData(infoBoxObject) {
@@ -3425,5 +3872,5 @@ $(document).ready(function(){
         }
         delete this._dict[key];
     };
-});
+} );
 
