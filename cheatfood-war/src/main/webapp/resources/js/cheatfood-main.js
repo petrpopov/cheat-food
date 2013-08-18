@@ -2086,10 +2086,17 @@ $(function() {
     function setInfoBoxContentFromLocation(infoBoxObject) {
 
         var location = infoBoxObject.location;
-        var ratyProperties = {
+        var ratyViewProperties = {
             path: getImageDirPath(),
             size: 24,
             score: location.averageRate,
+            readOnly: true
+        };
+
+        var ratyActionProperties = {
+            path: getImageDirPath(),
+            size: 24,
+            score: 0,
             click: function(score, e) {
                 rateForLocation(infoBoxObject, score);
             }
@@ -2098,7 +2105,7 @@ $(function() {
         if( authorized === false ) {
             $('#approveLocation').hide();
             $('#editDeleteMarkerGroup').hide();
-            $('#rateButtons').hide();
+            $('#rateActionButtons').hide();
         }
         else {
             if( location.alreadyVoted === false ) {
@@ -2109,11 +2116,13 @@ $(function() {
             }
 
             if( location.alreadyRated === true ) {
-                ratyProperties.readOnly = true;
+                ratyActionProperties.readOnly = true;
+                $('#rateActionsDiv').hide();
+            }
+            else {
+                $('#rateActionsDiv').show();
             }
 
-            console.log(location);
-            console.log(params);
             if( location.creator.id != params.currentUser.id ) {
                 $('#deleteMarkerButton').hide();
             }
@@ -2121,7 +2130,8 @@ $(function() {
                 $('#deleteMarkerButton').show();
             }
 
-            $('#rateButtons').raty(ratyProperties);
+            $('#rateViewButtons').raty(ratyViewProperties);
+            $('#rateActionButtons').raty(ratyActionProperties);
 
             $('#editDeleteMarkerGroup').show();
         }
@@ -2394,7 +2404,14 @@ $(function() {
 
                     infoBoxObject.location.alreadyRated = true;
                     infoBoxObject.location.averageRate = loc.averageRate;
-                    $('#rateButtons').raty('readOnly', true);
+
+                    $('#rateViewButtons').raty('readOnly', false);
+                    $('#rateViewButtons').raty('score', loc.averageRate);
+                    $('#rateViewButtons').raty('readOnly', true);
+
+                    $('#rateActionButtons').raty('readOnly', true);
+                    $('#rateActionsDiv').hide(EFFECTS_TIME);
+
                     showNoteTopCenter("Спасибо!", "success", true);
                 }
                 else {
@@ -2403,12 +2420,14 @@ $(function() {
                     }
                     else if( data.errorType === errors.already_rated ) {
                         infoBoxObject.location.alreadyRated = true;
-                        $('#rateButtons').raty('readOnly', true);
+                        $('#rateActionButtons').raty('readOnly', true);
+                        $('#rateActionsDiv').hide(EFFECTS_TIME);
                         showNoteTopCenter("А вы уже голосовали за эту локацию. Давайте без вбросов,ок? =)", "warning", true);
                     }
                     else if( data.errorType === errors.unknown_location ) {
                         infoBoxObject.location.alreadyVoted = true;
-                        $('#rateButtons').raty('readOnly', true);
+                        $('#rateActionButtons').raty('readOnly', true);
+                        $('#rateActionsDiv').hide(EFFECTS_TIME);
                         showNoteTopCenter("Такой локации больше нет в базе. Обновите страничку!", "warning", true);
                     }
                     else {
@@ -3205,7 +3224,7 @@ $(function() {
 
     function getMarkerContentElementFromLocation() {
 
-        var pluso = $('<div/>').addClass("pluso").attr("id", "shareLocationInSocial")
+        var pluso = $('<div/>').addClass("pluso spacer3").attr("id", "shareLocationInSocial")
             .attr("data-options", "small,square,line,horizontal,counter,theme=03")
             .attr("data-services", "facebook,twitter,vkontakte,google,odnoklassniki,moimir,print")
             .attr("data-background", "transparent")
@@ -3215,7 +3234,8 @@ $(function() {
             .attr("data-description", "Классное дешевое местечко!")
             .attr("data-user", "1262715342");
 
-        var raty = $('<span/>').attr("id", "rateButtons");
+        var rateViewButtons = $('<span/>').attr("id", "rateViewButtons").addClass("spacer3");
+        var rateActionButtons = $('<span/>').attr("id", "rateActionButtons").addClass("spacer3");
 
         var exRes = $('<div/>');
 
@@ -3353,25 +3373,41 @@ $(function() {
                     )
             )
             .append(
-                $('<div/>').attr("id", "voteRateDiv")
+                $('<div/>').attr("id", "voteRateDiv").addClass("clearfix")
                     .append(
                         $('<hr/>')
                     )
                     .append (
-                        $('<div/>')
+                        $('<div/>').addClass("form-inline")
                             .append(
-                                $('<label/>').text("Оцените это место")
+                                $('<div/>').addClass("form-inline").addClass("pull-left")
+                                    .append(
+                                        $('<label/>').text("Средний рейтинг").addClass("pull-left")
+                                    )
+                                    .append(
+                                        rateViewButtons
+                                    )
                             )
                             .append(
-                                raty.addClass("pull-left")
-                            )
-                            .append(
-                                pluso
+                                $('<div/>').attr("id", "rateActionsDiv").addClass("form-inline spacer3").addClass("pull-right")
+                                    .append(
+                                        $('<label/>').text("Оцените локацию")
+                                    )
+                                    .append(
+                                        rateActionButtons
+                                    )
                             )
                     )
             )
             .append(
-                $('<div/>').attr('id', 'approveLocation')
+                $('<div/>').attr('id', 'shareDiv').addClass("clearfix")
+                    .append(
+                        $('<div/>').addClass("pull-left")
+                            .append(pluso)
+                    )
+            )
+            .append(
+                $('<div/>').attr('id', 'approveLocation').addClass("clearfix")
                     .append(
                         $('<hr/>')
                     )
