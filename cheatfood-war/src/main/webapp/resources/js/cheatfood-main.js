@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(function() {
 
     "use strict";
 
@@ -2618,6 +2618,8 @@ $(document).ready(function(){
 
         showAllTempMarkers();
         showSearchForm();
+
+        resetSubmitEditButtonBehavior();
     }
 
     function submitEditForm(infoBoxObject) {
@@ -2642,7 +2644,7 @@ $(document).ready(function(){
                 $('#editFormTab a:first').tab('show');
             }
 
-            $('#submitEdit').button('reset');
+            resetSubmitEditButtonBehavior();
         }
     }
 
@@ -3870,5 +3872,5 @@ $(document).ready(function(){
         }
         delete this._dict[key];
     };
-});
+} );
 
