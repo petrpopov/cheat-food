@@ -5,6 +5,8 @@
 <tiles-definitions>
 
     <definition name="main" template="/WEB-INF/pages/main_template.jsp">
+        <put-attribute name="mainScripts" value="/WEB-INF/pages/mainScripts.jsp"/>
+        <put-attribute name="workingScripts" value="/WEB-INF/pages/workingScripts.jsp"/>
         <put-attribute name="header" value="/WEB-INF/pages/header.jsp"/>
         <put-attribute name="deleteModal" value="/WEB-INF/pages/deleteModal.jsp"/>
         <put-attribute name="hideModal" value="/WEB-INF/pages/hideModal.jsp"/>
@@ -19,8 +21,8 @@
         <put-attribute name="content" value="/WEB-INF/pages/index.jsp" />
     </definition>
 
-    <definition name="users" extends="main">
-        <put-attribute name="content" value="/WEB-INF/pages/users.jsp" />
+    <definition name="help" extends="main">
+        <put-attribute name="content" value="/WEB-INF/pages/help.jsp" />
     </definition>
 
     <definition name="manifest" extends="main">
@@ -29,6 +31,14 @@
 
     <definition name="restore" extends="main">
         <put-attribute name="content" value="/WEB-INF/pages/restore.jsp" />
+    </definition>
+
+
+    <definition name="error" template="/WEB-INF/pages/error_template.jsp">
+        <put-attribute name="mainScripts" value="/WEB-INF/pages/mainScripts.jsp"/>
+        <put-attribute name="simpleHeader" value="/WEB-INF/pages/simpleHeader.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/pages/footer.jsp"/>
+        <put-attribute name="googleAnalytics" value="/WEB-INF/pages/googleAnalytics.jsp"/>
     </definition>
 
 </tiles-definitions>

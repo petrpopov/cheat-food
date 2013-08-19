@@ -12,6 +12,11 @@
         </session-timeout>
     </session-config>
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errors/404</location>
+    </error-page>
+
     <!-- Mimetype needed for tomcat to serve favicon images -->
     <mime-mapping>
         <extension>ico</extension>

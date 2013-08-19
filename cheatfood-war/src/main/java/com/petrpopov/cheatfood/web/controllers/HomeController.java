@@ -1,5 +1,6 @@
 package com.petrpopov.cheatfood.web.controllers;
 
+import com.petrpopov.cheatfood.filters.LocationFilterService;
 import com.petrpopov.cheatfood.filters.LocationRateService;
 import com.petrpopov.cheatfood.filters.LocationVoteService;
 import com.petrpopov.cheatfood.model.Location;
@@ -32,6 +33,9 @@ public class HomeController {
     private LocationRateService locationRateService;
 
     @Autowired
+    private LocationFilterService locationFilterService;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @RequestMapping({"/","/home", "/index", "/main"})
@@ -44,9 +48,9 @@ public class HomeController {
         return "manifest";
     }
 
-    @RequestMapping({"/users"})
-    public String showUsersPage() {
-        return "users";
+    @RequestMapping({"/help"})
+    public String showHelpPage() {
+        return "help";
     }
 
     @RequestMapping({"/restore"})
@@ -59,11 +63,16 @@ public class HomeController {
     public ModelAndView getLocation(@PathVariable String locationid) throws IOException {
 
         Location location = locationService.findById(locationid);
+
         locationVoteService.setAlreadyVoted(location);
         locationRateService.setAlreadyRated(location);
+        locationFilterService.filterCreator(location);
+        locationFilterService.filterRates(location);
+        locationFilterService.filterVotes(location);
 
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("location", objectMapper.writeValueAsString(location));
+
         return modelAndView;
     }
 

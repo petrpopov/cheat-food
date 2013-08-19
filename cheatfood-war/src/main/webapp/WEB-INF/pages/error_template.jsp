@@ -11,30 +11,25 @@
 
 <head>
     <t:insertAttribute name="mainScripts" />
-
-    <t:insertAttribute name="workingScripts" />
 </head>
 <body>
 
-    <t:insertAttribute name="header" />
+<t:insertAttribute name="simpleHeader" />
 
+<div class="container-fluid errorBody">
+    <div class="row-fluid">
+        <div class="span6 offset4">
+                <h1>Ошибка! Нет такой страницы :(</h1>
+            <p>
+                <img align="center" src="<s:url value="/resources"/>/img/unicorn.jpg"/>
+            </p>
+        </div>
+    </div>
+</div>
 
-    <t:insertAttribute name="content" />
+<t:insertAttribute name="footer" />
 
-
-    <t:insertAttribute name="deleteModal" />
-
-    <t:insertAttribute name="hideModal" />
-
-    <t:insertAttribute name="loginModal" />
-
-    <t:insertAttribute name="registrationModal" />
-
-    <t:insertAttribute name="forgetPasswordModal" />
-
-    <t:insertAttribute name="footer" />
-
-    <t:insertAttribute name="googleAnalytics" />
+<t:insertAttribute name="googleAnalytics" />
 </body>
 </html>
 

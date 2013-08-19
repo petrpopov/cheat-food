@@ -3286,7 +3286,7 @@ $(function() {
                 .append(
                     $('<div/>').addClass("ribbon-inner")
                         .append(
-                            $('<a/>').attr("href", params.realPath + "/users#moderation").text("ПРОВЕРЕНО!")
+                            $('<a/>').attr("href", params.realPath + "/help#moderation").text("ПРОВЕРЕНО!")
                         )
                 )
         );

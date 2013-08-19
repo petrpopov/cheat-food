@@ -34,7 +34,7 @@
 
             <ul class="nav">
                 <li><a href="<s:url value="/manifest"/>">Манифест</a></li>
-                <li><a href="<s:url value="/users"/>">Помощь</a></li>
+                <li><a href="<s:url value="/help"/>">Помощь</a></li>
 
                 <li class="dropdown">
                     <a id="editMenu" href="#" class="dropdown-toggle" data-toggle="dropdown">
