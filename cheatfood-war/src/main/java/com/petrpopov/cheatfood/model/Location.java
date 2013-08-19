@@ -58,8 +58,15 @@ public class Location implements Serializable {
     @DBRef
     private UserEntity creator;
 
+    @NotNull
+    private Double averagePrice;
+
+
     @Valid
     private List<Vote> votes;
+
+    @Valid
+    private List<Rate> rates;
 
     private long votesUpCount;
 
@@ -67,19 +74,14 @@ public class Location implements Serializable {
 
     private Boolean adminChecked;
 
-    @Transient
-    private Boolean alreadyVoted;
+    private Double averageRate;
 
-    @Valid
-    private List<Rate> rates;
 
     @Transient
     private Boolean alreadyRated;
 
-    private Double averageRate;
-
-    @NotNull
-    private Double averagePrice;
+    @Transient
+    private Boolean alreadyVoted;
 
     public Location() {
     }
