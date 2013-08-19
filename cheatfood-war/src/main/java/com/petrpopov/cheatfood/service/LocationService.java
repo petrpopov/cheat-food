@@ -10,6 +10,7 @@ import com.petrpopov.cheatfood.model.*;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.IndexOperations;
 import org.springframework.data.mongodb.core.geo.Box;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
@@ -44,6 +45,9 @@ public class LocationService extends GenericService<Location> {
 
     @Autowired
     private UserService userService;
+
+    @Value("#{properties.max_price}")
+    private Double maxPrice;
 
 
     public LocationService() {
@@ -132,7 +136,11 @@ public class LocationService extends GenericService<Location> {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    public Location createOrSave(@Valid Location location, UserEntity userEntity) {
+    public Location createOrSave(@Valid Location location, UserEntity userEntity) throws CheatException{
+
+        Double averagePrice = location.getAveragePrice();
+        if( averagePrice > maxPrice )
+            throw new CheatException(ErrorType.overpriced);
 
         Type savedType = getTypeForLocation(location);
         if( savedType != null ) {

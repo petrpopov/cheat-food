@@ -32,6 +32,7 @@ $(function() {
         user_already_exists: "user_already_exists",
         email_is_empty: "email_is_empty",
         no_user_with_such_email: "no_user_with_such_email",
+        overpriced: "overpriced",
         other: "other"
     };
 
@@ -106,8 +107,10 @@ $(function() {
             window.history.pushState("", "", url);
         }
 
-        $.get(params.realPath+'/api/types', function(data) {
-            params.types = data;
+        $.get(params.realPath+'/api/params', function(data) {
+            params.types = data.types;
+            params.maxPrice = data.maxPrice;
+            params.recommendedPrice = data.recommendedPrice;
             init(location);
         });
     }
@@ -2912,6 +2915,11 @@ $(function() {
                             $.noty.closeAll();
                             $('#loginModal').modal('show');
                         }
+                        else if(res.errorType === errors.overpriced) {
+                            $('#editFormAlertBeginText').text("Ошибка!");
+                            $('#editFormAlertText').text("Это слишком дорого, извините...");
+                            $('#editFormAlert').show(EFFECTS_TIME);
+                        }
                         else {
                             //show error message
                             $('#editFormAlert').show(EFFECTS_TIME);
@@ -3081,13 +3089,8 @@ $(function() {
                 },
                 averagePrice: {
                     required: false,
-                    max: 350,
+                    max: params.maxPrice,
                     digits: true
-                }
-            },
-            messages: {
-                averagePrice: {
-                    max: "Цена выше 350 это уже высоковато. Давай лучше в какое-нибудь другое кафе?"
                 }
             },
             success: function() {
@@ -3138,6 +3141,23 @@ $(function() {
             source: ["100", "150", "200", "250", "300", "350"],
             items: 8,
             minlength: 0
+        });
+        $('#averagePrice').off('keyup change');
+        $('#averagePrice').on('keyup change', function() {
+            var price = $('#averagePrice').val();
+            if( price > params.recommendedPrice && price <= params.maxPrice ) {
+                $('#editFormAlertBeginText').text("Ой!");
+                $('#editFormAlertText').text("Это неплохая цена, но, все-таки, лучше чтобы кафе было дешевле "+params.recommendedPrice+" рублей");
+                $('#editFormAlert').show(EFFECTS_TIME);
+            }
+            else if( price > params.maxPrice ) {
+                $('#editFormAlertBeginText').text("Ой!");
+                $('#editFormAlertText').text("Это очень дорого, максимальная цена должна быть меньше "+params.maxPrice+" рублей");
+                $('#editFormAlert').show(EFFECTS_TIME);
+            }
+            else {
+                $('#editFormAlert').hide(EFFECTS_TIME);
+            }
         });
 
         initDatePicker(location.actualDate);
@@ -3942,7 +3962,7 @@ $(function() {
             alreadyVoted: false,
             alreadyRated: false,
             averageRate: 0.0,
-            averagePrice: 250
+            averagePrice: params.recommendedPrice
         };
     }
 

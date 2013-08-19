@@ -19,5 +19,6 @@ public enum ErrorType {
     user_already_exists,
     email_is_empty,
     no_user_with_such_email,
+    overpriced,
     other
 }

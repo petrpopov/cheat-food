@@ -1,5 +1,6 @@
 package com.petrpopov.cheatfood.web.rest;
 
+import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.filters.LocationFilterService;
 import com.petrpopov.cheatfood.filters.LocationRateService;
 import com.petrpopov.cheatfood.filters.LocationVoteService;
@@ -112,12 +113,19 @@ public class LocationWebService {
             UserEntity userEntity = userContextHandler.currentContextUser();
             loc = locationService.createOrSave(location, userEntity);
         }
+        catch (CheatException e) {
+            result.setError(true);
+            result.setErrorType(e.getErrorType());
+            result.setMessage("Overpriced!");
+            return result;
+        }
         catch (AccessDeniedException e) {
             e.printStackTrace();
 
             result.setError(true);
             result.setErrorType(ErrorType.access_denied);
             result.setMessage("Access denied");
+            return result;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -125,6 +133,7 @@ public class LocationWebService {
             result.setError(true);
             result.setErrorType(ErrorType.other);
             result.setMessage("Unknown error");
+            return result;
         }
 
         locationVoteService.setAlreadyVoted(loc);
