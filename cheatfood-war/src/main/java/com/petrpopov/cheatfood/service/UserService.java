@@ -132,6 +132,10 @@ public class UserService extends GenericService<UserEntity> {
     }
 
     public boolean isUserAdmin(UserEntity entity) {
+
+        if( entity == null )
+            return false;
+
         List<UserRole> roles = entity.getRoles();
         if( roles == null )
             return false;

@@ -143,6 +143,12 @@ public class LocationService extends GenericService<Location> {
         location.setCreator(userEntity);
 
         location.setVotes(this.getLocationVotes(location));
+        location.setRates(this.getLocationRates(location));
+        location.setVotesUpCount(this.getVotesUpCount(location));
+        location.setVotesDownCount(this.getVotesDownCount(location));
+        location.setAdminChecked(this.isAnyAdminHasVotedForLocation(location));
+        location.setAverageRate(this.getNewAverageRate(location));
+
 
         logger.info("Saving location to database");
 
@@ -238,32 +244,6 @@ public class LocationService extends GenericService<Location> {
         rates.add(rate);
         location.setAverageRate(getNewAverageRate(rates));
         return saveLocationObject(location);
-    }
-
-    public long getVotesUpCount(Location location) {
-
-        List<Vote> votes = location.getVotes();
-
-        long count = 0;
-        for (Vote vote : votes) {
-            if( vote.getValue().equals(Boolean.TRUE) )
-                count++;
-        }
-
-        return count;
-    }
-
-    public long getVotesDownCount(Location location) {
-
-        List<Vote> votes = location.getVotes();
-
-        long count = 0;
-        for (Vote vote : votes) {
-            if( vote.getValue().equals(Boolean.FALSE) )
-                count++;
-        }
-
-        return count;
     }
 
 
@@ -420,6 +400,11 @@ public class LocationService extends GenericService<Location> {
         return res;
     }
 
+    private Double getNewAverageRate(Location location) {
+        List<Rate> rates = location.getRates();
+        return getNewAverageRate(rates);
+    }
+
     private Double getNewAverageRate(List<Rate> rates) {
 
         if( rates == null )
@@ -440,6 +425,69 @@ public class LocationService extends GenericService<Location> {
             return null;
 
         return location1.getVotes();
+    }
+
+    private List<Rate> getLocationRates(Location location) {
+        Location byId = this.findById(location.getId());
+        if( byId == null )
+            return null;
+
+        return byId.getRates();
+    }
+
+    private long getVotesUpCount(Location location) {
+
+        List<Vote> votes = location.getVotes();
+        if( votes == null )
+            return 0;
+
+        long count = 0;
+        for (Vote vote : votes) {
+            if( vote == null )
+                continue;
+
+            if( vote.getValue().equals(Boolean.TRUE) )
+                count++;
+        }
+
+        return count;
+    }
+
+    private long getVotesDownCount(Location location) {
+
+        List<Vote> votes = location.getVotes();
+        if( votes == null )
+            return 0;
+
+        long count = 0;
+        for (Vote vote : votes) {
+            if( vote == null )
+                continue;
+
+            if( vote.getValue().equals(Boolean.FALSE) )
+                count++;
+        }
+
+        return count;
+    }
+
+    private boolean isAnyAdminHasVotedForLocation(Location location) {
+
+        List<Vote> votes = location.getVotes();
+        if( votes == null )
+            return false;
+
+        for (Vote vote : votes) {
+            String userId = vote.getUserId();
+            if( userId == null )
+                continue;
+
+            boolean userAdmin = userService.isUserAdmin(userId);
+            if( userAdmin == true )
+                return true;
+        }
+
+        return false;
     }
 
     private Location saveLocationObject(Location location) {
