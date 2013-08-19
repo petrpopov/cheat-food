@@ -1015,6 +1015,7 @@ $(function() {
         createAddMarkerButton(auth);
         createRouteForm();
         createSearchBar();
+        createLocationsInfoBar();
     }
 
     function createInfoBox() {
@@ -1159,23 +1160,27 @@ $(function() {
 
         var form = $('<form/>').attr("id", "searchBarForm").addClass("form-inline infoWindowForm")
             .append(
-                $('<input/>').attr("id", "searchBar")
-                    .attr("type", "text").addClass("input-xxlarge")
-                    .attr("placeholder", "Введите адрес")
-            )
-            .append(
-                $('<button/>').attr("type", "submit").addClass("btn btn-primary")
-                    .attr("data-loading-text", "Ищем...")
-                    .attr("id", "searchButton")
+                $('<div/>').addClass("input-append")
                     .append(
-                        $('<i/>').addClass("icon-search icon-white")
+                        $('<input/>').attr("id", "searchBar")
+                            .attr("type", "text").addClass("input-xxlarge")
+                            .attr("placeholder", "Введите адрес")
                     )
                     .append(
-                        $('<span/>').addClass("spacer3").text("Найти")
+                        $('<button/>').attr("type", "submit").addClass("btn btn-primary")
+                            .attr("data-loading-text", "Ищем...")
+                            .attr("id", "searchButton")
+                            .append(
+                                $('<i/>').addClass("icon-search icon-white")
+                            )
+
                     )
-            )
-            .append(
-                $('<button/>').attr("id", "clearSearchButton").addClass("btn").text("Очистить")
+                    .append(
+                        $('<button/>').attr("id", "clearSearchButton").addClass("btn")
+                            .append(
+                                $('<i/>').addClass("icon-remove-sign")
+                            )
+                    )
             );
 
         var div = $('<div/>').attr("id", "searchBarDiv").addClass("infoWindow").append(form);
@@ -1184,6 +1189,46 @@ $(function() {
 
         google.maps.event.addListener(map.map, 'idle', function(event) {
             initSearchBarBehavior();
+        });
+    }
+
+    function createLocationsInfoBar() {
+
+        var div = $('<div/>').addClass("span3")
+            .append(
+                $('<p/>').addClass("form-inline")
+                    .append(
+                        $('<label/>').text("Всего локаций: ")
+                    )
+                    .append(
+                        $('<label/>').attr("id", "locationsCountLabel").addClass("spacer3")
+                    )
+            )
+            .append(
+                $('<p/>').addClass("form-inline")
+                    .append(
+                        $('<label/>').text("В регионе: ")
+                    )
+                    .append(
+                        $('<label/>').attr("id", "locationsLocalCountLabel").addClass("spacer3")
+                    )
+            )
+            .append(
+                $('<p/>').addClass("form-inline")
+                    .append(
+                        $('<label/>').text("Новых за сутки:")
+                    )
+                    .append(
+                        $('<label/>').attr("id", "locationsNewCountLabel").addClass("spacer3")
+                    )
+            );
+
+        var d = $('<div/>').addClass("infoWindow span3").attr("id", "infoBar").append(div);
+
+        map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push( d.get(0) );
+
+        google.maps.event.addListener(map.map, 'idle', function(event) {
+            initLocationsInfoBarBehavior();
         });
     }
 
@@ -1196,17 +1241,38 @@ $(function() {
         hideAutoCompleteResults();
     }
 
+    function initLocationsInfoBarBehavior() {
+        var bounds = map.map.getBounds();
+
+        var ne = bounds.getNorthEast();
+        var sw = bounds.getSouthWest();
+
+        $.ajax({
+            type: "GET",
+            url: params.realPath+"/api/locations/locationsinfo",
+            data: {
+                ne_latitude: ne.lat(),
+                ne_longitude: ne.lng(),
+                sw_latitude: sw.lat(),
+                sw_longitude: sw.lng()
+            },
+            success: function(data) {
+
+                if( data ) {
+                    if( data.result ) {
+                        $('#locationsCountLabel').text(data.result.totalCount);
+                        $('#locationsLocalCountLabel').text(data.result.regionCount);
+                        $('#locationsNewCountLabel').text(data.result.newCount);
+                    }
+                }
+            }
+        });
+    }
+
     function initSearchBarBehavior() {
 
-        //$('#searchBar').focus();
-
-        var options = {
-            //bounds: map.map.getBounds(),
-            //componentRestrictions: {country: 'ru'}
-        };
-
         var address = document.getElementById("searchBar");
-        var autocomplete = new google.maps.places.Autocomplete(address, options);
+        var autocomplete = new google.maps.places.Autocomplete(address);
 
         initAutocompleteFirstResult(autocomplete);
         initSearchBarFormBehavior();

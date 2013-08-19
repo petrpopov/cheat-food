@@ -92,6 +92,28 @@ public class LocationWebService {
         return res;
     }
 
+    @RequestMapping(value = "locationsinfo", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageResult getLocationsCountInfo(@Valid GeoPointBounds bounds) {
+
+        MessageResult res = new MessageResult();
+
+        LocationsInfo info = new LocationsInfo();
+
+        long totalCount = locationService.getLocationsTotalCount();
+        info.setTotalCount(totalCount);
+
+        long regionCount = locationService.getLocationsCountInBound(bounds);
+        info.setRegionCount(regionCount);
+
+        long newCount = locationService.getLocationsNewCount();
+        info.setNewCount(newCount);
+
+        res.setResult(info);
+
+        return res;
+    }
+
 
     @RequestMapping(value="add", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody

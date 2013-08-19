@@ -9,6 +9,7 @@ import com.petrpopov.cheatfood.filters.LocationVoteService;
 import com.petrpopov.cheatfood.model.*;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.IndexOperations;
@@ -148,6 +149,8 @@ public class LocationService extends GenericService<Location> {
             location.setType(savedType);
         }
 
+        this.setCreationDateForLocation(location);
+
         location.setCreator(userEntity);
 
         location.setVotes(this.getLocationVotes(location));
@@ -177,6 +180,14 @@ public class LocationService extends GenericService<Location> {
         op.save(location);
     }
 
+    public long getLocationsTotalCount() {
+
+        Criteria hidden = Criteria.where("hidden").ne(Boolean.TRUE);
+
+        long count = op.count(new Query(hidden), Location.class);
+        return count;
+    }
+
     public long getLocationsCountInBound(@Valid GeoPointBounds bounds) {
 
         Box box = this.getBoxFromBounds(bounds);
@@ -184,6 +195,17 @@ public class LocationService extends GenericService<Location> {
         Query query = new Query(Criteria.where("geoLocation").within(box).andOperator(hidden) );
 
         long count = op.count(query, Location.class);
+        return count;
+    }
+
+    public long getLocationsNewCount() {
+
+        DateTime date = new DateTime(new Date());
+        date = date.minusDays(1);
+
+        Criteria dateCriteria = Criteria.where("creationDate").gte(date.toDate());
+
+        long count = op.count(new Query(dateCriteria), Location.class);
         return count;
     }
 
@@ -262,6 +284,7 @@ public class LocationService extends GenericService<Location> {
         updateLocationWithCurrentRatesDate(entity);
         updateLocationWithVotesCount(entity);
         updateLocationWithAdminChecked(entity);
+        updateLocationWithCreationDate(entity);
 
         collection.save(entity);
     }
@@ -352,6 +375,7 @@ public class LocationService extends GenericService<Location> {
     }
 
     private void updateLocationWithAdminChecked(BasicDBObject entity) {
+
         Object votes = entity.get("votes");
         if( votes == null ) {
             return;
@@ -386,6 +410,16 @@ public class LocationService extends GenericService<Location> {
         }
 
         entity.put("adminChecked", admin);
+    }
+
+    private void updateLocationWithCreationDate(BasicDBObject entity) {
+
+        Object creationDate = entity.get("creationDate");
+        if( creationDate != null ) {
+            return;
+        }
+
+        entity.put("creationDate", new Date());
     }
 
 
@@ -506,6 +540,17 @@ public class LocationService extends GenericService<Location> {
         }
         op.save(location);
         return location;
+    }
+
+    private void setCreationDateForLocation(Location location) {
+
+        Location byId = this.findById(location.getId());
+        if( byId == null )
+            return;
+
+        Date creationDate = byId.getCreationDate();
+        if( creationDate == null )
+            location.setCreationDate(new Date());
     }
 
     private Type getTypeForLocation(Location location) {

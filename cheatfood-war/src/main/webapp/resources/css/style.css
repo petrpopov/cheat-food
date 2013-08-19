@@ -182,8 +182,16 @@ hr {
     margin-bottom: 10px;
 }
 
-#routeFormDiv, #searchBarDiv {
+#routeFormDiv, #searchBarDiv, #infoBar {
     margin-top: 10px;
+}
+
+#infoBar p {
+    margin-bottom: 0px;
+}
+
+#infoBar p label {
+    font: normal 13px Sans-Serif;
 }
 
 #searchBarForm {

@@ -76,6 +76,8 @@ public class Location implements Serializable {
 
     private Double averageRate;
 
+    private Date creationDate;
+
 
     @Transient
     private Boolean alreadyRated;
@@ -258,6 +260,14 @@ public class Location implements Serializable {
 
     public void setAdminChecked(Boolean adminChecked) {
         this.adminChecked = adminChecked;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override
