@@ -1,7 +1,7 @@
-package com.petrpopov.cheatfood.filters;
+package com.petrpopov.cheatfood.web.filters;
 
-import com.petrpopov.cheatfood.model.Location;
-import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.entity.Location;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 @Component
-public class LocationFilterService {
+public class LocationFieldFilter {
 
     public void filterCreator(List<Location> list) {
         for (Location location : list) {

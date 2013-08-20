@@ -1,11 +1,11 @@
 package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.config.CheatException;
-import com.petrpopov.cheatfood.model.Params;
+import com.petrpopov.cheatfood.model.data.MessageResult;
+import com.petrpopov.cheatfood.model.data.Params;
 import com.petrpopov.cheatfood.service.CookieService;
 import com.petrpopov.cheatfood.service.TypeService;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
-import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package com.petrpopov.cheatfood.model;
+package com.petrpopov.cheatfood.model.entity;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;

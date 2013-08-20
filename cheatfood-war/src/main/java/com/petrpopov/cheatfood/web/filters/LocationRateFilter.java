@@ -1,8 +1,8 @@
-package com.petrpopov.cheatfood.filters;
+package com.petrpopov.cheatfood.web.filters;
 
-import com.petrpopov.cheatfood.model.Location;
-import com.petrpopov.cheatfood.model.Rate;
-import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.entity.Location;
+import com.petrpopov.cheatfood.model.entity.Rate;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.service.UserContextHandler;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 @Component
-public class LocationRateService {
+public class LocationRateFilter {
 
     @Autowired
     private UserContextHandler userContextHandler;

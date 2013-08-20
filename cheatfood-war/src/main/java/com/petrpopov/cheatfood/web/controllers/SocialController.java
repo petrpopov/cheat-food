@@ -1,7 +1,7 @@
 package com.petrpopov.cheatfood.web.controllers;
 
 import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
-import com.petrpopov.cheatfood.web.other.MessageResult;
+import com.petrpopov.cheatfood.model.data.MessageResult;
 import com.petrpopov.cheatfood.web.other.SocialAccessError;
 import com.petrpopov.cheatfood.web.other.SocialConnectionService;
 import org.codehaus.jackson.map.ObjectMapper;

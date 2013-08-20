@@ -1,17 +1,15 @@
 package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.config.CheatException;
-import com.petrpopov.cheatfood.filters.LocationFilterService;
-import com.petrpopov.cheatfood.filters.LocationRateService;
-import com.petrpopov.cheatfood.filters.LocationVoteService;
-import com.petrpopov.cheatfood.model.*;
-import com.petrpopov.cheatfood.service.CookieService;
+import com.petrpopov.cheatfood.model.data.MessageResult;
+import com.petrpopov.cheatfood.model.entity.Location;
+import com.petrpopov.cheatfood.model.entity.Rate;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
+import com.petrpopov.cheatfood.model.entity.Vote;
 import com.petrpopov.cheatfood.service.LocationService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
-import com.petrpopov.cheatfood.web.other.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,48 +21,23 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api")
-public class VoteWebService {
-
-    @Autowired
-    private CookieService cookieService;
+public class VoteWebService extends BaseWebService {
 
     @Autowired
     private LocationService locationService;
-
-    @Autowired
-    private LocationFilterService locationFilterService;
-
-    @Autowired
-    private LocationVoteService locationVoteService;
-
-    @Autowired
-    private LocationRateService locationRateService;
 
     @Autowired
     private UserContextHandler userContextHandler;
 
     @RequestMapping(value="votes/add", method = RequestMethod.GET)
     @ResponseBody
-    public MessageResult voteForLocation(@CookieValue(required = true, value = "CHEATFOOD") String cookie,
-                                         @RequestParam String locationId, @RequestParam Boolean value) {
-
-        MessageResult result = new MessageResult();
-
-        boolean valid = cookieService.isCookieValidForCurrentUser(new CookieRequest(cookie));
-        if( !valid ) {
-            result.setError(true);
-            result.setErrorType(ErrorType.access_denied);
-            result.setMessage("Access denied");
-            return result;
-        }
+    public MessageResult voteForLocation(@CookieValue(required = true, value = "CHEATFOOD") CookieRequest cookie,
+                                         @RequestParam String locationId, @RequestParam Boolean value) throws CheatException {
 
         Location location = locationService.findById(locationId);
-        if( location == null ) {
-            result.setError(true);
-            result.setErrorType(ErrorType.unknown_location);
-            result.setMessage("Unknown location!");
+        MessageResult result = checkIfLocationExists(location);
+        if(result.getError().equals(Boolean.TRUE))
             return result;
-        }
 
         UserEntity entity = userContextHandler.currentContextUser();
 
@@ -72,38 +45,7 @@ public class VoteWebService {
         vote.setUserId(entity.getId());
         vote.setValue(value);
 
-        try {
-            location = locationService.voteForLocation(location, vote);
-        }
-        catch (AccessDeniedException e) {
-            e.printStackTrace();
-
-            result.setError(true);
-            result.setErrorType(ErrorType.access_denied);
-            result.setMessage("Access denied");
-            return result;
-        }
-        catch (CheatException e) {
-            e.printStackTrace();
-
-            result.setError(true);
-            result.setErrorType(e.getErrorType());
-            return result;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-
-            result.setError(true);
-            result.setErrorType(ErrorType.other);
-            return result;
-        }
-
-
-        locationVoteService.setAlreadyVoted(location);
-        locationRateService.setAlreadyRated(location);
-        locationFilterService.filterCreator(location);
-        locationFilterService.filterRates(location);
-        locationFilterService.filterVotes(location);
+        location = locationService.voteForLocation(location, vote);
         result.setResult(location);
 
         return result;
@@ -111,26 +53,13 @@ public class VoteWebService {
 
     @RequestMapping(value="rates/add", method = RequestMethod.GET)
     @ResponseBody
-    public MessageResult rateForLocation(@CookieValue(required = true, value = "CHEATFOOD") String cookie,
-                                         @RequestParam String locationId, @RequestParam Integer value) {
-
-        MessageResult result = new MessageResult();
-
-        boolean valid = cookieService.isCookieValidForCurrentUser(new CookieRequest(cookie));
-        if( !valid ) {
-            result.setError(true);
-            result.setErrorType(ErrorType.access_denied);
-            result.setMessage("Access denied");
-            return result;
-        }
+    public MessageResult rateForLocation(@CookieValue(required = true, value = "CHEATFOOD") CookieRequest cookie,
+                                         @RequestParam String locationId, @RequestParam Integer value) throws CheatException {
 
         Location location = locationService.findById(locationId);
-        if( location == null ) {
-            result.setError(true);
-            result.setErrorType(ErrorType.unknown_location);
-            result.setMessage("Unknown location!");
+        MessageResult result = checkIfLocationExists(location);
+        if(result.getError().equals(Boolean.TRUE))
             return result;
-        }
 
         UserEntity entity = userContextHandler.currentContextUser();
 
@@ -138,38 +67,7 @@ public class VoteWebService {
         rate.setUserId(entity.getId());
         rate.setValue(value);
 
-        try {
-            location = locationService.rateForLocation(location, rate);
-        }
-        catch (AccessDeniedException e) {
-            e.printStackTrace();
-
-            result.setError(true);
-            result.setErrorType(ErrorType.access_denied);
-            result.setMessage("Access denied");
-            return result;
-        }
-        catch (CheatException e) {
-            e.printStackTrace();
-
-            result.setError(true);
-            result.setErrorType(e.getErrorType());
-            return result;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-
-            result.setError(true);
-            result.setErrorType(ErrorType.other);
-            return result;
-        }
-
-
-        locationVoteService.setAlreadyVoted(location);
-        locationRateService.setAlreadyRated(location);
-        locationFilterService.filterCreator(location);
-        locationFilterService.filterRates(location);
-        locationFilterService.filterVotes(location);
+        location = locationService.rateForLocation(location, rate);
         result.setResult(location);
 
         return result;

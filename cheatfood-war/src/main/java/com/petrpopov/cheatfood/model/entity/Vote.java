@@ -1,4 +1,4 @@
-package com.petrpopov.cheatfood.model;
+package com.petrpopov.cheatfood.model.entity;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;

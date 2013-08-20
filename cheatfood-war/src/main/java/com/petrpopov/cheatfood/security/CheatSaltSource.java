@@ -1,6 +1,6 @@
 package com.petrpopov.cheatfood.security;
 
-import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.dao.SaltSource;

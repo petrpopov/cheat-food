@@ -1,7 +1,7 @@
 package com.petrpopov.cheatfood.security;
 
-import com.petrpopov.cheatfood.model.UserEntity;
-import com.petrpopov.cheatfood.model.UserRole;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
+import com.petrpopov.cheatfood.model.entity.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

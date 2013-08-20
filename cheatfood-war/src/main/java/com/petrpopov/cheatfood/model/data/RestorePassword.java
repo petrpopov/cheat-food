@@ -1,4 +1,4 @@
-package com.petrpopov.cheatfood.web.other;
+package com.petrpopov.cheatfood.model.data;
 
 import org.hibernate.validator.constraints.NotEmpty;
 

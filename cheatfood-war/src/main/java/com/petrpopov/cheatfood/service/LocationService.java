@@ -4,9 +4,11 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.petrpopov.cheatfood.config.CheatException;
-import com.petrpopov.cheatfood.filters.LocationRateService;
-import com.petrpopov.cheatfood.filters.LocationVoteService;
-import com.petrpopov.cheatfood.model.*;
+import com.petrpopov.cheatfood.model.data.ErrorType;
+import com.petrpopov.cheatfood.model.data.GeoPointBounds;
+import com.petrpopov.cheatfood.model.entity.*;
+import com.petrpopov.cheatfood.web.filters.LocationRateFilter;
+import com.petrpopov.cheatfood.web.filters.LocationVoteFilter;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
@@ -39,10 +41,10 @@ public class LocationService extends GenericService<Location> {
     private TypeService typeService;
 
     @Autowired
-    private LocationVoteService locationVoteService;
+    private LocationVoteFilter locationVoteFilter;
 
     @Autowired
-    private LocationRateService locationRateService;
+    private LocationRateFilter locationRateFilter;
 
     @Autowired
     private UserService userService;
@@ -217,7 +219,7 @@ public class LocationService extends GenericService<Location> {
         boolean isAdmin = userService.isUserAdmin(userById);
 
         if( votes != null ) {
-            boolean canVote = locationVoteService.canUserVoteForLocation(location, userById);
+            boolean canVote = locationVoteFilter.canUserVoteForLocation(location, userById);
 
             if( !canVote )
                 throw new CheatException(ErrorType.already_voted);
@@ -257,7 +259,7 @@ public class LocationService extends GenericService<Location> {
         List<Rate> rates = location.getRates();
         if( rates != null ) {
             UserEntity userById = userService.getUserById(rate.getUserId());
-            boolean canRate = locationRateService.canUserRateForLocation(location, userById);
+            boolean canRate = locationRateFilter.canUserRateForLocation(location, userById);
 
             if( !canRate )
                 throw new CheatException(ErrorType.already_rated);

@@ -1,4 +1,4 @@
-package com.petrpopov.cheatfood.model;
+package com.petrpopov.cheatfood.model.entity;
 
 import com.petrpopov.cheatfood.config.DateSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

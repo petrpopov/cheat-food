@@ -1,4 +1,6 @@
-package com.petrpopov.cheatfood.model;
+package com.petrpopov.cheatfood.model.data;
+
+import com.petrpopov.cheatfood.model.entity.Type;
 
 import java.util.List;
 

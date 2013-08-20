@@ -1,6 +1,4 @@
-package com.petrpopov.cheatfood.web.other;
-
-import com.petrpopov.cheatfood.model.ErrorType;
+package com.petrpopov.cheatfood.model.data;
 
 /**
  * User: petrpopov

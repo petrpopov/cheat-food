@@ -1,6 +1,6 @@
 package com.petrpopov.cheatfood.service;
 
-import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

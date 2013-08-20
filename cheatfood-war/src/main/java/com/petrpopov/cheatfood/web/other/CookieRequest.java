@@ -6,6 +6,7 @@ package com.petrpopov.cheatfood.web.other;
  * Time: 11:41
  */
 public class CookieRequest {
+
     private String cookie;
 
     public CookieRequest() {

@@ -1,8 +1,8 @@
 package com.petrpopov.cheatfood.service;
 
 import com.petrpopov.cheatfood.config.CheatException;
-import com.petrpopov.cheatfood.model.PasswordForgetToken;
-import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.entity.PasswordForgetToken;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;

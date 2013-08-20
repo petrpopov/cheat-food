@@ -1,10 +1,8 @@
 package com.petrpopov.cheatfood.web.controllers;
 
-import com.petrpopov.cheatfood.filters.LocationFilterService;
-import com.petrpopov.cheatfood.filters.LocationRateService;
-import com.petrpopov.cheatfood.filters.LocationVoteService;
-import com.petrpopov.cheatfood.model.Location;
+import com.petrpopov.cheatfood.model.entity.Location;
 import com.petrpopov.cheatfood.service.LocationService;
+import com.petrpopov.cheatfood.web.filters.LocationFilter;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,13 +25,7 @@ public class HomeController {
     private LocationService locationService;
 
     @Autowired
-    private LocationVoteService locationVoteService;
-
-    @Autowired
-    private LocationRateService locationRateService;
-
-    @Autowired
-    private LocationFilterService locationFilterService;
+    private LocationFilter locationFilter;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -63,12 +55,7 @@ public class HomeController {
     public ModelAndView getLocation(@PathVariable String locationid) throws IOException {
 
         Location location = locationService.findById(locationid);
-
-        locationVoteService.setAlreadyVoted(location);
-        locationRateService.setAlreadyRated(location);
-        locationFilterService.filterCreator(location);
-        locationFilterService.filterRates(location);
-        locationFilterService.filterVotes(location);
+        locationFilter.filterLocation(location);
 
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("location", objectMapper.writeValueAsString(location));

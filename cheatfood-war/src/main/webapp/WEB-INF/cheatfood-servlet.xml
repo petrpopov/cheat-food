@@ -22,11 +22,13 @@
      http://www.springframework.org/schema/util/spring-util.xsd">
 
     <import resource="security.xml"/>
-    <import resource="classpath*:spring/**/spring-social-mongo.xml"/>
+
+    <!--import resource="classpath*:spring/**/spring-social-mongo.xml"/-->
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <context:annotation-config/>
+    <context:component-scan base-package="org.springframework.social.connect.mongo"/>
     <context:component-scan base-package="com.petrpopov.cheatfood"/>
     <cache:annotation-driven />
 
@@ -73,16 +75,6 @@
         </property>
     </bean>
 
-
-    <!--bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
-        <property name="prefix">
-            <value>/WEB-INF/pages/</value>
-        </property>
-
-        <property name="suffix">
-            <value>.jsp</value>
-        </property>
-    </bean-->
 
     <bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver"/>
 

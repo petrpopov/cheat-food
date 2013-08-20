@@ -1,7 +1,7 @@
 package com.petrpopov.cheatfood.service;
 
 import com.petrpopov.cheatfood.config.CheatException;
-import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.security.LoginManager;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
 import org.springframework.beans.factory.annotation.Autowired;

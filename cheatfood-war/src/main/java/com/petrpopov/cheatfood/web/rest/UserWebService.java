@@ -1,10 +1,12 @@
 package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.config.CheatException;
-import com.petrpopov.cheatfood.model.ErrorType;
-import com.petrpopov.cheatfood.model.PasswordForgetToken;
-import com.petrpopov.cheatfood.model.UserCreate;
-import com.petrpopov.cheatfood.model.UserEntity;
+import com.petrpopov.cheatfood.model.data.ErrorType;
+import com.petrpopov.cheatfood.model.data.MessageResult;
+import com.petrpopov.cheatfood.model.data.RestorePassword;
+import com.petrpopov.cheatfood.model.data.UserCreate;
+import com.petrpopov.cheatfood.model.entity.PasswordForgetToken;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
 import com.petrpopov.cheatfood.security.CheatRememberMeServices;
 import com.petrpopov.cheatfood.security.LoginManager;
@@ -12,8 +14,6 @@ import com.petrpopov.cheatfood.service.MailService;
 import com.petrpopov.cheatfood.service.PasswordForgetTokenService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.service.UserService;
-import com.petrpopov.cheatfood.web.other.MessageResult;
-import com.petrpopov.cheatfood.web.other.RestorePassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
