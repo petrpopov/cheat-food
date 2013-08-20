@@ -7,7 +7,7 @@
 <div class="navbar navbar-fixed-bottom navbar-inverse">
     <div class="navbar-inner">
         <ul class="nav">
-            <li><a href="mailto:info@cheatfood.com">Разработка и поддержка - Петр Попов, &copy; 2013</a></li>
+            <li><a href="mailto:info@cheatfood.com">Связь и поддержка</a></li>
         </ul>
 
         <form id="currentActionForm" class="navbar-form form-inline centerForm" style="display: none;">
