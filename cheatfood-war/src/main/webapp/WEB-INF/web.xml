@@ -23,6 +23,7 @@
         <mime-type>image/x-icon</mime-type>
     </mime-mapping>
 
+
     <!-- Filter for removing jsessionid from s:urls -->
     <filter>
         <filter-name>DisableUrlSessionFilter</filter-name>
@@ -61,8 +62,29 @@
     </servlet-mapping>
     <!-- Spring main servlet ends -->
 
+    <!-- wro4j filter for compressing resources -->
+    <filter>
+        <filter-name>WebResourceOptimizer</filter-name>
+        <filter-class>
+            ro.isdc.wro.http.WroFilter
+        </filter-class>
+        <init-param>
+            <param-name>configuration</param-name>
+            <param-value>DEVELOPMENT</param-value>
+        </init-param>
+        <init-param>
+            <param-name>gzipResources</param-name>
+            <param-value>FALSE</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>WebResourceOptimizer</filter-name>
+        <url-pattern>/wro/*</url-pattern>
+    </filter-mapping>
+    <!-- end of wro4j filter for compressing resources -->
 
-    <!-- Spring REST filter for hidden fields starts -->
+
+    <!-- Spring REST filter for hidden fields starts for DELETE requests -->
     <filter>
         <filter-name>hiddenHttpMethodFilter</filter-name>
         <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>

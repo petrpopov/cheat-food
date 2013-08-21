@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<groups xmlns="http://www.isdc.ro/wro"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.isdc.ro/wro wro.xsd">
+
+    <group name="styles">
+        <css>/resources/css/bootstrap.min.css</css>
+        <css>/resources/css/bootstrap-responsive.min.css</css>
+        <css>/resources/css/jquery-ui-1.10.3.custom.min.css</css>
+        <css>/resources/css/style.css</css>
+    </group>
+
+
+
+</groups>

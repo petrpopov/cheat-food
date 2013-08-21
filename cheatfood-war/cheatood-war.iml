@@ -81,12 +81,47 @@
     <orderEntry type="library" name="Maven: commons-digester:commons-digester:2.0" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tiles:tiles-template:2.2.2" level="project" />
+    <orderEntry type="library" name="Maven: ro.isdc.wro4j:wro4j-core:1.6.3" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.1" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-web-api:6.0" level="project" />
+    <orderEntry type="library" name="Maven: ro.isdc.wro4j:wro4j-extensions:1.6.3" level="project" />
+    <orderEntry type="library" name="Maven: commons-pool:commons-pool:1.6" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:1.6" level="project" />
+    <orderEntry type="library" name="Maven: com.google.javascript:closure-compiler:r2388" level="project" />
+    <orderEntry type="library" name="Maven: args4j:args4j:2.0.16" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava:13.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:2.4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.json:json:20090211" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.ant:ant:1.8.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.8.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:1.3.9" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.jarjar:jarjar:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.mozilla:rhino:1.7R3" level="project" />
+    <orderEntry type="library" name="Maven: com.github.lltyk:dojo-shrinksafe:1.7.2" level="project" />
+    <orderEntry type="library" name="Maven: org.jruby:jruby-complete:1.6.8" level="project" />
+    <orderEntry type="library" name="Maven: me.n4u.sass:sass-gems:3.1.19" level="project" />
+    <orderEntry type="library" name="Maven: nz.co.edmi:bourbon-gem-jar:2.1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.github.sommeri:less4j:0.0.14" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr:3.4" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.4" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:stringtemplate:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: antlr:antlr:2.7.7" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:ST4:4.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.5" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.5" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.gmaven.runtime:gmaven-runtime-1.7:1.3" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.gmaven.feature:gmaven-feature-support:1.3" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.gmaven.feature:gmaven-feature-api:1.3" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.gmaven.runtime:gmaven-runtime-support:1.3" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.gmaven.runtime:gmaven-runtime-api:1.3" level="project" />
+    <orderEntry type="library" name="Maven: org.sonatype.gshell:gshell-io:2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:2.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.thoughtworks.qdox:qdox:1.10" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-all:1.7.4" level="project" />
+    <orderEntry type="library" name="Maven: jline:jline:0.9.94" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.9" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-web-api:6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.0" level="project" />
   </component>

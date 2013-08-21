@@ -6,6 +6,10 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="t" uri="http://tiles.apache.org/tags-tiles" %>
 
+
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.13&sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script>
+<script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
+
 <!-- neccessary for every working page -->
 <script src="<s:url value="/resources"/>/js/jquery.validate-1.11.1.min.js"></script>
 <script src="<s:url value="/resources"/>/js/validation.messages_ru.js"></script>
@@ -23,9 +27,6 @@
 <script src="<s:url value="/resources"/>/js/jquery.raty-2.5.2.min.js"></script>
 <script src="<s:url value="/resources"/>/js/jquery.numeric-1.3.1.js"></script>
 
-
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.13&sensor=false&key=AIzaSyBwBoJd0Pv2XqjkfAp25UJaehgWOzmajBc&libraries=places&language=RU"></script>
-<script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
 
 <script type="text/javascript" src="<s:url value="/resources"/>/js/markerclusterer-2.0.9.min.js"></script>
 <script type="text/javascript" src="<s:url value="/resources"/>/js/infobox-1.1.9.min.js"></script>
