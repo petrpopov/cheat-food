@@ -27,7 +27,8 @@ public class LocationFieldFilter {
         if( creator == null )
             return location;
 
-        location.setCreator( new UserEntity(creator.getId() ) );
+
+        location.setCreator( getUserEntity(creator) );
         return location;
     }
 
@@ -51,5 +52,14 @@ public class LocationFieldFilter {
     public Location filterRates(Location location) {
         location.setRates(null);
         return location;
+    }
+
+    private UserEntity getUserEntity(UserEntity creator) {
+
+        UserEntity entity = new UserEntity(creator.getId());
+        entity.setFirstName(creator.getFirstName());
+        entity.setLastName(creator.getLastName());
+
+        return entity;
     }
 }

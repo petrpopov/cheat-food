@@ -2353,6 +2353,24 @@ $(function() {
         $('#info_description').text(location.description);
         $('#info_type_icon').attr("src", getIconImagePath(location.type) );
 
+        if( location.creator ) {
+            $('#info_creator_body').show();
+
+            var creator = "";
+            if( location.creator.firstName ) {
+                creator += location.creator.firstName;
+            }
+            if( location.creator.lastName ) {
+                creator += " ";
+                creator += location.creator.lastName;
+            }
+
+            $('#info_creator').text(creator);
+        }
+        else {
+            $('#info_creator_body').hide();
+        }
+
         $('#info_type_link').off('click');
         $('#info_type_link').click(function() {
             removeAllMarkers();
@@ -2843,7 +2861,6 @@ $(function() {
 
         showEditMarkerFormDiv();
         initEditForm(infoBoxObject);
-
 
         $('#currentActionForm').data("infoBoxObject", infoBoxObject);
         showCurrentActionForm("Редактирование точки...", cancelNewMarkerAddition, "infoBoxObject");
@@ -3542,6 +3559,15 @@ $(function() {
                                             )
                                             .append(
                                                 $('<span/>').attr('id', 'info_address').addClass('spacer5')
+                                            )
+                                    )
+                                    .append(
+                                        $('<div/>').addClass('media-body').attr("id", "info_creator_body")
+                                            .append(
+                                                $('<span/>').addClass('label').text('Добавил')
+                                            )
+                                            .append(
+                                                $('<span/>').attr('id', 'info_creator').addClass('spacer5')
                                             )
                                     )
                             )
