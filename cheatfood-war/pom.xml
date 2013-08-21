@@ -349,6 +349,8 @@
                     <api_hoster>app.j.rsnx.ru</api_hoster>
                 </configuration>
             </plugin>
+
+
         </plugins>
 
         <resources>
@@ -356,6 +358,7 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
+
         </resources>
     </build>
 </project>

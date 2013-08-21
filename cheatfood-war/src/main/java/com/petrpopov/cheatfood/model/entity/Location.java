@@ -3,6 +3,7 @@ package com.petrpopov.cheatfood.model.entity;
 import com.petrpopov.cheatfood.config.DateSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -77,6 +78,9 @@ public class Location implements Serializable {
     private Double averageRate;
 
     private Date creationDate;
+
+    @URL
+    private String siteUrl;
 
 
     @Transient
@@ -268,6 +272,14 @@ public class Location implements Serializable {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getSiteUrl() {
+        return siteUrl;
+    }
+
+    public void setSiteUrl(String siteUrl) {
+        this.siteUrl = siteUrl;
     }
 
     @Override

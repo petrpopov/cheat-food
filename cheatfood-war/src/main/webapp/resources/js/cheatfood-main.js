@@ -2377,6 +2377,15 @@ $(function() {
             loadAndCreateMarkersByCategory(location.type.id);
         });
 
+        if(location.siteUrl) {
+            $('#info_siteUrl').text(location.siteUrl);
+            $('#info_siteUrl').attr("href", location.siteUrl);
+            $('#info_siteUrl_body').show();
+        }
+        else {
+            $('#info_siteUrl_body').hide();
+        }
+
         if(location.addressDescription) {
             $('#info_addressDescription').text(location.addressDescription);
             $('#info_addressd_body').show();
@@ -2996,6 +3005,17 @@ $(function() {
     function checkEditFormValidOrNot(infoBoxObject) {
         $('#submitEdit').button('loading');
 
+        var url = $('#siteUrl').val();
+        if( url ) {
+            var index1 = url.indexOf("http://");
+            var index2 = url.indexOf("https://");
+
+            if( index1 < 0 && index2 < 0 ) {
+                url = "http://" + url;
+                $('#siteUrl').val(url);
+            }
+        }
+
         if( $("#editMarkerForm").valid() ) {
             submitEditFormPost(infoBoxObject);
         }
@@ -3035,6 +3055,7 @@ $(function() {
         var zipcode = $('#zipcode').val();
         var addressLine = $('#addressLine').val();
         var averagePrice = $('#averagePrice').val();
+        var siteUrl = $('#siteUrl').val();
 
 
         var param = {
@@ -3058,7 +3079,8 @@ $(function() {
                 zipcode: zipcode,
                 addressLine: addressLine
             },
-            averagePrice: averagePrice
+            averagePrice: averagePrice,
+            siteUrl: siteUrl
         };
 
         param = JSON.stringify(param);
@@ -3285,6 +3307,10 @@ $(function() {
                     required: false,
                     max: params.maxPrice,
                     digits: true
+                },
+                siteUrl: {
+                    required: false,
+                    url: true
                 }
             },
             success: function() {
@@ -3354,6 +3380,21 @@ $(function() {
             }
         });
 
+        $('#siteUrl').off('keyup change');
+        $('#siteUrl').on('keyup change', function() {
+            var url = $('#siteUrl').val();
+            if( url ) {
+
+                var index1 = url.indexOf("http://");
+                var index2 = url.indexOf("https://");
+
+                if( index1 < 0 && index2 < 0 ) {
+                    url = "http://" + url;
+                    $('#siteUrl').val(url);
+                }
+            }
+        });
+
         initDatePicker(location.actualDate);
 
         //types
@@ -3414,6 +3455,7 @@ $(function() {
         $('#zipcode').val( null );
         $('#addressLine').val( null );
         $('#averagePrice').val(null);
+        $('#siteUrl').val(null);
 
         $('#editFormTab a:first').tab('show');
     }
@@ -3531,6 +3573,16 @@ $(function() {
                                             )
                                             .append(
                                                 $('<span/>').attr('id','info_addressDescription')
+                                                    .addClass('spacer5')
+                                            )
+                                    )
+                                    .append(
+                                        $('<div/>').addClass('media-body').attr('id','info_siteUrl_body')
+                                            .append(
+                                                $('<span/>').addClass('label label-info').text('Сайт')
+                                            )
+                                            .append(
+                                                $('<a/>').attr('id','info_siteUrl').attr("target", "_blank")
                                                     .addClass('spacer5')
                                             )
                                     )
@@ -3947,6 +3999,19 @@ $(function() {
                                     )
                             )
 
+                    )
+            )
+            .append(
+                $('<div/>').addClass('control-group')
+                    .append(
+                        $('<label/>').addClass('control-label').attr('for', 'siteUrl').text('Сайт')
+                    )
+                    .append(
+                        $('<div/>').addClass('controls')
+                            .append(
+                                $('<input/>').attr('id', 'siteUrl').addClass('input-block-level span4')
+                                    .attr('type', 'text').attr('name', 'siteUrl').attr("placeholder", "необязательно")
+                            )
                     )
             )
             .append(
