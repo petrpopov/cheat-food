@@ -3,13 +3,34 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.isdc.ro/wro wro.xsd">
 
-    <group name="styles">
+    <group name="main">
+        <js>/resources/js/jquery-1.10.1.min.js</js>
+        <js>/resources/js/jquery.cookie-1.3.1.js</js>
+        <js>/resources/js/bootstrap.min.js</js>
+
         <css>/resources/css/bootstrap.min.css</css>
         <css>/resources/css/bootstrap-responsive.min.css</css>
         <css>/resources/css/jquery-ui-1.10.3.custom.min.css</css>
         <css>/resources/css/style.css</css>
     </group>
 
+    <group name="working">
+        <js>/resources/js/jquery.validate-1.11.1.min.js</js>
+        <js>/resources/js/validation.messages_ru.js</js>
+        <js>/resources/js/jquery.noty-2.1.0.js</js>
+        <js>/resources/js/jquery.noty.top-2.1.0.js</js>
+        <js>/resources/js/jquery.noty.topCenter-2.1.0.js</js>
+        <js>/resources/js/jquery.noty.topRight-2.1.0.js</js>
+        <js>/resources/js/jquery.noty.default-theme-2.1.0.js</js>
+        <js>/resources/js/jquery-ui-1.10.3.custom.min.js</js>
+        <js>/resources/js/jquery-ui.datepicker.ru.js</js>
+        <js>/resources/js/jquery.raty-2.5.2.min.js</js>
+        <js>/resources/js/jquery.numeric-1.3.1.js</js>
+        <js>/resources/js/markerclusterer-2.0.9.min.js</js>
+        <js>/resources/js/infobox-1.1.9.min.js</js>
+        <js>/resources/js/gmaps-0.4.4.js</js>
+        <js>/resources/js/cheatfood-main.js</js>
+    </group>
 
 
 </groups>

@@ -17,14 +17,7 @@
 
 <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/img/favicon.ico" />
 
-<!-- Bootstrap -->
-<link href="<s:url value="/resources" />/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css"/>
-<link href="<s:url value="/resources" />/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
-<link href="<s:url value="/resources" />/css/style.css" rel="stylesheet" type="text/css"/>
-<link href="<s:url value="/resources" />/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
 
-<!-- neccessary for every page scripts -->
-<script src="<s:url value="/resources"/>/js/jquery-1.10.1.min.js"></script>
-<script src="<s:url value="/resources"/>/js/jquery.cookie-1.3.1.js"></script>
-<script src="<s:url value="/resources"/>/js/bootstrap.min.js"></script>
-<!-- end of neccessary for every page scripts -->
+<link href="/wro/main.css" rel="stylesheet" media="screen" type="text/css"/>
+
+<script src="/wro/main.js"></script>
