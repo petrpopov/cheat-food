@@ -45,6 +45,12 @@ public class WebControllerAspect {
         return doMethodCheckAndFilterData(joinPoint);
     }
 
+    @Around("execution(* com.petrpopov.cheatfood.web.rest.UserWebService.*(..))")
+    public Object checkUserWebService(ProceedingJoinPoint joinPoint) throws Throwable {
+
+        return doMethodCheckAndFilterData(joinPoint);
+    }
+
     private Object doMethodCheckAndFilterData(ProceedingJoinPoint joinPoint) throws Throwable {
 
         MessageResult cookieCheck = cookieChecker.checkForCookies(joinPoint);

@@ -8,8 +8,6 @@ import com.petrpopov.cheatfood.model.data.UserCreate;
 import com.petrpopov.cheatfood.model.entity.PasswordForgetToken;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
-import com.petrpopov.cheatfood.security.CheatRememberMeServices;
-import com.petrpopov.cheatfood.security.LoginManager;
 import com.petrpopov.cheatfood.service.MailService;
 import com.petrpopov.cheatfood.service.PasswordForgetTokenService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
@@ -34,19 +32,13 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/api/users/")
-public class UserWebService {
+public class UserWebService extends BaseWebService {
 
     @Autowired
     private UserService userService;
 
     @Autowired
     private UserContextHandler userContextHandler;
-
-    @Autowired
-    private LoginManager loginManager;
-
-    @Autowired
-    private CheatRememberMeServices rememberMeServices;
 
     @Autowired
     private CheatPasswordEncoder cheatPasswordEncoder;
@@ -59,27 +51,13 @@ public class UserWebService {
 
     @RequestMapping(value = "add", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody
-    public MessageResult processSubmit(@Valid @RequestBody UserCreate user, HttpServletRequest request, HttpServletResponse response) {
+    public MessageResult processSubmit(@Valid @RequestBody UserCreate user,
+                                       HttpServletRequest request, HttpServletResponse response) throws CheatException {
 
         MessageResult res = new MessageResult();
 
-        UserEntity entity;
-        try {
-            entity = userService.createUser(user);
-        } catch (CheatException e) {
-            res.setError(true);
-            res.setMessage("User is already exists !");
-            res.setErrorType(ErrorType.user_already_exists);
-            return res;
-        }
-
-        try {
-            this.authenticate(entity.getId(), user.getPassword(), request, response);
-        }
-        catch (CheatException e) {
-            res.setError(true);
-            res.setErrorType(e.getErrorType());
-        }
+        UserEntity entity = userService.createUser(user);
+        this.authenticate(entity.getId(), user.getPassword(), request, response);
 
         res.setResult(entity);
         return res;
@@ -87,22 +65,23 @@ public class UserWebService {
 
     @RequestMapping(value = "login", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody
-    public MessageResult processLogin(@Valid @RequestBody UserCreate user, HttpServletRequest request, HttpServletResponse response) {
+    public MessageResult processLogin(@Valid @RequestBody UserCreate user,
+                                      HttpServletRequest request, HttpServletResponse response) throws CheatException {
 
         MessageResult res = new MessageResult();
 
+        //built-in admin  - do not need to check existense, just authenticate it
         try {
             Authentication authenticate = this.authenticate(user.getEmail(), user.getPassword(), request, response);
-            return res;
-        }
-        catch (CheatException e) {
-        }
+            if( authenticate != null )
+                return res;
+        } catch (Exception e) {};
+
 
         UserEntity userByEmail = userService.getUserByEmail(user.getEmail());
         if( userByEmail == null ) {
             res.setError(true);
             res.setErrorType(ErrorType.no_such_user);
-            res.setMessage("There is no such user");
             return res;
         }
 
@@ -113,31 +92,24 @@ public class UserWebService {
         if( passwordHash == null ) {
             res.setError(true);
             res.setErrorType(ErrorType.no_password_data);
-            res.setMessage("No password data");
             return res;
         }
 
         if( !cheatPasswordEncoder.isPasswordValid(passwordHash, user.getPassword(), salt) ) {
             res.setError(true);
             res.setErrorType(ErrorType.wrong_password);
-            res.setMessage("Wrong password");
             return res;
         }
 
-        try {
-            this.authenticate(userByEmail.getId(), user.getPassword(), request, response);
-        }
-        catch (CheatException e) {
-            res.setError(true);
-            res.setErrorType(e.getErrorType());
-        }
+        this.authenticate(userByEmail.getId(), user.getPassword(), request, response);
 
         return res;
     }
 
     @RequestMapping(value = "forget", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody
-    public MessageResult processForgetPassword(@RequestBody String email, HttpServletRequest request) throws MessagingException {
+    public MessageResult processForgetPassword(@RequestBody String email, HttpServletRequest request)
+            throws CheatException, MessagingException {
 
         MessageResult res = new MessageResult();
 
@@ -153,14 +125,7 @@ public class UserWebService {
             return res;
         }
 
-        PasswordForgetToken tokenForEmail = null;
-        try {
-            tokenForEmail = tokenService.createTokenForEmail(email);
-        } catch (CheatException e) {
-            res.setError(true);
-            res.setErrorType(ErrorType.no_user_with_such_email);
-            return res;
-        }
+        PasswordForgetToken tokenForEmail = tokenForEmail = tokenService.createTokenForEmail(email);
 
         mailService.sendMail(email, tokenForEmail.getValue(), request);
 
@@ -194,7 +159,8 @@ public class UserWebService {
 
     @RequestMapping(value = "restore", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody
-    public MessageResult restorePassword(@Valid @RequestBody RestorePassword restorePassword, HttpServletRequest request, HttpServletResponse response) {
+    public MessageResult restorePassword(@Valid @RequestBody RestorePassword restorePassword,
+                                         HttpServletRequest request, HttpServletResponse response) throws CheatException {
 
         MessageResult res = new MessageResult();
 
@@ -233,13 +199,7 @@ public class UserWebService {
         userService.updatePasswordForUser(userByEmail, restorePassword.getPassword());
         tokenService.invalidateTokensForEmail(userByEmail.getEmail());
 
-        try {
-            this.authenticate(userByEmail.getId(), restorePassword.getPassword(), request, response);
-        }
-        catch (CheatException e) {
-            res.setError(true);
-            res.setErrorType(e.getErrorType());
-        }
+        this.authenticate(userByEmail.getId(), restorePassword.getPassword(), request, response);
 
         return res;
     }
@@ -250,18 +210,5 @@ public class UserWebService {
 
         UserEntity entity = userContextHandler.currentContextUser();
         return entity;
-    }
-
-
-    private Authentication authenticate(String name, String password, HttpServletRequest request, HttpServletResponse response) throws CheatException {
-
-        try {
-            Authentication authenticate = loginManager.authenticate(name, password);
-            rememberMeServices.onLoginSuccess(request, response, authenticate);
-            return authenticate;
-        }
-        catch (Exception e) {
-            throw new CheatException(ErrorType.login_error);
-        }
     }
 }
