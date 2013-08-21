@@ -1113,8 +1113,62 @@ $(function() {
         var div = $('<div/>').attr('id','editMarkerFormDiv').attr('hidden', 'true')
             .addClass('span7 transparent infoWindow').append(getEditFormMarkup());
 
-        var mapControls = map.map.controls[google.maps.ControlPosition.TOP_RIGHT];
         map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(div.get(0));
+    }
+
+    function showEditMarkerFormDiv(callback) {
+
+        var ar = map.map.controls[google.maps.ControlPosition.TOP_RIGHT].getArray();
+
+        var index = -1;
+        for(var i = 0; i < ar.length; i++) {
+            var el = ar[i];
+
+            if( el.hasOwnProperty("id") ) {
+                if( el.id === "editMarkerFormDiv" ) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+
+        if( index >= 0 ) {
+            $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
+                if( callback ) {
+                    callback();
+                }
+            });
+        }
+        else {
+            createMarkerEditFormOnMap();
+            $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME);
+        }
+    }
+
+    function hideEditMarkerFormDiv(callback) {
+
+        var ar = map.map.controls[google.maps.ControlPosition.TOP_RIGHT].getArray();
+
+        var index = -1;
+        for(var i = 0; i < ar.length; i++) {
+            var el = ar[i];
+            if( el.hasOwnProperty("id") ) {
+                if( el.id === "editMarkerFormDiv" ) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+
+        $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME, function() {
+            if( callback ) {
+                callback();
+            }
+
+            if( index >= 0 ) {
+                map.map.controls[google.maps.ControlPosition.TOP_RIGHT].removeAt(index);
+            }
+        });
     }
 
     function createLocateMeButton() {
@@ -1192,7 +1246,7 @@ $(function() {
         });
     }
 
-    function createLocationsInfoBar() {
+    function createLocationsInfoBarDiv() {
 
         var div = $('<div/>').addClass("span3")
             .append(
@@ -1226,6 +1280,11 @@ $(function() {
         var d = $('<div/>').addClass("infoWindow span3").attr("id", "infoBar").append(div);
 
         map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push( d.get(0) );
+    }
+
+    function createLocationsInfoBar() {
+
+        createLocationsInfoBarDiv();
 
         google.maps.event.addListener(map.map, 'idle', function(event) {
             initLocationsInfoBarBehavior();
@@ -1239,6 +1298,54 @@ $(function() {
     function hideSearchForm() {
         $('#searchBarDiv').hide(EFFECTS_TIME);
         hideAutoCompleteResults();
+    }
+
+    function showInfoBar() {
+
+        var ar = map.map.controls[google.maps.ControlPosition.TOP_RIGHT].getArray();
+
+        var index = -1;
+        for(var i = 0; i < ar.length; i++) {
+            var el = ar[i];
+            if( el.hasOwnProperty("id") ) {
+                if( el.id === "infoBar" ) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+
+        if( index >= 0 ) {
+            $('#infoBar').fadeIn(EFFECTS_TIME);
+        }
+        else {
+            createLocationsInfoBarDiv();
+            $('#infoBar').fadeIn(EFFECTS_TIME, function() {
+                initLocationsInfoBarBehavior();
+            });
+        }
+    }
+
+    function hideInfoBar() {
+
+        var ar = map.map.controls[google.maps.ControlPosition.TOP_RIGHT].getArray();
+
+        var index = -1;
+        for(var i = 0; i < ar.length; i++) {
+            var el = ar[i];
+            if( el.hasOwnProperty("id") ) {
+                if( el.id === "infoBar" ) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+
+        $('#infoBar').fadeOut(EFFECTS_TIME, function() {
+            if( index >= 0 ) {
+                map.map.controls[google.maps.ControlPosition.TOP_RIGHT].removeAt(index);
+            }
+        });
     }
 
     function initLocationsInfoBarBehavior() {
@@ -1492,6 +1599,7 @@ $(function() {
         $('#closeRouteForm').click(function() {
             $('#routeFormDiv').hide(EFFECTS_TIME);
             showSearchForm();
+            showInfoBar();
             clearRouteForm();
             clearMapRoutes();
         });
@@ -1500,6 +1608,7 @@ $(function() {
         $('#cancelRouteForm').click(function() {
             $('#routeFormDiv').hide(EFFECTS_TIME);
             showSearchForm();
+            showInfoBar();
             clearRouteForm();
             clearMapRoutes();
         });
@@ -2361,6 +2470,7 @@ $(function() {
         clearRouteForm();
         $('#routeFormDiv').show(EFFECTS_TIME);
         hideSearchForm();
+        hideInfoBar();
 
         var myInput;
         var myHideInput;
@@ -2726,13 +2836,14 @@ $(function() {
     function initAndShowEditForm(infoBoxObject) {
 
         hideSearchForm();
+        hideInfoBar();
 
         map.map.setCenter( infoBoxObject.infoBox.getPosition() );
         infoBoxObject.infoBox.hide();
 
-
+        showEditMarkerFormDiv();
         initEditForm(infoBoxObject);
-        $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME);
+
 
         $('#currentActionForm').data("infoBoxObject", infoBoxObject);
         showCurrentActionForm("Редактирование точки...", cancelNewMarkerAddition, "infoBoxObject");
@@ -2823,7 +2934,7 @@ $(function() {
 
     function cancelNewMarkerAddition(infoBoxObject) {
 
-        $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME);
+        hideEditMarkerFormDiv();
 
         if( infoBoxObject ) {
             infoBoxObject.infoBox.show();
@@ -2855,6 +2966,7 @@ $(function() {
 
         showAllTempMarkers();
         showSearchForm();
+        showInfoBar();
 
         resetSubmitEditButtonBehavior();
     }
@@ -2962,15 +3074,14 @@ $(function() {
                         newMarker = false;
                         searchMarker = false;
 
-                        $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME, function() {
-                            resetSubmitEditButtonBehavior();
-                        });
+                        hideEditMarkerFormDiv(resetSubmitEditButtonBehavior);
                         removeAllTempMarkers();
                         showInfoBoxForMarker(infoBoxObject);
                         enableEditMarkerMenu(infoBoxObject);
                         enableDeleteMarkerMenu(infoBoxObject);
                         enableHideMarkerMenu(infoBoxObject);
                         showSearchForm();
+                        showInfoBar();
                     }
                     else {
                         if( res.errorType === errors.access_denied) {
