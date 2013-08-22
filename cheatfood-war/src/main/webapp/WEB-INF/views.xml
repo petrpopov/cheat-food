@@ -4,6 +4,23 @@
 
 <tiles-definitions>
 
+    <definition name="simple" template="/WEB-INF/pages/templates/simpleTemplate.jsp">
+        <put-attribute name="scripts" value="/WEB-INF/pages/tiles/signinScripts.jsp"/>
+        <put-attribute name="header" value="/WEB-INF/pages/tiles/simpleHeader.jsp"/>
+        <put-attribute name="loginModal" value="/WEB-INF/pages/tiles/loginModal.jsp"/>
+        <put-attribute name="registrationModal" value="/WEB-INF/pages/tiles/registrationModal.jsp"/>
+        <put-attribute name="forgetPasswordModal" value="/WEB-INF/pages/tiles/forgetPasswordModal.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/pages/tiles/footer.jsp"/>
+        <put-attribute name="googleAnalytics" value="/WEB-INF/pages/tiles/googleAnalytics.jsp"/>
+    </definition>
+
+    <definition name="error" template="/WEB-INF/pages/templates/errorTemplate.jsp">
+        <put-attribute name="mainScripts" value="/WEB-INF/pages/tiles/mainScripts.jsp"/>
+        <put-attribute name="simpleHeader" value="/WEB-INF/pages/tiles/minimalHeader.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/pages/tiles/footer.jsp"/>
+        <put-attribute name="googleAnalytics" value="/WEB-INF/pages/tiles/googleAnalytics.jsp"/>
+    </definition>
+
     <definition name="main" template="/WEB-INF/pages/templates/mainTemplate.jsp">
         <put-attribute name="mainScripts" value="/WEB-INF/pages/tiles/mainScripts.jsp"/>
         <put-attribute name="workingScripts" value="/WEB-INF/pages/tiles/workingScripts.jsp"/>
@@ -22,7 +39,7 @@
     </definition>
 
     <definition name="help" extends="main">
-        <put-attribute name="header" value="/WEB-INF/pages/tiles/simpleHeader.jsp"/>
+        <put-attribute name="header" value="/WEB-INF/pages/tiles/header.jsp"/>
         <put-attribute name="content" value="/WEB-INF/pages/pages/help.jsp" />
     </definition>
 
@@ -31,25 +48,12 @@
         <put-attribute name="content" value="/WEB-INF/pages/pages/manifest.jsp" />
     </definition>
 
-    <definition name="restore" extends="main">
+    <definition name="restore" extends="simple">
         <put-attribute name="content" value="/WEB-INF/pages/pages/restore.jsp" />
     </definition>
 
-
-    <definition name="error" template="/WEB-INF/pages/templates/errorTemplate.jsp">
-        <put-attribute name="mainScripts" value="/WEB-INF/pages/tiles/mainScripts.jsp"/>
-        <put-attribute name="simpleHeader" value="/WEB-INF/pages/tiles/minimalHeader.jsp"/>
-        <put-attribute name="footer" value="/WEB-INF/pages/tiles/footer.jsp"/>
-        <put-attribute name="googleAnalytics" value="/WEB-INF/pages/tiles/googleAnalytics.jsp"/>
-    </definition>
-
-    <definition name="signin" template="/WEB-INF/pages/pages/signin.jsp">
-        <put-attribute name="signinScripts" value="/WEB-INF/pages/tiles/signinScripts.jsp"/>
-        <put-attribute name="footer" value="/WEB-INF/pages/tiles/footer.jsp"/>
-        <put-attribute name="loginModal" value="/WEB-INF/pages/tiles/loginModal.jsp"/>
-        <put-attribute name="registrationModal" value="/WEB-INF/pages/tiles/registrationModal.jsp"/>
-        <put-attribute name="forgetPasswordModal" value="/WEB-INF/pages/tiles/forgetPasswordModal.jsp"/>
-        <put-attribute name="googleAnalytics" value="/WEB-INF/pages/tiles/googleAnalytics.jsp"/>
+    <definition name="signin" extends="simple">
+        <put-attribute name="content" value="/WEB-INF/pages/pages/signin.jsp" />
     </definition>
 
 </tiles-definitions>

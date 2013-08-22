@@ -1,9 +1,9 @@
 package com.petrpopov.cheatfood.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.RememberMeAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,9 +31,6 @@ public class CheatRememberFilter extends GenericFilterBean {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UsernameAuthenticationTokenService usernameAuthenticationTokenService;
 
     public CheatRememberFilter() {
     }
@@ -72,7 +69,7 @@ public class CheatRememberFilter extends GenericFilterBean {
                // RememberMeAuthenticationToken t = (RememberMeAuthenticationToken) rememberMeAuth;
                 //UsernamePasswordAuthenticationToken token = usernameAuthenticationTokenService.getUsernamePasswordToken(t);
 
-                UsernamePasswordAuthenticationToken token = rememberMe.getToken();
+                AbstractAuthenticationToken token = rememberMe.getToken();
 
                 rememberMeAuth = authenticationManager.authenticate(token);
                 SecurityContextHolder.getContext().setAuthentication(rememberMeAuth);

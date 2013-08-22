@@ -34,28 +34,6 @@
 
             <ul class="nav">
                 <li><a href="<s:url value="/manifest"/>">Манифест</a></li>
-                <li><a href="<s:url value="/help"/>">Помощь</a></li>
-
-                <li class="dropdown">
-                    <a href="#"  class="dropdown-toggle" data-toggle="dropdown">
-                        <span id="loginMenuLink">Вход</span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a id="loginLink" href="#">Вход</a>
-                        </li>
-                        <li>
-                            <a id="registrationLink">Регистрация</a>
-                        </li>
-                        <li class="disabled">
-                            <a id="profileLink" href="#">Профиль</a>
-                        </li>
-                        <li>
-                            <a id="logoutLink" href="#">Выход</a>
-                        </li>
-                    </ul>
-                </li>
             </ul>
 
             <!-- Everything you want hidden at 940px or less, place within here -->

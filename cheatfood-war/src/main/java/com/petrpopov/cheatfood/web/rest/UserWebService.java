@@ -125,7 +125,7 @@ public class UserWebService extends BaseWebService {
             return res;
         }
 
-        PasswordForgetToken tokenForEmail = tokenForEmail = tokenService.createTokenForEmail(email);
+        PasswordForgetToken tokenForEmail = tokenService.createTokenForEmail(email);
 
         mailService.sendMail(email, tokenForEmail.getValue(), request);
 

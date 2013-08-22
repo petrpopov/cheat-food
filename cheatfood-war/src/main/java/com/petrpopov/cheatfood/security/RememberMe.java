@@ -1,6 +1,6 @@
 package com.petrpopov.cheatfood.security;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 /**
@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 public class RememberMe {
 
     private Authentication authentication;
-    private UsernamePasswordAuthenticationToken token;
+    private AbstractAuthenticationToken token;
 
     public Authentication getAuthentication() {
         return authentication;
@@ -21,11 +21,11 @@ public class RememberMe {
         this.authentication = authentication;
     }
 
-    public UsernamePasswordAuthenticationToken getToken() {
+    public AbstractAuthenticationToken getToken() {
         return token;
     }
 
-    public void setToken(UsernamePasswordAuthenticationToken token) {
+    public void setToken(AbstractAuthenticationToken token) {
         this.token = token;
     }
 }

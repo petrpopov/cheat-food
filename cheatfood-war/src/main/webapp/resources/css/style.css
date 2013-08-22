@@ -294,13 +294,12 @@ hr {
 .errorBody {
     color: #ffffff;
     background: #b37623;
-    background: -moz-radial-gradient(center, ellipse cover, #b37623 0%, #824206 100%);
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #b37623), color-stop(100%, #824206));
-    background: -webkit-radial-gradient(center, ellipse cover, #b37623 0%, #824206 100%);
-    background: -o-radial-gradient(center, ellipse cover, #b37623 0%, #824206 100%);
-    background: -ms-radial-gradient(center, ellipse cover, #b37623 0%, #824206 100%);
-    background: radial-gradient(center, ellipse cover, #b37623 0%, #824206 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4786b3', endColorstr='#2e5673',GradientType=1 );
+    background: -webkit-radial-gradient(#cd7785 0%, #551350 100%);
+    background: -moz-radial-gradient(#cd7785 0%, #551350 100%);
+    background: -ms-radial-gradient(#cd7785 0%, #551350 100%);
+    background: -o-radial-gradient(center, ellipse cover, #cd7785 0%, #551350 100%);
+    background: radial-gradient(center, ellipse cover, #cd7785 0%, #551350 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cd7785', endColorstr='#551350',GradientType=1 );
     background-repeat: no-repeat;
     background-attachment: fixed;
     *background-image: none;

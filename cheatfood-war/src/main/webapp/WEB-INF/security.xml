@@ -11,7 +11,14 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd">
                     authentication-failure-url="/signin?error=true" />
 
         <intercept-url pattern="/signin" access="permitAll"/>
-        <intercept-url pattern="/" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/manifest" access="permitAll"/>
+        <intercept-url pattern="/error" access="permitAll"/>
+
+        <intercept-url pattern="/*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/index*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/home*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/main*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/location/*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
 
         <custom-filter ref="cheatRememberFilter" position="REMEMBER_ME_FILTER"/>
 
@@ -23,6 +30,7 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd">
                 <user name="#{properties.admin_username}" password="#{properties.admin_password}" authorities="ROLE_USER,ROLE_ADMIN"/>
             </user-service>
         </authentication-provider>
+        <authentication-provider ref="rememberMeProvider"/>
         <authentication-provider ref="authProvider"/>
     </authentication-manager>
 

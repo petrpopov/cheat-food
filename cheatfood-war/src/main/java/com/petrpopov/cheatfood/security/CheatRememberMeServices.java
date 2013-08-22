@@ -5,6 +5,8 @@ import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +38,8 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
     private String cookieName = "CHEATFOOD";
     private String cookieName_name = "name";
     private String defaultProviderType = "default";
-    private int cookieSize = 4;
+    private int cookieSize = 5;
+    private String key = "ndsigHIDfn428ds";
 
     @Autowired
     private UserDetailsFieldHandler userDetailsFieldHandler;
@@ -80,7 +83,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
 
         long expiryTime = System.currentTimeMillis() + (1000L* TWO_WEEKS_S);
 
-        setCookie(new String[] {username, Long.toString(expiryTime), token, providerType}, (int)expiryTime, request, response);
+        setCookie(new String[] {username, Long.toString(expiryTime), token, providerType, key}, (int)expiryTime, request, response);
     }
 
     @Override
@@ -121,7 +124,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
             user = processAutoLoginCookie(cookieTokens, request, response);
 
             //TODO: this is a pretty shitty code
-            UsernamePasswordAuthenticationToken token = processCookies(cookieTokens, request, response);
+            AbstractAuthenticationToken token = processCookies(cookieTokens, user);
 
             if( user == null )
                 return null;
@@ -163,7 +166,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
     protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request, HttpServletResponse response) {
 
         if (cookieTokens.length != cookieSize) {
-            throw new InvalidCookieException("Cookie token did not contain 3" +
+            throw new InvalidCookieException("Cookie token did not contain 5" +
                     " tokens, but contained '" + Arrays.asList(cookieTokens) + "'");
         }
 
@@ -197,7 +200,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
         return userDetails;
     }
 
-    protected UsernamePasswordAuthenticationToken processCookies(String[] cookieTokens, HttpServletRequest request, HttpServletResponse response) {
+    protected RememberMeAuthenticationToken processCookies(String[] cookieTokens, UserDetails user) {
 
         if (cookieTokens.length != cookieSize) {
             throw new InvalidCookieException("Cookie token did not contain 3" +
@@ -230,21 +233,28 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
             }
 
             if( apiClass != null ) {
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, token);
-                authenticationToken.setDetails(apiClass);
-                return authenticationToken;
+                //UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, token);
+
+                RememberMeAuthenticationToken rememberToken = new RememberMeAuthenticationToken(key, user, user.getAuthorities());
+
+                rememberToken.setDetails(apiClass);
+                return rememberToken;
             }
             else {
                 username = c_username;
                 token = entity.getPasswordHash();
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, token);
-                return authenticationToken;
+                //UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, token);
+
+                RememberMeAuthenticationToken rememberToken = new RememberMeAuthenticationToken(key, user, user.getAuthorities());
+                return rememberToken;
             }
         }
         else {
             String token = entity.getPasswordHash();
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(c_username, token);
-            return authenticationToken;
+            //UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(c_username, token);
+
+            RememberMeAuthenticationToken rememberToken = new RememberMeAuthenticationToken(key, user, user.getAuthorities());
+            return rememberToken;
         }
     }
 

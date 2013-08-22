@@ -10,6 +10,8 @@ var params = {
     types: []
 };
 
+var EFFECTS_TIME = 250;
+
 function loadParams(callback) {
 
     params.realPath = $('#realPath').text().trim();
@@ -541,7 +543,7 @@ function initLoginUserFormValidation() {
                 email: true
             },
             passwordLogin: {
-                required: true,
+                required: true
             }
         },
         success: function() {
@@ -594,7 +596,10 @@ function logout() {
             showNoteTopCenter("Вы успешно вышли из системы", "success", true);
 
             sessionStorage.setItem('showHello', false);
-            modifyInterface(false);
+
+            if( $.fn.modifyInterface !== undefined ) {
+                $().modifyInterface(false);
+            }
 
             if( $.fn.disableContextMenu !== undefined ) {
                 $().disableContextMenu();

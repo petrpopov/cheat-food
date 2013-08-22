@@ -29,6 +29,7 @@
         <js>/resources/js/markerclusterer-2.0.9.min.js</js>
         <js>/resources/js/infobox-1.1.9.min.js</js>
         <js>/resources/js/gmaps-0.4.4.js</js>
+        <js>/resources/js/cheatfood-auth.js</js>
         <js>/resources/js/cheatfood-main.js</js>
     </group>
 

@@ -3,6 +3,7 @@ package com.petrpopov.cheatfood.service;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +32,8 @@ public class UserContextHandler {
             return null;
         }
 
-        if( authentication instanceof UsernamePasswordAuthenticationToken) {
+        if( authentication instanceof UsernamePasswordAuthenticationToken
+                || authentication instanceof RememberMeAuthenticationToken) {
 
             String username = (authentication.getPrincipal() == null) ? null : authentication.getName();
             if( username == null )

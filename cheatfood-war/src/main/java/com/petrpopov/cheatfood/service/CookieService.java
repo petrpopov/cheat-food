@@ -24,7 +24,7 @@ import java.util.Arrays;
 public class CookieService {
 
     private static final String DELIMITER = ":";
-    private int cookieSize = 4;
+    private int cookieSize = 5;
 
     @Autowired
     private UserContextHandler userContextHandler;
