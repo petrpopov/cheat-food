@@ -178,6 +178,11 @@ hr {
     padding: 25px;
 }
 
+#restorePasswordForm {
+    margin-top: 50px;
+    padding: 10px;
+}
+
 #routeForm .control-group {
     margin-bottom: 10px;
 }

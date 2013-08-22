@@ -35,6 +35,7 @@
                     <div class="controls">
                         <button id="restorePasswordSubmit" data-loading-text="Подождите..."
                                 type="submit" class="btn btn-primary">Восстановить</button>
+                        <a href="/" class="btn">Отмена</a>
                     </div>
                 </div>
             </form>

@@ -56,6 +56,6 @@
     </div>
 
     <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">Отмена</a>
+        <a href="#" class="btn" data-dismiss="modal">Закрыть</a>
     </div>
 </div>

@@ -108,7 +108,7 @@ public class LocationWebService extends BaseWebService {
     @RequestMapping(value = "{locationid}/delete", method = RequestMethod.DELETE)
     @ResponseBody
     public MessageResult deleteLocation(@CookieValue(required = true, value = "CHEATFOOD") CookieRequest cookie,
-                                        @PathVariable String locationid) throws CheatException {
+                                        @PathVariable String locationid) {
 
         Location location = locationService.findById(locationid);
         MessageResult result = checkIfLocationExists(location);

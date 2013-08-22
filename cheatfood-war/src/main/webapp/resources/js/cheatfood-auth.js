@@ -12,6 +12,24 @@ var params = {
 
 var EFFECTS_TIME = 250;
 
+var errors = {
+    access_denied: "access_denied",
+    unknown_location: "unknown_location",
+    already_voted: "already_voted",
+    already_rated: "already_rated",
+    no_such_user: "no_such_user",
+    no_password_data: "no_password_data",
+    wrong_password: "wrong_password",
+    login_error: "login_error",
+    password_mismatch: "password_mismatch",
+    wrong_token: "wrong_token",
+    user_already_exists: "user_already_exists",
+    email_is_empty: "email_is_empty",
+    no_user_with_such_email: "no_user_with_such_email",
+    overpriced: "overpriced",
+    other: "other"
+};
+
 function loadParams(callback) {
 
     params.realPath = $('#realPath').text().trim();
@@ -418,7 +436,7 @@ function submitCreateUserForm() {
                     /*$('#registrationModal').modal('hide');
                      checkCookies();
                      resetCreateUserSubmitButtonBehavior();*/
-                    resetCreateUserSubmitButtonBehavior();
+                    //resetCreateUserSubmitButtonBehavior();
                     window.location.replace(params.realPath);
                 }
                 else {

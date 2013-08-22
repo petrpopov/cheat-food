@@ -49,7 +49,7 @@
     </div>
     <div class="modal-footer">
         <span>Нет учетки в соцсетях? Ну, тогда можно и по-старинке:</span>
-        <a id="registrationButton" href="#registrationModal" class="btn btn-primary" data-toggle="modal" data-dismiss="modal">Регистрация</a>
-        <a href="#" class="btn" data-dismiss="modal">Отмена</a>
+        <a id="registrationButton" data-toggle="modal" >Регистрация</a>
+        <a href="#" class="btn" data-dismiss="modal">Закрыть</a>
     </div>
 </div>

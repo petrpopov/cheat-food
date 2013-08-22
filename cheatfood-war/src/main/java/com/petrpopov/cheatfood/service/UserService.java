@@ -4,6 +4,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.petrpopov.cheatfood.config.CheatException;
+import com.petrpopov.cheatfood.model.data.ErrorType;
 import com.petrpopov.cheatfood.model.data.UserCreate;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.model.entity.UserRole;
@@ -67,7 +68,7 @@ public class UserService extends GenericService<UserEntity> {
 
         String email = user.getEmail();
         if( email.equals(adminUsername) ) {
-            throw new CheatException("User is already exists!");
+            throw new CheatException(ErrorType.user_already_exists);
         }
 
         UserEntity userToSave = new UserEntity();
@@ -78,7 +79,7 @@ public class UserService extends GenericService<UserEntity> {
 
             if(passwordHash != null ) {
                 //user already registered with password-email
-                throw new CheatException("User is already exists!");
+                throw new CheatException(ErrorType.user_already_exists);
             }
 
             userToSave = userByEmail;

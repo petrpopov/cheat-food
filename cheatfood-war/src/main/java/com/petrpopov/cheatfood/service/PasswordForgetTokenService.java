@@ -1,6 +1,7 @@
 package com.petrpopov.cheatfood.service;
 
 import com.petrpopov.cheatfood.config.CheatException;
+import com.petrpopov.cheatfood.model.data.ErrorType;
 import com.petrpopov.cheatfood.model.entity.PasswordForgetToken;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import org.apache.log4j.Logger;
@@ -44,7 +45,7 @@ public class PasswordForgetTokenService extends GenericService<PasswordForgetTok
 
         UserEntity userByEmail = userService.getUserByEmail(email);
         if( userByEmail == null ) {
-            throw new CheatException("There is no user with such an email!");
+            throw new CheatException(ErrorType.no_user_with_such_email);
         }
 
         //paranoia style
