@@ -11,7 +11,7 @@
     </div>
     <div class="modal-body">
 
-        <div id="loginAlert" class="alert" >
+        <div id="loginAlert" class="alert" style="display: none" hidden="true" >
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong>Ошибка! </strong><span id="loginError">Ошибка на сервере</span>
         </div>
@@ -49,7 +49,7 @@
     </div>
     <div class="modal-footer">
         <span>Нет учетки в соцсетях? Ну, тогда можно и по-старинке:</span>
-        <a id="registrationButton" href="#" class="btn btn-primary">Регистрация</a>
+        <a id="registrationButton" href="#registrationModal" class="btn btn-primary" data-toggle="modal" data-dismiss="modal">Регистрация</a>
         <a href="#" class="btn" data-dismiss="modal">Отмена</a>
     </div>
 </div>

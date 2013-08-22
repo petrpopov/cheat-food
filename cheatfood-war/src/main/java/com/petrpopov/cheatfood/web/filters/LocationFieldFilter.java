@@ -23,6 +23,9 @@ public class LocationFieldFilter {
 
     public Location filterCreator(Location location) {
 
+        if( location == null )
+            return location;
+
         UserEntity creator = location.getCreator();
         if( creator == null )
             return location;
@@ -39,6 +42,10 @@ public class LocationFieldFilter {
     }
 
     public Location filterVotes(Location location) {
+
+        if( location == null )
+            return location;
+
         location.setVotes(null);
         return location;
     }
@@ -50,6 +57,10 @@ public class LocationFieldFilter {
     }
 
     public Location filterRates(Location location) {
+
+        if( location == null )
+            return location;
+
         location.setRates(null);
         return location;
     }

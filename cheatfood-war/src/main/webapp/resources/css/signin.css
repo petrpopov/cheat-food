@@ -1,0 +1,128 @@
+/*
+-----------------------------------------------
+:::	� nerdnotfool
+-----------------------------------------------
+:::	Author:			Joseph Wachira
+:::	Twitter:			@nerdnotfool
+:::	Author URL:	nerdnotfool.com
+
+-----------------------------------------------
+*/
+
+/*
+-----------------------------------------------
+:::	Common
+-----------------------------------------------
+*/
+html, body {
+	height: 100%;
+    /* The html and body elements cannot have any padding or margin. *
+	background: #eaeaea;*/
+
+    min-height: 100%;
+
+    /*background: #C07B3A url('../img/logo_background.jpg') 100% 100% no-repeat;
+    background: #C07B3A url('../img/logo_background.jpg') 100% 100% no-repeat;
+
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;*/
+}
+body {
+	background-color: #cd7785;
+
+	background: -webkit-radial-gradient(#cd7785 0%, #551350 100%);
+	background: -moz-radial-gradient(#cd7785 0%, #551350 100%);
+	background: -ms-radial-gradient(#cd7785 0%, #551350 100%);
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+
+/*-- content --*/
+.content {
+	text-align: center;
+	color: white;
+}
+.content .muted {
+	color: white;
+}
+.content input {
+	background-color: rgba(255,255,255,.8);
+	border: 1px solid white;
+}
+
+.top {
+    margin: 250px auto 33px;
+}
+
+/*-- logo --*/
+.logo {
+	width: 200px;
+	height: 130px;
+	margin: 100px auto 33px;
+	background-image: url(../img/mainlogo_singin.png);
+	display: block;
+	text-indent: -9999px;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+/*-- box --*/
+.box {
+	background: rgba(255, 255, 255, 0.20);
+	box-shadow: 0 1px 5px rgba(42, 43, 36, .05);
+	margin: 0 auto;
+	max-width: 620px;
+	position: relative;
+}
+.intro, .form {
+	padding: 20px 53px;
+}
+.form form fieldset {
+	margin: 20px 0;
+}
+
+/*
+-----------------------------------------------
+:::	Typography
+-----------------------------------------------
+*/
+body, p {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	font-style: normal;
+}
+input, button, select, textarea {
+	font-family: 'Open Sans', sans-serif;
+	font-style: normal;
+}
+
+
+/*
+-----------------------------------------------
+:::	Media Queries
+-----------------------------------------------
+*/
+@media (max-width: 767px) {
+	/* Lastly, apply responsive CSS fixes as necessary */
+	footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+@media (max-width: 480px) {
+	.logo {
+		margin: 20px auto 33px;
+	}
+	.intro, .form {
+		padding: 20px 10px;
+	}
+	form button {
+		margin-top: 10px;
+	}
+}

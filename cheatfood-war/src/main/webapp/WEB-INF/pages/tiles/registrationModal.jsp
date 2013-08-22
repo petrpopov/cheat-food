@@ -12,7 +12,7 @@
 
     <div class="modal-body">
         <div>
-            <div id="registrationAlert" class="alert" >
+            <div id="registrationAlert" class="alert" class="alert" style="display: none" hidden="true" >
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong>Ошибка! </strong><span id="registrationError">Пользователь с таким email уже существует.</span>
             </div>

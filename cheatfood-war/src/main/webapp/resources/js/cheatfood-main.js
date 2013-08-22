@@ -62,9 +62,9 @@ $(function() {
     var DATE_LANGUAGE = 'ru';
 
 
-    loadParams();
+    loadParams(init);
 
-    function loadParams() {
+    function loadParams(callback) {
 
         params.realPath = $('#realPath').text().trim();
 
@@ -76,6 +76,7 @@ $(function() {
         var location = $('#locationLabel').text();
         if( location ) {
             location = JSON.parse(location);
+            params.location = location;
         }
 
         var index = document.URL.indexOf(params.realPath);
@@ -111,22 +112,24 @@ $(function() {
             params.types = data.types;
             params.maxPrice = data.maxPrice;
             params.recommendedPrice = data.recommendedPrice;
-            init(location);
+
+            if( callback ) {
+                callback();
+            }
         });
     }
 
-
-    function init(location) {
-        checkCookies(location);
+    function init() {
+        checkCookies();
     }
 
-    function checkCookies(location) {
+    function checkCookies() {
         var cookie = $.cookie(COOKIE_NAME);
 
         if( !cookie ) {
             //non authorized
             sessionStorage.setItem('showHello', false);
-            modifyInterface(false, location);
+            modifyInterface(false);
         }
         else {
             $.ajax({
@@ -151,18 +154,18 @@ $(function() {
                             }
 
                             sessionStorage.setItem('showHello', true);
-                            modifyInterface(true, location);
+                            modifyInterface(true);
                         }
                         else {
                             //non authorized
                             sessionStorage.setItem('showHello', false);
-                            modifyInterface(false, location);
+                            modifyInterface(false);
                         }
                     }
                     else {
                         //non authorized
                         sessionStorage.setItem('showHello', false);
-                        modifyInterface(false, location);
+                        modifyInterface(false);
                     }
                 }
             });
@@ -201,7 +204,7 @@ $(function() {
         return true;
     }
 
-    function modifyInterface(auth, location) {
+    function modifyInterface(auth) {
 
         if( auth === true ) {
             authorized = true;
@@ -217,7 +220,7 @@ $(function() {
         }
 
         buildLoginMenu(authorized);
-        buildInterface(auth, location);
+        buildInterface(auth);
     }
 
     function buildLoginMenu(auth) {
@@ -280,11 +283,11 @@ $(function() {
         }
     }
 
-    function buildInterface(auth, location) {
+    function buildInterface(auth) {
         createRegistrationAuthActions();
 
         if( $.fn.createMap !== undefined ) {
-            $().createMap(auth, location);
+            $().createMap(auth);
         }
     }
 
@@ -511,8 +514,6 @@ $(function() {
             }
         });
     }
-
-
 
     function submitForgetPasswordUserForm() {
 
@@ -893,7 +894,7 @@ $(function() {
     }
 
 
-    $.fn.createMap = function createMap(auth, location) {
+    $.fn.createMap = function createMap(auth) {
         var mcOptions = {gridSize: GRID_SIZE, maxZoom: MAX_ZOOM};
         var styles = [
             {
@@ -945,7 +946,7 @@ $(function() {
         setDefaultMapClickBehavior();
 
         createMapControls(auth);
-        loadDataAfterMapIsLoaded(location);
+        loadDataAfterMapIsLoaded();
 
         createMapBoundsChangedBehavior();
     };
@@ -963,17 +964,17 @@ $(function() {
         });
     }
 
-    function loadDataAfterMapIsLoaded(location) {
+    function loadDataAfterMapIsLoaded() {
 
         google.maps.event.addListenerOnce(map.map, 'idle', function() {
-            getLocationsCountInCurrentBounds(location);
+            getLocationsCountInCurrentBounds();
 
-            centerMapToLocation(location);
+            centerMapToLocation();
         });
 
     }
 
-    function getLocationsCountInCurrentBounds(location) {
+    function getLocationsCountInCurrentBounds() {
         var bounds = map.map.getBounds();
 
         var ne = bounds.getNorthEast();
@@ -999,7 +1000,7 @@ $(function() {
                         sessionStorage.setItem('showNoLocations', true);
                     }
                     else if( data.result > 0 ) {
-                        loadAndCreateMarkersForLocationsInBounds(null, location);
+                        loadAndCreateMarkersForLocationsInBounds(null);
                     }
                 }
             }
@@ -1772,14 +1773,14 @@ $(function() {
         });
     }
 
-    function centerMapToLocation(location) {
+    function centerMapToLocation() {
         disableLocateMeButton();
 
         GMaps.geolocate({
             success: function(position) {
                 myPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-                if( !location ) {
+                if( !params.location ) {
                     map.setCenter(myPosition.lat(), myPosition.lng());
                 }
 
@@ -1787,14 +1788,14 @@ $(function() {
             },
             error: function(error) {
 
-                if( !location ) {
+                if( !params.location ) {
                     map.setCenter( moscowCenter.lat, moscowCenter.lng );
                 }
 
                 $('#locateMeDiv').hide();
             },
             not_supported: function() {
-                if( !location ) {
+                if( !params.location ) {
                     map.setCenter( moscowCenter.lat, moscowCenter.lng );
                 }
 
@@ -2098,13 +2099,13 @@ $(function() {
         });
     }
 
-    function renderMarkersForLocations(data, infoBox, location) {
+    function renderMarkersForLocations(data, infoBox) {
         $.each(data, function(n, loadedLocation) {
-            renderSingleMarkerForLocation(infoBox, loadedLocation, location);
+            renderSingleMarkerForLocation(infoBox, loadedLocation);
         });
     }
 
-    function renderSingleMarkerForLocation(infoBox, locationToRender, singleLocationToZoomIn) {
+    function renderSingleMarkerForLocation(infoBox, locationToRender) {
 
         var infoBoxObject = {
             infoBox: infoBox,
@@ -2112,8 +2113,8 @@ $(function() {
         };
 
         var zoomIn = false;
-        if( singleLocationToZoomIn ) {
-            if(locationToRender.id === singleLocationToZoomIn.id) {
+        if( params.location ) {
+            if(locationToRender.id === params.location.id) {
                 zoomIn = true;
             }
         }
@@ -2121,7 +2122,7 @@ $(function() {
         createMarkerWithInfoBoxForLocation(infoBoxObject, zoomIn);
     }
 
-    function loadAndCreateMarkersForLocationsInBounds(type_id, location) {
+    function loadAndCreateMarkersForLocationsInBounds(type_id) {
 
         var bounds = map.map.getBounds();
         prevBounds = curBounds;
@@ -2163,7 +2164,7 @@ $(function() {
             url: params.realPath+"/api/locations/inbounds",
             data: data,
             success: function(result) {
-                renderMarkersForLocations(result, infoBox, location);
+                renderMarkersForLocations(result, infoBox);
                 createMainMenuBehavior();
             }
         });

@@ -18,9 +18,15 @@
 <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/img/favicon.ico" />
 
 
-<link href="/wro/main.css" rel="stylesheet" media="screen" type="text/css"/>
+<link href="/wro/login.css" rel="stylesheet" media="screen" type="text/css"/>
 
-<script src="/wro/main.js" type="text/javascript"></script>
+<script src="/wro/login.js" type="text/javascript"></script>
+
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
 
 
 <label id="realPath" hidden="true" style="display: none;">

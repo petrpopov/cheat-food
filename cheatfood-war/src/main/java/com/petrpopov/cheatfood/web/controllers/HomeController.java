@@ -50,6 +50,11 @@ public class HomeController {
         return "restore";
     }
 
+    @RequestMapping("/signin")
+    public String showLoginPage() {
+        return "signin";
+    }
+
     @RequestMapping(value = "location/{locationid}")
     @ResponseBody
     public ModelAndView getLocation(@PathVariable String locationid) throws IOException {

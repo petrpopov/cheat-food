@@ -4,13 +4,6 @@
 <%@ taglib prefix="t" uri="http://tiles.apache.org/tags-tiles"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<label id="realPath" hidden="true" style="display: none;">
-    <%= request.getScheme()+"://"
-            + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() %>
-</label>
-<label id="loginLabel" hidden="true" style="display: none;">${login}</label>
-
-<label id="locationLabel" hidden="true" style="display: none;">${location}</label>
 
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">

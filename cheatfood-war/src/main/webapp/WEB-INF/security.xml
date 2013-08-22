@@ -7,11 +7,11 @@ http://www.springframework.org/schema/security
 http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
     <http auto-config="true"  access-denied-page="/error403.jsp" use-expressions="true">
-        <form-login login-page="/login" default-target-url="/index"
-                    authentication-failure-url="/login?error=true" />
+        <form-login login-page="/signin" default-target-url="/index"
+                    authentication-failure-url="/signin?error=true" />
 
-        <intercept-url pattern="/login" access="permitAll"/>
-        <!--intercept-url pattern="/profile*" access="hasRole('ROLE_USER')" /-->
+        <intercept-url pattern="/signin" access="permitAll"/>
+        <intercept-url pattern="/" access="hasRole('ROLE_USER')" />
 
         <custom-filter ref="cheatRememberFilter" position="REMEMBER_ME_FILTER"/>
 
