@@ -78,6 +78,9 @@ body {
 	max-width: 620px;
 	position: relative;
 }
+.boxlink {
+    color: #000000;
+}
 .intro, .form {
 	padding: 20px 53px;
 }
