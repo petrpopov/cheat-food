@@ -83,7 +83,7 @@
                             <a id="profileLink" href="#">Профиль</a>
                         </li>
                         <li>
-                            <a id="logoutLink" href="#">Выход</a>
+                            <a id="logoutLink" href="<c:url value="/connect/logout"/>">Выход</a>
                         </li>
                     </ul>
                 </li>

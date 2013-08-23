@@ -89,10 +89,6 @@ function createRegistrationAuthActions() {
 
     console.log(params.realPath);
 
-    $('#logoutLink').click(function() {
-        logout();
-    });
-
     $('#loginLink').off('click');
     $('#loginLink').click(function() {
         clearLoginUserForm();
@@ -597,33 +593,6 @@ function initCreateUserFormValidation() {
         },
         unhighlight: function (element, errorClass, validClass) {
             $(element).closest('.control-group').removeClass('error');
-        }
-    });
-}
-
-function logout() {
-
-    $.ajax({
-        type: "DELETE",
-        url: params.realPath + "/connect/logout",
-        success: function(data) {
-
-        },
-        complete: function(data) {
-            $.noty.closeAll();
-            showNoteTopCenter("Вы успешно вышли из системы", "success", true);
-
-            sessionStorage.setItem('showHello', false);
-
-            if( $.fn.modifyInterface !== undefined ) {
-                $().modifyInterface(false);
-            }
-
-            if( $.fn.disableContextMenu !== undefined ) {
-                $().disableContextMenu();
-            }
-
-            window.location.replace(params.realPath);
         }
     });
 }

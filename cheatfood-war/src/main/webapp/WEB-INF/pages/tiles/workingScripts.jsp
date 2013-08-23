@@ -12,5 +12,7 @@
 
 <!-- jquery ui - separate because of firefox bugs -->
 <script src="<s:url value="/resources"/>/js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+<script src="<s:url value="/resources"/>/js/jquery.validate-1.11.1.min.js" type="text/javascript"></script>
+<script src="<s:url value="/resources"/>/js/validation.messages_ru.js" type="text/javascript"></script>
 
 <script src="/wro/working.js" type="text/javascript"></script>

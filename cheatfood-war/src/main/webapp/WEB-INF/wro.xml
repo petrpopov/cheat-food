@@ -15,8 +15,6 @@
     </group>
 
     <group name="working">
-        <js>/resources/js/jquery.validate-1.11.1.min.js</js>
-        <js>/resources/js/validation.messages_ru.js</js>
         <js>/resources/js/jquery.noty-2.1.0.js</js>
         <js>/resources/js/jquery.noty.top-2.1.0.js</js>
         <js>/resources/js/jquery.noty.topCenter-2.1.0.js</js>

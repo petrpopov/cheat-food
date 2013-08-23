@@ -1,10 +1,8 @@
 package com.petrpopov.cheatfood.web.controllers;
 
 import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
-import com.petrpopov.cheatfood.model.data.MessageResult;
 import com.petrpopov.cheatfood.web.other.SocialAccessError;
 import com.petrpopov.cheatfood.web.other.SocialConnectionService;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Controller;
@@ -31,8 +29,6 @@ public class SocialController {
     @Autowired
     private ProviderIdClassStorage providerIdClassStorage;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @RequestMapping(value="connect/{providerId}", method= RequestMethod.POST)
     public RedirectView providerConnect(@PathVariable String providerId, NativeWebRequest request) {
@@ -79,13 +75,13 @@ public class SocialController {
         return new RedirectView("/", true);
     }
 
-    @RequestMapping(value="connect/logout", method=RequestMethod.DELETE)
+    @RequestMapping(value="connect/logout", method=RequestMethod.GET)
     @ResponseBody
-    public MessageResult foursquareLogout(HttpServletRequest request, HttpServletResponse response) {
+    public RedirectView logout(HttpServletRequest request, HttpServletResponse response) {
 
         socialConnectionService.logout(request, response);
 
-        return new MessageResult("ok");
+        return new RedirectView("/", true);
     }
 
     private String getScope(NativeWebRequest request) {
