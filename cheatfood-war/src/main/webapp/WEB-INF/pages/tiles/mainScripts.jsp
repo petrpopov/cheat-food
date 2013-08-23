@@ -19,11 +19,6 @@
 
 
 <link href="/wro/main.css" rel="stylesheet" media="screen" type="text/css"/>
-<!--link href="<s:url value="/resources"/>/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css"/>
-<link href="<s:url value="/resources"/>/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
-<link href="<s:url value="/resources"/>/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
-<link href="<s:url value="/resources"/>/css/style.css" rel="stylesheet" type="text/css"/-->
-
 
 <script src="/wro/main.js" type="text/javascript"></script>
 
