@@ -31,11 +31,8 @@ public class LocationFieldFilter {
             return location;
 
         UserEntity creator = location.getCreator();
-        if( creator == null )
-            return location;
-
-
         location.setCreator( getUserEntity(creator) );
+
         return location;
     }
 
@@ -71,10 +68,14 @@ public class LocationFieldFilter {
 
     private UserEntity getUserEntity(UserEntity creator) {
 
-        UserEntity entity = new UserEntity(creator.getId());
+        String id = (creator == null ? "-1" : creator.getId());
+        UserEntity entity = new UserEntity(id);
 
-        entity.setFirstName(creator.getFirstName());
-        entity.setLastName(creator.getLastName());
+        String firstName = (creator == null ? "" : creator.getFirstName() );
+        entity.setFirstName(firstName);
+
+        String lastName = (creator == null ? "" : creator.getLastName() );
+        entity.setLastName(lastName);
         entity.setPublicName(userEntityFilter.getPublicName(creator));
 
         return entity;

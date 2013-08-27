@@ -39,6 +39,9 @@ public class UserEntityFilter {
 
     public String getVisibleName(UserEntity entity) {
 
+        if( entity == null )
+            return "";
+
         String firstName = entity.getFirstName();
         String lastName = entity.getLastName();
 
@@ -61,6 +64,9 @@ public class UserEntityFilter {
     }
 
     public String getPublicName(UserEntity entity) {
+
+        if( entity == null )
+            return "";
 
         String visibleName = getVisibleName(entity);
 

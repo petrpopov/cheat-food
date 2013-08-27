@@ -49,6 +49,7 @@ $(function() {
     var searchMarker = false;
 
 
+    var UNKNOWN_USER_ID = "-1";
     var NEW_MARKER_ID = "";
     var GRID_SIZE = 50;
     var MAX_ZOOM = 15;
@@ -236,7 +237,6 @@ $(function() {
                 showLoginMenuInfo(auth, null);
             }
             else {
-
                 params.currentUser = {id: user.id, name: user.visibleName, admin: isUserAdmin(user)};
 
                 showLoginMenuInfo(auth, user.visibleName);
@@ -1365,6 +1365,18 @@ $(function() {
                         deleteMarkerAction(infoBoxObject);
                     });
                 }
+                else {
+                    if( params.currentUser.hasOwnProperty('admin') ) {
+                        if( params.currentUser.admin === true) {
+                            $('#deleteMarkerMenu').closest('li').show();
+                            $('#deleteMarkerMenu').closest('li').removeClass('disabled');
+                            $('#deleteMarkerMenu').off('click');
+                            $('#deleteMarkerMenu').click(function() {
+                                deleteMarkerAction(infoBoxObject);
+                            });
+                        }
+                    }
+                }
             }
         }
     }
@@ -1725,6 +1737,14 @@ $(function() {
 
             if( location.creator.id != params.currentUser.id ) {
                 $('#deleteMarkerButton').hide();
+
+                if( params.hasOwnProperty('currentUser') ) {
+                    if(params.currentUser.hasOwnProperty('admin') ) {
+                        if( params.currentUser.admin === true ) {
+                            $('#deleteMarkerButton').show();
+                        }
+                    }
+                }
             }
             else {
                 $('#deleteMarkerButton').show();
@@ -1760,9 +1780,14 @@ $(function() {
         $('#info_type_icon').attr("src", getIconImagePath(location.type) );
 
         if( location.creator ) {
-            $('#info_creator_body').show();
+            if( location.creator.id !== UNKNOWN_USER_ID ) {
+                $('#info_creator_body').show();
+                $('#info_creator').text(location.creator.publicName);
+            }
+            else {
+                $('#info_creator_body').hide();
+            }
 
-            $('#info_creator').text(location.creator.publicName);
         }
         else {
             $('#info_creator_body').hide();
@@ -3718,7 +3743,7 @@ $(function() {
             return false;
         }
 
-        for(var i = 0; i < user.roles; i++) {
+        for(var i = 0; i < user.roles.length; i++) {
             var role = user.roles[i];
             if( role.name === "ROLE_ADMIN" ) {
                 return true;
