@@ -2,12 +2,14 @@ package com.petrpopov.cheatfood.model.entity;
 
 import com.mongodb.BasicDBObject;
 
+import java.io.Serializable;
+
 /**
  * User: petrpopov
  * Date: 11.08.13
  * Time: 23:42
  */
-public class UserRole {
+public class UserRole implements Serializable {
 
     public static String ROLE_USER = "ROLE_USER";
     public static String ROLE_ADMIN = "ROLE_ADMIN";

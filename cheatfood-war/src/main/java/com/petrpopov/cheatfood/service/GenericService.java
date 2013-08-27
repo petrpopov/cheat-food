@@ -48,6 +48,11 @@ public class GenericService<T> {
         return op.findById(id, domainClass);
     }
 
+    public T save(T object) {
+        op.save(object);
+        return object;
+    }
+
     protected void batchUpdateAllCollectionObjects() {
 
         String collectionName = op.getCollectionName(domainClass);

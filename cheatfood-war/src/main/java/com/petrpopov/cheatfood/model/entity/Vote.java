@@ -1,6 +1,7 @@
 package com.petrpopov.cheatfood.model.entity;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
  * Date: 24.07.13
  * Time: 22:08
  */
-public class Vote {
+public class Vote implements Serializable {
 
     @NotNull
     private String userId;

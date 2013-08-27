@@ -26,7 +26,7 @@ import java.util.List;
 
 @Component
 @Aspect
-public class WebControllerAspect {
+public class WebResultControllerAspect {
 
     @Autowired
     private LocationFilter locationFilter;

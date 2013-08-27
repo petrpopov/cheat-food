@@ -1,11 +1,13 @@
 package com.petrpopov.cheatfood.model.entity;
 
+import java.io.Serializable;
+
 /**
  * User: petrpopov
  * Date: 28.07.13
  * Time: 6:05
  */
-public class Geo2DPoint {
+public class Geo2DPoint implements Serializable {
 
     private double lng;
     private double lat;
@@ -16,6 +18,16 @@ public class Geo2DPoint {
     public Geo2DPoint(double lng, double lat) {
         this.lng = lng;
         this.lat = lat;
+    }
+
+    public Geo2DPoint copy() {
+
+        Geo2DPoint res = new Geo2DPoint();
+
+        res.setLat(lat);
+        res.setLng(lng);
+
+        return res;
     }
 
     public double[] getCoordinates() {

@@ -3,13 +3,14 @@ package com.petrpopov.cheatfood.model.entity;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * User: petrpopov
  * Date: 12.07.13
  * Time: 2:12
  */
-public class Text {
+public class Text implements Serializable {
 
     @NotNull
     @NotEmpty

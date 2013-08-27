@@ -1,11 +1,13 @@
 package com.petrpopov.cheatfood.model.entity;
 
+import java.io.Serializable;
+
 /**
  * User: petrpopov
  * Date: 02.07.13
  * Time: 17:36
  */
-public class Address {
+public class Address implements Serializable {
 
     private String zipcode;
     private String country;
