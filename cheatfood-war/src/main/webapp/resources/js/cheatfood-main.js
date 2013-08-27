@@ -1850,6 +1850,17 @@ $(function() {
         if(location.averagePrice) {
             $('#info_averagePrice').text(location.averagePrice + " RUB");
             $('#info_averagePrice').show();
+
+            if( location.averagePrice > params.recommendedPrice ) {
+                $('#info_averagePrice_label').addClass("label-warning");
+                $('#info_averagePrice').addClass("label-warning");
+                $('#info_averagePrice_label').removeClass("label-success");
+            }
+            else {
+                $('#info_averagePrice_label').removeClass("label-warning");
+                $('#info_averagePrice').removeClass("label-warning");
+                $('#info_averagePrice_label').addClass("label-success");
+            }
         }
         else {
             $('#info_averagePrice').hide();
@@ -3020,22 +3031,21 @@ $(function() {
                                             )
                                     )
                                     .append(
+                                        $('<div/>').addClass('media-body')
+                                            .append(
+                                                $('<span/>').addClass('label').attr("id", "info_averagePrice_label").text('Средний чек')
+                                            )
+                                            .append(
+                                                $('<span/>').attr('id', 'info_averagePrice').addClass('spacer5')
+                                            )
+                                    )
+                                    .append(
                                         $('<div/>').addClass('media-body').attr('id','info_addressd_body')
                                             .append(
                                                 $('<span/>').addClass('label label-info').text('Описание адреса')
                                             )
                                             .append(
                                                 $('<span/>').attr('id','info_addressDescription')
-                                                    .addClass('spacer5')
-                                            )
-                                    )
-                                    .append(
-                                        $('<div/>').addClass('media-body').attr('id','info_siteUrl_body')
-                                            .append(
-                                                $('<span/>').addClass('label label-info').text('Сайт')
-                                            )
-                                            .append(
-                                                $('<a/>').attr('id','info_siteUrl').attr("target", "_blank")
                                                     .addClass('spacer5')
                                             )
                                     )
@@ -3049,21 +3059,22 @@ $(function() {
                                             )
                                     )
                                     .append(
-                                        $('<div/>').addClass('media-body')
-                                            .append(
-                                                $('<span/>').addClass('label').text('Средний чек')
-                                            )
-                                            .append(
-                                                $('<span/>').attr('id', 'info_averagePrice').addClass('spacer5')
-                                            )
-                                    )
-                                    .append(
                                         $('<div/>').addClass('media-body').attr("id", "info_address_body")
                                             .append(
                                                 $('<span/>').addClass('label').text('Адрес')
                                             )
                                             .append(
                                                 $('<span/>').attr('id', 'info_address').addClass('spacer5')
+                                            )
+                                    )
+                                    .append(
+                                        $('<div/>').addClass('media-body').attr('id','info_siteUrl_body')
+                                            .append(
+                                                $('<span/>').addClass('label label-info').text('Сайт')
+                                            )
+                                            .append(
+                                                $('<a/>').attr('id','info_siteUrl').attr("target", "_blank")
+                                                    .addClass('spacer5')
                                             )
                                     )
                                     .append(
