@@ -37,6 +37,10 @@ public class UserEntity {
 
     private List<UserRole> roles;
 
+
+    private String visibleName;
+    private String publicName;
+
     public UserEntity() {
     }
 
@@ -170,5 +174,21 @@ public class UserEntity {
 
     public void setRoles(List<UserRole> roles) {
         this.roles = roles;
+    }
+
+    public String getVisibleName() {
+        return visibleName;
+    }
+
+    public void setVisibleName(String visibleName) {
+        this.visibleName = visibleName;
+    }
+
+    public String getPublicName() {
+        return publicName;
+    }
+
+    public void setPublicName(String publicName) {
+        this.publicName = publicName;
     }
 }

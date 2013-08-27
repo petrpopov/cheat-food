@@ -4,7 +4,9 @@ import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.data.ErrorType;
 import com.petrpopov.cheatfood.model.data.MessageResult;
 import com.petrpopov.cheatfood.model.entity.Location;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.web.filters.LocationFilter;
+import com.petrpopov.cheatfood.web.filters.UserEntityFilter;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -28,6 +30,9 @@ public class WebControllerAspect {
 
     @Autowired
     private LocationFilter locationFilter;
+
+    @Autowired
+    private UserEntityFilter userEntityFilter;
 
     @Autowired
     private CookieChecker cookieChecker;
@@ -62,7 +67,7 @@ public class WebControllerAspect {
         Object res;
         try {
             res = joinPoint.proceed();
-            res = filterLocations(res, joinPoint);
+            res = filterResultFields(res, joinPoint);
         }
         catch (CheatException e) {
             result.setError(true);
@@ -87,7 +92,7 @@ public class WebControllerAspect {
         return res;
     }
 
-    protected Object filterLocations(Object res, ProceedingJoinPoint joinPoint) {
+    protected Object filterResultFields(Object res, ProceedingJoinPoint joinPoint) {
 
         Signature signature = joinPoint.getSignature();
         if( !(signature instanceof MethodSignature) )
@@ -96,10 +101,10 @@ public class WebControllerAspect {
         MethodSignature methodSignature = (MethodSignature) signature;
 
         Class clazz = methodSignature.getReturnType();
-        return filterLocations(res, clazz);
+        return filterResultFields(res, clazz);
     }
 
-    protected Object filterLocations(Object res, Class returnClass) {
+    protected Object filterResultFields(Object res, Class returnClass) {
 
         if( returnClass.equals(List.class)) {
 
@@ -108,12 +113,18 @@ public class WebControllerAspect {
                 return tempList;
 
             Object o = tempList.get(0);
-            if( !(o instanceof Location) )
-                return tempList;
+            if( o instanceof Location) {
+                List<Location> list = (List<Location>) res;
 
-            List<Location> list = (List<Location>) res;
+                return filterLocationsList(list);
+            }
+            else if( o instanceof UserEntity ) {
+                List<UserEntity> list = (List<UserEntity>) res;
 
-            return filterLocationsList(list);
+                return filterUserEntityList(list);
+            }
+
+            return tempList;
         }
         else if( returnClass.equals(MessageResult.class)) {
 
@@ -122,9 +133,36 @@ public class WebControllerAspect {
             return filterMessageResult(mes);
         }
 
-        return res;
+        return filterObject(res);
     }
 
+    protected Object filterMessageResult(MessageResult mes) {
+
+        Object res = mes.getResult();
+
+        filterObject(res);
+
+        return mes;
+    }
+
+    protected Object filterObject(Object res) {
+
+        if( res == null )
+            return res;
+
+        if( res instanceof Location ) {
+            Location location = (Location) res;
+
+            locationFilter.filterLocation(location);
+        }
+        else if( res instanceof UserEntity ) {
+            UserEntity entity = (UserEntity) res;
+
+            userEntityFilter.filterUserEntity(entity);
+        }
+
+        return res;
+    }
 
     protected Object filterLocationsList(List<Location> list) {
 
@@ -133,16 +171,11 @@ public class WebControllerAspect {
         return list;
     }
 
-    protected Object filterMessageResult(MessageResult mes) {
+    protected Object filterUserEntityList(List<UserEntity> list) {
 
-        Object executionResult = mes.getResult();
+        userEntityFilter.filterUserEntities(list);
 
-        if( executionResult instanceof Location ) {
-            Location location = (Location) executionResult;
-
-            locationFilter.filterLocation(location);
-        }
-
-        return mes;
+        return list;
     }
+
 }

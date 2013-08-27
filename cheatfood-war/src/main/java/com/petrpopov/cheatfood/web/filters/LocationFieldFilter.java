@@ -2,6 +2,7 @@ package com.petrpopov.cheatfood.web.filters;
 
 import com.petrpopov.cheatfood.model.entity.Location;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,6 +15,9 @@ import java.util.List;
 
 @Component
 public class LocationFieldFilter {
+
+    @Autowired
+    private UserEntityFilter userEntityFilter;
 
     public void filterCreator(List<Location> list) {
         for (Location location : list) {
@@ -68,9 +72,13 @@ public class LocationFieldFilter {
     private UserEntity getUserEntity(UserEntity creator) {
 
         UserEntity entity = new UserEntity(creator.getId());
+
         entity.setFirstName(creator.getFirstName());
         entity.setLastName(creator.getLastName());
+        entity.setPublicName(userEntityFilter.getPublicName(creator));
 
         return entity;
     }
+
+
 }

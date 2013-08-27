@@ -236,30 +236,10 @@ $(function() {
                 showLoginMenuInfo(auth, null);
             }
             else {
-                var email = user.email;
-                var firstName = user.firstName;
-                var lastName = user.lastName;
 
-                var name = "";
-                if( firstName ) {
-                    name = firstName;
-                }
-                if( lastName ) {
-                    if( stringIsNotEmpty(name) ) {
-                        name += " " + lastName;
-                    }
-                    else {
-                        name = lastName;
-                    }
-                }
+                params.currentUser = {id: user.id, name: user.visibleName, admin: isUserAdmin(user)};
 
-                if( !stringIsNotEmpty(name) ) {
-                    name = email;
-                }
-
-                params.currentUser = {id: user.id, name: name, admin: isUserAdmin(user)};
-
-                showLoginMenuInfo(auth, name);
+                showLoginMenuInfo(auth, user.visibleName);
             }
         });
     }
@@ -1782,16 +1762,7 @@ $(function() {
         if( location.creator ) {
             $('#info_creator_body').show();
 
-            var creator = "";
-            if( location.creator.firstName ) {
-                creator += location.creator.firstName;
-            }
-            if( location.creator.lastName ) {
-                creator += " ";
-                creator += location.creator.lastName;
-            }
-
-            $('#info_creator').text(creator);
+            $('#info_creator').text(location.creator.publicName);
         }
         else {
             $('#info_creator_body').hide();
