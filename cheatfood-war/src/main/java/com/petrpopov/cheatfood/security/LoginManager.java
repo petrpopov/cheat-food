@@ -2,6 +2,7 @@ package com.petrpopov.cheatfood.security;
 
 import com.petrpopov.cheatfood.connection.ConnectionAccessTokenFieldHandler;
 import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
+import com.petrpopov.cheatfood.model.data.AuthDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,17 +41,27 @@ public class LoginManager {
 
     public Authentication authenticate(Connection connection)
     {
+        return this.authenticate(connection, null);
+    }
+
+    public Authentication authenticate(Connection connection, Boolean firstTimeLogin)
+    {
         Class<?> apiClass = providerIdClassStorage.getProviderClassByConnection(connection);
 
         String token = connectionAccessTokenFieldHandler.getAccessTokenFromConnection(connection);
-        Authentication authentication = this.doAuthenticate(connection.getKey().getProviderUserId(), token, apiClass);
+        Authentication authentication = this.doAuthenticate(connection.getKey().getProviderUserId(), token, apiClass, firstTimeLogin);
 
         return authentication;
     }
 
     public Authentication authenticate(String username, String password)
     {
-        Authentication authentication = this.doAuthenticate(username, password, null);
+        return this.authenticate(username, password, null);
+    }
+
+    public Authentication authenticate(String username, String password, Boolean firstTimeLogin)
+    {
+        Authentication authentication = this.doAuthenticate(username, password, null, firstTimeLogin);
 
         return authentication;
     }
@@ -64,12 +75,18 @@ public class LoginManager {
         rememberMeServices.cancelCookie(request, response);
     }
 
-    private Authentication doAuthenticate(String username, String token, Class<?> apiClass)
+    private Authentication doAuthenticate(String username, String token, Class<?> apiClass, Boolean firstTimeLogin)
     {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, token);
 
-        if( apiClass != null )
-            authenticationToken.setDetails(apiClass);
+        if( apiClass != null ) {
+            authenticationToken.setDetails(new AuthDetails(apiClass, firstTimeLogin));
+        }
+        else {
+            AuthDetails details = new AuthDetails();
+            details.setFirstTimeLogin(firstTimeLogin);
+            authenticationToken.setDetails(details);
+        }
 
         Authentication authentication = authenticationManager.authenticate( authenticationToken );
         SecurityContextHolder.getContext().setAuthentication(authentication);

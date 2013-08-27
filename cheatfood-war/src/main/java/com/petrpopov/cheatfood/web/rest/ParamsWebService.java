@@ -1,10 +1,12 @@
 package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.config.CheatException;
+import com.petrpopov.cheatfood.model.data.AuthDetails;
 import com.petrpopov.cheatfood.model.data.MessageResult;
 import com.petrpopov.cheatfood.model.data.Params;
 import com.petrpopov.cheatfood.service.CookieService;
 import com.petrpopov.cheatfood.service.TypeService;
+import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,9 @@ public class ParamsWebService {
     @Value("#{properties.recommended_price}")
     private Double recommendedPrice;
 
+    @Autowired
+    private UserContextHandler userContextHandler;
+
     @RequestMapping(value="params", method = RequestMethod.GET)
     @ResponseBody
     public Params getParams() {
@@ -50,6 +55,7 @@ public class ParamsWebService {
         Params params = new Params();
 
         logger.info("Returning all types from database to WEB response");
+
         params.setTypes(typeService.findAll());
         params.setMaxPrice(maxPrice);
         params.setRecommendedPrice(recommendedPrice);
@@ -64,6 +70,8 @@ public class ParamsWebService {
         MessageResult res = new MessageResult();
 
         try {
+            logger.info("Checking cookies " + cookie.getCookie());
+
             cookieService.isCookieValidForCurrentUser(cookie, request, response);
         } catch (CheatException e) {
 
@@ -75,7 +83,8 @@ public class ParamsWebService {
             return res;
         }
 
-        res.setMessage("OK");
+        AuthDetails details = userContextHandler.currentAuthDetails();
+        res.setResult(details);
 
         return res;
     }

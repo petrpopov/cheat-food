@@ -1,5 +1,6 @@
 package com.petrpopov.cheatfood.connection;
 
+import com.petrpopov.cheatfood.model.data.UserEntityInfo;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.model.entity.UserRole;
 import com.petrpopov.cheatfood.service.UserService;
@@ -35,6 +36,16 @@ public class MongoAccountConnectionSignUp implements ConnectionSignUp {
 
     @Autowired
     private ProviderIdClassStorage providerIdClassStorage;
+
+    public Boolean executeAndGetSavedOrUpdatedInfo(Connection<?> connection) {
+
+        UserProfile profile = connection.fetchUserProfile();
+
+        UserEntity userEntity = this.buildUserEntity(connection, profile);
+        UserEntityInfo info = userService.saveOrUpdate(userEntity);
+
+        return info.getSavedNew();
+    }
 
     @Override
     public String execute(Connection<?> connection) {

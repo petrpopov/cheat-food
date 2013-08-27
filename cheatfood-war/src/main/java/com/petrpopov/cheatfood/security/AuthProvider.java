@@ -1,5 +1,6 @@
 package com.petrpopov.cheatfood.security;
 
+import com.petrpopov.cheatfood.model.data.AuthDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,13 +36,14 @@ public class AuthProvider extends AbstractUserDetailsAuthenticationProvider
 
 
     @Override
-    protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+    protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication)
+            throws AuthenticationException {
 
-        Object details = authentication.getDetails();
-        if( details instanceof Class<?> ) {
-            //do not check salt for social accounts
+        //do not check social accounts
+        Class<?> apiClass = getApiClass(authentication);
+        if( apiClass != null )
             return;
-        }
+
 
         Object salt = null;
         if (this.saltSource != null) {
@@ -71,23 +73,20 @@ public class AuthProvider extends AbstractUserDetailsAuthenticationProvider
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 
-        boolean paswordUser = false;
-        Object details = authentication.getDetails();
-        Class<?> clazz = null;
+        boolean paswordUser;
 
-        if( details instanceof Class<?> ) {
-            paswordUser = false;
-            clazz = (Class<?>) details;
-        }
-        else {
+        Class<?> apiClass = getApiClass(authentication);
+        if( apiClass == null )
             paswordUser = true;
-        }
+        else
+            paswordUser = false;
 
-        UserDetails u = null;
+
+        UserDetails u;
         try
         {
             if( paswordUser == false ) {
-                u = cheatUserDetailsService.loadUserById(username, clazz);
+                u = cheatUserDetailsService.loadUserById(username, apiClass);
             }
             else {
                 u = cheatUserDetailsService.loadUserByUsername(username);
@@ -117,4 +116,18 @@ public class AuthProvider extends AbstractUserDetailsAuthenticationProvider
         return super.supports(authentication);
     }
 
+    private Class<?> getApiClass(UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+
+        Object details = authentication.getDetails();
+        if( details == null ) {
+            throw new BadCredentialsException("AuthDetails cannot be null !");
+        }
+
+        if( !(details instanceof AuthDetails) ) {
+            throw new BadCredentialsException("AuthDetails must be a class of AuthDetails.class !");
+        }
+
+        Class<?> apiClass = ((AuthDetails)details).getApiClass();
+        return apiClass;
+    }
 }

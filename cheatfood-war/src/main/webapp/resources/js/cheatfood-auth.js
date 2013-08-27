@@ -89,6 +89,12 @@ function createRegistrationAuthActions() {
 
     console.log(params.realPath);
 
+    $('#logoutLink').off('click');
+    $('#logoutLink').click(function() {
+        sessionStorage.removeItem('showHello');
+        sessionStorage.removeItem('showFirstTime');
+    });
+
     $('#loginLink').off('click');
     $('#loginLink').click(function() {
         clearLoginUserForm();
@@ -385,7 +391,17 @@ function submitLoginUserForm() {
                         showLoginError("Пользователя с таким email не существует");
                     }
                     else if( result.errorType === errors.no_password_data ) {
-                        showLoginError("Вы заходили сюда, используя соц.сети? Пройдите регистрацию, чтобы установить пароль.");
+                        var text = "Вы заходили сюда, используя соц.сети? Пройдите ";
+                        text += "<a href=\"#\" id=\"registrationErrorButton\">регистрацию</a>";
+                        text += ", чтобы установить пароль.";
+
+                        showLoginError(text, function() {
+                            $('#registrationErrorButton').click(function() {
+                                clearCreateUserForm();
+                                $('#loginModal').modal('hide');
+                                $('#registrationModal').modal('show');
+                            });
+                        });
                     }
                     else if( result.errorType === errors.wrong_password ) {
                         showLoginError("Неправильный пароль!");
@@ -464,9 +480,12 @@ function showForgetPasswordMessage(text) {
     });
 }
 
-function showLoginError(text) {
+function showLoginError(text, callback) {
     $('#loginAlert').fadeIn(EFFECTS_TIME, function() {
-        $('#loginError').text(text);
+        $('#loginError').html(text);
+        if( callback ) {
+            callback();
+        }
         resetLoginUserButtonSubmitBehavior();
     });
 }

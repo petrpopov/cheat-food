@@ -2,6 +2,7 @@ package com.petrpopov.cheatfood.web.other;
 
 import com.petrpopov.cheatfood.connection.ConnectionService;
 import com.petrpopov.cheatfood.connection.ConnectionServiceFactory;
+import com.petrpopov.cheatfood.connection.MongoAccountConnectionSignUp;
 import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
 import com.petrpopov.cheatfood.security.CheatRememberMeServices;
 import com.petrpopov.cheatfood.security.LoginManager;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
-import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.NativeWebRequest;
 
@@ -29,7 +29,7 @@ public class SocialConnectionService {
     private ConnectionServiceFactory registry;
 
     @Autowired
-    private ConnectionSignUp connectionSignUp;
+    private MongoAccountConnectionSignUp connectionSignUp;
 
     @Autowired
     private ConnectionRepository connectionRepository;
@@ -49,10 +49,10 @@ public class SocialConnectionService {
         Connection<?> connection = connectionService.getConnection(code, oauth_verifier, request);
 
         //first - save user or update it
-        connectionSignUp.execute(connection);
+        Boolean newUser = connectionSignUp.executeAndGetSavedOrUpdatedInfo(connection);
 
         //second - use SpringSecurity auth services, because they use DB to retrieve user
-        Authentication authentication = loginManager.authenticate(connection);
+        Authentication authentication = loginManager.authenticate(connection, newUser);
         //create cookies for remember-me shit
         rememberMeServices.onLoginSuccess((HttpServletRequest) request.getNativeRequest(), response, authentication);
 

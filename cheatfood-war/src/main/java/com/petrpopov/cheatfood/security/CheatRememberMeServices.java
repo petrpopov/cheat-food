@@ -1,6 +1,7 @@
 package com.petrpopov.cheatfood.security;
 
 import com.petrpopov.cheatfood.connection.ProviderIdClassStorage;
+import com.petrpopov.cheatfood.model.data.AuthDetails;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,12 +73,16 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
         if( authentication instanceof UsernamePasswordAuthenticationToken ) {
             Object details = authentication.getDetails();
 
-            if( details instanceof Class<?> ) {
-                Class<?> clazz = (Class<?>) details;
-                String providerId = providerIdClassStorage.getProviderIdByClass(clazz);
+            if( details != null ) {
+                if( details instanceof AuthDetails ) {
+                    Class<?> apiClass = ((AuthDetails) details).getApiClass();
+                    if( apiClass != null ) {
+                        String providerId = providerIdClassStorage.getProviderIdByClass(apiClass);
 
-                if( providerId != null )
-                    providerType = providerId;
+                        if( providerId != null )
+                            providerType = providerId;
+                    }
+                }
             }
         }
 
@@ -237,7 +242,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
 
                 RememberMeAuthenticationToken rememberToken = new RememberMeAuthenticationToken(key, user, user.getAuthorities());
 
-                rememberToken.setDetails(apiClass);
+                rememberToken.setDetails(new AuthDetails(apiClass, Boolean.FALSE));
                 return rememberToken;
             }
             else {
@@ -246,6 +251,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
                 //UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, token);
 
                 RememberMeAuthenticationToken rememberToken = new RememberMeAuthenticationToken(key, user, user.getAuthorities());
+                rememberToken.setDetails(new AuthDetails());
                 return rememberToken;
             }
         }
@@ -254,6 +260,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
             //UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(c_username, token);
 
             RememberMeAuthenticationToken rememberToken = new RememberMeAuthenticationToken(key, user, user.getAuthorities());
+            rememberToken.setDetails(new AuthDetails());
             return rememberToken;
         }
     }
@@ -302,24 +309,7 @@ public class CheatRememberMeServices extends TokenBasedRememberMeServices {
     protected String retrieveUserName(Authentication authentication) {
 
         if( authentication instanceof UsernamePasswordAuthenticationToken ) {
-            Object details = authentication.getDetails();
 
-           /* if( details instanceof Class<?> ) {
-                Class<?> clazz = (Class<?>) details;
-
-                String id = ((UserDetails) authentication.getPrincipal()).getUsername();
-                if( clazz.equals(Foursquare.class) ) {
-                    UserEntity userEntity = userService.getUserByFoursquareId(id);
-                    return userEntity.getId();
-                }
-                else if( clazz.equals(Facebook.class) ) {
-                    UserEntity userEntity = userService.getUserByFacebookId(id);
-                    return userEntity.getId();
-                }
-                return id;
-            }
-            else
-                return super.retrieveUserName(authentication);  */
             return super.retrieveUserName(authentication);
         }
         else

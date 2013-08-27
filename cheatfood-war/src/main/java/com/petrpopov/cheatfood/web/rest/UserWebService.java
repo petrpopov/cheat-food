@@ -57,7 +57,7 @@ public class UserWebService extends BaseWebService {
         MessageResult res = new MessageResult();
 
         UserEntity entity = userService.createUser(user);
-        this.authenticate(entity.getId(), user.getPassword(), request, response);
+        this.authenticate(entity.getId(), user.getPassword(), true, request, response);
 
         res.setResult(entity);
         return res;

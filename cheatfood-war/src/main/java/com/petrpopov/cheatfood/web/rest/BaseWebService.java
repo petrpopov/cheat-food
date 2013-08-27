@@ -44,8 +44,14 @@ public class BaseWebService {
 
     protected Authentication authenticate(String name, String password, HttpServletRequest request, HttpServletResponse response) throws CheatException {
 
+        return  this.authenticate(name, password, null, request, response);
+    }
+
+    protected Authentication authenticate(String name, String password, Boolean firstTimeLogin, HttpServletRequest request, HttpServletResponse response)
+            throws CheatException {
+
         try {
-            Authentication authenticate = loginManager.authenticate(name, password);
+            Authentication authenticate = loginManager.authenticate(name, password, firstTimeLogin);
             rememberMeServices.onLoginSuccess(request, response, authenticate);
             return authenticate;
         }

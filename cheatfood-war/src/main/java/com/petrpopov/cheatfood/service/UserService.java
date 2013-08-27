@@ -6,6 +6,7 @@ import com.mongodb.DBCollection;
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.data.ErrorType;
 import com.petrpopov.cheatfood.model.data.UserCreate;
+import com.petrpopov.cheatfood.model.data.UserEntityInfo;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.model.entity.UserRole;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
@@ -206,7 +207,7 @@ public class UserService extends GenericService<UserEntity> {
     }
 
     @CacheEvict(value = "users", allEntries = true) //key = "#userEntity.id")
-    public UserEntity saveOrUpdate(UserEntity userEntity)
+    public UserEntityInfo saveOrUpdate(UserEntity userEntity)
     {
         if(userEntity.getFoursquareId() != null) {
             return saveOrUpdateFoursquareUser(userEntity);
@@ -218,7 +219,7 @@ public class UserService extends GenericService<UserEntity> {
             return saveOrUpdateTwitterUser(userEntity);
         }
 
-        return userEntity;
+        return new UserEntityInfo(userEntity);
     }
 
     @Override
@@ -239,7 +240,7 @@ public class UserService extends GenericService<UserEntity> {
         collection.save(entity);
     }
 
-    private UserEntity saveOrUpdateFoursquareUser(UserEntity userEntity) {
+    private UserEntityInfo saveOrUpdateFoursquareUser(UserEntity userEntity) {
 
         UserEntity u = this.getUserByFoursquareId(userEntity.getFoursquareId());
 
@@ -276,7 +277,7 @@ public class UserService extends GenericService<UserEntity> {
         }
     }
 
-    private UserEntity saveOrUpdateByFoursquareTwitterUsername(UserEntity userEntity) {
+    private UserEntityInfo saveOrUpdateByFoursquareTwitterUsername(UserEntity userEntity) {
         String foursquareTwitterUsername = userEntity.getFoursquareTwitterUsername();
 
         if( foursquareTwitterUsername != null ) {
@@ -299,7 +300,7 @@ public class UserService extends GenericService<UserEntity> {
         }
     }
 
-    private UserEntity saveOrUpdateFacebookUser(UserEntity userEntity) {
+    private UserEntityInfo saveOrUpdateFacebookUser(UserEntity userEntity) {
 
         UserEntity u = this.getUserByFacebookId(userEntity.getFacebookId());
 
@@ -333,7 +334,7 @@ public class UserService extends GenericService<UserEntity> {
         }
     }
 
-    private UserEntity saveOrUpdateTwitterUser(UserEntity userEntity) {
+    private UserEntityInfo saveOrUpdateTwitterUser(UserEntity userEntity) {
 
         UserEntity u = this.getUserByTwitterId(userEntity.getTwitterId());
 
@@ -369,7 +370,7 @@ public class UserService extends GenericService<UserEntity> {
         }
     }
 
-    private UserEntity saveOrUpdateByTwitterUsername(UserEntity userEntity) {
+    private UserEntityInfo saveOrUpdateByTwitterUsername(UserEntity userEntity) {
         String twitterUsername = userEntity.getTwitterUsername();
 
         if( twitterUsername != null ) {
@@ -391,18 +392,18 @@ public class UserService extends GenericService<UserEntity> {
         }
     }
 
-    private UserEntity justSave(UserEntity userEntity) {
+    private UserEntityInfo justSave(UserEntity userEntity) {
         op.save(userEntity);
-        return userEntity;
+        return new UserEntityInfo(userEntity);
     }
 
-    private UserEntity findAndUpdate(UserEntity userEntity, Update update, String field) {
+    private UserEntityInfo findAndUpdate(UserEntity userEntity, Update update, String field) {
 
         BeanWrapper wrapper = new BeanWrapperImpl(userEntity);
         String value = (String) wrapper.getPropertyValue(field);
 
         Query query = new Query(Criteria.where(field).is(value));
         UserEntity u = op.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), UserEntity.class);
-        return u;
+        return new UserEntityInfo(u, false);
     }
 }

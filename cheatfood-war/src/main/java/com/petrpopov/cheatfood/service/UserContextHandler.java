@@ -1,5 +1,6 @@
 package com.petrpopov.cheatfood.service;
 
+import com.petrpopov.cheatfood.model.data.AuthDetails;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,4 +53,18 @@ public class UserContextHandler {
         return null;
     }
 
+    public AuthDetails currentAuthDetails() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if( authentication == null ) {
+            return null;
+        }
+
+        Object details = authentication.getDetails();
+        if( details instanceof AuthDetails )
+            return (AuthDetails) details;
+
+        return null;
+    }
 }

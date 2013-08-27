@@ -43,14 +43,14 @@
         <p>Или вы все-таки можете припарковаться тут с помощью соцсетей:</p>
         <div class="form-inline clearfix">
             <form id="facebookFormReg" class="pull-left" method="POST" action="<c:url value="/connect/facebook" />">
-            <input type="hidden" name="scope" value="email,publish_stream,offline_access" />
-            <button class="facebookImage" type="submit"></button>
+                <input type="hidden" name="scope" value="email,publish_stream,offline_access" />
+                <button class="facebookImage" type="submit"></button>
             </form>
             <form id="foursquareFormReg" class="pull-left spacer3" method="POST" action="<c:url value="/connect/foursquare" />">
-            <button class="foursquareImage" type="submit"></button>
+                <button class="foursquareImage" type="submit"></button>
             </form>
             <form id="twitterFormReg" class="pull-left spacer3" method="POST" action="<c:url value="/connect/twitter" />">
-            <button class="twitterImage" type="submit"></button>
+                <button class="twitterImage" type="submit"></button>
             </form>
         </div>
     </div>

@@ -151,9 +151,24 @@ $(function() {
                             //authorized
 
                             if( needToShowHello() === true ) {
-                                showNoteTopCenter("Вы вошли в систему. Привет!", "success", true);
+                                showNoteTopCenter("Привет, %username%!", "success", true);
                             }
 
+                            if( needToShowFirstTime() === true ) {
+                                var details = res.result;
+                                if( details ) {
+                                    var firstTime = details.firstTimeLogin;
+                                    if( firstTime === true ) {
+                                        var text = "Первый раз на сайте? Прочтите ";
+                                        text += "<a href=\"" + params.realPath + "/help" + "\">правила</a>";
+                                        text += " использования, чтобы все было проще.";
+
+                                        showNoteTopCenter(text, "warning", true);
+                                    }
+                                }
+                            }
+
+                            sessionStorage.setItem('showFirstTime', true);
                             sessionStorage.setItem('showHello', true);
                             $().modifyInterface(true);
                         }
@@ -175,6 +190,22 @@ $(function() {
 
     function needToShowHello() {
         var show = sessionStorage.getItem('showHello');
+
+        if( !show ) {
+            return true;
+        }
+
+        show = JSON.parse(show);
+
+        if( show == true ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function needToShowFirstTime() {
+        var show = sessionStorage.getItem('showFirstTime');
 
         if( !show ) {
             return true;
