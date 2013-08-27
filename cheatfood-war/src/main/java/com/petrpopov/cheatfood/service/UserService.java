@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -83,6 +84,14 @@ public class UserService extends GenericService<UserEntity> {
             }
 
             userToSave = userByEmail;
+        }
+
+        List<UserRole> roles = userToSave.getRoles();
+        if( roles == null ) {
+            roles = new ArrayList<UserRole>();
+            roles.add(UserRole.getRoleUser());
+
+            userToSave.setRoles(roles);
         }
 
         userToSave.setEmail(email);

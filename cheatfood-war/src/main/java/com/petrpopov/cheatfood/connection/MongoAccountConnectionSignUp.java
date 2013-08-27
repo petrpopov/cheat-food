@@ -1,6 +1,7 @@
 package com.petrpopov.cheatfood.connection;
 
 import com.petrpopov.cheatfood.model.entity.UserEntity;
+import com.petrpopov.cheatfood.model.entity.UserRole;
 import com.petrpopov.cheatfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
@@ -13,6 +14,9 @@ import org.springframework.social.foursquare.api.Foursquare;
 import org.springframework.social.foursquare.api.FoursquareUser;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: petrpopov
@@ -85,6 +89,10 @@ public class MongoAccountConnectionSignUp implements ConnectionSignUp {
             userEntity.setTwitterToken(token);
             userEntity.setTwitterUsername(profile.getUsername());
         }
+
+        List<UserRole> roles = new ArrayList<UserRole>();
+        roles.add(UserRole.getRoleUser());
+        userEntity.setRoles(roles);
 
         return userEntity;
     }
