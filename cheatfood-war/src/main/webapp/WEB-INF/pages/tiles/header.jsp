@@ -26,8 +26,14 @@
             </a>
 
             <ul class="nav">
-                <li><a href="<s:url value="/manifest"/>">Манифест</a></li>
-                <li><a href="<s:url value="/help"/>">Помощь</a></li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Категории<b class="caret"></b>
+                    </a>
+                    <ul id="categoryMenu" class="dropdown-menu">
+                    </ul>
+                </li>
 
                 <li class="dropdown">
                     <a id="editMenu" href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -60,13 +66,17 @@
                         </li>
                     </ul>
                 </li>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        Категории<b class="caret"></b>
+                        Помощь<b class="caret"></b>
                     </a>
-                    <ul id="categoryMenu" class="dropdown-menu">
+                    <ul class="dropdown-menu">
+                        <li><a href="<s:url value="/manifest"/>">Манифест</a></li>
+                        <li><a href="<s:url value="/help"/>">Справка</a></li>
                     </ul>
                 </li>
+
                 <li class="dropdown">
                     <a href="#"  class="dropdown-toggle" data-toggle="dropdown">
                         <span id="loginMenuLink">Вход</span>
