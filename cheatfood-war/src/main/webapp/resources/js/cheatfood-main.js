@@ -29,6 +29,7 @@ $(function() {
         login_error: "login_error",
         password_mismatch: "password_mismatch",
         wrong_token: "wrong_token",
+        merge_users: "merge_users",
         user_already_exists: "user_already_exists",
         email_is_empty: "email_is_empty",
         no_user_with_such_email: "no_user_with_such_email",
@@ -272,7 +273,7 @@ $(function() {
                 showLoginMenuInfo(auth, null);
             }
             else {
-                params.currentUser = {id: user.id, name: user.visibleName, admin: isUserAdmin(user)};
+                params.currentUser = {id: user.id, name: user.visibleName, email: user.email, admin: isUserAdmin(user)};
 
                 showLoginMenuInfo(auth, user.visibleName);
             }
@@ -1367,17 +1368,31 @@ $(function() {
 
         $('#profileForm').off('submit');
 
+        $('#profileEmail').off('keyup change');
+        $('#profileEmail').on('keyup change', function() {
+            var email = $('#profileEmail').val().trim();
+            if( params.currentUser.email ) {
+                if( params.currentUser.email !== email ) {
+                    $('#profileAlert').show(EFFECTS_TIME);
+                    $('#profileError').text("Вы собираетесь поменять адрес email?.. ");
+                }
+                else {
+                    $('#profileAlert').hide(EFFECTS_TIME);
+                }
+            }
+        });
+
         $('#saveProfileForm').off('click');
         $('#saveProfileForm').click(function() {
 
-            if( $('#profileForm').data('submitted') === true ) {
+           /* if( $('#profileForm').data('submitted') === true ) {
                 console.log('prevented submit');
                 e.preventDefault();
                 return;
             }
             else {
                 $('#profileForm').data('submitted', true);
-            }
+            }*/
 
             checkProfileFormValidOrNot();
         });
@@ -1461,7 +1476,6 @@ $(function() {
                                     "нескольких секунд, но если письма не будет - напишите нам на info@cheatfood.com");
                             }
                         }
-
                     }
                     else {
                         if( res.errorType === errors.no_such_user ) {
@@ -1471,6 +1485,14 @@ $(function() {
                         else if( res.errorType === errors.access_denied) {
                             $('#profileAlert').show(EFFECTS_TIME);
                             $('#profileError').text("Извините, но у вас нет прав на это действие...")
+                        }
+                        else if( res.errorType === errors.merge_users ) {
+                            $('#profileAlert').show(EFFECTS_TIME);
+                            $('#profileError').text("Мы нашли в системе другого пользователя с адресом email, который вы указали." +
+                                " Если это действительно вы, то напишите нам на info@cheatfood.com и мы сможем объединить эти учетные записи" +
+                                " в одну.")
+
+                            $('#profileEmail').val(null);
                         }
                     }
                 }

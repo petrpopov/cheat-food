@@ -127,43 +127,34 @@ public class UserService extends GenericService<UserEntity> {
 
         op.save(byId);
 
+        //paranoia style
+        String email = user.getEmail();
+        if( email == null)
+            return res;
+
+        if( email.isEmpty() )
+            return res;
+
+
         //if email from request is equal to current email
         if( byId.getEmail() != null && byId.getEmail().equals(user.getEmail()) ) {
             res.setResult(byId);
             return res;
         }
 
-        //current email is null - absent for twitter-like users
-        //or user wants to change it
-        if( byId.getEmail() == null ) {
-            EmailChangeToken token = emailChangeTokenService.createTokenForEmail(user.getEmail(), user.getId());
-
-            res.setWarning(true);
-            res.setWarningType(WarningType.email_change);
-
-            mailService.sendChangeEmailMail(user.getEmail(), token.getValue(), globalUrl);
-
-            return res;
+        UserEntity userByEmail = this.getUserByEmail(user.getEmail());
+        if( userByEmail != null ) {
+            if( !userByEmail.getId().equals(id))
+                throw new CheatException(ErrorType.merge_users);
         }
-        else {
-            UserEntity userByEmail = this.getUserByEmail(user.getEmail());
 
-            //no another user in db with such an email
-            if( userByEmail == null ) {
-                EmailChangeToken token = emailChangeTokenService.createTokenForEmail(user.getEmail(), user.getId());
 
-                res.setWarning(true);
-                res.setWarningType(WarningType.email_change);
+        EmailChangeToken token = emailChangeTokenService.createTokenForEmail(user.getEmail(), user.getId());
 
-                mailService.sendChangeEmailMail(user.getEmail(), token.getValue(), globalUrl);
+        res.setWarning(true);
+        res.setWarningType(WarningType.email_change);
 
-                return res;
-            }
-            else {
-                //this is fucking merging users
-
-            }
-        }
+        mailService.sendChangeEmailMail(user.getEmail(), token.getValue(), globalUrl);
 
         return res;
     }

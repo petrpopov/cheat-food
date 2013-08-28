@@ -23,6 +23,7 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd">
         <intercept-url pattern="/api/locations*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/api/votes*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/api/rates*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/api/users/changeemail*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
 
         <custom-filter ref="cheatRememberFilter" position="REMEMBER_ME_FILTER"/>
 
