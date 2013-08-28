@@ -1,12 +1,12 @@
 package com.petrpopov.cheatfood.model.entity;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * User: petrpopov
@@ -15,24 +15,17 @@ import java.util.Date;
  */
 
 @Document(collection = "passwordforgettokens")
-public class PasswordForgetToken {
+public class PasswordForgetToken extends Token {
 
     @Id
     private String id;
 
     @NotNull
     @NotEmpty
+    @Email
     @Indexed
     private String email;
 
-    @NotNull
-    @NotEmpty
-    @Indexed
-    private String value;
-
-    private Boolean valid;
-
-    private Date creationDate;
 
     public PasswordForgetToken() {
     }
@@ -49,30 +42,6 @@ public class PasswordForgetToken {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public Boolean getValid() {
-        return valid;
-    }
-
-    public void setValid(Boolean valid) {
-        this.valid = valid;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
     }
 
     @Override

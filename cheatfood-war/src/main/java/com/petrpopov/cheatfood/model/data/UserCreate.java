@@ -1,5 +1,6 @@
 package com.petrpopov.cheatfood.model.data;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ public class UserCreate {
 
     @NotNull
     @NotEmpty
+    @Email
     private String email;
 
     @NotNull

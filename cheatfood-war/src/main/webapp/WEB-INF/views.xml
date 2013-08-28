@@ -25,6 +25,8 @@
         <put-attribute name="mainScripts" value="/WEB-INF/pages/tiles/mainScripts.jsp"/>
         <put-attribute name="workingScripts" value="/WEB-INF/pages/tiles/workingScripts.jsp"/>
         <put-attribute name="header" value="/WEB-INF/pages/tiles/header.jsp"/>
+        <put-attribute name="messageModal" value="/WEB-INF/pages/tiles/messageModal.jsp"/>
+        <put-attribute name="profileModal" value="/WEB-INF/pages/tiles/profileModal.jsp"/>
         <put-attribute name="deleteModal" value="/WEB-INF/pages/tiles/deleteModal.jsp"/>
         <put-attribute name="hideModal" value="/WEB-INF/pages/tiles/hideModal.jsp"/>
         <put-attribute name="loginModal" value="/WEB-INF/pages/tiles/loginModal.jsp"/>

@@ -21,6 +21,9 @@
 
     <t:insertAttribute name="content" />
 
+    <t:insertAttribute name="messageModal" />
+
+    <t:insertAttribute name="profileModal" />
 
     <t:insertAttribute name="deleteModal" />
 

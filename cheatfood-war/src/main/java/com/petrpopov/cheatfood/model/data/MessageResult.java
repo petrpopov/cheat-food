@@ -8,7 +8,9 @@ package com.petrpopov.cheatfood.model.data;
 public class MessageResult {
 
     private Boolean error = false;
+    private Boolean warning = false;
     private ErrorType errorType;
+    private WarningType warningType;
     private String message;
     private Object result;
 
@@ -49,5 +51,21 @@ public class MessageResult {
 
     public void setErrorType(ErrorType errorType) {
         this.errorType = errorType;
+    }
+
+    public Boolean getWarning() {
+        return warning;
+    }
+
+    public void setWarning(Boolean warning) {
+        this.warning = warning;
+    }
+
+    public WarningType getWarningType() {
+        return warningType;
+    }
+
+    public void setWarningType(WarningType warningType) {
+        this.warningType = warningType;
     }
 }

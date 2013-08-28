@@ -1,6 +1,8 @@
 package com.petrpopov.cheatfood.model.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -32,14 +34,19 @@ public class UserEntity implements Serializable {
     private String firstName;
     private String lastName;
     private String cookieId;
+
+    @Indexed
     private String email;
+
     private String passwordHash;
     private String salt;
 
     private List<UserRole> roles;
 
-
+    @Transient
     private String visibleName;
+
+    @Transient
     private String publicName;
 
     public UserEntity() {

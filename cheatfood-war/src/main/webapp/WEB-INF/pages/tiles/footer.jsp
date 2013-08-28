@@ -21,7 +21,7 @@
             <ul class="nav">
                 <li>
                     <a href="https://www.facebook.com/cheatfood" target="_blank">
-                        <img width="32" src="<s:url value="/resources"/>/img/facebook_small.png">
+                        <img width="32" src="<s:url value="/resources"/>/img/facebook_small_32.png">
                         <span class="spacer3">Мы на Facebook</span>
                     </a>
                 </li>

@@ -6,13 +6,9 @@ import com.petrpopov.cheatfood.model.entity.PasswordForgetToken;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * User: petrpopov
@@ -21,82 +17,36 @@ import java.util.UUID;
  */
 
 @Component
-public class PasswordForgetTokenService extends GenericService<PasswordForgetToken> {
-
-    private Logger logger = Logger.getLogger(PasswordForgetTokenService.class);
+public class PasswordForgetTokenService extends TokenService<PasswordForgetToken> {
 
     @Autowired
     private UserService userService;
 
     public PasswordForgetTokenService() {
         super(PasswordForgetToken.class);
+        logger = Logger.getLogger(PasswordForgetTokenService.class);
     }
 
-    public List<PasswordForgetToken> findTokensForEmail(String email) {
 
-        Criteria criteria = Criteria.where("email").is(email);
-        Query query = new Query(criteria);
-
-        List<PasswordForgetToken> list = op.find(query, PasswordForgetToken.class);
-        return list;
-    }
-
-    public PasswordForgetToken createTokenForEmail(String email) throws CheatException{
+    @Override
+    protected void additionalChecks(String email, String userId) throws CheatException {
 
         UserEntity userByEmail = userService.getUserByEmail(email);
         if( userByEmail == null ) {
             throw new CheatException(ErrorType.no_user_with_such_email);
         }
-
-        //paranoia style
-        boolean ok = false;
-        String token = null;
-        while(!ok) {
-            UUID uuid = UUID.randomUUID();
-            token = uuid.toString().replaceAll("-", "");
-
-            PasswordForgetToken byToken = this.findByToken(token);
-            if( byToken == null ) {
-                ok = true;
-                break;
-            }
-        }
-
-        PasswordForgetToken t = new PasswordForgetToken();
-        t.setEmail(email);
-        t.setValue(token);
-        t.setValid(true);
-        t.setCreationDate(new Date());
-
-        op.save(t);
-        return findByToken(token);
     }
 
-    public PasswordForgetToken findByToken(String token) {
-        Criteria criteria = Criteria.where("value").is(token);
-        Query query = new Query(criteria);
+    @Override
+    protected PasswordForgetToken generateTokenObject(String email, String tokenValue, String userId) throws CheatException {
 
-        return op.findOne(query, PasswordForgetToken.class);
-    }
+        PasswordForgetToken token = new PasswordForgetToken();
 
-    public void invalidateTokensForEmail(String email) {
+        token.setEmail(email);
+        token.setValue(tokenValue);
+        token.setValid(true);
+        token.setCreationDate(new Date());
 
-        List<PasswordForgetToken> list = findTokensForEmail(email);
-        for (PasswordForgetToken token : list) {
-            token.setValid(false);
-            op.save(token);
-        }
-    }
-
-
-    private boolean tokenListContains(List<PasswordForgetToken> list, String token) {
-
-        for (PasswordForgetToken passwordForgetToken : list) {
-            if( passwordForgetToken.getValue().equals(token)) {
-                return true;
-            }
-        }
-
-        return false;
+        return token;
     }
 }

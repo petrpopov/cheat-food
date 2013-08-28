@@ -36,6 +36,10 @@ $(function() {
         other: "other"
     };
 
+    var warnings = {
+        email_change: "email_change"
+    };
+
     var markersCount = 0;
     var markers = new HashMap();
     var markersIds = new HashMap();
@@ -1281,6 +1285,210 @@ $(function() {
         disableEditMarkerMenu();
         disableDeleteMarkerMenu();
         disableHideMarkerMenu();
+        enableProfileMenu();
+    }
+
+    function enableProfileMenu() {
+
+        $('#profileLink').off('click');
+        $('#profileLink').click(function() {
+            $('#profileModal').modal('show');
+        });
+
+        $('#profileModal').on('show', function () {
+            initProfileForm();
+        });
+    }
+
+    function initProfileForm() {
+
+        $('#profileAlert').hide();
+        returnProfileFormSubmitDefault();
+        initProfileFormValidation();
+        initProfileFormBehavior();
+
+        if( params.hasOwnProperty('currentUser')) {
+            loadProfileData();
+        }
+    }
+
+    function loadProfileData() {
+        $.get(params.realPath+"/api/users/current", function(user) {
+            if( user ) {
+                if( user.hasOwnProperty('firstName')) {
+                    $('#profileFirstName').val(user.firstName);
+                }
+                else {
+                    $('#profileFirstName').val(null);
+                }
+
+                if( user.hasOwnProperty('lastName')) {
+                    $('#profileLastName').val(user.lastName);
+                }
+                else {
+                    $('#profileLastName').val(null);
+                }
+
+                if( user.hasOwnProperty('email')) {
+                    $('#profileEmail').val(user.email);
+                }
+                else {
+                    $('#profileEmail').val(null);
+                }
+
+                if( user.facebookId ) {
+                    $('#profileFacebookLink').show();
+                    $('#profileFacebookLink').attr("href", "http://www.facebook.com/" + user.facebookId);
+                }
+                else {
+                    $('#profileFacebookLink').hide();
+                }
+
+                if( user.foursquareId ) {
+                    $('#profileFoursquareLink').show();
+                    $('#profileFoursquareLink').attr("href", "http://foursquare.com/user/" + user.foursquareId);
+                }
+                else {
+                    $('#profileFoursquareLink').hide();
+                }
+
+                if( user.twitterUsername ) {
+                    $('#profileTwitterLink').show();
+                    $('#profileTwitterLink').attr("href", "http://twitter.com/" + user.twitterUsername);
+                }
+                else {
+                    $('#profileTwitterLink').hide();
+                }
+            }
+        });
+    }
+
+    function initProfileFormBehavior() {
+
+        $('#profileForm').off('submit');
+
+        $('#saveProfileForm').off('click');
+        $('#saveProfileForm').click(function() {
+
+            if( $('#profileForm').data('submitted') === true ) {
+                console.log('prevented submit');
+                e.preventDefault();
+                return;
+            }
+            else {
+                $('#profileForm').data('submitted', true);
+            }
+
+            checkProfileFormValidOrNot();
+        });
+    }
+
+    function returnProfileFormSubmitDefault() {
+        $('#profileForm').data('submitted', false);
+        $('#saveProfileForm').button('reset');
+    }
+
+    function initProfileFormValidation() {
+        $("#profileForm").validate({
+            rules: {
+                profileEmail: {
+                    required: true,
+                    email: true
+                }
+            },
+            success: function() {
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
+            }
+        });
+    }
+
+    function checkProfileFormValidOrNot() {
+        $('#saveProfileForm').button('loading');
+
+        if( $("#profileForm").valid() ) {
+            submitProfileForm();
+        }
+        else {
+            $('#saveProfileForm').button('reset');
+        }
+    }
+
+    function submitProfileForm() {
+
+        var userUpdate = {
+            id: params.currentUser.id,
+            firstName: $('#profileFirstName').val().trim(),
+            lastName: $('#profileLastName').val().trim(),
+            email: $('#profileEmail').val().trim()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: params.realPath+"/api/users/update",
+            data: JSON.stringify( userUpdate ),
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function() {
+
+            },
+            complete: function(data) {
+
+                $('#profileAlert').hide();
+
+                if( data.responseJSON ) {
+                    var res = data.responseJSON;
+
+                    if( res.error === false ) {
+
+                        if( res.warning === false ) {
+                            $('#profileModal').modal('hide');
+                            returnProfileFormSubmitDefault();
+                            window.location.replace(params.realPath);
+                        }
+                        else {
+                            if( res.warningType === warnings.email_change ) {
+                                $('#profileModal').modal('hide');
+                                showGlobalMessage("Мы отправили вам письмо с секретной ссылкой для смены адреса электропочты " +
+                                    "на введеный вами. " +
+                                    "Вам нужно пройти по ссылке из письма для привязки адреса email к вашей учетной записи." +
+                                    " Выходить (разлогиниваться) из системы для этого не нужно! Обычно письма приходят в течении " +
+                                    "нескольких секунд, но если письма не будет - напишите нам на info@cheatfood.com");
+                            }
+                        }
+
+                    }
+                    else {
+                        if( res.errorType === errors.no_such_user ) {
+                            $('#profileAlert').show(EFFECTS_TIME);
+                            $('#profileError').text("Нет такого пользователя ;(");
+                        }
+                        else if( res.errorType === errors.access_denied) {
+                            $('#profileAlert').show(EFFECTS_TIME);
+                            $('#profileError').text("Извините, но у вас нет прав на это действие...")
+                        }
+                    }
+                }
+                returnProfileFormSubmitDefault();
+            },
+            statusCode: {
+                400: function(data) {
+                    $('#profileAlert').show(EFFECTS_TIME);
+                    $('#profileError').text("Извините, у нас какая-то ошибка на сервере ;(");
+                    returnProfileFormSubmitDefault();
+                }
+            }
+        });
+    }
+
+    function showGlobalMessage(text) {
+        $('#messageModal').modal('show');
+        $('#messageModalText').html(text);
     }
 
     function createCategoryMenu() {

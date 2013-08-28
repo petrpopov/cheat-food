@@ -89,7 +89,7 @@
                         <li>
                             <a id="registrationLink">Регистрация</a>
                         </li>
-                        <li class="disabled">
+                        <li>
                             <a id="profileLink" href="#">Профиль</a>
                         </li>
                         <li>

@@ -4,9 +4,9 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.petrpopov.cheatfood.config.CheatException;
-import com.petrpopov.cheatfood.model.data.ErrorType;
-import com.petrpopov.cheatfood.model.data.UserCreate;
-import com.petrpopov.cheatfood.model.data.UserEntityInfo;
+import com.petrpopov.cheatfood.model.data.*;
+import com.petrpopov.cheatfood.model.entity.EmailChangeToken;
+import com.petrpopov.cheatfood.model.entity.PasswordForgetToken;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.model.entity.UserRole;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
@@ -23,9 +23,11 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,15 @@ public class UserService extends GenericService<UserEntity> {
 
     @Autowired
     private CheatPasswordEncoder encoder;
+
+    @Autowired
+    private PasswordForgetTokenService tokenService;
+
+    @Autowired
+    private EmailChangeTokenService emailChangeTokenService;
+
+    @Autowired
+    private MailService mailService;
 
     public UserService() {
         super(UserEntity.class);
@@ -99,19 +110,99 @@ public class UserService extends GenericService<UserEntity> {
         return updatePasswordForUser(userToSave, user.getPassword());
     }
 
-    public UserEntity updatePasswordForUser(UserEntity userToSave, String password) {
+    @CacheEvict(value = "users", allEntries = true)
+    @PreAuthorize("(hasRole('ROLE_USER') and #user.id==principal.username) or hasRole('ROLE_ADMIN')")
+    public MessageResult updateUser(@Valid UserUpdate user, String globalUrl) throws CheatException, MessagingException {
 
-        //generate random salt
-        UUID randomUUID = UUID.randomUUID();
-        String newSalt = randomUUID.toString();
+        MessageResult res = new MessageResult();
 
+        String id = user.getId();
+        UserEntity byId = this.findById(id);
 
-        String encodePassword = encoder.encodePassword(password, newSalt);
-        userToSave.setPasswordHash(encodePassword);
-        userToSave.setSalt(newSalt);
+        if( byId == null )
+            throw new CheatException(ErrorType.no_such_user);
 
-        op.save(userToSave);
-        return getUserByEmail(userToSave.getEmail());
+        byId.setFirstName(user.getFirstName());
+        byId.setLastName(user.getLastName());
+
+        op.save(byId);
+
+        //if email from request is equal to current email
+        if( byId.getEmail() != null && byId.getEmail().equals(user.getEmail()) ) {
+            res.setResult(byId);
+            return res;
+        }
+
+        //current email is null - absent for twitter-like users
+        //or user wants to change it
+        if( byId.getEmail() == null ) {
+            EmailChangeToken token = emailChangeTokenService.createTokenForEmail(user.getEmail(), user.getId());
+
+            res.setWarning(true);
+            res.setWarningType(WarningType.email_change);
+
+            mailService.sendChangeEmailMail(user.getEmail(), token.getValue(), globalUrl);
+
+            return res;
+        }
+        else {
+            UserEntity userByEmail = this.getUserByEmail(user.getEmail());
+
+            //no another user in db with such an email
+            if( userByEmail == null ) {
+                EmailChangeToken token = emailChangeTokenService.createTokenForEmail(user.getEmail(), user.getId());
+
+                res.setWarning(true);
+                res.setWarningType(WarningType.email_change);
+
+                mailService.sendChangeEmailMail(user.getEmail(), token.getValue(), globalUrl);
+
+                return res;
+            }
+            else {
+                //this is fucking merging users
+
+            }
+        }
+
+        return res;
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
+    public void updateEmailForUser(UserEntity userEntity, String tokenid) throws CheatException {
+
+        EmailChangeToken token = emailChangeTokenService.findByTokenValue(tokenid);
+        if( token == null )
+            throw new CheatException(ErrorType.wrong_token);
+
+        if( token.getValid().equals(Boolean.FALSE) )
+            throw new CheatException(ErrorType.token_invalid);
+
+        String userId = token.getUserId();
+        if( userId == null )
+            throw new CheatException(ErrorType.no_such_user);
+
+        if( !userId.equals(userEntity.getId()))
+            throw new CheatException(ErrorType.access_denied);
+
+        UserEntity user = this.findById(userId);
+        user.setEmail(token.getEmail());
+        op.save(user);
+
+        emailChangeTokenService.invalidateTokensForEmail(token.getEmail());
+    }
+
+    public void forgetPasswordForUser(String email, String globalUrl) throws CheatException, MessagingException {
+
+        if( email == null )
+            throw new CheatException(ErrorType.email_is_empty);
+
+        if( email.isEmpty() )
+            throw new CheatException(ErrorType.email_is_empty);
+
+        PasswordForgetToken tokenForEmail = tokenService.createTokenForEmail(email, null);
+
+        mailService.sendForgetPasswordMail(email, tokenForEmail.getValue(), globalUrl);
     }
 
     //@Cacheable("users")
@@ -220,6 +311,21 @@ public class UserService extends GenericService<UserEntity> {
         }
 
         return new UserEntityInfo(userEntity);
+    }
+
+    public UserEntity updatePasswordForUser(UserEntity userToSave, String password) {
+
+        //generate random salt
+        UUID randomUUID = UUID.randomUUID();
+        String newSalt = randomUUID.toString();
+
+
+        String encodePassword = encoder.encodePassword(password, newSalt);
+        userToSave.setPasswordHash(encodePassword);
+        userToSave.setSalt(newSalt);
+
+        op.save(userToSave);
+        return getUserByEmail(userToSave.getEmail());
     }
 
     @Override

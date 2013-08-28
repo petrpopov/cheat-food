@@ -1,13 +1,13 @@
 package com.petrpopov.cheatfood.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * User: petrpopov
@@ -21,17 +21,30 @@ public class MailService {
     @Autowired
     private JavaMailSenderImpl mailSender;
 
-    public void sendMail(String email, String url, HttpServletRequest request) throws MessagingException {
+    @Value("#{properties.mail_account}")
+    private String mailAccount;
 
+    public void sendForgetPasswordMail(String email, String url, String globalUrl) throws MessagingException {
 
-        // Prepare message using a Spring helper
+        String content = getForgetPasswordContent(url, globalUrl);
+        sendEmail(email, getForgetPasswordSubject(), content);
+    }
+
+    public void sendChangeEmailMail(String email, String url, String globalUrl) throws MessagingException {
+
+        String content = getChangeEmailContent(url, globalUrl);
+        sendEmail(email, getChangeEmailSubject(), content);
+    }
+
+    private void sendEmail(String email, String subject, String content) throws MessagingException {
+
         final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
         final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-        message.setSubject("Password restore request");
-        message.setFrom("info@cheatfood.com");
+        message.setSubject(subject);
+        message.setFrom(mailAccount);
         message.setTo(email);
-        message.setText(getContent(url, request), true);
+        message.setText(content, true);
 
 
         // Send mail
@@ -40,19 +53,39 @@ public class MailService {
         thread.start();
     }
 
-    private String getGlobalUrl(HttpServletRequest request) {
+    private String getForgetPasswordSubject() {
+        return "Password restore request";
 
-        return request.getScheme()+"://"
-                + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 
-    private String getContent(String url, HttpServletRequest request) {
+    private String getForgetPasswordContent(String url, String globalUrl) {
 
-        String address = getGlobalUrl(request) + "/api/users/forget/" + url;
+        String address = globalUrl + "/api/users/forget/" + url;
 
         String res = "<html><body></body><p>Привет!</p>"
                 + "<p>Кто-то (скорее всего это были вы) запрашивал восстановление пароля на сервисе "
-                + "<a href=\"" + getGlobalUrl(request) + "\">Cheat Food</a>"
+                + "<a href=\"" + globalUrl + "\">Cheat Food</a>"
+                + "</p>"
+                + "<p>Если это были вы, пройдите, пожалуйста, по ссылке:</p>"
+                + "<p><a href=\"" + address + "\">" + address + "</a></p>"
+                + "<p>Если это были не вы - удалите же скорее это письмо!</p>"
+                + "<p>Пока-пока!</p>"
+                + "</html>";
+
+        return res;
+    }
+
+    private String getChangeEmailSubject() {
+        return "Change email";
+    }
+
+    private String getChangeEmailContent(String url, String globalUrl) {
+
+        String address = globalUrl + "/api/users/changeemail/" + url;
+
+        String res = "<html><body></body><p>Привет!</p>"
+                + "<p>Кто-то (скорее всего это были вы) запрашивал смену (или привязку) email на сервисе "
+                + "<a href=\"" + globalUrl + "\">Cheat Food</a>"
                 + "</p>"
                 + "<p>Если это были вы, пройдите, пожалуйста, по ссылке:</p>"
                 + "<p><a href=\"" + address + "\">" + address + "</a></p>"
