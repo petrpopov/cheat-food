@@ -31,6 +31,11 @@
                 </div>
                 <div class="control-group">
                     <div class="controls">
+                        <input type="password" name="passwordRepeat" class="span3" id="passwordRepeat" placeholder="повторите пароль" required />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
                         <button id="createUserSubmit" data-loading-text="Подождите..." type="submit" class="btn btn-primary">YARR!</button>
                         <button class="btn" data-dismiss="modal">Отмена</button>
                     </div>

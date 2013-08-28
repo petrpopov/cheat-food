@@ -10,6 +10,10 @@ import javax.validation.constraints.NotNull;
  * Date: 16.07.13
  * Time: 15:58
  */
+
+@FieldMatch.List({
+        @FieldMatch(first = "password", second = "passwordRepeat", message = "The password fields must match")
+})
 public class UserCreate {
 
     @NotNull
@@ -20,6 +24,10 @@ public class UserCreate {
     @NotNull
     @NotEmpty
     private String password;
+
+    @NotEmpty
+    @NotNull
+    private String passwordRepeat;
 
     public UserCreate() {
     }
@@ -43,6 +51,14 @@ public class UserCreate {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPasswordRepeat() {
+        return passwordRepeat;
+    }
+
+    public void setPasswordRepeat(String passwordRepeat) {
+        this.passwordRepeat = passwordRepeat;
     }
 
     @Override

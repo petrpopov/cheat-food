@@ -5,7 +5,6 @@ import com.petrpopov.cheatfood.model.data.*;
 import com.petrpopov.cheatfood.model.entity.PasswordForgetToken;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
-import com.petrpopov.cheatfood.service.EmailChangeTokenService;
 import com.petrpopov.cheatfood.service.PasswordForgetTokenService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.service.UserService;
@@ -44,9 +43,6 @@ public class UserWebService extends BaseWebService {
 
     @Autowired
     private PasswordForgetTokenService passwordForgetTokenService;
-
-    @Autowired
-    private EmailChangeTokenService emailChangeTokenService;
 
     @Autowired
     private UrlService urlService;

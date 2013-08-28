@@ -427,7 +427,8 @@ function submitCreateUserForm() {
 
     var formParams = {
         email: $('#emailCreate').val().trim(),
-        password: $('#passwordCreate').val().trim()
+        password: $('#passwordCreate').val().trim(),
+        passwordRepeat: $('#passwordRepeat').val().trim()
     };
 
     $.ajax({
@@ -602,6 +603,12 @@ function initCreateUserFormValidation() {
             password: {
                 required: true,
                 minlength: 5,
+                maxlength: 50
+            },
+            passwordRepeat: {
+                required: true,
+                equalTo: "#passwordCreate",
+                minlength: 3,
                 maxlength: 50
             }
         },
