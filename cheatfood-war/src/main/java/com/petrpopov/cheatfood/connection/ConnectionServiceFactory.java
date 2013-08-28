@@ -57,6 +57,14 @@ public class ConnectionServiceFactory {
         return null;
     }
 
+    public void removeConnectionsForUser(String id) {
+
+        List<Class<?>> list = providerIdClassStorage.getAllProviderClass();
+        for (Class<?> api : list) {
+            removeConnectionsForUser(id, api);
+        }
+    }
+
     public void removeConnectionsForUser(String id, Class<?> apiClass) {
 
         ConnectionRepository repo = usersConnectionRepository.createConnectionRepository(id);

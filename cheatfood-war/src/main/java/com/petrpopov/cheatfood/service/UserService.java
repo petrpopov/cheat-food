@@ -26,7 +26,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -358,7 +357,7 @@ public class UserService extends GenericService<UserEntity> {
         if( email != null )
             return;
 
-        connectionServiceFactory.removeConnectionsForUser(_id.toString(), Twitter.class);
+        connectionServiceFactory.removeConnectionsForUser(_id.toString());
     }
 
     private UserEntityInfo saveOrUpdateFoursquareUser(UserEntity userEntity) {

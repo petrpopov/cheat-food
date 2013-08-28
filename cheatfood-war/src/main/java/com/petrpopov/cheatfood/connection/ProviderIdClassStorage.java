@@ -2,7 +2,9 @@ package com.petrpopov.cheatfood.connection;
 
 import org.springframework.social.connect.Connection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +23,18 @@ public class ProviderIdClassStorage {
 
     public void addClass(Class<?> apiClass, String providerId) {
         apiIndex.put(apiClass, providerId);
+    }
+
+    public List<Class<?>> getAllProviderClass() {
+
+        List<Class<?>> res = new ArrayList<Class<?>>();
+
+        for (Map.Entry<Class<?>, String> entry : apiIndex.entrySet()) {
+            Class<?> key = entry.getKey();
+            res.add(key);
+        }
+
+        return res;
     }
 
     public String getProviderIdByClass(Class<?> apiClass) {
