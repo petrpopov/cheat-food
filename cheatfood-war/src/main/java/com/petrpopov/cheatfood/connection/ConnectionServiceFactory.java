@@ -1,8 +1,12 @@
 package com.petrpopov.cheatfood.connection;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.connect.UsersConnectionRepository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,6 +17,9 @@ import java.util.Map;
 
 
 public class ConnectionServiceFactory {
+
+    @Autowired
+    private UsersConnectionRepository usersConnectionRepository;
 
     private Map<String, ConnectionService<?>> services = new HashMap<String, ConnectionService<?>>();
     private ProviderIdClassStorage providerIdClassStorage;
@@ -48,5 +55,21 @@ public class ConnectionServiceFactory {
         }
 
         return null;
+    }
+
+    public void removeConnectionsForUser(String id, Class<?> apiClass) {
+
+        ConnectionRepository repo = usersConnectionRepository.createConnectionRepository(id);
+        List list = repo.findConnections(apiClass);
+
+        if( list == null )
+            return;
+        if( list.isEmpty() )
+            return;
+
+        String providerId = providerIdClassStorage.getProviderIdByClass(apiClass);
+
+        if( providerId != null )
+            repo.removeConnections(providerId);
     }
 }

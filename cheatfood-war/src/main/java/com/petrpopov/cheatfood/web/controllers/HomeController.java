@@ -1,7 +1,9 @@
 package com.petrpopov.cheatfood.web.controllers;
 
 import com.petrpopov.cheatfood.model.entity.Location;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.service.LocationService;
+import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.web.filters.LocationFilter;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 
@@ -26,6 +29,9 @@ public class HomeController {
 
     @Autowired
     private LocationFilter locationFilter;
+
+    @Autowired
+    private UserContextHandler userContextHandler;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -51,8 +57,13 @@ public class HomeController {
     }
 
     @RequestMapping("/signin")
-    public String showLoginPage() {
-        return "signin";
+    public ModelAndView showLoginPage() {
+
+        UserEntity entity = userContextHandler.currentContextUser();
+        if( entity != null )
+            return new ModelAndView(new RedirectView("index"));
+
+        return new ModelAndView("signin");
     }
 
     @RequestMapping(value = "location/{locationid}")

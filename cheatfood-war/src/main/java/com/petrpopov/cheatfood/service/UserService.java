@@ -4,6 +4,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.petrpopov.cheatfood.config.CheatException;
+import com.petrpopov.cheatfood.connection.ConnectionServiceFactory;
 import com.petrpopov.cheatfood.model.data.*;
 import com.petrpopov.cheatfood.model.entity.EmailChangeToken;
 import com.petrpopov.cheatfood.model.entity.PasswordForgetToken;
@@ -11,6 +12,7 @@ import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.model.entity.UserRole;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
 import org.apache.log4j.Logger;
+import org.bson.types.ObjectId;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -56,6 +59,9 @@ public class UserService extends GenericService<UserEntity> {
 
     @Autowired
     private EmailChangeTokenService emailChangeTokenService;
+
+    @Autowired
+    private ConnectionServiceFactory connectionServiceFactory;
 
     @Autowired
     private MailService mailService;
@@ -321,6 +327,13 @@ public class UserService extends GenericService<UserEntity> {
 
     @Override
     protected void updateEntityForBatchOperation(DBCollection collection, BasicDBObject entity) {
+
+        setDefaultRoles(collection, entity);
+        removeConnectionsForEmptyEmail(entity);
+    }
+
+    private void setDefaultRoles(DBCollection collection, BasicDBObject entity) {
+
         Object roles = entity.get("roles");
 
         if( roles != null ) {
@@ -335,6 +348,17 @@ public class UserService extends GenericService<UserEntity> {
         entity.put("roles", rolesList);
 
         collection.save(entity);
+    }
+
+    private void removeConnectionsForEmptyEmail(BasicDBObject entity) {
+
+        ObjectId _id = (ObjectId) entity.get("_id");
+
+        Object email = entity.get("email");
+        if( email != null )
+            return;
+
+        connectionServiceFactory.removeConnectionsForUser(_id.toString(), Twitter.class);
     }
 
     private UserEntityInfo saveOrUpdateFoursquareUser(UserEntity userEntity) {
