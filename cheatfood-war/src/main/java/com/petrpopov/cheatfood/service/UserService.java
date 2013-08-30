@@ -356,6 +356,8 @@ public class UserService extends GenericService<UserEntity> {
 
         setDefaultRoles(collection, entity);
         removeConnectionsForEmptyEmail(entity);
+
+        collection.save(entity);
     }
 
     private void setDefaultRoles(DBCollection collection, BasicDBObject entity) {

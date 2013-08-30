@@ -44,6 +44,18 @@ public class LocationWebService extends BaseWebService {
         return list;
     }
 
+    @RequestMapping(value = "userconnected", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Location> getUserConnectedLocations() {
+
+        UserEntity user = userContextHandler.currentContextUser();
+        if( user == null )
+            return null;
+
+        List<Location> res = locationService.getUserConnectedLocations(user);
+        return res;
+    }
+
     @RequestMapping(value = "inbounds", method = RequestMethod.GET)
     @ResponseBody
     public List<Location> getAllLocationsInDifferenceBetweenBounds(@Valid GeoJSONPointBoundsDiff diff, String typeId) {
@@ -103,6 +115,15 @@ public class LocationWebService extends BaseWebService {
         result.setResult(loc);
 
         return result;
+    }
+
+    @RequestMapping(value = "{locationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Location getLocation(@PathVariable String locationId) {
+
+        Location location = locationService.findById(locationId);
+
+        return location;
     }
 
     @RequestMapping(value = "{locationid}/delete", method = RequestMethod.DELETE)

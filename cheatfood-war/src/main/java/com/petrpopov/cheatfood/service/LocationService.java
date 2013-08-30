@@ -3,6 +3,7 @@ package com.petrpopov.cheatfood.service;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBRef;
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.data.ErrorType;
 import com.petrpopov.cheatfood.model.data.GeoPointBounds;
@@ -48,6 +49,9 @@ public class LocationService extends GenericService<Location> {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserConnectionsService userConnectionsService;
 
     @Value("#{properties.max_price}")
     private Double maxPrice;
@@ -165,7 +169,9 @@ public class LocationService extends GenericService<Location> {
 
         logger.info("Saving location to database");
 
-        return saveLocationObject(location);
+        Location saved = saveLocationObject(location);
+        createLocationUserConnection(userEntity.getId(), saved.getId());
+        return saved;
     }
 
     @PreAuthorize("(hasRole('ROLE_USER') and #location.creator.id==principal.username) or hasRole('ROLE_ADMIN')")
@@ -250,6 +256,8 @@ public class LocationService extends GenericService<Location> {
             }
         }
 
+        createLocationUserConnection(userById.getId(), location.getId());
+
         return saveLocationObject(location);
     }
 
@@ -275,7 +283,24 @@ public class LocationService extends GenericService<Location> {
 
         rates.add(rate);
         location.setAverageRate(getNewAverageRate(rates));
+
+        createLocationUserConnection(rate.getUserId(), location.getId());
+
         return saveLocationObject(location);
+    }
+
+    public List<Location> getUserConnectedLocations(UserEntity user) {
+
+        UserConnections connections = userConnectionsService.findByUser(user.getId());
+        if( connections == null )
+            return null;
+
+        if( connections.getLocations() == null )
+            return null;
+
+        Query query = new Query( Criteria.where("_id").in(connections.getLocations()) );
+        List<Location> locations = op.find(query, domainClass);
+        return locations;
     }
 
 
@@ -287,6 +312,7 @@ public class LocationService extends GenericService<Location> {
         updateLocationWithVotesCount(entity);
         updateLocationWithAdminChecked(entity);
         updateLocationWithCreationDate(entity);
+        createLocationUserConnectionForCreator(entity);
 
         collection.save(entity);
     }
@@ -313,6 +339,8 @@ public class LocationService extends GenericService<Location> {
                 logger.info("Updating location " + entity.get("_id") + " setting today date for votes");
                 obj.put("date", new Date());
             }
+
+            createLocationVoteUserConnections(entity.get("_id").toString(), obj);
         }
     }
 
@@ -338,6 +366,8 @@ public class LocationService extends GenericService<Location> {
                 logger.info("Updating location " + entity.get("_id") + " setting today date for rates");
                 obj.put("date", new Date());
             }
+
+            createLocationRateUserConnections(entity.get("_id").toString(), obj);
         }
     }
 
@@ -422,6 +452,88 @@ public class LocationService extends GenericService<Location> {
         }
 
         entity.put("creationDate", new Date());
+    }
+
+
+    private void createLocationVoteUserConnections(String locationId, BasicDBObject vote) {
+
+        if( locationId == null )
+            return;
+
+        Object userId = vote.get("userId");
+        if( userId == null )
+            return;
+
+        String id = (String) userId;
+
+        logger.info("Create UserConnections from Location vote");
+        createLocationUserConnection(id, locationId);
+    }
+
+    private void createLocationRateUserConnections(String locationId, BasicDBObject rate) {
+
+        if( locationId == null )
+            return;
+
+        Object userId = rate.get("userId");
+        if( userId == null )
+            return;
+
+        String id = (String) userId;
+
+        logger.info("Create UserConnections from Location rate");
+        createLocationUserConnection(id, locationId);
+    }
+
+    private void createLocationUserConnectionForCreator(BasicDBObject entity) {
+
+        Object obj = entity.get("creator");
+        if( obj == null )
+            return;
+
+        if( !(obj instanceof DBRef) )
+            return;
+
+        DBRef creator = (DBRef) obj;
+        Object id = creator.getId();
+        if( id == null )
+            return;
+
+        ObjectId userId = (ObjectId) id;
+        String locationId = entity.get("_id").toString();
+
+        createLocationUserConnection(userId.toString(), locationId);
+    }
+
+    private void createLocationUserConnection(String userId, String locationId) {
+
+        UserEntity user = userService.findById(userId);
+        if( user == null )
+            return;
+
+        UserConnections connections = userConnectionsService.findByUser(userId);
+        if( connections == null ) {
+            connections = new UserConnections();
+            connections.setUser(user);
+        }
+
+        if( connections.getLocations() == null ) {
+            connections.setLocations(new ArrayList<String>());
+        }
+
+        boolean ok = false;
+        for (String location : connections.getLocations()) {
+            if( location.equals(locationId)) {
+                ok = true;
+                break;
+            }
+        }
+
+        if( ok )
+            return;
+
+        connections.getLocations().add(locationId);
+        userConnectionsService.save(connections);
     }
 
 

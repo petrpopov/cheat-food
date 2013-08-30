@@ -54,6 +54,7 @@ $(function() {
     var searchMarker = false;
 
 
+    var RATY_SIZE = 24;
     var UNKNOWN_USER_ID = "-1";
     var NEW_MARKER_ID = "";
     var GRID_SIZE = 50;
@@ -1362,6 +1363,95 @@ $(function() {
                 }
             }
         });
+
+        $.get(params.realPath+"/api/locations/userconnected", function(locations) {
+
+            if( locations ) {
+                if( locations.length === 0 ) {
+                    $('#connectedLocationsLabel').show(EFFECTS_TIME);
+                }
+                else {
+                    $('#connectedLocationsLabel').hide(EFFECTS_TIME);
+
+                    var locEls = [];
+                    for(var i = 0; i < locations.length; i++ ) {
+                        locEls.push(createLocationInTable(locations[i], i));
+                    }
+
+                    $('#connectedLocsBody').children().remove();
+                    $('#connectedLocsBody').append(locEls);
+                }
+            }
+        });
+    }
+
+    function createLocationInTable(location, i) {
+
+        var ratyViewProperties = {
+            path: getImageDirPath(),
+            size: RATY_SIZE,
+            score: location.averageRate,
+            readOnly: true
+        };
+
+        return $('<tr/>')
+            .append(
+                $('<td/>').attr("style", "display: none").attr("hidden", "true").attr("id", "conLocId"+i)
+                    .text(location.id)
+            )
+            .append(
+                $('<td/>').append(
+                    $('<a/>').attr("id", "connLocLink"+i).attr('href', '#').text(location.title)
+                        .click(function() {
+                            showLocationFromProfile($('#conLocId'+i).text());
+                        })
+                )
+            ).append(
+                $('<td/>').text(location.address.addressLine)
+            )
+            .append(
+                $('<td/>').text(location.averagePrice + " RUB")
+            )
+            .append(
+                $('<td/>').raty(ratyViewProperties)
+            )
+            .append(
+                $('<td/>').text(location.creator.publicName)
+            );
+    }
+
+    function showLocationFromProfile(id) {
+
+        $('#profileModal').modal('hide');
+
+        $.get(params.realPath+'/api/locations/'+id, function(location) {
+            if( !location ) {
+                return;
+            }
+
+            renderSingleMarkerForLocation(infoBox, location, true);
+
+            $.each(markers._dict, function(n, marker) {
+                var location = marker.location;
+
+                if( location.id === id ) {
+
+                    var pos = getLatLngFromGeoLocation(location.geoLocation);
+
+                    map.map.setCenter(pos);
+                    map.map.setZoom(MAX_ZOOM_FOR_MARKER);
+
+                    var infoBoxObject = {
+                        infoBox: marker.infoBox,
+                        location: location
+                    };
+
+                    markerClickBehavior(marker.marker, infoBoxObject);
+                }
+            });
+        });
+
+
     }
 
     function initProfileFormBehavior() {
@@ -1384,16 +1474,7 @@ $(function() {
 
         $('#saveProfileForm').off('click');
         $('#saveProfileForm').click(function() {
-
-           /* if( $('#profileForm').data('submitted') === true ) {
-                console.log('prevented submit');
-                e.preventDefault();
-                return;
-            }
-            else {
-                $('#profileForm').data('submitted', true);
-            }*/
-
+            //don't need prevent?
             checkProfileFormValidOrNot();
         });
     }
@@ -1783,7 +1864,7 @@ $(function() {
         });
     }
 
-    function renderSingleMarkerForLocation(infoBox, locationToRender) {
+    function renderSingleMarkerForLocation(infoBox, locationToRender, zoom) {
 
         var infoBoxObject = {
             infoBox: infoBox,
@@ -1797,7 +1878,11 @@ $(function() {
             }
         }
 
-        createMarkerWithInfoBoxForLocation(infoBoxObject, zoomIn);
+        if( zoom === true ) {
+            zoomIn = true;
+        }
+
+        return createMarkerWithInfoBoxForLocation(infoBoxObject, zoomIn);
     }
 
     function loadAndCreateMarkersForLocationsInBounds(type_id) {
@@ -1913,7 +1998,7 @@ $(function() {
 
         if( zoomIn ) {
             if( zoomIn === true ) {
-                map.map.setCenter(marker.getPosition());
+                map.map.setCenter(pos);
 
                 markerClickBehavior(marker, infoBoxObject);
 
@@ -1960,7 +2045,7 @@ $(function() {
         var location = infoBoxObject.location;
         var ratyViewProperties = {
             path: getImageDirPath(),
-            size: 24,
+            size: RATY_SIZE,
             score: location.averageRate,
             readOnly: true
         };
@@ -1968,7 +2053,7 @@ $(function() {
 
         var ratyActionProperties = {
             path: getImageDirPath(),
-            size: 24,
+            size: RATY_SIZE,
             score: 0,
             click: function(score, e) {
                 rateForLocation(infoBoxObject, score);

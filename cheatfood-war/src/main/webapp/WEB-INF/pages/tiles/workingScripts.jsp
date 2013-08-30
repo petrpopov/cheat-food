@@ -15,4 +15,18 @@
 <script src="<s:url value="/resources"/>/js/jquery.validate-1.11.1.min.js" type="text/javascript"></script>
 <script src="<s:url value="/resources"/>/js/validation.messages_ru.js" type="text/javascript"></script>
 
-<script src="/wro/working.js" type="text/javascript"></script>
+<!--script src="/wro/working.js" type="text/javascript"></script-->
+
+<script src="/resources/js/jquery.noty-2.1.0.js" type="text/javascript"></script>
+<script src="/resources/js/jquery.noty.top-2.1.0.js" type="text/javascript"></script>
+<script src="/resources/js/jquery.noty.topCenter-2.1.0.js" type="text/javascript"></script>
+<script src="/resources/js/jquery.noty.topRight-2.1.0.js" type="text/javascript"></script>
+<script src="/resources/js/jquery.noty.default-theme-2.1.0.js" type="text/javascript"></script>
+<script src="/resources/js/jquery-ui.datepicker.ru.js" type="text/javascript"></script>
+<script src="/resources/js/jquery.raty-2.5.2.min.js" type="text/javascript"></script>
+<script src="/resources/js/jquery.numeric-1.3.1.js" type="text/javascript"></script>
+<script src="/resources/js/markerclusterer-2.0.9.min.js" type="text/javascript"></script>
+<script src="/resources/js/infobox-1.1.9.min.js" type="text/javascript"></script>
+<script src="/resources/js/gmaps-0.4.4.js" type="text/javascript"></script>
+<script src="/resources/js/cheatfood-auth.js" type="text/javascript"></script>
+<script src="/resources/js/cheatfood-main.js" type="text/javascript"></script>
