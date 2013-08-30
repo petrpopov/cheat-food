@@ -30,7 +30,7 @@ public class GenericConnectionService<T> implements ConnectionService {
     private Class domainClass;
     private String callbackUrl;
 
-    private static final String OAUTH_TOKEN_ATTRIBUTE = "oauthToken";
+    public static final String OAUTH_TOKEN_ATTRIBUTE = "oauthToken";
 
     @Autowired
     private ConnectionFactoryLocator registry;
@@ -86,9 +86,34 @@ public class GenericConnectionService<T> implements ConnectionService {
     }
 
     @Override
-    public Connection<T> getConnection(String code, String oauth_verifier, NativeWebRequest request) {
+    public Connection getConnectionOAuth1(String oauth_verifier, NativeWebRequest request) {
 
         ConnectionFactory<T> connectionFactory = getConnectionFactory();
+
+        if( connectionFactory instanceof OAuth1ConnectionFactory) {
+
+            OAuth1ConnectionFactory oAuth1ConnectionFactory = (OAuth1ConnectionFactory) connectionFactory;
+            OAuth1Operations oAuthOperations = oAuth1ConnectionFactory.getOAuthOperations();
+
+            OAuthToken tokenValue = extractCachedRequestToken(request);
+            if(tokenValue == null)
+                return null;
+
+            AuthorizedRequestToken requestToken = new AuthorizedRequestToken(tokenValue, oauth_verifier);
+
+
+            OAuthToken accessToken = oAuthOperations.exchangeForAccessToken(requestToken, null);
+            return oAuth1ConnectionFactory.createConnection(accessToken);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Connection getConnectionOAuth2(String code) {
+
+        ConnectionFactory<T> connectionFactory = getConnectionFactory();
+
         if( connectionFactory instanceof OAuth2ConnectionFactory) {
 
             OAuth2ConnectionFactory oAuth2ConnectionFactory = (OAuth2ConnectionFactory) connectionFactory;
@@ -99,22 +124,13 @@ public class GenericConnectionService<T> implements ConnectionService {
 
             return connection;
         }
-        else if( connectionFactory instanceof OAuth1ConnectionFactory) {
-
-            OAuth1ConnectionFactory oAuth1ConnectionFactory = (OAuth1ConnectionFactory) connectionFactory;
-            OAuth1Operations oAuthOperations = oAuth1ConnectionFactory.getOAuthOperations();
-
-            AuthorizedRequestToken requestToken = new AuthorizedRequestToken(extractCachedRequestToken(request), oauth_verifier);
-            OAuthToken accessToken = oAuthOperations.exchangeForAccessToken(requestToken, null);
-            return oAuth1ConnectionFactory.createConnection(accessToken);
-        }
 
         return null;
     }
 
     private OAuthToken extractCachedRequestToken(WebRequest request) {
         OAuthToken requestToken = (OAuthToken) request.getAttribute(OAUTH_TOKEN_ATTRIBUTE, RequestAttributes.SCOPE_SESSION);
-        request.removeAttribute(OAUTH_TOKEN_ATTRIBUTE, RequestAttributes.SCOPE_SESSION);
+        //request.removeAttribute(OAUTH_TOKEN_ATTRIBUTE, RequestAttributes.SCOPE_SESSION);
         return requestToken;
     }
 

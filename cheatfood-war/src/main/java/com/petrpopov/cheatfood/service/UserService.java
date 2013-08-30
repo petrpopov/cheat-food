@@ -82,6 +82,19 @@ public class UserService extends GenericService<UserEntity> {
     }
 
     @CacheEvict(value = "users", allEntries = true)
+    public void removeUser(String userId) throws CheatException {
+
+        if( userId == null )
+            return;
+
+        UserEntity entity = this.findById(userId);
+        if( entity == null )
+            return;
+
+        op.remove(entity);
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
     public UserEntity createUser(@Valid UserCreate user) throws CheatException {
 
         String email = user.getEmail();
@@ -186,6 +199,20 @@ public class UserService extends GenericService<UserEntity> {
         op.save(user);
 
         emailChangeTokenService.invalidateTokensForEmail(token.getEmail());
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
+    public void updateEmailForUserFromCallback(String userId, String email) {
+
+        if( email == null || userId == null )
+            return;
+
+        UserEntity entity = this.findById(userId);
+        if( entity == null )
+            return;
+
+        entity.setEmail(email);
+        op.save(entity);
     }
 
     public void forgetPasswordForUser(String email, String globalUrl) throws CheatException, MessagingException {
@@ -387,8 +414,6 @@ public class UserService extends GenericService<UserEntity> {
         else {
             //found saved foursquare user. need to update
             Update update = new Update()
-                    .set("firstName", userEntity.getFirstName())
-                    .set("lastName", userEntity.getLastName())
                     .set("foursquareToken", userEntity.getFoursquareToken() )
                     .set("foursquareTwitterUsername", userEntity.getFoursquareTwitterUsername())
                     .set("email", userEntity.getEmail());
@@ -445,8 +470,6 @@ public class UserService extends GenericService<UserEntity> {
         else {
             //found saved facebook user. need to update
             Update update = new Update()
-                    .set("firstName", userEntity.getFirstName())
-                    .set("lastName", userEntity.getLastName())
                     .set("facebookToken", userEntity.getFacebookToken() )
                     .set("email", userEntity.getEmail());
 
@@ -478,13 +501,10 @@ public class UserService extends GenericService<UserEntity> {
                 return saveOrUpdateByTwitterUsername(userEntity);
         }
         else {
-            //found saved facebook user. need to update
+            //found saved twitter user. need to update
             Update update = new Update()
-                    .set("firstName", userEntity.getFirstName())
-                    .set("lastName", userEntity.getLastName())
                     .set("twitterToken", userEntity.getTwitterToken() )
-                    .set("twitterUsername", userEntity.getTwitterUsername() )
-                    .set("email", userEntity.getEmail());
+                    .set("twitterUsername", userEntity.getTwitterUsername() );
 
             return findAndUpdate(userEntity, update, "twitterId");
         }

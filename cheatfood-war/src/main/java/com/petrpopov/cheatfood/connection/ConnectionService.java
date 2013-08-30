@@ -12,5 +12,6 @@ public interface ConnectionService<T> {
 
     public String getProviderId();
     public String getAuthorizeUrl(String scope, NativeWebRequest request);
-    public Connection<T> getConnection(String code, String oauth_verifier, NativeWebRequest request);
+    public Connection<T> getConnectionOAuth1(String oauth_verifier, NativeWebRequest request);
+    public Connection<T> getConnectionOAuth2(String code);
 }

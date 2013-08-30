@@ -37,14 +37,18 @@ public class MongoAccountConnectionSignUp implements ConnectionSignUp {
     @Autowired
     private ProviderIdClassStorage providerIdClassStorage;
 
-    public Boolean executeAndGetSavedOrUpdatedInfo(Connection<?> connection) {
+    public UserEmailInfo executeAndGetSavedOrUpdatedInfo(Connection<?> connection) {
 
         UserProfile profile = connection.fetchUserProfile();
 
         UserEntity userEntity = this.buildUserEntity(connection, profile);
         UserEntityInfo info = userService.saveOrUpdate(userEntity);
 
-        return info.getSavedNew();
+        UserEmailInfo res = new UserEmailInfo();
+        res.setUserId(info.getUserEntity().getId());
+        res.setEmail(info.getUserEntity().getEmail());
+        res.setNewUser(info.getSavedNew());
+        return res;
     }
 
     @Override

@@ -178,7 +178,7 @@ hr {
     padding: 25px;
 }
 
-#restorePasswordForm {
+#restorePasswordForm, #emailConnectForm {
     margin-top: 50px;
     padding: 10px;
 }

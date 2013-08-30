@@ -54,6 +54,10 @@
         <put-attribute name="content" value="/WEB-INF/pages/pages/restore.jsp" />
     </definition>
 
+    <definition name="email" extends="simple">
+        <put-attribute name="content" value="/WEB-INF/pages/pages/email.jsp" />
+    </definition>
+
     <definition name="signin" extends="simple">
         <put-attribute name="content" value="/WEB-INF/pages/pages/signin.jsp" />
     </definition>
