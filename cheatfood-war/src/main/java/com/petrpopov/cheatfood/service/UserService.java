@@ -228,7 +228,6 @@ public class UserService extends GenericService<UserEntity> {
         mailService.sendForgetPasswordMail(email, tokenForEmail.getValue(), globalUrl);
     }
 
-    //@Cacheable("users")
     public UserEntity getUserByEmail(String email) {
         Criteria criteria = Criteria.where("email").is(email);
         Query query = new Query(criteria);
@@ -273,7 +272,6 @@ public class UserService extends GenericService<UserEntity> {
         return false;
     }
 
-  //  @Cacheable("users")
     public UserEntity getUserByFoursquareId(String foursquareId)
     {
         Criteria criteria = Criteria.where("foursquareId").is(foursquareId);
@@ -289,7 +287,6 @@ public class UserService extends GenericService<UserEntity> {
         return op.findOne(query, UserEntity.class);
     }
 
-    // @Cacheable("users")
     public UserEntity getUserByFacebookId(String facebookId) {
         Criteria criteria = Criteria.where("facebookId").is(facebookId);
         Query query = new Query(criteria);
@@ -311,7 +308,6 @@ public class UserService extends GenericService<UserEntity> {
         return op.findOne(query, UserEntity.class);
     }
 
-    //  @Cacheable("users")
     public UserEntity getUserByCookieId(String cookie)
     {
         Criteria criteria = Criteria.where("cookieId").is(cookie);

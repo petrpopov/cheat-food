@@ -5,6 +5,7 @@ import com.petrpopov.cheatfood.model.data.ErrorType;
 import com.petrpopov.cheatfood.model.data.MessageResult;
 import com.petrpopov.cheatfood.model.entity.Location;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
+import com.petrpopov.cheatfood.web.filters.LocationFavFilter;
 import com.petrpopov.cheatfood.web.filters.LocationFilter;
 import com.petrpopov.cheatfood.web.filters.UserEntityFilter;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -30,6 +31,9 @@ public class WebResultControllerAspect {
 
     @Autowired
     private LocationFilter locationFilter;
+
+    @Autowired
+    private LocationFavFilter locationFavFilter;
 
     @Autowired
     private UserEntityFilter userEntityFilter;

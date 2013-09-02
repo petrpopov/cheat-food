@@ -89,6 +89,9 @@ public class Location implements Serializable {
     @Transient
     private Boolean alreadyVoted;
 
+    @Transient
+    private Boolean inFavourites;
+
     public Location() {
     }
 
@@ -280,6 +283,14 @@ public class Location implements Serializable {
 
     public void setSiteUrl(String siteUrl) {
         this.siteUrl = siteUrl;
+    }
+
+    public Boolean getInFavourites() {
+        return inFavourites;
+    }
+
+    public void setInFavourites(Boolean inFavourites) {
+        this.inFavourites = inFavourites;
     }
 
     @Override

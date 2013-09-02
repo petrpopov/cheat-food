@@ -5,6 +5,8 @@ import com.petrpopov.cheatfood.model.entity.UserConnections;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,7 @@ public class UserConnectionsService extends GenericService<UserConnections> {
         logger = Logger.getLogger(UserConnectionsService.class);
     }
 
+    @Cacheable(value = "userconnections", key = "#userId")
     public UserConnections findByUser(String userId) {
 
         Criteria criteria = Criteria.where("user.$id").is(new ObjectId(userId));
@@ -35,6 +38,23 @@ public class UserConnectionsService extends GenericService<UserConnections> {
         return user;
     }
 
+    public boolean contains(UserEntity entity, Location location) {
+
+        UserConnections conn = findByUser(entity.getId());
+        int pos = contains(conn, location);
+
+        return pos < 0 ? false : true;
+    }
+
+    public boolean containsRemoved(UserEntity entity, Location location) {
+
+        UserConnections conn = findByUser(entity.getId());
+        int pos = containsRemoved(conn, location);
+
+        return pos < 0 ? false : true;
+    }
+
+    @CacheEvict(value = "userconnections", allEntries = true)
     public void removeLocationFromUserConnections(Location location, UserEntity user) {
 
         UserConnections conn = findByUser(user.getId());
@@ -44,6 +64,7 @@ public class UserConnectionsService extends GenericService<UserConnections> {
         removeLocation(location, conn);
     }
 
+    @CacheEvict(value = "userconnections", allEntries = true)
     public void restoreLocationToUserConnections(Location location, UserEntity user) {
 
         UserConnections conn = findByUser(user.getId());
@@ -53,6 +74,7 @@ public class UserConnectionsService extends GenericService<UserConnections> {
         addLocation(location, conn);
     }
 
+    @CacheEvict(value = "userconnections", allEntries = true)
     public void removeLocationFromConnections(Location location) {
 
         List<UserConnections> list = this.findAll();
@@ -105,7 +127,7 @@ public class UserConnectionsService extends GenericService<UserConnections> {
         op.save(conn);
     }
 
-    private int contains(UserConnections conn, Location location) {
+    public int contains(UserConnections conn, Location location) {
 
         if( conn == null )
             return -1;

@@ -22,6 +22,9 @@ public class LocationFilter {
     private LocationRateFilter locationRateFilter;
 
     @Autowired
+    private LocationFavFilter locationFavFilter;
+
+    @Autowired
     private LocationVoteFilter locationVoteFilter;
 
     public List<Location> filterLocations(List<Location> list) {
@@ -43,6 +46,7 @@ public class LocationFilter {
         locationFieldFilter.filterCreator(location);
         locationFieldFilter.filterRates(location);
         locationFieldFilter.filterVotes(location);
+        locationFavFilter.filterFavourites(location);
 
         return location;
     }

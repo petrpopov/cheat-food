@@ -143,6 +143,25 @@ public class LocationWebService extends BaseWebService {
         return result;
     }
 
+    @RequestMapping(value = "{locationid}/addprofile", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageResult addLocationToProfile(@CookieValue(required = true, value = "CHEATFOOD") CookieRequest cookie,
+                                                   @PathVariable String locationid) {
+
+        UserEntity userEntity = userContextHandler.currentContextUser();
+        Location location = locationService.findById(locationid);
+
+        MessageResult result = checkIfLocationExists(location);
+        if(result.getError().equals(Boolean.TRUE))
+            return result;
+
+        userConnectionsService.restoreLocationToUserConnections(location, userEntity);
+
+        result.setResult(location);
+
+        return result;
+    }
+
     @RequestMapping(value = "{locationid}/deleteprofile", method = RequestMethod.DELETE)
     @ResponseBody
     public MessageResult deleteLocationFromProfile(@CookieValue(required = true, value = "CHEATFOOD") CookieRequest cookie,
@@ -156,6 +175,8 @@ public class LocationWebService extends BaseWebService {
             return result;
 
         userConnectionsService.removeLocationFromUserConnections(location, userEntity);
+
+        result.setResult(location);
 
         return result;
     }

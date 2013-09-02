@@ -2238,6 +2238,21 @@ $(function() {
             $('#info_creator_body').hide();
         }
 
+        if( location.inFavourites ) {
+            if( location.inFavourites === true ) {
+                $('#addLocToFavIcon').removeClass("icon-heart-empty");
+                $('#addLocToFavIcon').addClass("icon-heart");
+            }
+            else {
+                $('#addLocToFavIcon').removeClass("icon-heart");
+                $('#addLocToFavIcon').addClass("icon-heart-empty");
+            }
+        }
+        else {
+            $('#addLocToFavIcon').removeClass("icon-heart");
+            $('#addLocToFavIcon').addClass("icon-heart-empty");
+        }
+
         $('#info_type_link').off('click');
         $('#info_type_link').click(function() {
             removeAllMarkers();
@@ -2328,6 +2343,7 @@ $(function() {
         initToggleEditAndViewBehavior(infoBoxObject);
         initVoteButtonsBehavior(infoBoxObject);
         initRouteButtonsBehavior(infoBoxObject);
+        initFavButtonBehavior(infoBoxObject);
     }
 
     function initRouteButtonsBehavior(infoBoxObject) {
@@ -2431,6 +2447,81 @@ $(function() {
         }
 
         $('#submitRouteForm').click();
+    }
+
+    function initFavButtonBehavior(infoBoxObject) {
+
+        $('#addLocToFav').off('click');
+        $('#addLocToFav').click(function() {
+            favForLocation(infoBoxObject);
+        });
+    }
+
+    function favForLocation(infoBoxObject) {
+
+        var fav = infoBoxObject.location.inFavourites;
+        if( fav ) {
+            if( fav === false ) {
+                addLocationToFav(infoBoxObject);
+            }
+            else {
+                removeLocationFromFav(infoBoxObject);
+            }
+        }
+        else {
+            addLocationToFav(infoBoxObject);
+        }
+    }
+
+    function addLocationToFav(infoBoxObject) {
+        var id = infoBoxObject.location.id;
+        $.get(params.realPath+'/api/locations/'+id+'/addprofile', function(result) {
+
+            if( !result ) {
+                showNoteTopCenter("Какая-то странная ошибка на сервере..извините", "warning", true);
+                return;
+            }
+
+            if( result.error === false ) {
+                infoBoxObject.location = result.result;
+                setInfoBoxContentFromLocation(infoBoxObject);
+                showNoteTopCenter("Добавлено в избранное!", "success", true);
+            }
+            else {
+                showNoteTopCenter("Какая-то странная ошибка на сервере..извините", "warning", true);
+            }
+        });
+    }
+
+    function removeLocationFromFav(infoBoxObject) {
+
+        var id = infoBoxObject.location.id;
+        $.ajax({
+            type: "DELETE",
+            url: params.realPath+'/api/locations/'+id+'/deleteprofile',
+            complete:function(result) {
+
+                if( !result ) {
+                    showNoteTopCenter("Какая-то странная ошибка на сервере..извините", "warning", true);
+                    return;
+                }
+
+                var res = result.responseJSON;
+                if( !res ) {
+                    showNoteTopCenter("Какая-то странная ошибка на сервере..извините", "warning", true);
+                    return;
+                }
+
+                if( res.error === false ) {
+                    infoBoxObject.location = res.result;
+                    setInfoBoxContentFromLocation(infoBoxObject);
+                    showNoteTopCenter("Убрано из избранного!", "success", true);
+                }
+                else {
+                    showNoteTopCenter("Какая-то странная ошибка на сервере..извините", "warning", true);
+                }
+            }
+        });
     }
 
     function initVoteButtonsBehavior(infoBoxObject) {
@@ -3393,6 +3484,13 @@ $(function() {
         var rateViewButtons = $('<span/>').attr("id", "rateViewButtons").addClass("spacer3");
         var rateActionButtons = $('<span/>').attr("id", "rateActionButtons").addClass("spacer3");
 
+        var fav = $('<div/>').addClass("pull-right")
+            .append(
+                $('<a/>').attr("id", "addLocToFav").append(
+                    $('<i/>').attr("id","addLocToFavIcon").addClass("icon-heart-empty icon-2x")
+                )
+            );
+
         var exRes = $('<div/>');
 
         exRes.append(
@@ -3605,6 +3703,9 @@ $(function() {
                                         $('<label/>').text("53K").attr("width", "32").attr("id", "voteDownLabel")
                                     )
                             )
+                    )
+                    .append(
+                        fav
                     )
             )
             .append(
