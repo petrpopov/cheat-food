@@ -858,6 +858,7 @@ $(function() {
         $("#clearSearchButton").off('click');
         $("#clearSearchButton").click(function() {
             $('#searchBar').val(null);
+            map.map.setZoom(ZOOM_LEVEL);
             removeAllTempMarkers();
         });
     }
@@ -912,7 +913,7 @@ $(function() {
         map.map.setCenter(position);
         map.map.setZoom(MAX_ZOOM_FOR_MARKER);
 
-        var marker = map.addMarker({
+       /* var marker = map.addMarker({
             lat: position.lat(),
             lng: position.lng(),
             draggable: true,
@@ -920,10 +921,10 @@ $(function() {
             click: function() {
                 createMarkerForContextMenuByMarker(marker);
             }
-        });
+        });*/
 
         removeAllTempMarkers();
-        tempMarkers.push(marker);
+//        tempMarkers.push(marker);
 
         searchMarker = true;
     }
@@ -1699,23 +1700,26 @@ $(function() {
 
         if( params.hasOwnProperty('currentUser') ) {
             if( params.currentUser.hasOwnProperty('id') ) {
-                if( infoBoxObject.location.creator.id === params.currentUser.id ) {
-                    $('#deleteMarkerMenu').closest('li').show();
-                    $('#deleteMarkerMenu').closest('li').removeClass('disabled');
-                    $('#deleteMarkerMenu').off('click');
-                    $('#deleteMarkerMenu').click(function() {
-                        deleteMarkerAction(infoBoxObject);
-                    });
-                }
-                else {
-                    if( params.currentUser.hasOwnProperty('admin') ) {
-                        if( params.currentUser.admin === true) {
-                            $('#deleteMarkerMenu').closest('li').show();
-                            $('#deleteMarkerMenu').closest('li').removeClass('disabled');
-                            $('#deleteMarkerMenu').off('click');
-                            $('#deleteMarkerMenu').click(function() {
-                                deleteMarkerAction(infoBoxObject);
-                            });
+
+                if( infoBoxObject.location.hasOwnProperty("creator") ) {
+                    if( infoBoxObject.location.creator.id === params.currentUser.id ) {
+                        $('#deleteMarkerMenu').closest('li').show();
+                        $('#deleteMarkerMenu').closest('li').removeClass('disabled');
+                        $('#deleteMarkerMenu').off('click');
+                        $('#deleteMarkerMenu').click(function() {
+                            deleteMarkerAction(infoBoxObject);
+                        });
+                    }
+                    else {
+                        if( params.currentUser.hasOwnProperty('admin') ) {
+                            if( params.currentUser.admin === true) {
+                                $('#deleteMarkerMenu').closest('li').show();
+                                $('#deleteMarkerMenu').closest('li').removeClass('disabled');
+                                $('#deleteMarkerMenu').off('click');
+                                $('#deleteMarkerMenu').click(function() {
+                                    deleteMarkerAction(infoBoxObject);
+                                });
+                            }
                         }
                     }
                 }
