@@ -8,6 +8,7 @@ import com.petrpopov.cheatfood.model.data.MessageResult;
 import com.petrpopov.cheatfood.model.entity.Location;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.service.LocationService;
+import com.petrpopov.cheatfood.service.UserConnectionsService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class LocationWebService extends BaseWebService {
     @Autowired
     private UserContextHandler userContextHandler;
 
+    @Autowired
+    private UserConnectionsService userConnectionsService;
 
 
     @RequestMapping(method = RequestMethod.GET)
@@ -137,6 +140,42 @@ public class LocationWebService extends BaseWebService {
             return result;
 
         locationService.deleteLocation(location);
+        return result;
+    }
+
+    @RequestMapping(value = "{locationid}/deleteprofile", method = RequestMethod.DELETE)
+    @ResponseBody
+    public MessageResult deleteLocationFromProfile(@CookieValue(required = true, value = "CHEATFOOD") CookieRequest cookie,
+                                        @PathVariable String locationid) {
+
+        UserEntity userEntity = userContextHandler.currentContextUser();
+        Location location = locationService.findById(locationid);
+
+        MessageResult result = checkIfLocationExists(location);
+        if(result.getError().equals(Boolean.TRUE))
+            return result;
+
+        userConnectionsService.removeLocationFromUserConnections(location, userEntity);
+
+        return result;
+    }
+
+    @RequestMapping(value = "{locationid}/restoreprofile", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageResult restoreLocationToProfile(@CookieValue(required = true, value = "CHEATFOOD") CookieRequest cookie,
+                                                   @PathVariable String locationid) {
+
+        UserEntity userEntity = userContextHandler.currentContextUser();
+        Location location = locationService.findById(locationid);
+
+        MessageResult result = checkIfLocationExists(location);
+        if(result.getError().equals(Boolean.TRUE))
+            return result;
+
+        userConnectionsService.restoreLocationToUserConnections(location, userEntity);
+
+        result.setResult(location);
+
         return result;
     }
 

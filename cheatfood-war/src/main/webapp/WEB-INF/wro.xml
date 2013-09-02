@@ -10,6 +10,7 @@
 
         <css>/resources/css/bootstrap.min.css</css>
         <css>/resources/css/bootstrap-responsive.min.css</css>
+        <css>/resources/css/font-awesome.min.css</css>
         <css>/resources/css/jquery-ui-1.10.3.custom.min.css</css>
         <css>/resources/css/style.css</css>
     </group>
@@ -47,6 +48,7 @@
         <css>/resources/css/bootstrap.min.css</css>
         <css>/resources/css/bootstrap-responsive.min.css</css>
         <css>/resources/css/jquery-ui-1.10.3.custom.min.css</css>
+        <css>/resources/css/font-awesome.min.css</css>
         <css>/resources/css/style.css</css>
         <css>/resources/css/signin.css</css>
     </group>

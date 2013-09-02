@@ -23,6 +23,8 @@ public class UserConnections {
 
     private List<String> locations;
 
+    private List<String> removedLocations;
+
     public UserConnections() {
     }
 
@@ -48,5 +50,13 @@ public class UserConnections {
 
     public void setLocations(List<String> locations) {
         this.locations = locations;
+    }
+
+    public List<String> getRemovedLocations() {
+        return removedLocations;
+    }
+
+    public void setRemovedLocations(List<String> removedLocations) {
+        this.removedLocations = removedLocations;
     }
 }

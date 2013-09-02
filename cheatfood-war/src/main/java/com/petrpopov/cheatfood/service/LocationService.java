@@ -520,6 +520,10 @@ public class LocationService extends GenericService<Location> {
             connections.setUser(user);
         }
 
+        int rem = userConnectionsService.containsRemoved(connections, locationId);
+        if( rem >= 0 )
+            return;
+
         if( connections.getLocations() == null ) {
             connections.setLocations(new ArrayList<String>());
         }

@@ -1410,7 +1410,7 @@ $(function() {
 
                     var locEls = [];
                     for(var i = 0; i < locations.length; i++ ) {
-                        locEls.push(createLocationInTable(locations[i], i));
+                        locEls.push(getLocationTrInTable(locations[i], i));
                     }
 
                     $('#connectedLocsBody').children().remove();
@@ -1420,7 +1420,7 @@ $(function() {
         });
     }
 
-    function createLocationInTable(location, i) {
+    function getLocationTrInTable(location, i) {
 
         var ratyViewProperties = {
             path: getImageDirPath(),
@@ -1429,7 +1429,7 @@ $(function() {
             readOnly: true
         };
 
-        return $('<tr/>')
+        return $('<tr/>').attr("id", "connLocTr"+i)
             .append(
                 $('<td/>').attr("style", "display: none").attr("hidden", "true").attr("id", "conLocId"+i)
                     .text(location.id)
@@ -1452,6 +1452,16 @@ $(function() {
             )
             .append(
                 $('<td/>').text(location.creator.publicName)
+            )
+            .append(
+                $('<td/>').append(
+                    $('<a/>').attr("id", "connLocEdit"+i)
+                        .append(
+                            $('<i/>').addClass("icon-remove-sign")
+                        ).click(function() {
+                            removeLocationFromProfile(i,$('#conLocId'+i).text());
+                        })
+                )
             );
     }
 
@@ -1485,8 +1495,59 @@ $(function() {
                 }
             });
         });
+    }
 
+    function removeLocationFromProfile(i, id) {
 
+        $.ajax({
+            type: "DELETE",
+            url: params.realPath+'/api/locations/'+id+'/deleteprofile',
+            complete: function(result) {
+
+                if( !result ) {
+                    return;
+                }
+
+                if( result.responseJSON ) {
+                    var res = result.responseJSON;
+                    if( res.error === false ) {
+
+                        var trId = "connLocTr"+i;
+                        $('#'+trId).replaceWith(
+                            $('<tr/>').attr('id', trId).append(
+                                $('<span/>').text("Локация удалена из избранного!")
+                            ).append(
+                                    $('<a/>').addClass("spacer5").attr("href", "#").text("Восстановить?")
+                                        .attr("id", "restoreConnLoc"+i).click(function() {
+                                            restoreLocationToProfile(i, id)
+                                        })
+                                )
+                        );
+                    }
+                }
+
+            }
+        });
+    }
+
+    function restoreLocationToProfile(i, id) {
+
+        $.get(params.realPath+'/api/locations/'+id+'/restoreprofile', function(result) {
+
+            if( !result ) {
+                return;
+            }
+
+            if( result.error === false ) {
+
+                var location = result.result;
+
+                var trId = "#connLocTr"+i;
+                $(trId).replaceWith(
+                    getLocationTrInTable(location, i)
+                );
+            }
+        });
     }
 
     function initProfileFormBehavior() {

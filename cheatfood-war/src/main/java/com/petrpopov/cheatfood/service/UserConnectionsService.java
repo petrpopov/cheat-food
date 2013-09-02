@@ -2,12 +2,14 @@ package com.petrpopov.cheatfood.service;
 
 import com.petrpopov.cheatfood.model.entity.Location;
 import com.petrpopov.cheatfood.model.entity.UserConnections;
+import com.petrpopov.cheatfood.model.entity.UserEntity;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,19 +35,74 @@ public class UserConnectionsService extends GenericService<UserConnections> {
         return user;
     }
 
+    public void removeLocationFromUserConnections(Location location, UserEntity user) {
+
+        UserConnections conn = findByUser(user.getId());
+        if( conn == null )
+            return;
+
+        removeLocation(location, conn);
+    }
+
+    public void restoreLocationToUserConnections(Location location, UserEntity user) {
+
+        UserConnections conn = findByUser(user.getId());
+        if( conn == null )
+            return;
+
+        addLocation(location, conn);
+    }
+
     public void removeLocationFromConnections(Location location) {
 
         List<UserConnections> list = this.findAll();
         for (UserConnections conn : list) {
-
-            int pos = contains(conn, location);
-            if( pos < 0 )
-                continue;
-
-            conn.getLocations().remove(pos);
-            op.save(conn);
+            removeLocation(location, conn);
         }
 
+    }
+
+    private void addLocation(Location location, UserConnections conn) {
+
+        int pos = contains(conn, location);
+        if( pos >= 0 )
+            return;
+
+        List<String> locations = conn.getLocations();
+        if( locations == null ) {
+            locations = new ArrayList<String>();
+            conn.setLocations(locations);
+        }
+
+        locations.add(location.getId());
+
+        int rem = containsRemoved(conn, location);
+        if( rem >= 0 ) {
+            conn.getRemovedLocations().remove(rem);
+        }
+
+        op.save(conn);
+    }
+
+    private void removeLocation(Location location, UserConnections conn) {
+
+        int pos = contains(conn, location);
+        if( pos < 0 )
+            return;
+
+        conn.getLocations().remove(pos);
+
+        int rem = containsRemoved(conn, location);
+        if( rem < 0 ) {
+            List<String> removed = conn.getRemovedLocations();
+            if( removed == null ) {
+                removed = new ArrayList<String>();
+                conn.setRemovedLocations(removed);
+            }
+            removed.add(location.getId());
+        }
+
+        op.save(conn);
     }
 
     private int contains(UserConnections conn, Location location) {
@@ -65,6 +122,40 @@ public class UserConnectionsService extends GenericService<UserConnections> {
         for(pos = 0; pos < locations.size(); pos++) {
             String s = locations.get(pos);
             if( s.equals(location.getId())) {
+                ok = true;
+                break;
+            }
+        }
+
+        if( ok )
+            return pos;
+        return -1;
+    }
+
+    public int containsRemoved(UserConnections conn, Location location) {
+
+        if( location == null )
+            return -1;
+
+        return containsRemoved(conn, location.getId());
+    }
+
+    public int containsRemoved(UserConnections conn, String locationId) {
+        if( conn == null )
+            return -1;
+
+        if( locationId == null )
+            return -1;
+
+        List<String> removed = conn.getRemovedLocations();
+        if( removed == null )
+            return -1;
+
+        int pos = -1;
+        boolean ok = false;
+        for(pos = 0; pos < removed.size(); pos++) {
+            String s = removed.get(pos);
+            if( s.equals(locationId)) {
                 ok = true;
                 break;
             }

@@ -17,8 +17,12 @@
 
 <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/img/favicon.ico" />
 
-
 <link href="/wro/main.css" rel="stylesheet" media="screen" type="text/css"/>
+
+<!--[if IE 7]>
+<link rel="stylesheet" href="/resources/css/font-awesome-ie7.min.css">
+<![endif]-->
+
 
 <script src="/wro/main.js" type="text/javascript"></script>
 

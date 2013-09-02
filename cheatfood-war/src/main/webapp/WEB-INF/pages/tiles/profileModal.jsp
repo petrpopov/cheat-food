@@ -31,6 +31,7 @@
                                 <th>Средний чек</th>
                                 <th>Рейтинг</th>
                                 <th>Добавил</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="connectedLocsBody">

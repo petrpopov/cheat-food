@@ -22,6 +22,9 @@
 
 <script src="/wro/login.js" type="text/javascript"></script>
 
+<!--[if IE 7]>
+<link rel="stylesheet" href="/resources/css/font-awesome-ie7.min.css">
+<![endif]-->
 
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
