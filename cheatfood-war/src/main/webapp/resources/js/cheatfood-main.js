@@ -67,6 +67,8 @@ $(function() {
     var DATE_FORMAT = 'yy-mm-dd';
     var DATE_FORMAT_DISPLAY = 'dd.mm.yy';
     var DATE_LANGUAGE = 'ru';
+    var MIN_WIDTH_TOOLBAR = 1366;
+    var MIN_WIDTH_INFOBAR = 1024;
 
 
     loadParams(init);
@@ -459,6 +461,20 @@ $(function() {
         createRouteForm();
         createSearchBar();
         createLocationsInfoBar();
+        hideOrShowControlsDueToDocumentWidth();
+    }
+
+    function hideOrShowControlsDueToDocumentWidth() {
+
+        var width = document.width;
+        if( width <= MIN_WIDTH_TOOLBAR ) {
+            $('#addMarkerButton').hide();
+            $('#infoBar').hide();
+        }
+        else {
+            $('#addMarkerButton').show();
+            $('#infoBar').show();
+        }
     }
 
     function createInfoBox() {
@@ -645,6 +661,15 @@ $(function() {
             map.map.controls[google.maps.ControlPosition.TOP_LEFT].push( div.get(0) );
 
             google.maps.event.addListener(map.map, 'idle', function(event) {
+
+                var width = document.width;
+                if( width <= MIN_WIDTH_TOOLBAR ) {
+                    $('#addMarkerButton').hide();
+                }
+                else {
+                    $('#addMarkerButton').show();
+                }
+
                 $('#addMarkerButton').click(function(){
                     addMarkerOnMapByLeftClick();
                 });
@@ -730,6 +755,15 @@ $(function() {
         createLocationsInfoBarDiv();
 
         google.maps.event.addListener(map.map, 'idle', function(event) {
+
+            var width = document.width;
+            if( width <= MIN_WIDTH_INFOBAR ) {
+                $('#infoBar').hide();
+            }
+            else {
+                $('#infoBar').show();
+            }
+
             initLocationsInfoBarBehavior();
         });
     }

@@ -22,6 +22,9 @@
 
 <script src="/wro/main.js" type="text/javascript"></script>
 
+<!--[if lt IE 9]>
+<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+<![endif]-->
 
 <label id="realPath" hidden="true" style="display: none;">
     <%= request.getScheme()+"://"

@@ -79,6 +79,7 @@ hr {
 
 .centerForm {
     width: 460px;
+    max-width: 460px;
     margin: 0 auto;
 }
 
@@ -101,6 +102,12 @@ hr {
 
 .container100 {
     height: 95%;
+}
+
+@media screen and (max-width: 940px)  {
+    #footer {
+        display: none;
+    }
 }
 
 .facebookImage {
