@@ -1329,6 +1329,9 @@ $(function() {
 
         $('#profileLink').off('click');
         $('#profileLink').click(function() {
+            if( infoBox ) {
+                infoBox.hide();
+            }
             $('#profileModal').modal('show');
         });
 
@@ -1512,6 +1515,17 @@ $(function() {
                     var res = result.responseJSON;
                     if( res.error === false ) {
 
+                        var loc = res.result;
+
+                        $.each(markers._dict, function(n, marker) {
+                            var location = marker.location;
+                            if( location.id === loc.id ) {
+                                var infoBoxObject = markers.get(marker.marker);
+                                infoBoxObject.location = loc;
+                            }
+                        });
+
+
                         var trId = "connLocTr"+i;
                         $('#'+trId).replaceWith(
                             $('<tr/>').attr('id', trId).append(
@@ -1540,11 +1554,19 @@ $(function() {
 
             if( result.error === false ) {
 
-                var location = result.result;
+                var loc = result.result;
+
+                $.each(markers._dict, function(n, marker) {
+                    var location = marker.location;
+                    if( location.id === loc.id ) {
+                        var infoBoxObject = markers.get(marker.marker);
+                        infoBoxObject.location = loc;
+                    }
+                });
 
                 var trId = "#connLocTr"+i;
                 $(trId).replaceWith(
-                    getLocationTrInTable(location, i)
+                    getLocationTrInTable(loc, i)
                 );
             }
         });
