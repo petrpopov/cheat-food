@@ -177,6 +177,8 @@ public class LocationService extends GenericService<Location> {
     @PreAuthorize("(hasRole('ROLE_USER') and #location.creator.id==principal.username) or hasRole('ROLE_ADMIN')")
     public void deleteLocation(Location location) {
         logger.info("Deleting location from database by object");
+
+        userConnectionsService.removeLocationFromConnections(location);
         op.remove(location);
     }
 
@@ -184,6 +186,7 @@ public class LocationService extends GenericService<Location> {
     public void hideLocation(Location location) {
         logger.info("Hiding location from database by object");
 
+        userConnectionsService.removeLocationFromConnections(location);
         location.setHidden(true);
         op.save(location);
     }

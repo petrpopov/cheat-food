@@ -738,7 +738,7 @@ $(function() {
             .append(
                 $('<p/>').addClass("form-inline")
                     .append(
-                        $('<label/>').text("Новых за сутки:")
+                        $('<label/>').text("Новых:")
                     )
                     .append(
                         $('<label/>').attr("id", "locationsNewCountLabel").addClass("spacer3")
