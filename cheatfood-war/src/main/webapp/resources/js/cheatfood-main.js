@@ -2163,6 +2163,8 @@ $(function() {
 
     function setInfoBoxContentFromLocation(infoBoxObject) {
 
+        google.maps.event.clearListeners(infoBoxObject.infoBox, 'domready');
+
         var location = infoBoxObject.location;
         var ratyViewProperties = {
             path: getImageDirPath(),
@@ -2352,8 +2354,11 @@ $(function() {
 
         if( window.pluso ) {
             if (typeof window.pluso.start === "function") {
-                var url = getLocationFullURL(location);
-                $('#shareLocationInSocial').attr("data-url", url);
+                var url = getLocationFullURL(infoBoxObject.location);
+                //$('#shareLocationInSocial').attr("data-url", url);
+
+                $('#plusoShareLoc').children().remove();
+                $('#plusoShareLoc').append( getPluso(url));
 
                 window.pluso.start();
             }
@@ -3491,17 +3496,26 @@ $(function() {
         return res.html();
     }
 
-    function getMarkerContentElementFromLocation() {
+    function getPluso(url) {
 
-        var pluso = $('<div/>').addClass("pluso pull-left").attr("id", "shareLocationInSocial")
+        var urlString = "";
+        if( url ) {
+            urlString = url;
+        }
+        return $('<div/>').addClass("pluso pull-left").attr("id", "shareLocationInSocial")
             .attr("data-options", "small,square,line,horizontal,counter,theme=03")
-            .attr("data-services", "facebook,twitter,vkontakte,google,odnoklassniki,moimir,print")
+            .attr("data-services", "facebook,twitter,vkontakte,google,odnoklassniki,moimir")
             .attr("data-background", "transparent")
-            .attr("data-url", "")
+            .attr("data-url", urlString)
             .attr("data-image", getMainlogoURL() )
             .attr("data-title", "Классное дешевое местечко!")
             .attr("data-description", "Классное дешевое местечко!")
             .attr("data-user", "1262715342");
+    }
+
+    function getMarkerContentElementFromLocation() {
+
+        var pluso = $('<div/>').addClass("pull-left").attr("id", "plusoShareLoc");
 
         var rateViewButtons = $('<span/>').attr("id", "rateViewButtons").addClass("spacer3");
         var rateActionButtons = $('<span/>').attr("id", "rateActionButtons").addClass("spacer3");
@@ -4279,12 +4293,16 @@ $(function() {
         }
     }
 
-    function getLocationFullURL(location) {
+    function getLocationFullURL(loc) {
+
         if( params.realPath.indexOf("localhost") >= 0 ) {
-            return "www.cheatfood.com/location/" + location.id;
+            return "www.cheatfood.com/location/" + loc.id;
+        }
+        else if( params.realPath.indexOf("127.0.0.1") >= 0 ){
+            return "www.cheatfood.com/location/" + loc.id;
         }
         else {
-            return params.realPath + "/location/" + location.id;
+            return params.realPath + "/location/" + loc.id;
         }
     }
 

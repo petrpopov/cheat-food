@@ -71,6 +71,9 @@ public class HomeController {
     public ModelAndView getLocation(@PathVariable String locationid) throws IOException {
 
         Location location = locationService.findById(locationid);
+        if( location == null ) {
+            return new ModelAndView(new RedirectView("/", true));
+        }
         locationFilter.filterLocation(location);
 
         ModelAndView modelAndView = new ModelAndView("index");
