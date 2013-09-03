@@ -4,6 +4,7 @@ import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.data.*;
 import com.petrpopov.cheatfood.model.entity.PasswordForgetToken;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
+import com.petrpopov.cheatfood.model.entity.UserLogin;
 import com.petrpopov.cheatfood.security.CheatPasswordEncoder;
 import com.petrpopov.cheatfood.service.PasswordForgetTokenService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
@@ -97,7 +98,7 @@ public class UserWebService extends BaseWebService {
 
     @RequestMapping(value = "login", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseBody
-    public MessageResult processLogin(@Valid @RequestBody UserCreate user,
+    public MessageResult processLogin(@Valid @RequestBody UserLogin user,
                                       HttpServletRequest request, HttpServletResponse response) throws CheatException {
 
         MessageResult res = new MessageResult();

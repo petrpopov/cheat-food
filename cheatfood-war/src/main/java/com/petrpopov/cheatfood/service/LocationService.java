@@ -157,7 +157,13 @@ public class LocationService extends GenericService<Location> {
 
         this.setCreationDateForLocation(location);
 
-        location.setCreator(userEntity);
+        UserEntity creator = getCreatorForLocation(location);
+        if( creator == null )
+            location.setCreator(userEntity);
+        else {
+            location.setCreator(creator);
+        }
+
 
         location.setVotes(this.getLocationVotes(location));
         location.setRates(this.getLocationRates(location));
@@ -672,6 +678,26 @@ public class LocationService extends GenericService<Location> {
         Date creationDate = byId.getCreationDate();
         if( creationDate == null )
             location.setCreationDate(new Date());
+    }
+
+    private UserEntity getCreatorForLocation(Location location) {
+
+        if(location == null )
+            return null;
+
+        String id = location.getId();
+        if( id == null )
+            return null;
+
+        if( id.isEmpty() )
+            return null;
+
+        Location saved = this.findById(id);
+        if( saved == null )
+            return null;
+
+        UserEntity creator = saved.getCreator();
+        return creator;
     }
 
     private Type getTypeForLocation(Location location) {
