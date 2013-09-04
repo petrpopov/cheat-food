@@ -3377,6 +3377,9 @@ $(function() {
         });
 
         $('#siteUrl').off('keyup change');
+        if( location.siteUrl ) {
+            $('#siteUrl').val(location.siteUrl);
+        }
         $('#siteUrl').on('keyup change', function() {
             var url = $('#siteUrl').val();
             if( url ) {
