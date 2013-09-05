@@ -16,27 +16,19 @@
     <div class="navbar-inner">
         <div class="container">
 
-            <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-
             <a class="rightspacer3" href="<c:url value="/"/>">
-                <img src="<s:url value="/resources"/>/img/mainlogo_white.png" width="50" class="pull-left"/>
+                <img src="<s:url value="/resources"/>/img/mainlogo_white_50.png" width="32" style="margin-top: 5px" class="pull-left"/>
             </a>
 
-            <!-- Be sure to leave the brand out there if you want it shown -->
             <a class="brand spacer3" href="<c:url value="/"/>">
                 cheat food
             </a>
 
             <ul class="nav">
                 <li><a href="<s:url value="/manifest"/>">Манифест</a></li>
+                <li><a href="<s:url value="/help"/>">Справка</a></li>
             </ul>
 
-            <!-- Everything you want hidden at 940px or less, place within here -->
             <div class="nav-collapse collapse pull-right">
                 <script type="text/javascript">(function() {
                     if (window.pluso)if (typeof window.pluso.start == "function") return;
@@ -46,8 +38,8 @@
                     var h=d[g]('head')[0] || d[g]('body')[0];
                     h.appendChild(s);
                 })();</script>
-                <div class="pluso" data-options="medium,square,line,horizontal,counter,theme=03"
-                     data-services="facebook,twitter,vkontakte,google,odnoklassniki,moimir,email,print"
+                <div class="pluso" data-options="small,square,line,horizontal,counter,theme=03"
+                     data-services="facebook,twitter,vkontakte,google,odnoklassniki,moimir,email"
                      data-background="transparent" data-url="http://www.cheatfood.com"
                      data-title="Cheat Food" data-description="Клевый сервис для поиска мест, где можно ну очень дешево поесть!"
                      data-user="1262715342"

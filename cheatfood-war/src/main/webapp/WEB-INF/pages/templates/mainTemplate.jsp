@@ -17,6 +17,7 @@
 <body>
 
     <t:insertAttribute name="header" />
+    <t:insertAttribute name="secondHeader" />
 
     <!-- main content here -->
     <t:insertAttribute name="content" />

@@ -25,6 +25,7 @@
         <put-attribute name="mainScripts" value="/WEB-INF/pages/tiles/mainScripts.jsp"/>
         <put-attribute name="workingScripts" value="/WEB-INF/pages/tiles/workingScripts.jsp"/>
         <put-attribute name="header" value="/WEB-INF/pages/tiles/header.jsp"/>
+        <put-attribute name="secondHeader" value="/WEB-INF/pages/tiles/secondHeader.jsp"/>
         <put-attribute name="messageModal" value="/WEB-INF/pages/tiles/messageModal.jsp"/>
         <put-attribute name="profileModal" value="/WEB-INF/pages/tiles/profileModal.jsp"/>
         <put-attribute name="deleteModal" value="/WEB-INF/pages/tiles/deleteModal.jsp"/>
@@ -40,12 +41,12 @@
         <put-attribute name="content" value="/WEB-INF/pages/pages/index.jsp" />
     </definition>
 
-    <definition name="help" extends="main">
-        <put-attribute name="header" value="/WEB-INF/pages/tiles/header.jsp"/>
+    <definition name="help" extends="simple">
+        <put-attribute name="header" value="/WEB-INF/pages/tiles/simpleHeader.jsp"/>
         <put-attribute name="content" value="/WEB-INF/pages/pages/help.jsp" />
     </definition>
 
-    <definition name="manifest" extends="main">
+    <definition name="manifest" extends="simple">
         <put-attribute name="header" value="/WEB-INF/pages/tiles/simpleHeader.jsp"/>
         <put-attribute name="content" value="/WEB-INF/pages/pages/manifest.jsp" />
     </definition>

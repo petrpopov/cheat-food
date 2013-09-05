@@ -9,18 +9,10 @@
     <div class="navbar-inner">
         <div class="container">
 
-            <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-            <!--a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a-->
-
             <a class="rightspacer3" href="<c:url value="/"/>">
                 <img src="<s:url value="/resources"/>/img/mainlogo_white_50.png" width="32" style="margin-top: 5px" class="pull-left"/>
             </a>
 
-            <!-- Be sure to leave the brand out there if you want it shown -->
             <a class="brand spacer3" href="<c:url value="/"/>">
                 cheat food
             </a>
@@ -107,36 +99,12 @@
                 var h=d[g]('head')[0] || d[g]('body')[0];
                 h.appendChild(s);
             })();</script>
-            <div id="mainPluso" class="pluso pull-right" data-options="small,square,line,horizontal,counter,theme=03"
+            <div class="pluso" data-options="small,square,line,horizontal,counter,theme=03"
                  data-services="facebook,twitter,vkontakte,google,odnoklassniki,moimir,email"
                  data-background="transparent" data-url="http://www.cheatfood.com"
                  data-title="Cheat Food" data-description="Клевый сервис для поиска мест, где можно ну очень дешево поесть!"
                  data-user="1262715342"
                  data-image="<s:url value="/resources"/>/img/mainlogo.png"></div>
-
-            <!-- Everything you want hidden at 940px or less, place within here -->
-            <!--div class="nav-collapse collapse pull-right">
-
-            </div-->
-
-        </div>
-    </div>
-</div>
-
-<div id="secondNavbar" class="navbar navbar-inverse">
-    <div class="navbar-inner">
-        <div class="container">
-            <ul class="nav">
-                <li>
-                    <a href="#">Всего локаций: <span id="locationsCountLabel"></span></a>
-                </li>
-                <li>
-                    <a href="#">В видимом регионе: <span id="locationsLocalCountLabel"></span></a>
-                </li>
-                <li>
-                    <a href="#">Новых: <span id="locationsNewCountLabel"></span></a>
-                </li>
-            </ul>
         </div>
     </div>
 </div>
