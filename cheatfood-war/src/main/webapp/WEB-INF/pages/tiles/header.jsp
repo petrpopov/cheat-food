@@ -99,7 +99,7 @@
                 var h=d[g]('head')[0] || d[g]('body')[0];
                 h.appendChild(s);
             })();</script>
-            <div class="pluso" data-options="small,square,line,horizontal,counter,theme=03"
+            <div class="pluso pull-right" data-options="small,square,line,horizontal,counter,theme=03"
                  data-services="facebook,twitter,vkontakte,google,odnoklassniki,moimir,email"
                  data-background="transparent" data-url="http://www.cheatfood.com"
                  data-title="Cheat Food" data-description="Клевый сервис для поиска мест, где можно ну очень дешево поесть!"
