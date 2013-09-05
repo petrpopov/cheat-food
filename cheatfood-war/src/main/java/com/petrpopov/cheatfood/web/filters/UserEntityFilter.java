@@ -50,14 +50,20 @@ public class UserEntityFilter {
         }
 
         String name = firstName;
-        if( name != null ) {
-            if( !name.trim().isEmpty() )
-                name += " ";
 
-            name += lastName;
+        if( firstName != null ) {
+            name = firstName.trim();
+
+            if( lastName != null ) {
+                if( !lastName.trim().isEmpty() ) {
+                    name += " " + lastName;
+                }
+            }
         }
         else {
-            name = lastName;
+            if( lastName != null ) {
+                name = lastName.trim();
+            }
         }
 
         return name;

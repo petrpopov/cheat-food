@@ -2248,18 +2248,14 @@ $(function() {
         $('#info_description').text(location.description);
         $('#info_type_icon').attr("src", getIconImagePath(location.type) );
 
+        $('#info_creator_body').hide();
         if( location.creator ) {
-            if( location.creator.id !== UNKNOWN_USER_ID ) {
-                $('#info_creator_body').show();
-                $('#info_creator').text(location.creator.publicName);
+            if( stringIsNotEmpty(location.creator.publicName)) {
+                if( location.creator.id !== UNKNOWN_USER_ID ) {
+                    $('#info_creator_body').show();
+                    $('#info_creator').text(location.creator.publicName);
+                }
             }
-            else {
-                $('#info_creator_body').hide();
-            }
-
-        }
-        else {
-            $('#info_creator_body').hide();
         }
 
         if( location.inFavourites ) {
