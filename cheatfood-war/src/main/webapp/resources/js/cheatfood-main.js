@@ -400,17 +400,20 @@ $(function() {
         google.maps.event.addListener(map.map, 'dragend', function() {
             hideAutoCompleteResults();
             loadAndCreateMarkersForLocationsInBounds();
+            loadLocationsInfo();
         } );
 
         google.maps.event.addListener(map.map, 'zoom_changed', function() {
             hideAutoCompleteResults();
             loadAndCreateMarkersForLocationsInBounds();
+            loadLocationsInfo();
         });
     }
 
     function loadDataAfterMapIsLoaded() {
 
         google.maps.event.addListenerOnce(map.map, 'idle', function() {
+            loadLocationsInfo();
             getLocationsCountInCurrentBounds();
 
             centerMapToLocation();
@@ -460,7 +463,6 @@ $(function() {
         createAddMarkerButton(auth);
         createRouteForm();
         createSearchBar();
-        //createLocationsInfoBar();
         hideOrShowControlsDueToDocumentWidth();
     }
 
@@ -750,24 +752,6 @@ $(function() {
         map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push( d.get(0) );
     }
 
-    function createLocationsInfoBar() {
-
-        createLocationsInfoBarDiv();
-
-        google.maps.event.addListener(map.map, 'idle', function(event) {
-
-            var width = document.width;
-            if( width <= MIN_WIDTH_INFOBAR ) {
-                $('#infoBar').hide();
-            }
-            else {
-                $('#infoBar').show();
-            }
-
-            initLocationsInfoBarBehavior();
-        });
-    }
-
     function showSearchForm() {
         $('#searchBarDiv').show(EFFECTS_TIME);
     }
@@ -777,56 +761,7 @@ $(function() {
         hideAutoCompleteResults();
     }
 
-    function showInfoBar() {
-
-        var ar = map.map.controls[google.maps.ControlPosition.TOP_RIGHT].getArray();
-
-        var index = -1;
-        for(var i = 0; i < ar.length; i++) {
-            var el = ar[i];
-            if( el.hasOwnProperty("id") ) {
-                if( el.id === "infoBar" ) {
-                    index = i;
-                    break;
-                }
-            }
-        }
-
-        if( index >= 0 ) {
-            $('#infoBar').fadeIn(EFFECTS_TIME);
-        }
-        else {
-            createLocationsInfoBarDiv();
-
-            $('#infoBar').fadeIn(EFFECTS_TIME, function() {
-                initLocationsInfoBarBehavior();
-            });
-        }
-    }
-
-    function hideInfoBar() {
-
-        var ar = map.map.controls[google.maps.ControlPosition.TOP_RIGHT].getArray();
-
-        var index = -1;
-        for(var i = 0; i < ar.length; i++) {
-            var el = ar[i];
-            if( el.hasOwnProperty("id") ) {
-                if( el.id === "infoBar" ) {
-                    index = i;
-                    break;
-                }
-            }
-        }
-
-        $('#infoBar').fadeOut(EFFECTS_TIME, function() {
-            if( index >= 0 ) {
-                map.map.controls[google.maps.ControlPosition.TOP_RIGHT].removeAt(index);
-            }
-        });
-    }
-
-    function initLocationsInfoBarBehavior() {
+    function loadLocationsInfo() {
         var bounds = map.map.getBounds();
 
         var ne = bounds.getNorthEast();
@@ -1079,7 +1014,6 @@ $(function() {
         $('#closeRouteForm').click(function() {
             $('#routeFormDiv').hide(EFFECTS_TIME);
             showSearchForm();
-            showInfoBar();
             clearRouteForm();
             clearMapRoutes();
         });
@@ -1088,7 +1022,6 @@ $(function() {
         $('#cancelRouteForm').click(function() {
             $('#routeFormDiv').hide(EFFECTS_TIME);
             showSearchForm();
-            showInfoBar();
             clearRouteForm();
             clearMapRoutes();
         });
@@ -2420,7 +2353,6 @@ $(function() {
         clearRouteForm();
         $('#routeFormDiv').show(EFFECTS_TIME);
         hideSearchForm();
-        hideInfoBar();
 
         var myInput;
         var myHideInput;
@@ -2861,7 +2793,6 @@ $(function() {
     function initAndShowEditForm(infoBoxObject) {
 
         hideSearchForm();
-        hideInfoBar();
 
         map.map.setCenter( infoBoxObject.infoBox.getPosition() );
         infoBoxObject.infoBox.hide();
@@ -2990,7 +2921,6 @@ $(function() {
 
         showAllTempMarkers();
         showSearchForm();
-        showInfoBar();
 
         resetSubmitEditButtonBehavior();
     }
@@ -3118,7 +3048,6 @@ $(function() {
                         enableDeleteMarkerMenu(infoBoxObject);
                         enableHideMarkerMenu(infoBoxObject);
                         showSearchForm();
-                        showInfoBar();
                     }
                     else {
                         if( res.errorType === errors.access_denied) {

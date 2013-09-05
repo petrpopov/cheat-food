@@ -128,13 +128,13 @@
         <div class="container">
             <ul class="nav">
                 <li>
-                    <a href="#">Всего локаций: <span>56К</span></a>
+                    <a href="#">Всего локаций: <span id="locationsCountLabel"></span></a>
                 </li>
                 <li>
-                    <a href="#">В видимом регионе: <span>56К</span></a>
+                    <a href="#">В видимом регионе: <span id="locationsLocalCountLabel"></span></a>
                 </li>
                 <li>
-                    <a href="#">Новых: <span>56К</span></a>
+                    <a href="#">Новых: <span id="locationsNewCountLabel"></span></a>
                 </li>
             </ul>
         </div>
