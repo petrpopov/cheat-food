@@ -18,8 +18,11 @@
 
     <t:insertAttribute name="header" />
 
-
+    <!-- main content here -->
     <t:insertAttribute name="content" />
+    <!-- main content here -->
+
+
 
     <t:insertAttribute name="messageModal" />
 

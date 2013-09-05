@@ -17,7 +17,7 @@
             </a-->
 
             <a class="rightspacer3" href="<c:url value="/"/>">
-                <img src="<s:url value="/resources"/>/img/mainlogo_white.png" width="50" class="pull-left"/>
+                <img src="<s:url value="/resources"/>/img/mainlogo_white_50.png" width="32" style="margin-top: 5px" class="pull-left"/>
             </a>
 
             <!-- Be sure to leave the brand out there if you want it shown -->
@@ -119,6 +119,24 @@
 
             </div-->
 
+        </div>
+    </div>
+</div>
+
+<div id="secondNavbar" class="navbar navbar-inverse">
+    <div class="navbar-inner">
+        <div class="container">
+            <ul class="nav">
+                <li>
+                    <a href="#">Всего локаций: <span>56К</span></a>
+                </li>
+                <li>
+                    <a href="#">В видимом регионе: <span>56К</span></a>
+                </li>
+                <li>
+                    <a href="#">Новых: <span>56К</span></a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

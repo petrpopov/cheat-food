@@ -460,7 +460,7 @@ $(function() {
         createAddMarkerButton(auth);
         createRouteForm();
         createSearchBar();
-        createLocationsInfoBar();
+        //createLocationsInfoBar();
         hideOrShowControlsDueToDocumentWidth();
     }
 
@@ -569,7 +569,7 @@ $(function() {
     }
 
     function createMarkerEditFormOnMap() {
-        var div = $('<div/>').attr('id','editMarkerFormDiv').attr('hidden', 'true')
+        var div = $('<div/>').attr('id','editMarkerFormDiv').attr("style", "display: none")
             .addClass('span7 transparent infoWindow').append(getEditFormMarkup());
 
         map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(div.get(0));
@@ -720,28 +720,28 @@ $(function() {
             .append(
                 $('<p/>').addClass("form-inline")
                     .append(
-                        $('<label/>').text("Всего локаций: ")
-                    )
-                    .append(
-                        $('<label/>').attr("id", "locationsCountLabel").addClass("spacer3")
-                    )
-            )
-            .append(
-                $('<p/>').addClass("form-inline")
-                    .append(
-                        $('<label/>').text("В регионе: ")
-                    )
-                    .append(
-                        $('<label/>').attr("id", "locationsLocalCountLabel").addClass("spacer3")
+                        $('<label/>').addClass("control-label infoBarLabel").text("Всего локаций:")
+                            .append(
+                                $('<span/>').attr("id", "locationsCountLabel").addClass("spacer3")
+                            )
                     )
             )
             .append(
                 $('<p/>').addClass("form-inline")
                     .append(
-                        $('<label/>').text("Новых:")
+                        $('<label/>').addClass("control-label infoBarLabel").text("В регионе: ")
+                            .append(
+                                $('<span/>').attr("id", "locationsLocalCountLabel").addClass("spacer3")
+                            )
                     )
+            )
+            .append(
+                $('<p/>').addClass("form-inline")
                     .append(
-                        $('<label/>').attr("id", "locationsNewCountLabel").addClass("spacer3")
+                        $('<label/>').addClass("control-label infoBarLabel").text("Новых:")
+                            .append(
+                                $('<span/>').attr("id", "locationsNewCountLabel").addClass("spacer3")
+                            )
                     )
             );
 
@@ -797,6 +797,7 @@ $(function() {
         }
         else {
             createLocationsInfoBarDiv();
+
             $('#infoBar').fadeIn(EFFECTS_TIME, function() {
                 initLocationsInfoBarBehavior();
             });
@@ -989,6 +990,7 @@ $(function() {
 
     function createRouteForm() {
         var div = $('<div/>').attr("id", "routeFormDiv").addClass("span7 infoWindow").attr("hidden", "true")
+            .attr("style", "display: none")
             .append(
                 $('<button/>').attr("type", "button").addClass("close").text("x").attr("id", "closeRouteForm")
             ).append(
@@ -2070,11 +2072,15 @@ $(function() {
         var boxText = document.createElement("div");
         boxText.id = 'infoBox';
         boxText.className = "arrow_box infoWindowInner";
-        boxText.innerHTML = getMarkerContentFromLocation();
+        boxText.innerHTML = getInfoBoxWindowMarkup();
 
         var infoOptions = {
             content: boxText,
             boxClass: "span7 transparent infoWindow",
+            boxStyle: {
+                "min-width": "510px",
+                width: "700px"
+            },
             disableAutoPan: false,
             isHidden: true,
             pane: "floatPane",
@@ -3488,9 +3494,9 @@ $(function() {
         });
     }
 
-    function getMarkerContentFromLocation() {
+    function getInfoBoxWindowMarkup() {
 
-        var res = getMarkerContentElementFromLocation();
+        var res = getInfoBoxHtml();
 
         return res.html();
     }
@@ -3512,7 +3518,7 @@ $(function() {
             .attr("data-user", "1262715342");
     }
 
-    function getMarkerContentElementFromLocation() {
+    function getInfoBoxHtml() {
 
         var pluso = $('<div/>').addClass("pull-left").attr("id", "plusoShareLoc");
 
