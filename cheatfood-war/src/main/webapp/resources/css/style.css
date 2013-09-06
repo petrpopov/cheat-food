@@ -11,22 +11,18 @@ body > .container-fluid > .row-fluid {
     margin: 0px; padding: 0px;
 }
 
+.btn-toolbar, .btn-group {
+    font-size: 100%;
+}
+
 .navbar {
     margin-bottom: 0;
-}
-
-.navbar .container {
-    max-height: 32px;
-    height: 3em;
-}
-
-#secondNavbar {
-    max-height: 25px;
 }
 
 #secondNavbar .nav>li>a {
     padding: 0px 15px 6px;
 }
+
 
 #map {
     display: block;
@@ -36,6 +32,8 @@ body > .container-fluid > .row-fluid {
 
 #slidepanel {
     display: none;
+    height: 100%;
+    overflow: auto;
 }
 
 /* this is for strange maps render problem */
@@ -127,6 +125,16 @@ hr {
 
 .container100 {
     height: 95%;
+}
+
+.favLink {
+    color: #be0005;
+    cursor: pointer;
+}
+
+.favLink:hover {
+    text-decoration: none;
+    color: #be0005;
 }
 
 @media screen and (max-width: 940px)  {

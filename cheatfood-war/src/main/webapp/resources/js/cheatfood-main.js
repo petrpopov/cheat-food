@@ -50,6 +50,7 @@ $(function() {
     var prevBounds;
     var currentTypeId;
 
+    var slidepanel = false;
     var newMarker = false;
     var searchMarker = false;
 
@@ -2019,7 +2020,7 @@ $(function() {
             pane: "floatPane",
             infoBoxClearance: new google.maps.Size(50, 50),
             maxWidth: 900,
-            pixelOffset: new google.maps.Size(13, -255),
+            pixelOffset: new google.maps.Size(40, -250),
             enableEventPropagation: false
         };
         infoBox = new InfoBox(infoOptions);
@@ -2069,6 +2070,261 @@ $(function() {
         return marker;
     }
 
+    function toggleMarkerSlidePanel(infoBoxObject) {
+
+        if( slidepanel === false ) {
+            showMarkerSlidePanel(infoBoxObject);
+        }
+        else {
+            hideMarkerSlidePanel(true);
+        }
+    }
+
+    function showMarkerSlidePanel(infoBoxObject) {
+
+        $('#slidepanel').show();
+        $('#slidepanel').animate({
+            "width": "+=350px"
+        }, EFFECTS_TIME);
+        $('#map').removeClass("span12");
+
+        if( infoBox ) {
+            infoBox.hide();
+        }
+
+        initSlidePanelWithData(infoBoxObject);
+        initSlideRouteButtonsBehavior(infoBoxObject);
+
+
+        slidepanel = true;
+    }
+
+    function hideMarkerSlidePanel(infoBoxShow) {
+
+
+        $('#slidepanel').fadeOut(EFFECTS_TIME, function() {
+            $('#map').addClass("span12");
+
+            $('#slidepanel').animate({
+                "width": "-=350px"
+            }, 0);
+        });
+
+
+        if( infoBoxShow ) {
+            if( infoBoxShow === true ) {
+                if( infoBox ) {
+                    infoBox.show();
+                }
+            }
+        }
+
+
+        slidepanel = false;
+    }
+
+    function initSlidePanelWithData(infoBoxObject) {
+
+        $('#closeSlidePanel').off('click');
+        $('#closeSlidePanel').click(function() {
+            hideMarkerSlidePanel(true);
+        });
+
+        var loc = infoBoxObject.location;
+
+        $('#slideImage').attr("src", getIconImagePath(loc.type) );
+        $('#slideType').text( getTypeValueByLanguage(loc.type, DATE_LANGUAGE) );
+        $('#slideTitle').text(loc.title);
+        $('#slideDescription').text(loc.description);
+
+        if( loc.footype === true ) {
+            $('#slideFootype').addClass('icon-warning-sign').removeClass('icon-ok-sign');
+            $('#slideFootypeText').text('Это тошняк или палатка');
+        }
+        else if( loc.footype === false ) {
+            $('#slideFootype').removeClass('icon-warning-sign').addClass('icon-ok-sign');
+            $('#slideFootypeText').text('Это нормальное кафе');
+        }
+
+        if(loc.averagePrice) {
+            $('#slideAveragePrice').text(loc.averagePrice + " RUB");
+
+            if( loc.averagePrice > params.recommendedPrice ) {
+                $('#slideAveragePriceInfo').addClass("label-warning");
+                $('#slideAveragePriceInfo').addClass("label-warning");
+                $('#slideAveragePriceInfo').removeClass("label-success");
+            }
+            else {
+                $('#slideAveragePriceInfo').removeClass("label-warning");
+                $('#slideAveragePriceInfo').removeClass("label-warning");
+                $('#slideAveragePriceInfo').addClass("label-success");
+            }
+        }
+
+        $('#slideAddressDescrBody').hide();
+        if(loc.addressDescription) {
+            $('#slideAddressDescription').text(loc.addressDescription);
+            $('#slideAddressDescrBody').show();
+        }
+
+        if(loc.actualDate) {
+            var parseDate = $.datepicker.parseDate( DATE_FORMAT, loc.actualDate );
+            var displayDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, parseDate );
+            $('#slideActualDate').text(displayDate);
+        }
+
+        $('#slideAddressBody').hide();
+        if( loc.address ) {
+            var address = "";
+
+            if( loc.address.addressLine ) {
+                address = loc.address.addressLine;
+            }
+            else {
+                address = addressToString(loc.address);
+            }
+
+            if( stringIsNotEmpty(address) === true   ) {
+                $('#slideAddress').text(address);
+                $('#slideAddressBody').show();
+            }
+        }
+
+        $('#slideSiteUrlBody').hide();
+        if(loc.siteUrl) {
+            $('#slideSiteUrl').text(loc.siteUrl);
+            $('#slideSiteUrl').attr("href", loc.siteUrl);
+            $('#slideSiteUrlBody').show();
+        }
+
+        $('#slideCreatorBody').hide();
+        if( loc.creator ) {
+            if( stringIsNotEmpty(loc.creator.publicName)) {
+                if( loc.creator.id !== UNKNOWN_USER_ID ) {
+                    $('#slideCreatorBody').show();
+                    $('#slideCreator').text(loc.creator.publicName);
+                }
+            }
+        }
+
+        $('#slideApproveLoc').hide();
+        $('#slideEditGroup').hide();
+        $('#slideHide').hide();
+        $('#slideDelete').hide();
+        $('#slideRatyGroup').hide();
+
+        if( authorized === true ) {
+            $('#slideEditGroup').show();
+
+            if( params.hasOwnProperty('currentUser') ) {
+                if(params.currentUser.hasOwnProperty('admin') ) {
+                    if( params.currentUser.admin === true ) {
+                        $('#slideHide').show();
+                        $('#slideDelete').show();
+                    }
+                    else {
+                        if( loc.creator ) {
+                            if( loc.creator.id === params.currentUser.id ) {
+                                $('#slideDelete').show();
+                            }
+                        }
+                    }
+                }
+            }
+
+            if( loc.alreadyVoted === false ) {
+                $('#slideApproveLoc').show();
+            }
+
+            if( loc.alreadyRated === false ) {
+                var ratyActionProperties = {
+                    path: getImageDirPath(),
+                    size: RATY_SIZE,
+                    score: 0,
+                    click: function(score, e) {
+                        rateForLocation(infoBoxObject, score);
+                    }
+                };
+                $('#slideRatyGroup').show();
+                $('#slideRatyAction').raty(ratyActionProperties);
+            }
+
+            if( loc.inFavourites ) {
+                if( loc.inFavourites === true ) {
+                    $('#slideFavIcon').removeClass("icon-heart-empty");
+                    $('#slideFavIcon').addClass("icon-heart");
+                }
+                else {
+                    $('#slideFavIcon').removeClass("icon-heart");
+                    $('#slideFavIcon').addClass("icon-heart-empty");
+                }
+            }
+            else {
+                $('#slideFavIcon').removeClass("icon-heart");
+                $('#slideFavIcon').addClass("icon-heart-empty");
+            }
+        }
+
+        var ratyViewProperties = {
+            path: getImageDirPath(),
+            size: RATY_SIZE,
+            score: loc.averageRate,
+            readOnly: true
+        };
+        $('#slideRatyView').raty(ratyViewProperties);
+
+        if( window.pluso ) {
+            if (typeof window.pluso.start === "function") {
+                var url = getLocationFullURL(infoBoxObject.location);
+
+                $('#slidePluso').children().remove();
+                $('#slidePluso').append( getPluso(url));
+
+                window.pluso.start();
+            }
+        }
+    }
+
+    function initSlideRouteButtonsBehavior(infoBoxObject) {
+
+        $('#slideToHere').off('click');
+        $('#slideToHere').click(function() {
+            getRouteAddresses(infoBoxObject, true);
+        });
+
+        $('#slideFromHere').off('click');
+        $('#slideFromHere').click(function() {
+            getRouteAddresses(infoBoxObject, false);
+        });
+
+        $('#slideDelete').off('click');
+        $('#slideDelete').click(function() {
+            $('#deleteAlert').hide();
+            $('#deleteModal').modal('show');
+        });
+
+        $('#slideHide').off('click');
+        $('#slideHide').click(function() {
+            $('#hideAlert').hide();
+            $('#hideModal').modal('show');
+        });
+
+        $('#slideFav').off('click');
+        $('#slideFav').click(function() {
+            favForLocation(infoBoxObject);
+        });
+
+        $('#slideApprove').off('click');
+        $('#slideApprove').click(function() {
+            voteForLocation(infoBoxObject, true, $('#slideApprove') );
+        });
+
+        $('#slideNotApprove').off('click');
+        $('#slideNotApprove').click(function() {
+            voteForLocation(infoBoxObject, false, $('#slideNotApprove') );
+        });
+    }
+
     function markerClickBehavior(marker, infoBoxObject) {
         initialShowInfoBoxForMarker(marker, infoBoxObject);
         enableEditMarkerMenu(infoBoxObject);
@@ -2098,6 +2354,7 @@ $(function() {
         infoBoxObject.infoBox.setPosition(getLatLngFromGeoLocation(infoBoxObject.location.geoLocation));
         infoBoxObject.infoBox.show();
         setInfoBoxContentFromLocation(infoBoxObject);
+
     }
 
     function setInfoBoxContentFromLocation(infoBoxObject) {
@@ -2306,6 +2563,11 @@ $(function() {
         initVoteButtonsBehavior(infoBoxObject);
         initRouteButtonsBehavior(infoBoxObject);
         initFavButtonBehavior(infoBoxObject);
+
+        $('#infoDetails').off('click');
+        $('#infoDetails').click(function() {
+            toggleMarkerSlidePanel(infoBoxObject);
+        })
     }
 
     function initRouteButtonsBehavior(infoBoxObject) {
@@ -2444,8 +2706,11 @@ $(function() {
             }
 
             if( result.error === false ) {
+
                 infoBoxObject.location = result.result;
                 setInfoBoxContentFromLocation(infoBoxObject);
+                initSlidePanelWithData(infoBoxObject);
+
                 showNoteTopCenter("Добавлено в избранное!", "success", true);
             }
             else {
@@ -2474,8 +2739,11 @@ $(function() {
                 }
 
                 if( res.error === false ) {
+
                     infoBoxObject.location = res.result;
                     setInfoBoxContentFromLocation(infoBoxObject);
+                    initSlidePanelWithData(infoBoxObject);
+
                     showNoteTopCenter("Убрано из избранного!", "success", true);
                 }
                 else {
@@ -2513,25 +2781,32 @@ $(function() {
             success: function(data) {
 
                 if( data.error == false ) {
+
                     infoBoxObject.location = data.result;
                     setInfoBoxContentFromLocation(infoBoxObject);
+                    initSlidePanelWithData(infoBoxObject);
+
                     showNoteTopCenter("Спасибо!", "success", true);
                     $('#approveLocation').hide();
+                    $('#slideApproveLoc').hide();
                 }
                 else {
                     if( data.errorType === errors.access_denied) {
                         showNoteTopCenter("Извините, но у вас нет прав на это действие...", "warning", true);
                         $('#approveLocation').hide();
+                        $('#slideApproveLoc').hide();
                     }
                     else if( data.errorType === errors.already_voted ) {
                         infoBoxObject.location.alreadyVoted = true;
                         showNoteTopCenter("А вы уже голосовали за эту локацию. Давайте без вбросов,ок? =)", "warning", true);
                         $('#approveLocation').hide();
+                        $('#slideApproveLoc').hide();
                     }
                     else if( data.errorType === errors.unknown_location ) {
                         infoBoxObject.location.alreadyVoted = true;
                         showNoteTopCenter("Такой локации больше нет в базе. Обновите страничку!", "warning", true);
                         $('#approveLocation').hide();
+                        $('#slideApproveLoc').hide();
                     }
                     else {
                         showNoteTopCenter("Какая-то странная ошибка на сервере..извините", "warning", true);
@@ -2567,8 +2842,10 @@ $(function() {
 
                     infoBoxObject.location = loc;
                     setInfoBoxContentFromLocation(infoBoxObject);
+                    initSlidePanelWithData(infoBoxObject);
 
                     $('#rateActionsDiv').hide(EFFECTS_TIME);
+                    $('#slideRatyGroup').hide(EFFECTS_TIME);
 
                     showNoteTopCenter("Спасибо!", "success", true);
                 }
@@ -2578,14 +2855,20 @@ $(function() {
                     }
                     else if( data.errorType === errors.already_rated ) {
                         infoBoxObject.location.alreadyRated = true;
+
+                        $('#slideRatyAction').raty('readOnly', true);
                         $('#rateActionButtons').raty('readOnly', true);
                         $('#rateActionsDiv').hide(EFFECTS_TIME);
+                        $('#slideRatyGroup').hide(EFFECTS_TIME);
                         showNoteTopCenter("А вы уже голосовали за эту локацию. Давайте без вбросов,ок? =)", "warning", true);
                     }
                     else if( data.errorType === errors.unknown_location ) {
                         infoBoxObject.location.alreadyVoted = true;
+
+                        $('#slideRatyAction').raty('readOnly', true);
                         $('#rateActionButtons').raty('readOnly', true);
                         $('#rateActionsDiv').hide(EFFECTS_TIME);
+                        $('#slideRatyGroup').hide(EFFECTS_TIME);
                         showNoteTopCenter("Такой локации больше нет в базе. Обновите страничку!", "warning", true);
                     }
                     else {
@@ -2697,6 +2980,7 @@ $(function() {
                     if( res.error == false ) {
                         $('#deleteModal').modal('hide');
                         removeMarkerAndInfoBox(infoBoxObject);
+                        hideMarkerSlidePanel();
                     }
                     else {
                         if( res.errorType === errors.access_denied ) {
@@ -2744,6 +3028,7 @@ $(function() {
                     if( res.error == false ) {
                         $('#hideModal').modal('hide');
                         removeMarkerAndInfoBox(infoBoxObject);
+                        hideMarkerSlidePanel();
                     }
                     else {
                         if( res.errorType === errors.access_denied ) {
@@ -3456,7 +3741,7 @@ $(function() {
 
         var fav = $('<div/>').addClass("pull-right")
             .append(
-                $('<a/>').attr("id", "addLocToFav").append(
+                $('<a/>').attr("id", "addLocToFav").addClass("favLink").append(
                     $('<i/>').attr("id","addLocToFavIcon").addClass("icon-heart-empty icon-2x")
                 )
             );
@@ -3586,6 +3871,10 @@ $(function() {
                                             .append(
                                                 $('<button/>').addClass('btn btn-small').text('Маршрут отсюда')
                                                     .attr("id", "routeFromHere")
+                                            )
+                                            .append(
+                                                $('<button/>').addClass('btn btn-small').text('Подробнее')
+                                                    .attr("id", "infoDetails")
                                             )
 
                                     )
