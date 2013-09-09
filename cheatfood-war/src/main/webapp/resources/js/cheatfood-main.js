@@ -139,7 +139,24 @@ $(function() {
     }
 
     function init() {
+
+        $(window).resize(function() {
+            setMapCorrectSize();
+        });
+
+        setMapCorrectSize();
         checkCookies();
+    }
+
+    function setMapCorrectSize() {
+        var h = $(window).height();
+        var offset = $('#firstNavbar').height() + $('#secondNavbar').height();
+        if( $('#footer').is(':visible') === true ) {
+            offset += $('#footer').height();
+        }
+
+        $('#map').css('height', (h-offset));
+        $('#slidepanel').css('height', (h-offset));
     }
 
     function checkCookies() {
@@ -582,7 +599,7 @@ $(function() {
 
     function createMarkerEditFormOnMap() {
         var div = $('<div/>').attr('id','editMarkerFormDiv').attr("style", "display: none")
-            .addClass('span7 transparent infoWindow').append(getEditFormMarkup());
+            .addClass('span6 transparent infoWindow').append(getEditFormMarkup());
 
         map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(div.get(0));
     }
@@ -1996,16 +2013,6 @@ $(function() {
         return marker;
     }
 
-    function toggleMarkerSlidePanel(infoBoxObject) {
-
-        if( slidepanel === false ) {
-            showMarkerSlidePanel(infoBoxObject);
-        }
-        else {
-            hideMarkerSlidePanel(true);
-        }
-    }
-
     function showMarkerSlidePanel(infoBoxObject) {
 
         if( slidepanel === false ) {
@@ -2014,6 +2021,8 @@ $(function() {
                 "width": "+=350px"
             }, EFFECTS_TIME);
             $('#map').removeClass("span12");
+
+            setMapCorrectSize();
         }
 
         if( infoBox ) {
@@ -2036,6 +2045,8 @@ $(function() {
             $('#slidepanel').animate({
                 "width": "-=350px"
             }, 0);
+
+            setMapCorrectSize();
         });
 
 
@@ -2897,11 +2908,11 @@ $(function() {
 
         if( location.footype === true ) {
             $('#info_footype').addClass('icon-warning-sign').removeClass('icon-ok-sign');
-            $('#info_footype_text').text('Это тошняк или палатка');
+            //$('#info_footype_text').text('Это тошняк или палатка');
         }
         else if( location.footype === false ) {
             $('#info_footype').removeClass('icon-warning-sign').addClass('icon-ok-sign');
-            $('#info_footype_text').text('Это нормальное кафе');
+            //$('#info_footype_text').text('Это нормальное кафе');
         }
 
         if( location.address ) {
@@ -4159,23 +4170,19 @@ $(function() {
                     .append(
                         $('<div/>').addClass('media-body')
                             .append(
-                                $('<h4/>').attr('id', 'info_title').addClass('media-heading')
+                                $('<h4/>').addClass('media-heading')
+                                    .append(
+                                        $('<i/>').attr('id','info_footype')
+                                    )
+                                    .append(
+                                        $('<span/>').attr('id', 'info_title').addClass("spacer3")
+                                    )
                             )
                             .append(
                                 $('<p/>').attr('id', 'info_description')
                             )
                             .append(
                                 $('<div/>').addClass('media')
-                                    .append(
-                                        $('<div/>').addClass('media-body')
-                                            .append(
-                                                $('<i/>').attr('id','info_footype')
-                                            )
-                                            .append(
-                                                $('<span/>').attr('id','info_footype_text')
-                                                    .addClass('spacer5')
-                                            )
-                                    )
                                     .append(
                                         $('<div/>').addClass('media-body')
                                             .append(
@@ -4205,31 +4212,27 @@ $(function() {
                                             )
                                     )
                                     .append(
-                                        $('<div/>').addClass('media-body').attr("id", "info_address_body")
-                                            .append(
-                                                $('<span/>').addClass('label').text('Адрес')
-                                            )
-                                            .append(
-                                                $('<span/>').attr('id', 'info_address').addClass('spacer5')
-                                            )
-                                    )
-                                    .append(
-                                        $('<div/>').addClass('media-body').attr('id','info_siteUrl_body')
-                                            .append(
-                                                $('<span/>').addClass('label label-info').text('Сайт')
-                                            )
-                                            .append(
-                                                $('<a/>').attr('id','info_siteUrl').attr("target", "_blank")
-                                                    .addClass('spacer5')
-                                            )
-                                    )
-                                    .append(
                                         $('<div/>').addClass('media-body').attr("id", "info_creator_body")
                                             .append(
                                                 $('<span/>').addClass('label').text('Добавил')
                                             )
                                             .append(
                                                 $('<span/>').attr('id', 'info_creator').addClass('spacer5')
+                                            )
+                                    )
+                                    .append(
+                                        $('<br/>')
+                                    )
+                                    .append(
+                                        $('<div/>').addClass('media-body').attr("id", "info_address_body")
+                                            .append(
+                                                $('<address/>').attr('id', 'info_address')
+                                            )
+                                    )
+                                    .append(
+                                        $('<div/>').addClass('media-body').attr('id','info_siteUrl_body')
+                                            .append(
+                                                $('<a/>').attr('id','info_siteUrl').attr("target", "_blank")
                                             )
                                     )
                             )
@@ -4499,49 +4502,12 @@ $(function() {
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').addClass('input-block-level span4')
+                                $('<input/>').addClass('input-block-level span11')
                                     .attr('id', 'title').attr('name', 'title')
                                     .attr('placeholder', 'Чебуречная Ашота').attr('required', 'true')
                             )
                     )
             )
-            .append(
-                $('<div/>').addClass('control-group')
-                    .append(
-                        $('<label/>').addClass('control-label').attr('for','description').text('Оставьте совет')
-                    )
-                    .append(
-                        $('<div/>').addClass('controls')
-                            .append(
-                                $('<textarea/>')//.addClass('input-block-level span4')
-                                    .attr('id', 'description').attr('name', 'description')
-                                    .attr('placeholder', 'Самые лучшие чебуреки и шаурма в городе!')
-                                    .attr('required', 'true')
-                                    .attr("rows", 3).addClass("span4")
-                            )
-                    )
-            )
-            .append(
-                $('<div/>').addClass('control-group')
-                    .append(
-                        $('<label/>').addClass('control-label').attr('for','addressDescription').text('Описание адреса')
-                    )
-                    .append(
-                        $('<div/>').addClass('controls')
-                            .append(
-                                $('<input/>').addClass('input-block-level span4')
-                                    .attr('id', 'addressDescription').attr('name', 'addressDescription')
-                                    .attr('placeholder', 'Выходите из электрички и спускайтесь под мост')
-                            )
-                    )
-            );
-
-        return div;
-    }
-
-    function getEditFormTab2Markup() {
-
-        var div = $('<div/>')
             .append(
                 $('<div/>').addClass('control-group')
                     .append(
@@ -4557,6 +4523,43 @@ $(function() {
                             )
                     )
             )
+            .append(
+                $('<div/>').addClass('control-group')
+                    .append(
+                        $('<label/>').addClass('control-label').attr('for','description').text('Оставьте совет')
+                    )
+                    .append(
+                        $('<div/>').addClass('controls')
+                            .append(
+                                $('<textarea/>')//.addClass('input-block-level span4')
+                                    .attr('id', 'description').attr('name', 'description')
+                                    .attr('placeholder', 'Самые лучшие чебуреки и шаурма в городе!')
+                                    .attr('required', 'true')
+                                    .attr("rows", 3).addClass("span11")
+                            )
+                    )
+            )
+            .append(
+                $('<div/>').addClass('control-group')
+                    .append(
+                        $('<label/>').addClass('control-label').attr('for','addressDescription').text('Описание адреса')
+                    )
+                    .append(
+                        $('<div/>').addClass('controls')
+                            .append(
+                                $('<input/>').addClass('input-block-level span11')
+                                    .attr('id', 'addressDescription').attr('name', 'addressDescription')
+                                    .attr('placeholder', 'Выходите из электрички и спускайтесь под мост')
+                            )
+                    )
+            );
+
+        return div;
+    }
+
+    function getEditFormTab2Markup() {
+
+        var div = $('<div/>')
             .append(
                 $('<div/>').addClass('control-group')
                     .append(
@@ -4593,7 +4596,7 @@ $(function() {
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').attr('id', 'actualDate').addClass('input-block-level span4')
+                                $('<input/>').attr('id', 'actualDate').addClass('input-block-level span11')
                                     .attr('type', 'text').attr('name', 'actualDate')
                             )
                     )
@@ -4608,7 +4611,7 @@ $(function() {
                             .append(
                                 $('<div/>').addClass("input-append")
                                     .append(
-                                        $('<input/>').attr('id', 'averagePrice').addClass('span3')
+                                        $('<input/>').attr('id', 'averagePrice').addClass('span10')
                                             .attr('type', 'text').attr('name', 'averagePrice')
                                     )
                                     .append(
@@ -4626,7 +4629,7 @@ $(function() {
                     .append(
                         $('<div/>').addClass('controls')
                             .append(
-                                $('<input/>').attr('id', 'siteUrl').addClass('input-block-level span4')
+                                $('<input/>').attr('id', 'siteUrl').addClass('input-block-level span11')
                                     .attr('type', 'text').attr('name', 'siteUrl').attr("placeholder", "необязательно")
                             )
                     )

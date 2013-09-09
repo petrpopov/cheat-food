@@ -20,16 +20,13 @@
         </ul>
 
 
-        <div class="nav-collapse collapse pull-right">
-            <ul class="nav">
-                <li>
-                    <a href="https://www.facebook.com/cheatfood" target="_blank">
-                        <img width="24" src="<s:url value="/resources"/>/img/facebook_small_32.png">
-                        <span class="spacer3">Мы на Facebook</span>
-                    </a>
-                </li>
-            </ul>
-
-        </div>
+        <ul class="nav pull-right">
+            <li>
+                <a href="https://www.facebook.com/cheatfood" target="_blank">
+                    <img width="16" src="<s:url value="/resources"/>/img/facebook_small_32.png">
+                    <span class="spacer3">Мы на Facebook</span>
+                </a>
+            </li>
+        </ul>
     </div>
 </div>

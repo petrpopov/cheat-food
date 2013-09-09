@@ -5,7 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 
-<div class="navbar navbar-inverse">
+<div id="firstNavbar" class="navbar navbar-inverse">
     <div class="navbar-inner">
         <div class="container">
 

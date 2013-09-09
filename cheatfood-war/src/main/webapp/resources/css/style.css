@@ -2,12 +2,12 @@ html { height: 100% }
 body { height: 100%; margin: 0px; padding: 0px; }
 
 body > .container-fluid {
-    height: 95%;
+   /* height: 95%;*/
     margin: 0px; padding: 0px;
 }
 
 body > .container-fluid > .row-fluid {
-    height: 100%;
+  /*  height: 100%; */
     margin: 0px; padding: 0px;
 }
 
@@ -18,14 +18,8 @@ body > .container-fluid > .row-fluid {
 .navbar {
     margin-bottom: 0;
 }
-/*
-#secondNavbar .nav>li>a {
-    padding: 0px 15px 6px;
-} */
-
 
 #map {
-    display: block;
     height: 100%;
     margin: 0px;
 }
@@ -49,6 +43,16 @@ body > .container-fluid > .row-fluid {
 
 .navbar-form {
     padding: 0px;
+}
+
+.navbar-fixed-bottom {
+    margin-top: 0px;
+}
+
+@media screen and (max-width: 1024px)  {
+    #footer, #infoNavbar {
+        display: none;
+    }
 }
 
 /* this is for strange maps render problem */
@@ -154,12 +158,6 @@ hr {
 .favLink:hover {
     text-decoration: none;
     color: #be0005;
-}
-
-@media screen and (max-width: 940px)  {
-    #footer {
-        display: none;
-    }
 }
 
 .facebookImage {

@@ -7,7 +7,7 @@
 <div id="secondNavbar" class="navbar navbar-inverse">
     <div class="navbar-inner">
         <div class="container">
-            <ul class="nav">
+            <ul id="infoNavbar" class="nav">
                 <li>
                     <a href="#">Всего локаций: <span id="locationsCountLabel"></span></a>
                 </li>
