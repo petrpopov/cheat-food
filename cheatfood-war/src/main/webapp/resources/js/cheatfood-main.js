@@ -2550,6 +2550,8 @@ $(function() {
 
                     if( res.error === false ) {
                         //good job
+                        loadCommentsForLocation(infoBoxObject);
+
                         $('#slideSubmitComment').button('reset');
                         hideSlideAddCommentForm();
                         clearSlideAddCommentForm();

@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -332,6 +333,8 @@ public class LocationService extends GenericService<Location> {
             throw new CheatException(ErrorType.unknown_location);
 
         List<Comment> comments = location.getComments();
+        Collections.sort(comments);
+
         return comments;
     }
 

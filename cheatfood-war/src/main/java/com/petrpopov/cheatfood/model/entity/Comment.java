@@ -4,6 +4,7 @@ import com.petrpopov.cheatfood.config.DateSerializer;
 import com.petrpopov.cheatfood.config.TimeSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -20,7 +21,7 @@ import java.util.List;
  */
 
 @Document
-public class Comment {
+public class Comment implements Comparable<Comment> {
 
     @Id
     private String id;
@@ -130,5 +131,29 @@ public class Comment {
 
     public void setQuestionCommentId(String questionCommentId) {
         this.questionCommentId = questionCommentId;
+    }
+
+    @Override
+    public int compareTo(Comment other) {
+
+        if( other == null )
+            return 1;
+
+        Date thisDate = this.getDate();
+        Date otherDate = other.getDate();
+
+        if( thisDate == null && otherDate == null )
+            return 0;
+
+        if( thisDate != null && otherDate == null )
+            return 1;
+
+        if( otherDate != null && thisDate == null )
+            return -1;
+
+        DateTime d = new DateTime(thisDate);
+        DateTime n = new DateTime(otherDate);
+
+        return d.compareTo(n);
     }
 }
