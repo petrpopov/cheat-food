@@ -2091,11 +2091,13 @@ $(function() {
 
     function showMarkerSlidePanel(infoBoxObject) {
 
-        $('#slidepanel').show();
-        $('#slidepanel').animate({
-            "width": "+=350px"
-        }, EFFECTS_TIME);
-        $('#map').removeClass("span12");
+        if( slidepanel === false ) {
+            $('#slidepanel').show();
+            $('#slidepanel').animate({
+                "width": "+=350px"
+            }, EFFECTS_TIME);
+            $('#map').removeClass("span12");
+        }
 
         if( infoBox ) {
             infoBox.hide();
@@ -2133,6 +2135,8 @@ $(function() {
     }
 
     function initSlidePanelWithData(infoBoxObject) {
+
+        $('#slideCommentsTree').children().remove();
 
         loadCommentsForLocation(infoBoxObject);
 
@@ -2527,7 +2531,6 @@ $(function() {
         else {
             quoteLabel = $('<span/>');
         }
-
 
         var res = $('<li/>').addClass("media")
             .append(
@@ -3030,7 +3033,7 @@ $(function() {
 
         $('#infoDetails').off('click');
         $('#infoDetails').click(function() {
-            toggleMarkerSlidePanel(infoBoxObject);
+            showMarkerSlidePanel(infoBoxObject);
         })
     }
 
