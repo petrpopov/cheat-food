@@ -66,6 +66,15 @@ public class LocationFieldFilter {
         return location;
     }
 
+    public Location filterComments(Location location) {
+
+        if( location == null )
+            return location;
+
+        location.setComments(null);
+        return location;
+    }
+
     private UserEntity getUserEntity(UserEntity creator) {
 
         String id = (creator == null ? "-1" : creator.getId());

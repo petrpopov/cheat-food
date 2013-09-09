@@ -24,5 +24,7 @@ public enum ErrorType {
     overpriced,
     comment_is_empty,
     too_early_comment,
+    unknown_comment,
+    vote_for_own_comment,
     other
 }

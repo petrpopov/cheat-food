@@ -1,10 +1,7 @@
 package com.petrpopov.cheatfood.web.rest;
 
 import com.petrpopov.cheatfood.config.CheatException;
-import com.petrpopov.cheatfood.model.data.GeoJSONPointBoundsDiff;
-import com.petrpopov.cheatfood.model.data.GeoPointBounds;
-import com.petrpopov.cheatfood.model.data.LocationsInfo;
-import com.petrpopov.cheatfood.model.data.MessageResult;
+import com.petrpopov.cheatfood.model.data.*;
 import com.petrpopov.cheatfood.model.entity.Comment;
 import com.petrpopov.cheatfood.model.entity.Location;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
@@ -238,6 +235,43 @@ public class LocationWebService extends BaseWebService {
 
         UserEntity author = userContextHandler.currentContextUser();
         locationService.addCommentToLocation(locationid, comment, author);
+
+        return result;
+    }
+
+    @RequestMapping(value = "{locationid}/comments/{commentid}/vote", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageResult voteForComment(@CookieValue(required = true, value = "CHEATFOOD") CookieRequest cookie,
+                                        @PathVariable String locationid,
+                                        @PathVariable String commentid,
+                                        @Valid @RequestBody Boolean value) throws CheatException {
+
+        MessageResult result = new MessageResult();
+
+        UserEntity author = userContextHandler.currentContextUser();
+        Comment comment = locationService.voteForComment(locationid, commentid, author, value);
+
+        result.setResult(comment);
+
+        return result;
+    }
+
+    @RequestMapping(value = "{locationid}/comments/{commentid}/delete", method = RequestMethod.DELETE)
+    @ResponseBody
+    public MessageResult deleteComment(@CookieValue(required = true, value = "CHEATFOOD") CookieRequest cookie,
+                                       @PathVariable String locationid,
+                                       @PathVariable String commentid) throws CheatException {
+
+        MessageResult result = new MessageResult();
+
+        Comment comment = locationService.getCommentForLocation(locationid, commentid);
+        if( comment == null ) {
+            result.setError(true);
+            result.setErrorType(ErrorType.unknown_comment);
+            return result;
+        }
+
+        locationService.deleteComment(comment, locationid);
 
         return result;
     }

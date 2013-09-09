@@ -237,7 +237,7 @@ public class LocationService extends GenericService<Location> {
         return count;
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public Location voteForLocation(Location location, Vote vote) throws CheatException {
 
         List<Vote> votes = location.getVotes();
@@ -281,7 +281,7 @@ public class LocationService extends GenericService<Location> {
         return saveLocationObject(location);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public Location rateForLocation(Location location, Rate rate) throws CheatException {
 
         List<Rate> rates = location.getRates();
@@ -338,6 +338,7 @@ public class LocationService extends GenericService<Location> {
         return comments;
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public Location addCommentToLocation(String locationId, @Valid Comment comment, UserEntity author) throws CheatException {
 
 
@@ -400,6 +401,11 @@ public class LocationService extends GenericService<Location> {
         comment.setAuthor(author);
         comment.setAuthorPublicName(userEntityFilter.getPublicName(author));
 
+        String questionCommentId = comment.getQuestionCommentId();
+        if( questionCommentId != null ) {
+            if( questionCommentId.isEmpty() )
+                comment.setQuestionCommentId(null);
+        }
 
         comments.add(comment);
 
@@ -408,6 +414,199 @@ public class LocationService extends GenericService<Location> {
         Location saved = op.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), Location.class);
 
         return saved;
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public Comment voteForComment(String locationId, String commentId, UserEntity user, Boolean value) throws CheatException {
+
+        if( locationId == null )
+            throw new CheatException(ErrorType.unknown_location);
+
+        if( commentId == null )
+            throw new CheatException(ErrorType.unknown_comment);
+
+        Location location = findById(locationId);
+        if( location == null )
+            throw new CheatException(ErrorType.unknown_location);
+
+        List<Comment> comments = location.getComments();
+        if( comments == null )
+            throw new CheatException(ErrorType.unknown_comment);
+
+        if( comments.isEmpty() )
+            throw new CheatException(ErrorType.unknown_comment);
+
+        boolean ok = false;
+        Comment savedComment = null;
+        for (Comment comment : comments) {
+            if( comment == null )
+                continue;
+
+            String id = comment.getId();
+            if( id.equals(commentId) ) {
+                ok = true;
+                savedComment = comment;
+                break;
+            }
+        }
+        if( !ok || savedComment == null )
+            throw new CheatException(ErrorType.unknown_comment);
+
+        UserEntity author = savedComment.getAuthor();
+        if( author != null ) {
+            String id = author.getId();
+
+            if( id.equals(user.getId()) )
+                throw new CheatException(ErrorType.vote_for_own_comment);
+        }
+
+        List<CommentVote> votes = savedComment.getVotes();
+        if( votes == null ) {
+            votes = new ArrayList<CommentVote>();
+            savedComment.setVotes(votes);
+        }
+
+        CommentVote userVote = null;
+        for (CommentVote vote : votes) {
+            UserEntity voteAuthor = vote.getAuthor();
+            if( voteAuthor == null )
+                continue;
+
+            String id = voteAuthor.getId();
+            if( id.equals(user.getId())) {
+                userVote = vote;
+                break;
+            }
+        }
+
+        if( userVote == null ) {
+            userVote = new CommentVote();
+            userVote.setAuthor(user);
+            userVote.setAuthorPublicName(userEntityFilter.getPublicName(user));
+            votes.add(userVote);
+        }
+
+        userVote.setValue(value);
+
+        long up = getVotesUpForComment(savedComment);
+        long down = getVotesDownForComment(savedComment);
+        savedComment.setVotesUpCount(up);
+        savedComment.setVotesDownCount(down);
+
+        Update update = new Update().set("comments", comments);
+        Query query = new Query(Criteria.where("_id").is(location.getId()));
+        Location saved = op.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), Location.class);
+
+        return savedComment;
+    }
+
+    public Comment getCommentForLocation(String locationId, String commentId) {
+
+        Location location = findById(locationId);
+        if( location == null )
+            return null;
+
+        List<Comment> comments = location.getComments();
+        if( comments == null )
+            return null;
+
+        for (Comment comment : comments) {
+
+            if( comment.getId().equals(commentId) )
+                return comment;
+        }
+
+        return null;
+    }
+
+    @PreAuthorize("(hasRole('ROLE_USER') and #comment.author.id==principal.username) or hasRole('ROLE_ADMIN')")
+    public void deleteComment(Comment comment, String locationId) throws CheatException {
+
+        if( comment == null )
+            throw new CheatException(ErrorType.unknown_comment);
+
+        Location location = findById(locationId);
+        if( location == null )
+            throw new CheatException(ErrorType.unknown_location);
+
+        List<Comment> comments = location.getComments();
+        if( comments == null )
+            throw new CheatException(ErrorType.unknown_comment);
+
+        boolean ok = false;
+        int i = 0;
+        for (Comment comm : comments) {
+
+            if( comm.getId().equals(comment.getId())) {
+                ok = true;
+                break;
+            }
+
+            i++;
+        }
+
+        if( !ok )
+            throw new CheatException(ErrorType.unknown_comment);
+
+        comments.remove(i);
+
+        Update update = new Update().set("comments", comments);
+        Query query = new Query(Criteria.where("_id").is(location.getId()));
+        Location saved = op.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), Location.class);
+    }
+
+    private long getVotesUpForComment(Comment comment) {
+        if( comment == null )
+            return 0;
+
+        List<CommentVote> votes = comment.getVotes();
+        if( votes == null )
+            return 0;
+
+        if( votes.isEmpty() )
+            return 0;
+
+        long up = 0;
+        for (CommentVote vote : votes) {
+            if( vote == null )
+                continue;
+
+            Boolean value = vote.getValue();
+            if( value == null )
+                continue;
+
+            if( value.equals(Boolean.TRUE))
+                up++;
+        }
+
+        return up;
+    }
+
+    private long getVotesDownForComment(Comment comment) {
+        if( comment == null )
+            return 0;
+
+        List<CommentVote> votes = comment.getVotes();
+        if( votes == null )
+            return 0;
+
+        if( votes.isEmpty() )
+            return 0;
+
+        long down = 0;
+        for (CommentVote vote : votes) {
+            if( vote == null )
+                continue;
+
+            Boolean value = vote.getValue();
+            if( value == null )
+                continue;
+
+            if( value.equals(Boolean.FALSE))
+                down++;
+        }
+
+        return down;
     }
 
 

@@ -46,6 +46,7 @@ public class LocationFilter {
         locationFieldFilter.filterCreator(location);
         locationFieldFilter.filterRates(location);
         locationFieldFilter.filterVotes(location);
+        locationFieldFilter.filterComments(location);
         locationFavFilter.filterFavourites(location);
 
         return location;

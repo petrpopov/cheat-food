@@ -175,6 +175,11 @@
                                 </div>
                             </div>
 
+                            <label id="slideQuestionLabel" class="label label-info transparent" style="display: none;">
+                                Это ответ пользователю: <span id="slideQuestionQuote"></span>
+                                <a id="slideQuestionClose" >(отмена)</a>
+                            </label>
+
                             <button id="slideSubmitComment" class="btn btn-mini btn-primary pull-right" data-loading-text="Отправляем...">
                                 Отправить</button>
                         </form>
@@ -187,7 +192,7 @@
                     </li>
 
                     <ul id="slideCommentsTree" class="media-list">
-                        <li class="media">
+                        <!--li class="media">
                             <div class="media-body">
                                 <p>
                                     <b>
@@ -215,7 +220,7 @@
                                 </p>
                             </div>
                             <hr/>
-                        </li>
+                        </li-->
                     </ul>
 
 

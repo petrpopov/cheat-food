@@ -54,6 +54,10 @@ hr {
     margin-top: 7px;
 }
 
+.label a {
+    color: #be0005;
+}
+
 .rightspacer3 {
     margin-right: 3px;
 }

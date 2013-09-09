@@ -3,8 +3,10 @@ package com.petrpopov.cheatfood.web.aspects;
 import com.petrpopov.cheatfood.config.CheatException;
 import com.petrpopov.cheatfood.model.data.ErrorType;
 import com.petrpopov.cheatfood.model.data.MessageResult;
+import com.petrpopov.cheatfood.model.entity.Comment;
 import com.petrpopov.cheatfood.model.entity.Location;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
+import com.petrpopov.cheatfood.web.filters.CommentFilter;
 import com.petrpopov.cheatfood.web.filters.LocationFavFilter;
 import com.petrpopov.cheatfood.web.filters.LocationFilter;
 import com.petrpopov.cheatfood.web.filters.UserEntityFilter;
@@ -37,6 +39,9 @@ public class WebResultControllerAspect {
 
     @Autowired
     private UserEntityFilter userEntityFilter;
+
+    @Autowired
+    private CommentFilter commentFilter;
 
     @Autowired
     private CookieChecker cookieChecker;
@@ -112,23 +117,7 @@ public class WebResultControllerAspect {
 
         if( returnClass.equals(List.class)) {
 
-            List tempList = (List) res;
-            if( tempList.isEmpty() )
-                return tempList;
-
-            Object o = tempList.get(0);
-            if( o instanceof Location) {
-                List<Location> list = (List<Location>) res;
-
-                return filterLocationsList(list);
-            }
-            else if( o instanceof UserEntity ) {
-                List<UserEntity> list = (List<UserEntity>) res;
-
-                return filterUserEntityList(list);
-            }
-
-            return tempList;
+            return filterListOfObjects(res);
         }
         else if( returnClass.equals(MessageResult.class)) {
 
@@ -138,6 +127,32 @@ public class WebResultControllerAspect {
         }
 
         return filterObject(res);
+    }
+
+    protected Object filterListOfObjects(Object res) {
+
+        List tempList = (List) res;
+        if( tempList.isEmpty() )
+            return tempList;
+
+        Object o = tempList.get(0);
+        if( o instanceof Location) {
+            List<Location> list = (List<Location>) res;
+
+            return filterLocationsList(list);
+        }
+        else if( o instanceof UserEntity ) {
+            List<UserEntity> list = (List<UserEntity>) res;
+
+            return filterUserEntityList(list);
+        }
+        else if( o instanceof Comment ) {
+            List<Comment> list = (List<Comment>) res;
+
+            return filterCommentsList(list);
+        }
+
+        return tempList;
     }
 
     protected Object filterMessageResult(MessageResult mes) {
@@ -164,6 +179,11 @@ public class WebResultControllerAspect {
 
             userEntityFilter.filterUserEntity(entity);
         }
+        else if( res instanceof Comment ) {
+            Comment comment = (Comment) res;
+
+            commentFilter.filterComment(comment);
+        }
 
         return res;
     }
@@ -178,6 +198,13 @@ public class WebResultControllerAspect {
     protected Object filterUserEntityList(List<UserEntity> list) {
 
         userEntityFilter.filterUserEntities(list);
+
+        return list;
+    }
+
+    protected Object filterCommentsList(List<Comment> list) {
+
+        commentFilter.filterComments(list);
 
         return list;
     }

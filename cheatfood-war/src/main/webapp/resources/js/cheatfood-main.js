@@ -2317,14 +2317,122 @@ $(function() {
                 return;
             }
 
+            $('#slideNoCommentsWarning').hide(EFFECTS_TIME);
             $('#slideCommentsTree').children().remove();
+
             $.each(comments, function(n, comment) {
-                $('#slideCommentsTree').prepend(getCommentMarkup(comment));
+                $('#slideCommentsTree').prepend(getCommentMarkup(infoBoxObject, comment, comments));
             })
         });
     }
 
-    function getCommentMarkup(comment) {
+    function deleteComment(infoBoxObject, comment) {
+
+        $('#slideDelComment'+id).button('loading');
+
+        var id = infoBoxObject.location.id;
+
+        $.ajax({
+            type: "DELETE",
+            url: params.realPath + "/api/locations/"+id+"/comments/"+comment.id+"/delete",
+            success: function(){},
+            complete: function(data) {
+
+                $('#slideDelComment'+id).button('reset');
+
+                if( !data ) {
+                    showNoteTopCenter("Какая-то странная ошибка на сервере..извините", "warning", true);
+                    return;
+                }
+
+                if( !data.responseJSON ) {
+                    showNoteTopCenter("Какая-то странная ошибка на сервере..извините", "warning", true);
+                    return;
+                }
+
+                var res = data.responseJSON;
+                if( res.error === false ) {
+                    loadCommentsForLocation(infoBoxObject);
+                }
+            }
+        });
+    }
+
+    function voteForComment(infoBoxObject, comment, value) {
+
+        var id = infoBoxObject.location.id;
+
+        $.ajax({
+            type: "POST",
+            url: params.realPath+"/api/locations/"+id+"/comments/"+comment.id+"/vote",
+            data: JSON.stringify(value),
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function(){},
+            complete: function(data) {
+
+                if( data.responseJSON ) {
+                    var res = data.responseJSON;
+                    if( res.error === false ) {
+                        var comm = res.result;
+
+                        showNoteTopCenter("Спасибо!", "success", true);
+
+                        $('#slideVotesUpText'+comment.id).text(comm.votesUpCount);
+                        $('#slideVotesDownText'+comment.id).text(comm.votesDownCount);
+                    }
+                }
+                else {
+                    showNoteTopCenter("Какая-то странная ошибка на сервере..извините", "warning", true);
+                    return;
+                }
+            }
+        });
+    }
+
+    function quoteCommentInForm(comments) {
+
+        var quote = $('#slideQuestionComment').val();
+        if( quote ) {
+            $('#slideQuestionLabel').show(EFFECTS_TIME);
+
+            $('#slideQuestionClose').off('click');
+            $('#slideQuestionClose').click(function() {
+                $('#slideQuestionLabel').hide(EFFECTS_TIME);
+                $('#slideQuestionComment').val(null);
+            });
+
+            $('#slideQuestionQuote').text(getQuoteComment(comments, quote));
+        }
+        else {
+            $('#slideQuestionLabel').hide(EFFECTS_TIME);
+        }
+    }
+
+    function getQuoteComment(comments, quote) {
+
+        if( !quote ) {
+            return "";
+        }
+
+        var comment = null;
+        for(var i = 0; i < comments.length; i++ ){
+            if( comments[i].id === quote) {
+                comment = comments[i];
+                break;
+            }
+        }
+
+        if( comment ) {
+            return comment.authorPublicName;
+        }
+        else {
+            return quote;
+        }
+    }
+
+    function getCommentMarkup(infoBoxObject, comment, comments) {
 
         var id = comment.id;
 
@@ -2336,6 +2444,88 @@ $(function() {
             var displayTime = $.datepicker.formatTime( TIME_FORMAT_DISPLAY, parseTime );
 
             var dateTime = displayDate + ' ' + displayTime;
+        }
+
+        var admin = isCurrentUserAdmin();
+
+        var deleteButton = $('<button/>').addClass("btn btn-mini").attr("id", "slideDelComment"+id)
+            .attr("data-loading-text", "Удаляем...")
+            .attr("style", "display: none")
+            .click(function(){
+                deleteComment(infoBoxObject, comment);
+            })
+            .append(
+                $('<i/>').addClass("icon-trash")
+            )
+            .append(
+                $('<span/>').addClass("spacer3").text("Удалить")
+            );
+
+        var commentAuthor = $('<a/>').attr('id', 'slideCommentAuthor'+id).attr("href", "#")
+            .addClass("spacer3 transparent")
+            .text(comment.authorPublicName)
+            .click(function() {
+                $('#slideQuestionComment').val(id);
+                showSlideAddCommentForm(function() {
+                    quoteCommentInForm(comments);
+                });
+            });
+
+        if( admin === true ) {
+            deleteButton.show();
+            commentAuthor.addClass("text-error");
+        }
+        else {
+            commentAuthor.addClass("text-info");
+        }
+
+        var voteUpButton = $('<a/>').addClass("badge badge-success transparent")
+            .attr("id", "slideVoteUpComment"+id)
+            .append(
+                $('<i/>').addClass("icon-thumbs-up")
+            )
+            .append(
+                $('<span/>').attr("id", "slideVotesUpText"+id)
+                    .addClass("spacer3").text(comment.votesUpCount)
+            );
+
+        var voteDownButton = $('<a/>').addClass("badge badge-important transparent")
+            .attr("id", "slideVoteDownComment"+id)
+            .append(
+                $('<i/>').addClass("icon-thumbs-down")
+            )
+            .append(
+                $('<span/>').attr("id", "slideVotesDownText"+id)
+                    .addClass("spacer3").text(comment.votesDownCount)
+            );
+
+        if( comment.author.id !== params.currentUser.id ) {
+             voteUpButton.click(function() {
+                 voteForComment(infoBoxObject, comment, true);
+             });
+            voteDownButton.click(function() {
+                voteForComment(infoBoxObject, comment, false);
+            });
+        }
+        else {
+            voteUpButton.addClass("disabled");
+            voteDownButton.addClass("disabled");
+        }
+
+        var quoteLabel;
+        if( comment.questionCommentId ) {
+            var quoteText = getQuoteComment(comments, comment.questionCommentId);
+
+            quoteLabel = $('<label/>').addClass("label transparent").attr("id", "slideQuoteInComment"+id)
+                .append(
+                    $('<span/>').text("это ответ пользователю: ")
+                )
+                .append(
+                    $('<span/>').attr('id', "slideQuoteInCommentText"+id).text(quoteText)
+                );
+        }
+        else {
+            quoteLabel = $('<span/>');
         }
 
 
@@ -2350,9 +2540,7 @@ $(function() {
                                         $('<i/>').addClass("icon-user")
                                     )
                                     .append(
-                                        $('<a/>').attr('id', 'slideCommentAuthor'+id).attr("href", "#")
-                                            .addClass("spacer3 text-error transparent")
-                                            .text(comment.authorPublicName)
+                                        commentAuthor
                                     )
                                     .append(
                                         $('<small/>').attr("id", "slideCommentDate"+id).addClass("spacer3")
@@ -2362,22 +2550,10 @@ $(function() {
                             .append(
                                 $('<span/>').addClass("pull-right")
                                     .append(
-                                        $('<a/>').addClass("badge badge-success transparent")
-                                            .append(
-                                                $('<i/>').addClass("icon-thumbs-up")
-                                            )
-                                            .append(
-                                                $('<span/>').addClass("spacer3").text(comment.votesUpCount)
-                                            )
+                                        voteUpButton
                                     )
                                     .append(
-                                        $('<a/>').addClass("badge badge-important transparent")
-                                            .append(
-                                                $('<i/>').addClass("icon-thumbs-down")
-                                            )
-                                            .append(
-                                                $('<span/>').addClass("spacer3").text(comment.votesDownCount)
-                                            )
+                                        voteDownButton
                                     )
                             )
                     )
@@ -2388,6 +2564,18 @@ $(function() {
                             )
                             .append(
                                 $('<span/>').attr("id", "slideCommentBody"+id).text(comment.text)
+                            )
+
+                    )
+                    .append(
+                        $('<p/>').append(
+                            quoteLabel
+                        )
+                            .append(
+                                $('<span/>').addClass("pull-right")
+                                    .append(
+                                        deleteButton
+                                    )
                             )
                     )
             )
@@ -2443,7 +2631,7 @@ $(function() {
             var vis = $('#slideCommentForm').data('visible');
 
             if( vis !== true ) {
-                showSlideAddCommentForm();
+                showSlideAddCommentForm(quoteCommentInForm());
             }
             else {
                 hideSlideAddCommentForm();
@@ -2453,13 +2641,17 @@ $(function() {
         initSlideAddCommentFormValidation(infoBoxObject);
     }
 
-    function showSlideAddCommentForm() {
+    function showSlideAddCommentForm(callback) {
         $('#slideCommentForm').fadeIn(EFFECTS_TIME, function() {
             $('#slideCommentForm').data('visible', true);
             $('#slideCommentTitle').text("Отмена");
             $('#slideCommentIcon').removeClass("icon-chevron-right");
             $('#slideCommentIcon').addClass("icon-chevron-left");
             $('#slideCommentText').focus();
+
+            if( callback ) {
+                callback();
+            }
         });
     }
 
@@ -2469,11 +2661,14 @@ $(function() {
             $('#slideCommentTitle').text("Оставьте отзыв");
             $('#slideCommentIcon').addClass("icon-chevron-right");
             $('#slideCommentIcon').removeClass("icon-chevron-left");
+
+            clearSlideAddCommentForm();
         });
     }
 
     function clearSlideAddCommentForm() {
         $('#slideCommentText').val(null);
+        $('#slideQuestionComment').val(null);
         $('#slideSymbNumber').text(COMMENT_LENGTH);
     }
 
@@ -2499,6 +2694,7 @@ $(function() {
     }
 
     function initSlideCommentFormSubmitBehavior(infoBoxObject) {
+
         $('#slideCommentText').off('keyup change');
         $('#slideCommentText').on('keyup change', function() {
             var text = $('#slideCommentText').val();
@@ -2554,7 +2750,6 @@ $(function() {
 
                         $('#slideSubmitComment').button('reset');
                         hideSlideAddCommentForm();
-                        clearSlideAddCommentForm();
                     }
                     else {
                         showSlideAddCommentErrorByType(res.errorType);
@@ -2577,6 +2772,9 @@ $(function() {
         }
         else if( errorType === errors.comment_is_empty ) {
             showSlideAddCommentError("Введите что-нибудь, пустые комментарии не разрешены");
+        }
+        else if( errorType === errors.access_denied ) {
+            showSlideAddCommentError("Извините, у вас нет прав на этой действие");
         }
         else if( errorType === errors.too_early_comment ) {
             var del = params.commentSecondsDelay;
@@ -4817,6 +5015,23 @@ $(function() {
         }
 
         return res;
+    }
+
+    function isCurrentUserAdmin() {
+        if( !params ) {
+            return false;
+        }
+
+        if( !params.hasOwnProperty('currentUser')) {
+            return false;
+        }
+
+        if( !params.currentUser.hasOwnProperty('admin') ) {
+            return false;
+        }
+
+        var admin = params.currentUser.admin;
+        return admin;
     }
 
     function isUserAdmin(user) {
