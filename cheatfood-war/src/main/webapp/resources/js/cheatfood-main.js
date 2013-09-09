@@ -472,7 +472,8 @@ $(function() {
         createLocateMeButton();
         createAddMarkerButton(auth);
         createRouteForm();
-        createSearchBar();
+//        createSearchBar();
+        initSearchBarBehavior();
         hideOrShowControlsDueToDocumentWidth();
     }
 
@@ -688,87 +689,6 @@ $(function() {
             });
         }
 
-    }
-
-    function createSearchBar() {
-
-        var form = $('<form/>').attr("id", "searchBarForm").addClass("form-inline infoWindowForm")
-            .append(
-                $('<div/>').addClass("input-append")
-                    .append(
-                        $('<input/>').attr("id", "searchBar")
-                            .attr("type", "text").addClass("input-xxlarge")
-                            .attr("placeholder", "Введите адрес")
-                    )
-                    .append(
-                        $('<button/>').attr("type", "submit").addClass("btn btn-primary")
-                            .attr("data-loading-text", "Ищем...")
-                            .attr("id", "searchButton")
-                            .append(
-                                $('<i/>').addClass("icon-search icon-white")
-                            )
-
-                    )
-                    .append(
-                        $('<button/>').attr("id", "clearSearchButton").addClass("btn")
-                            .append(
-                                $('<i/>').addClass("icon-remove-sign")
-                            )
-                    )
-            );
-
-        var div = $('<div/>').attr("id", "searchBarDiv").addClass("infoWindow").append(form);
-
-        map.map.controls[google.maps.ControlPosition.TOP_CENTER].push( div.get(0) );
-
-        google.maps.event.addListener(map.map, 'idle', function(event) {
-            initSearchBarBehavior();
-        });
-    }
-
-    function createLocationsInfoBarDiv() {
-
-        var div = $('<div/>').addClass("span3")
-            .append(
-                $('<p/>').addClass("form-inline")
-                    .append(
-                        $('<label/>').addClass("control-label infoBarLabel").text("Всего локаций:")
-                            .append(
-                                $('<span/>').attr("id", "locationsCountLabel").addClass("spacer3")
-                            )
-                    )
-            )
-            .append(
-                $('<p/>').addClass("form-inline")
-                    .append(
-                        $('<label/>').addClass("control-label infoBarLabel").text("В регионе: ")
-                            .append(
-                                $('<span/>').attr("id", "locationsLocalCountLabel").addClass("spacer3")
-                            )
-                    )
-            )
-            .append(
-                $('<p/>').addClass("form-inline")
-                    .append(
-                        $('<label/>').addClass("control-label infoBarLabel").text("Новых:")
-                            .append(
-                                $('<span/>').attr("id", "locationsNewCountLabel").addClass("spacer3")
-                            )
-                    )
-            );
-
-        var d = $('<div/>').addClass("infoWindow span3").attr("id", "infoBar").append(div);
-
-        map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push( d.get(0) );
-    }
-
-    function showSearchForm() {
-        $('#searchBarDiv').show(EFFECTS_TIME);
-    }
-
-    function hideSearchForm() {
-        $('#searchBarDiv').hide(EFFECTS_TIME);
-        hideAutoCompleteResults();
     }
 
     function loadLocationsInfo() {
@@ -1023,7 +943,6 @@ $(function() {
         $('#closeRouteForm').off('click');
         $('#closeRouteForm').click(function() {
             $('#routeFormDiv').hide(EFFECTS_TIME);
-            showSearchForm();
             clearRouteForm();
             clearMapRoutes();
         });
@@ -1031,7 +950,6 @@ $(function() {
         $('#cancelRouteForm').off('click');
         $('#cancelRouteForm').click(function() {
             $('#routeFormDiv').hide(EFFECTS_TIME);
-            showSearchForm();
             clearRouteForm();
             clearMapRoutes();
         });
@@ -3081,7 +2999,6 @@ $(function() {
 
         clearRouteForm();
         $('#routeFormDiv').show(EFFECTS_TIME);
-        hideSearchForm();
 
         var myInput;
         var myHideInput;
@@ -3544,8 +3461,6 @@ $(function() {
 
     function initAndShowEditForm(infoBoxObject) {
 
-        hideSearchForm();
-
         map.map.setCenter( infoBoxObject.infoBox.getPosition() );
         infoBoxObject.infoBox.hide();
 
@@ -3672,7 +3587,6 @@ $(function() {
         newMarker = false;
 
         showAllTempMarkers();
-        showSearchForm();
 
         resetSubmitEditButtonBehavior();
     }
@@ -3799,7 +3713,6 @@ $(function() {
                         enableEditMarkerMenu(infoBoxObject);
                         enableDeleteMarkerMenu(infoBoxObject);
                         enableHideMarkerMenu(infoBoxObject);
-                        showSearchForm();
                     }
                     else {
                         if( res.errorType === errors.access_denied) {

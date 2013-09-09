@@ -18,10 +18,10 @@ body > .container-fluid > .row-fluid {
 .navbar {
     margin-bottom: 0;
 }
-
+/*
 #secondNavbar .nav>li>a {
     padding: 0px 15px 6px;
-}
+} */
 
 
 #map {
@@ -34,6 +34,21 @@ body > .container-fluid > .row-fluid {
     display: none;
     height: 100%;
     overflow: auto;
+}
+
+.input-append {
+    max-height: 30px;
+    margin: 0px;
+    margin-top: 0px;
+}
+
+.navbar-form .input-append, .navbar-form .input-prepend {
+    margin-top: 0px;
+    white-space: nowrap;
+}
+
+.navbar-form {
+    padding: 0px;
 }
 
 /* this is for strange maps render problem */
