@@ -33,16 +33,42 @@
         <hr/>
 
         <div class="form-horizontal">
-            <div>Или войти с логином и паролем:</div>
+
             <form class="form-horizontal" method="post" action='' name="loginForm" id="loginForm">
-                <p><input type="text" class="span3" name="emailLogin" id="emailLogin" placeholder="электропочта"></p>
-                <p><input type="password" class="span3" name="passwordLogin" id="passwordLogin" placeholder="пароль"></p>
+                <div class="control-group">
+                    <div class="controls">
+                        Или войти с логином и паролем:
+                    </div>
+
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-envelope"></i></span>
+                            <input type="text" class="span3" name="emailLogin" id="emailLogin" placeholder="электропочта">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-key"></i></span>
+                            <input type="password" class="span3" name="passwordLogin" id="passwordLogin" placeholder="пароль">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" id="loginUserSubmit" data-loading-text="Подождите..." class="btn btn-primary">
+                            <i class="icon-rocket"></i> YARR!</button>
+                        <a id="forgetPasswordLink" href="#">Забыли пароль?</a>
+                    </div>
+                </div>
+
                 <p style="display: none" hidden="true"><label class="checkbox"><input type="checkbox" value="">
                     Запомнить меня</label></p>
-                <p>
-                    <button type="submit" id="loginUserSubmit" data-loading-text="Подождите..." class="btn btn-primary">YARR!</button>
-                    <a id="forgetPasswordLink" href="#">Забыли пароль?</a>
-                </p>
             </form>
         </div>
 

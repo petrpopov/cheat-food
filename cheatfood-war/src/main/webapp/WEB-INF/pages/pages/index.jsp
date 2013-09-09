@@ -84,8 +84,10 @@
                         <div class="media">
                             <div class="btn-toolbar">
                                 <div class="btn-group">
-                                    <button id="slideFromHere" class="btn btn-small">Маршрут сюда</button>
-                                    <button id="slideToHere" class="btn btn-small">Маршрут отсюда</button>
+                                    <button id="slideFromHere" class="btn btn-small">
+                                        <i class="icon-arrow-right"></i> Маршрут сюда</button>
+                                    <button id="slideToHere" class="btn btn-small">
+                                        <i class="icon-arrow-left"></i> Маршрут отсюда</button>
                                 </div>
 
                                 <div id="slideEditGroup" class="btn-group pull-right">
@@ -181,7 +183,7 @@
                             </label>
 
                             <button id="slideSubmitComment" class="btn btn-mini btn-primary pull-right" data-loading-text="Отправляем...">
-                                Отправить</button>
+                                <i class="icon-comment"></i> Отправить</button>
                         </form>
                     </li>
 
@@ -192,35 +194,6 @@
                     </li>
 
                     <ul id="slideCommentsTree" class="media-list">
-                        <!--li class="media">
-                            <div class="media-body">
-                                <p>
-                                    <b>
-                                        <i class="icon-user"></i>
-                                        <a id="slideCommentAuthor" href="#" class="spacer3 text-error transparent">Petr Popov</a>
-                                        <small id="slideCommentDate" class="spacer3">27.08.2013 14.59</small>
-                                    </b>
-
-                                    <span class="pull-right">
-                                        <a class="badge badge-success transparent"><i class="icon-thumbs-up"></i>
-                                            <span class="spacer3">23</span>
-                                        </a>
-                                        <a class="badge badge-important transparent"><i class="icon-thumbs-down"></i>
-                                            <span class="spacer3">23</span>
-                                        </a>
-                                    </span>
-                                </p>
-
-                                <p>
-                                    <span id="slideCommentId" style="display: none;">commentId</span>
-                                    <span id="slideCommentBody">Да нормальная у нее жопа</span>
-                                    <span class="pull-right">
-                                        <button class="btn btn-mini"><i class="icon-trash"></i> Удалить</button>
-                                    </span>
-                                </p>
-                            </div>
-                            <hr/>
-                        </li-->
                     </ul>
 
 

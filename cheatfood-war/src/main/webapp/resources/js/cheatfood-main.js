@@ -4247,16 +4247,34 @@ $(function() {
                                     .append(
                                         $('<div/>').addClass('btn-group')
                                             .append(
-                                                $('<button/>').addClass('btn btn-small').text('Маршрут сюда')
+                                                $('<button/>').addClass('btn btn-small')
                                                     .attr("id", "routeToHere")
+                                                    .append(
+                                                        $('<i/>').addClass("icon-arrow-right")
+                                                    )
+                                                    .append(
+                                                        $('<span/>').addClass("spacer3").text('Маршрут сюда')
+                                                    )
                                             )
                                             .append(
-                                                $('<button/>').addClass('btn btn-small').text('Маршрут отсюда')
+                                                $('<button/>').addClass('btn btn-small')
                                                     .attr("id", "routeFromHere")
+                                                    .append(
+                                                        $('<i/>').addClass("icon-arrow-left")
+                                                    )
+                                                    .append(
+                                                        $('<span/>').addClass("spacer3").text('Маршрут отсюда')
+                                                    )
                                             )
                                             .append(
-                                                $('<button/>').addClass('btn btn-small').text('Подробнее')
+                                                $('<button/>').addClass('btn btn-small')
                                                     .attr("id", "infoDetails")
+                                                    .append(
+                                                        $('<i/>').addClass("icon-expand-alt")
+                                                    )
+                                                    .append(
+                                                        $('<span/>').addClass("spacer3").text('Подробнее')
+                                                    )
                                             )
 
                                     )

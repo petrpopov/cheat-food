@@ -21,22 +21,32 @@
             <form id="createUserForm" class="form-horizontal">
                 <div class="control-group">
                     <div class="controls">
-                        <input type="email" name="email" class="span3" id="emailCreate" placeholder="электропочта" required />
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-envelope"></i></span>
+                            <input type="email" name="email" class="span3" id="emailCreate" placeholder="электропочта" required />
+                        </div>
                     </div>
                 </div>
                 <div class="control-group">
                     <div class="controls">
-                        <input type="password" name="password" class="span3" id="passwordCreate" placeholder="пароль" required />
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-key"></i></span>
+                            <input type="password" name="password" class="span3" id="passwordCreate" placeholder="пароль" required />
+                        </div>
                     </div>
                 </div>
                 <div class="control-group">
                     <div class="controls">
-                        <input type="password" name="passwordRepeat" class="span3" id="passwordRepeat" placeholder="повторите пароль" required />
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-key"></i></span>
+                            <input type="password" name="passwordRepeat" class="span3" id="passwordRepeat" placeholder="повторите пароль" required />
+                        </div>
                     </div>
                 </div>
                 <div class="control-group">
                     <div class="controls">
-                        <button id="createUserSubmit" data-loading-text="Подождите..." type="submit" class="btn btn-primary">YARR!</button>
+                        <button id="createUserSubmit" data-loading-text="Подождите..." type="submit" class="btn btn-primary">
+                            <i class="icon-rocket"></i> YARR!</button>
                         <button class="btn" data-dismiss="modal">Отмена</button>
                     </div>
                 </div>

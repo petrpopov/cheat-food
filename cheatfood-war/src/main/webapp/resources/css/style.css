@@ -263,21 +263,12 @@ hr {
     margin-right: 10px;
 }
 
-#infoBar {
-    max-width: 300px;
-    margin-right: 25px;
-}
-
-#infoBar p {
-    margin-bottom: 0px;
-}
-
-#infoBar p label {
-    font: normal 13px Sans-Serif;
-}
-
 #searchBarForm {
     margin: 0;
+}
+
+.mycontrols {
+    margin-left: 0px;
 }
 
 .infoBarLabel {
