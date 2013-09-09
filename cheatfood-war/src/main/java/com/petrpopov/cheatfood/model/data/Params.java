@@ -14,6 +14,7 @@ public class Params {
     private List<Type> types;
     private Double maxPrice;
     private Double recommendedPrice;
+    private Integer commentSecondsDelay;
 
     public Params() {
     }
@@ -40,5 +41,13 @@ public class Params {
 
     public void setRecommendedPrice(Double recommendedPrice) {
         this.recommendedPrice = recommendedPrice;
+    }
+
+    public Integer getCommentSecondsDelay() {
+        return commentSecondsDelay;
+    }
+
+    public void setCommentSecondsDelay(Integer commentSecondsDelay) {
+        this.commentSecondsDelay = commentSecondsDelay;
     }
 }

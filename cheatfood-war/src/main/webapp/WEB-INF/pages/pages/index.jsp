@@ -150,27 +150,50 @@
 
                     <li class="media">
                         <div class="media-body">
-                            <h4 class="media-heading">Комментики</h4>
+                            <h4 class="media-heading">Комментарии</h4>
                         </div>
                     </li>
+
+                    <div id="slideCommentAlert" class="alert" style="display: none;">
+                        <span id="slideCommentError">Какая-то ошибка</span>
+                    </div>
 
                     <li class="media">
-                        <p><a href="#">Оставьте отзыв<i class="icon-chevron-right spacer3"></i></a></p>
-                        <div class="media-body well well-small">
-                            <small class="muted">Осталось 1000 символов</small>
-                            <textarea class="span12" rows="3"></textarea>
-                            <button class="btn btn-mini btn-primary pull-right">Отправить</button>
+                        <p>
+                            <a id="slideComment" href="#"><span id="slideCommentTitle">Оставьте отзыв</span>
+                                <i id="slideCommentIcon" class="icon-chevron-right spacer3"></i>
+                            </a>
+                        </p>
+
+                        <form id="slideCommentForm" class="media-body well well-small" style="display: none;">
+                            <small class="muted">Осталось <span id="slideSymbNumber">1000</span> символов</small>
+                            <input type="text" class="input-mini" id="slideQuestionComment" style="display: none" hidden="true"/>
+
+                            <div class="control-group">
+                                <div class="controls">
+                                    <textarea id="slideCommentText" name="slideCommentText" class="span12" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <button id="slideSubmitComment" class="btn btn-mini btn-primary pull-right" data-loading-text="Отправляем...">
+                                Отправить</button>
+                        </form>
+                    </li>
+
+                    <li id="slideNoCommentsWarning" class="media" style="display: none;">
+                        <div class="well well-small">
+                            <p class="text-center">Здесь никто ничего не написал еще</p>
                         </div>
                     </li>
 
-                    <ul class="media-list">
+                    <ul id="slideCommentsTree" class="media-list">
                         <li class="media">
                             <div class="media-body">
                                 <p>
                                     <b>
                                         <i class="icon-user"></i>
-                                        <a href="#" class="spacer3 text-error transparent">Petr Popov</a>
-                                        <small class="spacer3">27.08.2013 14.59</small>
+                                        <a id="slideCommentAuthor" href="#" class="spacer3 text-error transparent">Petr Popov</a>
+                                        <small id="slideCommentDate" class="spacer3">27.08.2013 14.59</small>
                                     </b>
 
                                     <span class="pull-right">
@@ -184,7 +207,8 @@
                                 </p>
 
                                 <p>
-                                    Да нормальная у нее жопа
+                                    <span id="slideCommentId" style="display: none;">commentId</span>
+                                    <span id="slideCommentBody">Да нормальная у нее жопа</span>
                                     <span class="pull-right">
                                         <button class="btn btn-mini"><i class="icon-trash"></i> Удалить</button>
                                     </span>
@@ -192,26 +216,6 @@
                             </div>
                             <hr/>
                         </li>
-
-                        <li class="media">
-                            <div class="media-body">
-                                <p>
-                                    <b>
-                                        <i class="icon-user"></i>
-                                        <a href="#" class="spacer3 text-inso transparent">Vasya Popov</a>
-                                        <small class="spacer3">27.08.2013 14.59</small>
-                                    </b>
-
-                                <span class="pull-right">
-                                    <a class="badge badge-success transparent"><i class="icon-thumbs-up"></i> 23</a>
-                                    <a class="badge badge-important transparent"><i class="icon-thumbs-down"></i> 23</a>
-                                </span>
-                                </p>
-                                <p>БОЛЬШАЯ ЖОПА!</p>
-                            </div>
-                            <hr/>
-                        </li>
-
                     </ul>
 
 

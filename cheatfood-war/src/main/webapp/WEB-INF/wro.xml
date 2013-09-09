@@ -12,6 +12,7 @@
         <css>/resources/css/bootstrap-responsive.min.css</css>
         <css>/resources/css/font-awesome.min.css</css>
         <css>/resources/css/jquery-ui-1.10.3.custom.min.css</css>
+        <css>/resources/css/jquery-ui-timepicker-addon-1.4.css</css>
         <css>/resources/css/style.css</css>
     </group>
 
@@ -22,6 +23,7 @@
         <js>/resources/js/jquery.noty.topRight-2.1.0.js</js>
         <js>/resources/js/jquery.noty.default-theme-2.1.0.js</js>
         <js>/resources/js/jquery-ui.datepicker.ru.js</js>
+        <js>/resources/js/jquery-ui-timepicker-addon-1.4.js</js>
         <js>/resources/js/jquery.raty-2.5.2.min.js</js>
         <js>/resources/js/jquery.numeric-1.3.1.js</js>
         <js>/resources/js/markerclusterer-2.0.9.min.js</js>

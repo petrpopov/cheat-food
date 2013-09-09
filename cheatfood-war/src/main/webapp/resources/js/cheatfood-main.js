@@ -34,6 +34,8 @@ $(function() {
         email_is_empty: "email_is_empty",
         no_user_with_such_email: "no_user_with_such_email",
         overpriced: "overpriced",
+        comment_is_empty: "comment_is_empty",
+        too_early_comment: "too_early_comment",
         other: "other"
     };
 
@@ -55,6 +57,7 @@ $(function() {
     var searchMarker = false;
 
 
+    var COMMENT_LENGTH = 1000;
     var RATY_SIZE = 24;
     var UNKNOWN_USER_ID = "-1";
     var NEW_MARKER_ID = "";
@@ -65,8 +68,13 @@ $(function() {
     var ENTER_KEY = 13;
     var ZOOM_LEVEL = 10;
     var TYPE_IMAGE_WIDTH = 192;
+
     var DATE_FORMAT = 'yy-mm-dd';
     var DATE_FORMAT_DISPLAY = 'dd.mm.yy';
+
+    var TIME_FORMAT = 'HH:mm:ss';
+    var TIME_FORMAT_DISPLAY = 'HH:mm:ss';
+
     var DATE_LANGUAGE = 'ru';
     var MIN_WIDTH_TOOLBAR = 1366;
     var MIN_WIDTH_INFOBAR = 1024;
@@ -122,6 +130,7 @@ $(function() {
             params.types = data.types;
             params.maxPrice = data.maxPrice;
             params.recommendedPrice = data.recommendedPrice;
+            params.commentSecondsDelay = data.commentSecondsDelay;
 
             if( callback ) {
                 callback();
@@ -2093,7 +2102,7 @@ $(function() {
         }
 
         initSlidePanelWithData(infoBoxObject);
-        initSlideRouteButtonsBehavior(infoBoxObject);
+        initSlidePanelButtonsBehavior(infoBoxObject);
 
 
         slidepanel = true;
@@ -2124,6 +2133,8 @@ $(function() {
     }
 
     function initSlidePanelWithData(infoBoxObject) {
+
+        loadCommentsForLocation(infoBoxObject);
 
         $('#closeSlidePanel').off('click');
         $('#closeSlidePanel').click(function() {
@@ -2285,7 +2296,109 @@ $(function() {
         }
     }
 
-    function initSlideRouteButtonsBehavior(infoBoxObject) {
+    function loadCommentsForLocation(infoBoxObject) {
+
+        var id = infoBoxObject.location.id;
+
+        $.get(params.realPath+'/api/locations/'+id+'/comments', function(result) {
+            if( result === null ) {
+                $('#slideNoCommentsWarning').show(EFFECTS_TIME);
+                return;
+            }
+
+            var comments = result.result;
+            if( comments === null ) {
+                $('#slideNoCommentsWarning').show(EFFECTS_TIME);
+                return;
+            }
+
+            if( comments.length === 0 ) {
+                $('#slideNoCommentsWarning').show(EFFECTS_TIME);
+                return;
+            }
+
+            $('#slideCommentsTree').children().remove();
+            $.each(comments, function(n, comment) {
+                $('#slideCommentsTree').prepend(getCommentMarkup(comment));
+            })
+        });
+    }
+
+    function getCommentMarkup(comment) {
+
+        var id = comment.id;
+
+        if( comment.date ) {
+            var parseDate = $.datepicker.parseDate( DATE_FORMAT, comment.date );
+            var parseTime = $.datepicker.parseTime( TIME_FORMAT, comment.time );
+
+            var displayDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, parseDate );
+            var displayTime = $.datepicker.formatTime( TIME_FORMAT_DISPLAY, parseTime );
+
+            var dateTime = displayDate + ' ' + displayTime;
+        }
+
+
+        var res = $('<li/>').addClass("media")
+            .append(
+                $('<div/>').addClass("media-body")
+                    .append(
+                        $('<p/>')
+                            .append(
+                                $('<b/>')
+                                    .append(
+                                        $('<i/>').addClass("icon-user")
+                                    )
+                                    .append(
+                                        $('<a/>').attr('id', 'slideCommentAuthor'+id).attr("href", "#")
+                                            .addClass("spacer3 text-error transparent")
+                                            .text(comment.authorPublicName)
+                                    )
+                                    .append(
+                                        $('<small/>').attr("id", "slideCommentDate"+id).addClass("spacer3")
+                                            .text(dateTime)
+                                    )
+                            )
+                            .append(
+                                $('<span/>').addClass("pull-right")
+                                    .append(
+                                        $('<a/>').addClass("badge badge-success transparent")
+                                            .append(
+                                                $('<i/>').addClass("icon-thumbs-up")
+                                            )
+                                            .append(
+                                                $('<span/>').addClass("spacer3").text(comment.votesUpCount)
+                                            )
+                                    )
+                                    .append(
+                                        $('<a/>').addClass("badge badge-important transparent")
+                                            .append(
+                                                $('<i/>').addClass("icon-thumbs-down")
+                                            )
+                                            .append(
+                                                $('<span/>').addClass("spacer3").text(comment.votesDownCount)
+                                            )
+                                    )
+                            )
+                    )
+                    .append(
+                        $('<p/>')
+                            .append(
+                                $('<span/>').attr('id', 'slideCommentId'+id).attr("style", "display: none;").text(id)
+                            )
+                            .append(
+                                $('<span/>').attr("id", "slideCommentBody"+id).text(comment.text)
+                            )
+                    )
+            )
+            .append(
+                $('<hr/>')
+            );
+
+        return res;
+    }
+
+    function initSlidePanelButtonsBehavior(infoBoxObject) {
 
         $('#slideToHere').off('click');
         $('#slideToHere').click(function() {
@@ -2323,6 +2436,157 @@ $(function() {
         $('#slideNotApprove').click(function() {
             voteForLocation(infoBoxObject, false, $('#slideNotApprove') );
         });
+
+        //comments
+        $('#slideComment').off('click');
+        $('#slideComment').click(function() {
+            var vis = $('#slideCommentForm').data('visible');
+
+            if( vis !== true ) {
+                showSlideAddCommentForm();
+            }
+            else {
+                hideSlideAddCommentForm();
+            }
+        });
+
+        initSlideAddCommentFormValidation(infoBoxObject);
+    }
+
+    function showSlideAddCommentForm() {
+        $('#slideCommentForm').fadeIn(EFFECTS_TIME, function() {
+            $('#slideCommentForm').data('visible', true);
+            $('#slideCommentTitle').text("Отмена");
+            $('#slideCommentIcon').removeClass("icon-chevron-right");
+            $('#slideCommentIcon').addClass("icon-chevron-left");
+            $('#slideCommentText').focus();
+        });
+    }
+
+    function hideSlideAddCommentForm() {
+        $('#slideCommentForm').fadeOut(EFFECTS_TIME, function() {
+            $('#slideCommentForm').data('visible', false);
+            $('#slideCommentTitle').text("Оставьте отзыв");
+            $('#slideCommentIcon').addClass("icon-chevron-right");
+            $('#slideCommentIcon').removeClass("icon-chevron-left");
+        });
+    }
+
+    function clearSlideAddCommentForm() {
+        $('#slideCommentText').val(null);
+        $('#slideSymbNumber').text(COMMENT_LENGTH);
+    }
+
+    function initSlideAddCommentFormValidation(infoBoxObject) {
+        $("#slideCommentForm").validate({
+            rules: {
+                slideCommentText: {
+                    required: true,
+                    minlength: 1,
+                    maxlength: 1000
+                }
+            },
+            success: function() {
+                initSlideCommentFormSubmitBehavior(infoBoxObject);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('.control-group').removeClass('error');
+            }
+        });
+    }
+
+    function initSlideCommentFormSubmitBehavior(infoBoxObject) {
+        $('#slideCommentText').off('keyup change');
+        $('#slideCommentText').on('keyup change', function() {
+            var text = $('#slideCommentText').val();
+            $('#slideSymbNumber').text(COMMENT_LENGTH - text.length);
+        });
+
+        $('#slideCommentForm').off('submit');
+        $('#slideCommentForm').submit(function() {
+            return false;
+        });
+        $('#slideSubmitComment').off('click');
+        $('#slideSubmitComment').click(function() {
+            submitSlideAddCommentForm(infoBoxObject);
+        });
+    }
+
+    function submitSlideAddCommentForm(infoBoxObject) {
+
+        $('#slideCommentAlert').hide(EFFECTS_TIME);
+        $('#slideSubmitComment').button('loading');
+
+        if( $("#slideCommentForm").valid() ) {
+            submitSlideAddCommentFormPOST(infoBoxObject);
+        }
+        else {
+            $('#slideSubmitComment').button('reset');
+        }
+    }
+
+    function submitSlideAddCommentFormPOST(infoBoxObject) {
+        var comment = {
+            text: $('#slideCommentText').val().trim(),
+            questionCommentId: $('#slideQuestionComment').val().trim()
+        };
+        var id = infoBoxObject.location.id;
+
+        $.ajax({
+            type: "POST",
+            url: params.realPath + "/api/locations/"+id+"/comments/add",
+            data: JSON.stringify(comment),
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json',
+            success: function(){},
+            complete: function(data) {
+
+                if( data.responseJSON ) {
+                    var res = data.responseJSON;
+
+                    if( res.error === false ) {
+                        //good job
+                        $('#slideSubmitComment').button('reset');
+                        hideSlideAddCommentForm();
+                        clearSlideAddCommentForm();
+                    }
+                    else {
+                        showSlideAddCommentErrorByType(res.errorType);
+                    }
+                }
+                else {
+                    showSlideAddCommentError("Какая-то странная ошибка на сервере..извините");
+                }
+            }
+        });
+    }
+
+    function showSlideAddCommentErrorByType(errorType) {
+
+        if( errorType === errors.unknown_location ) {
+            showSlideAddCommentError("Такой локации больше нет в базе. Обновите страничку!");
+        }
+        else if( errorType === errors.no_such_user ) {
+            showSlideAddCommentError("Сервер говорит, что вашего пользователя больше не существует. Сожалеем...");
+        }
+        else if( errorType === errors.comment_is_empty ) {
+            showSlideAddCommentError("Введите что-нибудь, пустые комментарии не разрешены");
+        }
+        else if( errorType === errors.too_early_comment ) {
+            var del = params.commentSecondsDelay;
+            showSlideAddCommentError("Подождите " +del+ " секунд, потом снова сможете отправить комментарий");
+        }
+
+        $('#slideSubmitComment').button('reset');
+    }
+
+    function showSlideAddCommentError(text) {
+        $('#slideCommentError').text(text);
+        $('#slideCommentAlert').show(EFFECTS_TIME);
     }
 
     function markerClickBehavior(marker, infoBoxObject) {

@@ -10,16 +10,20 @@ import com.petrpopov.cheatfood.model.data.GeoPointBounds;
 import com.petrpopov.cheatfood.model.entity.*;
 import com.petrpopov.cheatfood.web.filters.LocationRateFilter;
 import com.petrpopov.cheatfood.web.filters.LocationVoteFilter;
+import com.petrpopov.cheatfood.web.filters.UserEntityFilter;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.joda.time.Seconds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.IndexOperations;
 import org.springframework.data.mongodb.core.geo.Box;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
@@ -51,10 +55,16 @@ public class LocationService extends GenericService<Location> {
     private UserService userService;
 
     @Autowired
+    private UserEntityFilter userEntityFilter;
+
+    @Autowired
     private UserConnectionsService userConnectionsService;
 
     @Value("#{properties.max_price}")
     private Double maxPrice;
+
+    @Value("#{properties.comment_seconds_delay}")
+    private int commentSecondsDelay;
 
 
     public LocationService() {
@@ -310,6 +320,91 @@ public class LocationService extends GenericService<Location> {
         Query query = new Query( Criteria.where("_id").in(connections.getLocations()) );
         List<Location> locations = op.find(query, domainClass);
         return locations;
+    }
+
+    public List<Comment> getCommentsForLocation(String locationid) throws CheatException {
+
+        if( locationid == null )
+            throw new CheatException(ErrorType.unknown_location);
+
+        Location location = findById(locationid);
+        if( location == null )
+            throw new CheatException(ErrorType.unknown_location);
+
+        List<Comment> comments = location.getComments();
+        return comments;
+    }
+
+    public Location addCommentToLocation(String locationId, @Valid Comment comment, UserEntity author) throws CheatException {
+
+
+        if( locationId == null )
+            throw new CheatException(ErrorType.unknown_location);
+
+        if( author == null )
+            throw new CheatException(ErrorType.no_such_user);
+
+        if( comment == null )
+            throw new CheatException(ErrorType.comment_is_empty);
+
+        String commentText = comment.getText();
+        if( commentText == null )
+            throw new CheatException(ErrorType.comment_is_empty);
+
+        commentText = commentText.trim();
+        if( commentText.isEmpty() )
+            throw new CheatException(ErrorType.comment_is_empty);
+
+        DateTime now = new DateTime(new Date());
+
+        Location location = findById(locationId);
+        if( location == null )
+            throw new CheatException(ErrorType.unknown_location);
+
+        Comment lastComment = null;
+        DateTime lastCommentDate = null;
+        List<Comment> comments = location.getComments();
+        if( comments == null )
+            comments = new ArrayList<Comment>();
+        else {
+            if( !comments.isEmpty() ) {
+                lastComment = comments.get(0);
+                lastCommentDate = new DateTime(lastComment.getDate());
+
+                for (Comment comm : comments) {
+                    DateTime currentDateTime = new DateTime(comm.getDate());
+
+                    if( currentDateTime.isAfter(lastCommentDate)) {
+                        lastComment = comm;
+                        lastCommentDate = currentDateTime;
+                    }
+                }
+            }
+        }
+
+        if( lastComment != null && lastCommentDate != null) {
+
+            Seconds seconds = Seconds.secondsBetween(now, lastCommentDate);
+
+            int sec = Math.abs(seconds.getSeconds());
+            if( sec <= commentSecondsDelay )
+                throw new CheatException(ErrorType.too_early_comment);
+        }
+
+
+        comment.setId(ObjectId.get().toString());
+        comment.setDate(now.toDate());
+        comment.setAuthor(author);
+        comment.setAuthorPublicName(userEntityFilter.getPublicName(author));
+
+
+        comments.add(comment);
+
+        Update update = new Update().set("comments", comments);
+        Query query = new Query(Criteria.where("_id").is(location.getId()));
+        Location saved = op.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), Location.class);
+
+        return saved;
     }
 
 

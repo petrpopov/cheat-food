@@ -23,6 +23,7 @@
 <script src="/resources/js/jquery.noty.topRight-2.1.0.js" type="text/javascript"></script>
 <script src="/resources/js/jquery.noty.default-theme-2.1.0.js" type="text/javascript"></script>
 <script src="/resources/js/jquery-ui.datepicker.ru.js" type="text/javascript"></script>
+<script src="/resources/js/jquery-ui-timepicker-addon-1.4.js" type="text/javascript"></script>
 <script src="/resources/js/jquery.raty-2.5.2.min.js" type="text/javascript"></script>
 <script src="/resources/js/jquery.numeric-1.3.1.js" type="text/javascript"></script>
 <script src="/resources/js/markerclusterer-2.0.9.min.js" type="text/javascript"></script>

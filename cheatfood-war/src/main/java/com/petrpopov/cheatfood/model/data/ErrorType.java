@@ -22,5 +22,7 @@ public enum ErrorType {
     email_is_empty,
     no_user_with_such_email,
     overpriced,
+    comment_is_empty,
+    too_early_comment,
     other
 }

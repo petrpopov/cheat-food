@@ -45,6 +45,9 @@ public class ParamsWebService {
     @Value("#{properties.recommended_price}")
     private Double recommendedPrice;
 
+    @Value("#{properties.comment_seconds_delay}")
+    private int commentSecondsDelay;
+
     @Autowired
     private UserContextHandler userContextHandler;
 
@@ -59,6 +62,7 @@ public class ParamsWebService {
         params.setTypes(typeService.findAll());
         params.setMaxPrice(maxPrice);
         params.setRecommendedPrice(recommendedPrice);
+        params.setCommentSecondsDelay(commentSecondsDelay);
 
         return params;
     }

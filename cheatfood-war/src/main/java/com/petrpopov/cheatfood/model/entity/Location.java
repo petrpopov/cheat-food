@@ -69,6 +69,8 @@ public class Location implements Serializable {
     @Valid
     private List<Rate> rates;
 
+    private List<Comment> comments;
+
     private long votesUpCount;
 
     private long votesDownCount;
@@ -291,6 +293,14 @@ public class Location implements Serializable {
 
     public void setInFavourites(Boolean inFavourites) {
         this.inFavourites = inFavourites;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override

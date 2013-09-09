@@ -23,6 +23,7 @@
 <link href="/resources/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
 <link href="/resources/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 <link href="/resources/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
+<link href="/resources/css/jquery-ui-timepicker-addon-1.4.css" rel="stylesheet" type="text/css"/>
 <link href="/resources/css/style.css" rel="stylesheet" type="text/css"/>
 
 <!--[if IE 7]>
