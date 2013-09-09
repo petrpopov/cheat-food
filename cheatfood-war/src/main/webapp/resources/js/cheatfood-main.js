@@ -472,7 +472,6 @@ $(function() {
         createLocateMeButton();
         createAddMarkerButton(auth);
         createRouteForm();
-//        createSearchBar();
         initSearchBarBehavior();
         hideOrShowControlsDueToDocumentWidth();
     }
@@ -854,7 +853,7 @@ $(function() {
     }
 
     function createRouteForm() {
-        var div = $('<div/>').attr("id", "routeFormDiv").addClass("span7 infoWindow").attr("hidden", "true")
+        var div = $('<div/>').attr("id", "routeFormDiv").addClass("span4 infoWindow")
             .attr("style", "display: none")
             .append(
                 $('<button/>').attr("type", "button").addClass("close").text("x").attr("id", "closeRouteForm")
@@ -898,7 +897,7 @@ $(function() {
                     )
             );
 
-        map.map.controls[google.maps.ControlPosition.TOP_LEFT].push( div.get(0) );
+        map.map.controls[google.maps.ControlPosition.TOP_CENTER].push( div.get(0) );
 
         google.maps.event.addListener(map.map, 'idle', function(event) {
             initRouteFormValidation();

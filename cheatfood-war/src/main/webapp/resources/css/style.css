@@ -252,11 +252,17 @@ hr {
 }
 
 #routeForm .control-group {
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
-#routeFormDiv, #searchBarDiv, #infoBar {
+#routeFormDiv {
     margin-top: 10px;
+}
+
+#routeFormDiv .close {
+    margin-top: 5px;
+    margin-right: 10px;
 }
 
 #infoBar {
@@ -287,10 +293,7 @@ hr {
     padding: 10px;
 }
 
-#routeFormDiv .close {
-    margin-top: 5px;
-    margin-right: 10px;
-}
+
 
 .arrow_box {
     position: relative;
