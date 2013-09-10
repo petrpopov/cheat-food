@@ -2557,6 +2557,7 @@ $(function() {
         });
 
         initSlideAddCommentFormValidation(infoBoxObject);
+        initSlideCommentFormSubmitBehavior(infoBoxObject);
     }
 
     function showSlideAddCommentForm(callback) {
@@ -2600,7 +2601,6 @@ $(function() {
                 }
             },
             success: function() {
-                initSlideCommentFormSubmitBehavior(infoBoxObject);
             },
             highlight: function (element, errorClass, validClass) {
                 $(element).closest('.control-group').addClass('error');
@@ -2949,7 +2949,7 @@ $(function() {
         $('#infoDetails').off('click');
         $('#infoDetails').click(function() {
             showMarkerSlidePanel(infoBoxObject);
-        })
+        });
     }
 
     function initRouteButtonsBehavior(infoBoxObject) {
