@@ -599,63 +599,21 @@ $(function() {
 
     function createMarkerEditFormOnMap() {
         var div = $('<div/>').attr('id','editMarkerFormDiv').attr("style", "display: none")
-            .addClass('span6 transparent infoWindow').append(getEditFormMarkup());
+            .addClass('span12').append(getEditFormMarkup());
 
-        map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(div.get(0));
+        $('#slidepanelInfoContent').hide();
+        $('#slidepanelEditContent').append(div);
     }
 
-    function showEditMarkerFormDiv(callback) {
+    function showEditMarkerFormDiv(infoBoxObject) {
 
-        var ar = map.map.controls[google.maps.ControlPosition.TOP_RIGHT].getArray();
-
-        var index = -1;
-        for(var i = 0; i < ar.length; i++) {
-            var el = ar[i];
-
-            if( el.hasOwnProperty("id") ) {
-                if( el.id === "editMarkerFormDiv" ) {
-                    index = i;
-                    break;
-                }
-            }
-        }
-
-        if( index >= 0 ) {
-            $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
-                if( callback ) {
-                    callback();
-                }
+        showMarkerSlidePanel(infoBoxObject, true);
+        createMarkerEditFormOnMap();
+        $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
+            $('#closeSlidePanel').off('click');
+            $('#closeSlidePanel').click(function() {
+                cancelNewMarkerAddition(infoBoxObject);
             });
-        }
-        else {
-            createMarkerEditFormOnMap();
-            $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME);
-        }
-    }
-
-    function hideEditMarkerFormDiv(callback) {
-
-        var ar = map.map.controls[google.maps.ControlPosition.TOP_RIGHT].getArray();
-
-        var index = -1;
-        for(var i = 0; i < ar.length; i++) {
-            var el = ar[i];
-            if( el.hasOwnProperty("id") ) {
-                if( el.id === "editMarkerFormDiv" ) {
-                    index = i;
-                    break;
-                }
-            }
-        }
-
-        $('#editMarkerFormDiv').fadeOut(EFFECTS_TIME, function() {
-            if( callback ) {
-                callback();
-            }
-
-            if( index >= 0 ) {
-                map.map.controls[google.maps.ControlPosition.TOP_RIGHT].removeAt(index);
-            }
         });
     }
 
@@ -2013,7 +1971,7 @@ $(function() {
         return marker;
     }
 
-    function showMarkerSlidePanel(infoBoxObject) {
+    function showMarkerSlidePanel(infoBoxObject, edit) {
 
         if( slidepanel === false ) {
             $('#slidepanel').show();
@@ -2029,14 +1987,21 @@ $(function() {
             infoBox.hide();
         }
 
+        slidepanel = true;
+
+        if( edit ) {
+            if( edit === true ) {
+                //initialization the form with data is in caller method
+                return;
+            }
+        }
+
+        $('#slidepanelInfoContent').show();
         initSlidePanelWithData(infoBoxObject);
         initSlidePanelButtonsBehavior(infoBoxObject);
-
-
-        slidepanel = true;
     }
 
-    function hideMarkerSlidePanel(infoBoxShow) {
+    function hideMarkerSlidePanel(infoBoxShow, callback) {
 
 
         $('#slidepanel').fadeOut(EFFECTS_TIME, function() {
@@ -2058,6 +2023,9 @@ $(function() {
             }
         }
 
+        if( callback ) {
+            callback();
+        }
 
         slidepanel = false;
     }
@@ -3474,7 +3442,7 @@ $(function() {
         map.map.setCenter( infoBoxObject.infoBox.getPosition() );
         infoBoxObject.infoBox.hide();
 
-        showEditMarkerFormDiv();
+        showEditMarkerFormDiv(infoBoxObject);
         initEditForm(infoBoxObject);
 
         $('#currentActionForm').data("infoBoxObject", infoBoxObject);
@@ -3526,11 +3494,6 @@ $(function() {
             cancelNewMarkerAddition(infoBoxObject);
         });
 
-        $('#closeEditForm').off('click');
-        $('#closeEditForm').click(function() {
-            cancelNewMarkerAddition(infoBoxObject);
-        });
-
         $('#editMarkerForm').off('submit');
         $('#editMarkerForm').submit(function(){
             //submitEditForm(infoBoxObject);
@@ -3566,7 +3529,7 @@ $(function() {
 
     function cancelNewMarkerAddition(infoBoxObject) {
 
-        hideEditMarkerFormDiv();
+        hideMarkerSlidePanel(true);
 
         if( infoBoxObject ) {
             infoBoxObject.infoBox.show();
@@ -3717,7 +3680,7 @@ $(function() {
                         newMarker = false;
                         searchMarker = false;
 
-                        hideEditMarkerFormDiv(resetSubmitEditButtonBehavior);
+                        hideMarkerSlidePanel(true, resetSubmitEditButtonBehavior);
                         removeAllTempMarkers();
                         showInfoBoxForMarker(infoBoxObject);
                         enableEditMarkerMenu(infoBoxObject);
@@ -3747,7 +3710,7 @@ $(function() {
                     }
                 }
                 else {
-                    resetSubmitEditButtonBehavior
+                    resetSubmitEditButtonBehavior();
                 }
             },
             statusCode: {
@@ -4420,9 +4383,6 @@ $(function() {
 
         var form = $('<form/>').attr('id', 'editMarkerForm').addClass('infoWindowInner form-horizontal')
             .attr('autocomplete', 'off')
-            .append(
-                $('<button/>').attr("type", "button").addClass("close").text("x").attr("id", "closeEditForm")
-            )
             .append(
                 $('<div/>').attr("id", "editFormAlert").addClass("alert").attr("hidden", "true").attr("style", "display: none;")
                     .append(
