@@ -602,12 +602,23 @@ $(function() {
             .addClass('span12').append(getEditFormMarkup());
 
         $('#slidepanelInfoContent').hide();
+
+        $('#slidepanelEditContent').children().remove();
         $('#slidepanelEditContent').append(div);
+        $('#slidepanelEditContent').show();
     }
 
-    function showEditMarkerFormDiv(infoBoxObject) {
+    function showEditMarkerFormDiv(infoBoxObject, doNotShowSlidePanel) {
 
-        showMarkerSlidePanel(infoBoxObject, true);
+        if( !doNotShowSlidePanel ) {
+            showMarkerSlidePanel(infoBoxObject, true);
+        }
+        else {
+            if( doNotShowSlidePanel === false ) {
+                showMarkerSlidePanel(infoBoxObject, true);
+            }
+        }
+
         createMarkerEditFormOnMap();
         $('#editMarkerFormDiv').fadeIn(EFFECTS_TIME, function() {
             $('#closeSlidePanel').off('click');
@@ -1997,6 +2008,7 @@ $(function() {
         }
 
         $('#slidepanelInfoContent').show();
+        $('#slidepanelEditContent').hide();
         initSlidePanelWithData(infoBoxObject);
         initSlidePanelButtonsBehavior(infoBoxObject);
     }
@@ -2121,11 +2133,13 @@ $(function() {
         $('#slideApproveLoc').hide();
         $('#slideEditGroup').hide();
         $('#slideHide').hide();
+        $('#slideEdit').hide();
         $('#slideDelete').hide();
         $('#slideRatyGroup').hide();
 
         if( authorized === true ) {
             $('#slideEditGroup').show();
+            $('#slideEdit').show();
 
             if( params.hasOwnProperty('currentUser') ) {
                 if(params.currentUser.hasOwnProperty('admin') ) {
@@ -2495,6 +2509,11 @@ $(function() {
         $('#slideFromHere').off('click');
         $('#slideFromHere').click(function() {
             getRouteAddresses(infoBoxObject, false);
+        });
+
+        $('#slideEdit').off('click');
+        $('#slideEdit').click(function() {
+            initAndShowEditForm(infoBoxObject, true);
         });
 
         $('#slideDelete').off('click');
@@ -3437,12 +3456,12 @@ $(function() {
         markersCount--;
     }
 
-    function initAndShowEditForm(infoBoxObject) {
+    function initAndShowEditForm(infoBoxObject, doNotShowSlidePanel) {
 
         map.map.setCenter( infoBoxObject.infoBox.getPosition() );
         infoBoxObject.infoBox.hide();
 
-        showEditMarkerFormDiv(infoBoxObject);
+        showEditMarkerFormDiv(infoBoxObject, doNotShowSlidePanel);
         initEditForm(infoBoxObject);
 
         $('#currentActionForm').data("infoBoxObject", infoBoxObject);

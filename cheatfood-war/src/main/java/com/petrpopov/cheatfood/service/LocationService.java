@@ -176,6 +176,7 @@ public class LocationService extends GenericService<Location> {
         }
 
 
+        location.setComments(this.getLocationComments(location));
         location.setVotes(this.getLocationVotes(location));
         location.setRates(this.getLocationRates(location));
         location.setVotesUpCount(this.getVotesUpCount(location));
@@ -883,6 +884,15 @@ public class LocationService extends GenericService<Location> {
 
         rate /= rates.size();
         return rate;
+    }
+
+    private List<Comment> getLocationComments(Location location) {
+
+        Location loc = findById(location.getId());
+        if( loc == null )
+            return null;
+
+        return loc.getComments();
     }
 
     private List<Vote> getLocationVotes(Location location) {
