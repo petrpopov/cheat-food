@@ -263,6 +263,11 @@ hr {
     margin-right: 10px;
 }
 
+#closeSlidePanel {
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
 #searchBarForm {
     margin: 0;
 }

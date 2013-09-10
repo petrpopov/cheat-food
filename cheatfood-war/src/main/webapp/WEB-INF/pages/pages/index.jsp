@@ -9,7 +9,8 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div id="slidepanel" class="span2 transparent infoWindow">
-            <button id="closeSlidePanel" type="button" class="close" data-dismiss="modal">&times;</button>
+
+            <button id="closeSlidePanel" type="button" class="close">&times;</button>
 
             <div id="slidepanelEditContent">
 
