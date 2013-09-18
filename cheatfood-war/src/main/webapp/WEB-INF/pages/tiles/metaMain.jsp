@@ -9,6 +9,8 @@
 <meta charset="utf-8">
 <title>Каталог интересных мест, где можно недорого поесть</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Секретные места, где можно дешево и вкусно поесть" />
+<meta name="keywords" content="дешево поесть,недорого поесть" />
 
 <meta property="og:title" content="Cheat Food"/>
 <meta property="og:url" content="http://www.cheatfood.com"/>

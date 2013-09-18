@@ -10,6 +10,7 @@
 <title>Справка Cheat Food о том, как добавлять точки, где можно дешево поесть</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Какие места, где можно недорого пообедать, добавлять на сайт, вы узнаете из этой справки" />
+<meta name="keywords" content="дешево поесть, где недорого поесть" />
 
 <meta property="og:title" content="Cheat Food"/>
 <meta property="og:url" content="http://www.cheatfood.com"/>

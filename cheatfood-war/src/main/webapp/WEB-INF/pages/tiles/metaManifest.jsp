@@ -10,6 +10,7 @@
 <title>Манифест Cheat Food о том, как можно недорого поесть</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Надоело тратить много денег на кафе? Здесь можно узнать, где можно поесть недорого" />
+<meta name="keywords" content="где дешево поесть, недорого поесть" />
 
 <meta property="og:title" content="Cheat Food"/>
 <meta property="og:url" content="http://www.cheatfood.com"/>
