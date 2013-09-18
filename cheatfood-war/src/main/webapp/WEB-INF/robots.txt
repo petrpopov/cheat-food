@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /api
+
+User-agent: Yandex
+Disallow: /api
+Host: www.cheatfood.com
+Crawl-delay: 30
+
+User-agent: Googlebot
+Disallow: /api
+Crawl-delay: 30
+
+Sitemap: http://www.cheatfood.com/sitemap.xml
