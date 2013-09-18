@@ -22,6 +22,7 @@
     </definition>
 
     <definition name="main" template="/WEB-INF/pages/templates/mainTemplate.jsp">
+        <put-attribute name="meta" value="/WEB-INF/pages/tiles/metaMain.jsp.jsp" />
         <put-attribute name="mainScripts" value="/WEB-INF/pages/tiles/mainScripts.jsp"/>
         <put-attribute name="workingScripts" value="/WEB-INF/pages/tiles/workingScripts.jsp"/>
         <put-attribute name="header" value="/WEB-INF/pages/tiles/header.jsp"/>
@@ -42,24 +43,29 @@
     </definition>
 
     <definition name="help" extends="simple">
+        <put-attribute name="meta" value="/WEB-INF/pages/tiles/metaHelp.jsp" />
         <put-attribute name="header" value="/WEB-INF/pages/tiles/simpleHeader.jsp"/>
         <put-attribute name="content" value="/WEB-INF/pages/pages/help.jsp" />
     </definition>
 
     <definition name="manifest" extends="simple">
+        <put-attribute name="meta" value="/WEB-INF/pages/tiles/metaManifest.jsp" />
         <put-attribute name="header" value="/WEB-INF/pages/tiles/simpleHeader.jsp"/>
         <put-attribute name="content" value="/WEB-INF/pages/pages/manifest.jsp" />
     </definition>
 
     <definition name="restore" extends="simple">
+        <put-attribute name="meta" value="/WEB-INF/pages/tiles/metaRestore.jsp" />
         <put-attribute name="content" value="/WEB-INF/pages/pages/restore.jsp" />
     </definition>
 
     <definition name="email" extends="simple">
+        <put-attribute name="meta" value="/WEB-INF/pages/tiles/metaEmail.jsp" />
         <put-attribute name="content" value="/WEB-INF/pages/pages/email.jsp" />
     </definition>
 
     <definition name="signin" extends="simple">
+        <put-attribute name="meta" value="/WEB-INF/pages/tiles/metaSignin.jsp" />
         <put-attribute name="content" value="/WEB-INF/pages/pages/signin.jsp" />
     </definition>
 

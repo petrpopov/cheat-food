@@ -10,6 +10,7 @@
 <html lang="en">
 
 <head>
+    <t:insertAttribute name="meta" />
     <t:insertAttribute name="scripts" />
 </head>
 

@@ -10,6 +10,8 @@
 <html lang="en">
 
 <head>
+    <t:insertAttribute name="meta" />
+
     <t:insertAttribute name="mainScripts" />
 
     <t:insertAttribute name="workingScripts" />
@@ -22,8 +24,6 @@
     <!-- main content here -->
     <t:insertAttribute name="content" />
     <!-- main content here -->
-
-
 
     <t:insertAttribute name="messageModal" />
 
