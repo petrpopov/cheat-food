@@ -22,7 +22,7 @@
     </definition>
 
     <definition name="main" template="/WEB-INF/pages/templates/mainTemplate.jsp">
-        <put-attribute name="meta" value="/WEB-INF/pages/tiles/metaMain.jsp.jsp" />
+        <put-attribute name="meta" value="/WEB-INF/pages/tiles/metaMain.jsp" />
         <put-attribute name="mainScripts" value="/WEB-INF/pages/tiles/mainScripts.jsp"/>
         <put-attribute name="workingScripts" value="/WEB-INF/pages/tiles/workingScripts.jsp"/>
         <put-attribute name="header" value="/WEB-INF/pages/tiles/header.jsp"/>
