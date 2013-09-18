@@ -23,6 +23,18 @@
         <mime-type>image/x-icon</mime-type>
     </mime-mapping>
 
+    <!-- URL rewriter filter for SEO -->
+    <filter>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
 
     <!-- Filter for removing jsessionid from s:urls -->
     <filter>
