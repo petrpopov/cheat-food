@@ -14,8 +14,10 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd">
         <intercept-url pattern="/manifest" access="permitAll"/>
         <intercept-url pattern="/help" access="permitAll"/>
         <intercept-url pattern="/error" access="permitAll"/>
+        <intercept-url pattern="/errors/*" access="permitAll"/>
+        <intercept-url pattern="/api/params*" access="permitAll"/>
 
-        <intercept-url pattern="/*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/index*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/home*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/main*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />

@@ -5,6 +5,7 @@ import com.petrpopov.cheatfood.model.entity.UserEntity;
 import com.petrpopov.cheatfood.service.LocationService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.web.filters.LocationFilter;
+import com.petrpopov.cheatfood.web.other.ImageService;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,15 @@ public class HomeController {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private ImageService imageService;
+
+    @RequestMapping(value = "/favicon.ico", produces = "image/png")
+    @ResponseBody
+    public byte[] favicon() {
+        return imageService.getFavicon();
+    }
 
     @RequestMapping({"/","/home", "/index", "/main"})
     public String showHomePage() {
