@@ -86,6 +86,18 @@ public class LocationWebService extends BaseWebService {
         return list;
     }
 
+    @RequestMapping(value = "totalcount", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageResult getLocationsTotalCount() {
+
+        MessageResult res = new MessageResult();
+
+        long count = locationService.getLocationsTotalCount();
+        res.setResult(count);
+
+        return res;
+    }
+
     @RequestMapping(value = "count", method = RequestMethod.GET)
     @ResponseBody
     public MessageResult getLocationsCountInBound(@Valid GeoPointBounds bounds) {

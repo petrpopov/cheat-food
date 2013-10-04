@@ -43,6 +43,7 @@ $(function() {
         email_change: "email_change"
     };
 
+    var currentPage = 0;
     var markersCount = 0;
     var markers = new HashMap();
     var markersIds = new HashMap();
@@ -57,6 +58,7 @@ $(function() {
     var searchMarker = false;
 
 
+    var PAGE_SIZE = 10;
     var COMMENT_LENGTH = 1000;
     var RATY_SIZE = 24;
     var UNKNOWN_USER_ID = "-1";
@@ -336,6 +338,10 @@ $(function() {
         if( $.fn.createMap !== undefined ) {
             $().createMap(auth);
         }
+
+        if($.fn.loadLocations !== undefined ) {
+            $().loadLocations();
+        }
     }
 
     function showNoLocationsNoteTopCenter() {
@@ -365,6 +371,149 @@ $(function() {
         });
     }
 
+    $.fn.loadLocations = function loadLocations() {
+        getLocationsTotalCount(loadLocationsBody);
+    };
+
+    function loadLocationsBody(totalCount) {
+        var url = params.realPath+"/api/locations/all?size="+PAGE_SIZE+"&page="+currentPage;
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(data) {
+
+                $('#mainLocations').children().remove();
+
+                $.each(data, function(n, location) {
+                    $('#mainLocations').append(createLocationInMainList(location));
+                });
+            }
+        });
+
+        var pageCount = Math.ceil(totalCount / PAGE_SIZE);
+
+        $("#mainListPrev").off('click');
+        if( currentPage === 0 ) {
+            $("#mainListPrev").closest('li').addClass("disabled");
+            $("#mainListPrev").off('click');
+        }
+        else {
+            $("#mainListPrev").closest('li').removeClass("disabled");
+
+            $("#mainListPrev").click(function() {
+                currentPage--;
+                if( currentPage < 0 ) {
+                    currentPage = 0;
+                }
+
+                loadLocationsBody(totalCount);
+            });
+        }
+
+
+        $("#mainListNext").off('click');
+        if(currentPage === pageCount-1) {
+            $("#mainListNext").closest('li').addClass("disabled");
+            $("#mainListNext").off('click');
+        }
+        else {
+            $("#mainListNext").closest('li').removeClass("disabled");
+
+            $("#mainListNext").click(function() {
+                currentPage++;
+                if( currentPage >= pageCount ) {
+                    currentPage = pageCount-1;
+                }
+
+                loadLocationsBody(totalCount);
+            });
+        }
+
+    }
+
+    function getLocationsTotalCount(callback) {
+        $.get(params.realPath+"/api/locations/totalcount", function(res) {
+
+            var totalCount = res.result;
+
+            if( callback ) {
+                callback(totalCount);
+            }
+        });
+    }
+
+    function createLocationInMainList(location) {
+
+        var favClass = "icon-heart-empty";
+        if( location.inFavourites ) {
+            if( location.inFavourites === true ) {
+                favClass = "icon-heart";
+            }
+            else {
+                favClass = "icon-heart-empty";
+            }
+        }
+        else {
+            favClass = "icon-heart-empty";
+        }
+
+        var fav = $('<a/>').addClass("favLink").attr("href", "#").append(
+            $('<i/>').addClass(favClass).attr("id", "mainFavIcon"+location.id)
+        );
+
+
+
+        var res = $('<li/>').addClass("media").append(
+            $('<a/>').addClass("pull-left")
+                .append(
+                    $('<img/>').addClass("media-object").attr("width", "64").attr("src", getIconImagePath(location.type))
+                )
+                .append(
+                    $('<label/>').addClass("label transparent").text(getTypeValueByLanguage(location.type, DATE_LANGUAGE))
+                )
+        ).append(
+                $('<div/>').addClass("media-body").append(
+                    $('<h5/>').addClass("media-heading").text(location.title)
+                )
+                   /* .append(
+                        $('<p/>').append($('<small/>').text(location.description))
+                    )*/
+                    .append(
+                        $('<address/>').append(
+                            $('<small/>').text(location.address.addressLine)
+                        )
+                            .append($('<br/>'))
+                    )
+                    .append(
+                        $('<div/>').addClass("media")
+                            .append(
+                                $('<div/>').addClass("media-body")
+                                    .append(
+                                        $('<span/>').addClass("label label-success transparent")
+                                            .text(location.averagePrice+" RUB")
+                                    )
+                                    .append(
+                                        $('<span/>').addClass("badge badge-info spacer5 transparent")
+                                            .text(location.averageRate)
+                                    )
+                                    .append(
+                                        $('<div/>').addClass("btn-group pull-right")
+                                            .append(
+                                                fav
+                                            )
+                                            .append(
+                                                $('<button/>').addClass("btn btn-mini spacer5").append(
+                                                    $('<i/>').addClass("icon-expand-alt")
+                                                ).append($('<span/>').addClass("spacer3").text("Подробнее"))
+                                            )
+                                    )
+                            )
+                    )
+            );
+
+        return res;
+    }
 
     $.fn.createMap = function createMap(auth) {
         var mcOptions = {gridSize: GRID_SIZE, maxZoom: MAX_ZOOM};
@@ -1986,11 +2135,14 @@ $(function() {
     function showMarkerSlidePanel(infoBoxObject, edit) {
 
         if( slidepanel === false ) {
+
+            $('#mainList').hide();
+
             $('#slidepanel').show();
             $('#slidepanel').animate({
                 "width": "+=350px"
             }, EFFECTS_TIME);
-            $('#map').removeClass("span12");
+            $('#map').removeClass("span9");
 
             setMapCorrectSize();
         }
@@ -2018,7 +2170,8 @@ $(function() {
 
 
         $('#slidepanel').fadeOut(EFFECTS_TIME, function() {
-            $('#map').addClass("span12");
+            $('#mainList').show();
+            $('#map').addClass("span9");
 
             $('#slidepanel').animate({
                 "width": "-=350px"
