@@ -463,7 +463,6 @@ $(function() {
         );
 
 
-
         var res = $('<li/>').addClass("media").append(
             $('<a/>').addClass("pull-left")
                 .append(
@@ -503,9 +502,18 @@ $(function() {
                                                 fav
                                             )
                                             .append(
-                                                $('<button/>').addClass("btn btn-mini spacer5").append(
-                                                    $('<i/>').addClass("icon-expand-alt")
-                                                ).append($('<span/>').addClass("spacer3").text("Подробнее"))
+                                                $('<button/>').addClass("btn btn-mini spacer5")
+                                                    .append(
+                                                        $('<i/>').addClass("icon-expand-alt")
+                                                    )
+                                                    .append($('<span/>').addClass("spacer3").text("Подробнее"))
+                                                    .click(function() {
+                                                        var infoBoxObject = {
+                                                            infoBox: infoBox,
+                                                            location: location
+                                                        };
+                                                        showMarkerSlidePanel(infoBoxObject);
+                                                    })
                                             )
                                     )
                             )
