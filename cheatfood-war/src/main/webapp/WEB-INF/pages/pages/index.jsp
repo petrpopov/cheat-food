@@ -209,7 +209,166 @@
             </div>
         </div>
 
-        <div id="map" class="span12"></div>
+        <div id="mainList" class="span3 infoWindow">
+            <div class="media">
+                <div class="media-body">
+                    <h4 class="media-heading">Результаты поиска: Столовая</h4>
+
+                    <div class="media">
+
+                    </div>
+                </div>
+
+                <hr/>
+            </div>
+
+            <div class="media-list">
+
+                <li class="media">
+
+                    <a class="pull-left" href="#">
+                        <img class="media-object" src="/resources/img/types/tandoor.png" width="64">
+                        <label class="label transparent">Столовая</label>
+                    </a>
+
+                    <div class="media-body">
+                        <h4 class="media-heading">Кафе "У Коли"</h4>
+                        <p>Клевая забегаловка</p>
+
+                        <address>
+                            Москва, Новоданиловаская набережная, дом 12а<br/>
+                        </address>
+
+                        <div class="media">
+                            <div class="media-body">
+                                <span class="label label-success transparent">565 RUB</span>
+                                <span class="badge badge-info spacer5 transparent">3.5</span>
+
+                                <div class="btn-group pull-right">
+                                    <a class="favLink" href="#">
+                                        <i class="icon-heart-empty"></i>
+                                    </a>
+                                    <button class="btn btn-mini spacer5">
+                                        <i class="icon-expand-alt"></i> Подробнее
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                </li>
+
+                <li class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" src="/resources/img/types/tandoor.png" width="64">
+                        <label class="label transparent">Тандыр</label>
+                    </a>
+
+                    <div class="media-body">
+                        <h4 class="media-heading">Кафе "У Коли"</h4>
+                        <p>Клевая забегаловка</p>
+
+                        <address>
+                            Москва, Новоданиловаская набережная, дом 12а<br/>
+                        </address>
+
+                        <div class="media">
+                            <div class="media-body">
+                                <span class="label label-success transparent">565 RUB</span>
+                                <span class="badge badge-info spacer5 transparent">3.5</span>
+                                <div class="btn-group pull-right">
+                                    <a class="favLink" href="#">
+                                        <i class="icon-heart-empty"></i>
+                                    </a>
+                                    <button class="btn btn-mini spacer5">
+                                        <i class="icon-expand-alt"></i> Подробнее
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                </li>
+
+                <li class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" src="/resources/img/types/tandoor.png" width="64">
+                        <label class="label transparent">Столовая</label>
+                    </a>
+
+                    <div class="media-body">
+                        <h4 class="media-heading">Кафе "У Коли"</h4>
+                        <p>Клевая забегаловка</p>
+
+                        <address>
+                            Москва, Новоданиловаская набережная, дом 12а<br/>
+                        </address>
+
+                        <div class="media">
+                            <div class="media-body">
+                                <span class="label label-success transparent">565 RUB</span>
+                                <span class="badge badge-info spacer5 transparent">3.5</span>
+
+                                <div class="btn-group pull-right">
+                                    <a class="favLink" href="#">
+                                        <i class="icon-heart-empty"></i>
+                                    </a>
+                                    <button class="btn btn-mini spacer5">
+                                        <i class="icon-expand-alt"></i> Подробнее
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                </li>
+
+                <li class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" src="/resources/img/types/tandoor.png" width="64">
+                        <label class="label transparent">Столовая</label>
+                    </a>
+
+                    <div class="media-body">
+                        <h4 class="media-heading">Кафе "У Коли"</h4>
+                        <p>Клевая забегаловка</p>
+
+                        <address>
+                            Москва, Новоданиловаская набережная, дом 12а<br/>
+                        </address>
+
+                        <div class="media">
+                            <div class="media-body">
+                                <span class="label label-success transparent">565 RUB</span>
+                                <span class="badge badge-info spacer5 transparent">3.5</span>
+
+                                <div class="btn-group pull-right">
+                                    <a class="favLink" href="#">
+                                        <i class="icon-heart-empty"></i>
+                                    </a>
+                                    <button class="btn btn-mini spacer5">
+                                        <i class="icon-expand-alt"></i> Подробнее
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                </li>
+
+
+            </div>
+
+        </div>
+
+        <div id="map" class="span9"></div>
     </div>
 </div>
 

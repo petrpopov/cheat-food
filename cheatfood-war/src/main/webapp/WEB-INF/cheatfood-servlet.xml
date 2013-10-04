@@ -7,6 +7,7 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:cache="http://www.springframework.org/schema/cache"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans
      http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
@@ -19,7 +20,9 @@
      http://www.springframework.org/schema/cache
      http://www.springframework.org/schema/cache/spring-cache-3.1.xsd
      http://www.springframework.org/schema/util
-     http://www.springframework.org/schema/util/spring-util.xsd">
+     http://www.springframework.org/schema/util/spring-util-3.1.xsd
+     http://www.springframework.org/schema/data/mongo
+     http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
     <import resource="security.xml"/>
 
@@ -31,6 +34,10 @@
     <context:component-scan base-package="org.springframework.social.connect.mongo"/>
     <context:component-scan base-package="com.petrpopov.cheatfood"/>
     <cache:annotation-driven />
+
+    <mongo:repositories base-package="com.petrpopov.cheatfood.service">
+    </mongo:repositories>
+
 
     <util:properties id="properties" location="classpath:config.properties"/>
 

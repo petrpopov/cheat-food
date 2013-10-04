@@ -5,11 +5,16 @@ import com.petrpopov.cheatfood.model.data.*;
 import com.petrpopov.cheatfood.model.entity.Comment;
 import com.petrpopov.cheatfood.model.entity.Location;
 import com.petrpopov.cheatfood.model.entity.UserEntity;
+import com.petrpopov.cheatfood.service.LocationRepository;
 import com.petrpopov.cheatfood.service.LocationService;
 import com.petrpopov.cheatfood.service.UserConnectionsService;
 import com.petrpopov.cheatfood.service.UserContextHandler;
 import com.petrpopov.cheatfood.web.other.CookieRequest;
+import com.petrpopov.cheatfood.web.other.PageableRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +40,18 @@ public class LocationWebService extends BaseWebService {
     @Autowired
     private UserConnectionsService userConnectionsService;
 
+    @Autowired
+    private LocationRepository locationRepository;
+
+    @RequestMapping(value = "all", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Location> findAllLocations(@Valid PageableRequest pageable) {
+
+        Pageable page = new PageRequest(pageable.getPage(), pageable.getSize() );
+        Page<Location> all = locationRepository.findAll(page);
+
+        return all.getContent();
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody

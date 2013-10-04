@@ -155,6 +155,7 @@ $(function() {
             offset += $('#footer').height();
         }
 
+        $('#mainList').css('height', (h-offset));
         $('#map').css('height', (h-offset));
         $('#slidepanel').css('height', (h-offset));
     }
