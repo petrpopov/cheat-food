@@ -458,9 +458,17 @@ $(function() {
             favClass = "icon-heart-empty";
         }
 
-        var fav = $('<a/>').addClass("favLink").attr("href", "#").append(
-            $('<i/>').addClass(favClass).attr("id", "mainFavIcon"+location.id)
-        );
+        var fav = $('<a/>').addClass("favLink").attr("href", "#")
+            .append(
+                $('<i/>').addClass(favClass).attr("id", "mainFavIcon"+location.id)
+            )
+            .click(function() {
+                var infoBoxObject = {
+                    infoBox: infoBox,
+                    location: location
+                };
+                favForLocation(infoBoxObject);
+            });
 
 
         var res = $('<li/>').addClass("media").append(
@@ -3254,6 +3262,9 @@ $(function() {
                 setInfoBoxContentFromLocation(infoBoxObject);
                 initSlidePanelWithData(infoBoxObject);
 
+                $("#mainFavIcon"+infoBoxObject.location.id).removeClass("icon-heart-empty").addClass("icon-heart");
+
+
                 showNoteTopCenter("Добавлено в избранное!", "success", true);
             }
             else {
@@ -3283,9 +3294,11 @@ $(function() {
 
                 if( res.error === false ) {
 
-                    infoBoxObject.location = res.result;
+                    infoBoxObject.location = res.result;;
                     setInfoBoxContentFromLocation(infoBoxObject);
                     initSlidePanelWithData(infoBoxObject);
+
+                    $("#mainFavIcon"+infoBoxObject.location.id).addClass("icon-heart-empty").removeClass("icon-heart");
 
                     showNoteTopCenter("Убрано из избранного!", "success", true);
                 }

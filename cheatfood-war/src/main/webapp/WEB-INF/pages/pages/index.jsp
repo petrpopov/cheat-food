@@ -224,7 +224,7 @@
 
             <div id="mainLocations" class="media-list">
 
-                <li class="media">
+                <!--li class="media">
                     <a class="pull-left" href="#">
                         <img class="media-object" src="/resources/img/types/tandoor.png" width="64">
                         <label class="label transparent">Столовая</label>
@@ -257,7 +257,7 @@
                     </div>
 
                     <hr/>
-                </li>
+                </li-->
             </div>
 
             <ul class="pager pull-right">
