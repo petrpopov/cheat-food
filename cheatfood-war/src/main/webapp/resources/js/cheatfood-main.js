@@ -516,11 +516,7 @@ $(function() {
                                                     )
                                                     .append($('<span/>').addClass("spacer3").text("Подробнее"))
                                                     .click(function() {
-                                                        var infoBoxObject = {
-                                                            infoBox: infoBox,
-                                                            location: location
-                                                        };
-                                                        showMarkerSlidePanel(infoBoxObject);
+                                                        detailsButtonInListClicked(location);
                                                     })
                                             )
                                     )
@@ -529,6 +525,15 @@ $(function() {
             );
 
         return res;
+    }
+
+    function detailsButtonInListClicked(location) {
+        var infoBoxObject = {
+            infoBox: infoBox,
+            location: location
+        };
+
+        showMarkerSlidePanel(infoBoxObject);
     }
 
     $.fn.createMap = function createMap(auth) {
@@ -1505,7 +1510,8 @@ $(function() {
 
                     var infoBoxObject = {
                         infoBox: marker.infoBox,
-                        location: location
+                        location: location,
+                        marker: marker
                     };
 
                     markerClickBehavior(marker.marker, infoBoxObject);
@@ -3658,6 +3664,10 @@ $(function() {
     function initMarkerEditBehavior(infoBoxObject) {
 
         var marker = infoBoxObject.marker;
+        if( !marker ) {
+            return;
+        }
+
         marker.setDraggable(true);
 
         google.maps.event.addListener(marker, 'dragend', function() {
@@ -3671,6 +3681,10 @@ $(function() {
     function initMarkerDefaultNonEditBehavior(infoBoxObject) {
 
         var marker = infoBoxObject.marker;
+        if( !marker ) {
+            return;
+        }
+
         marker.setDraggable(false);
 
         google.maps.event.clearListeners(marker, 'dragend');
@@ -3880,6 +3894,10 @@ $(function() {
                         enableEditMarkerMenu(infoBoxObject);
                         enableDeleteMarkerMenu(infoBoxObject);
                         enableHideMarkerMenu(infoBoxObject);
+
+                        if($.fn.loadLocations !== undefined ) {
+                            $().loadLocations();
+                        }
                     }
                     else {
                         if( res.errorType === errors.access_denied) {
