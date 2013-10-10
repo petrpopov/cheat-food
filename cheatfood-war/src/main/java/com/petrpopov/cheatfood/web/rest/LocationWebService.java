@@ -243,8 +243,7 @@ public class LocationWebService extends BaseWebService {
 
     @RequestMapping(value = "{locationid}/comments", method = RequestMethod.GET)
     @ResponseBody
-    public MessageResult comments(@CookieValue(required = true, value = "CHEATFOOD") CookieRequest cookie,
-                                  @PathVariable String locationid) throws CheatException {
+    public MessageResult comments(@PathVariable String locationid) throws CheatException {
 
         MessageResult result = new MessageResult();
 

@@ -17,14 +17,14 @@
 
 <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/img/favicon.ico" />
 
-<!--link href="/wro/main.css" rel="stylesheet" media="screen" type="text/css"/-->
+<link href="/wro/main.css" rel="stylesheet" media="screen" type="text/css"/>
 
-<link href="/resources/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css"/>
+<!--link href="/resources/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css"/>
 <link href="/resources/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
 <link href="/resources/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 <link href="/resources/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
 <link href="/resources/css/jquery-ui-timepicker-addon-1.4.css" rel="stylesheet" type="text/css"/>
-<link href="/resources/css/style.css" rel="stylesheet" type="text/css"/>
+<link href="/resources/css/style.css" rel="stylesheet" type="text/css"/-->
 
 <!--[if IE 7]>
 <link rel="stylesheet" href="/resources/css/font-awesome-ie7.min.css">

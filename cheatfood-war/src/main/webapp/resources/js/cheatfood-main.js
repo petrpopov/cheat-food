@@ -468,7 +468,8 @@ $(function() {
                     location: location
                 };
                 favForLocation(infoBoxObject);
-            });
+            })
+            .hide();
 
 
         var res = $('<li/>').addClass("media").append(
@@ -2589,18 +2590,22 @@ $(function() {
                     .addClass("spacer3").text(comment.votesDownCount)
             );
 
-        if( comment.author.id !== params.currentUser.id ) {
-             voteUpButton.click(function() {
-                 voteForComment(infoBoxObject, comment, true);
-             });
-            voteDownButton.click(function() {
-                voteForComment(infoBoxObject, comment, false);
-            });
+        voteUpButton.addClass("disabled");
+        voteDownButton.addClass("disabled");
+
+        if( authorized === true ) {
+            if(params.currentUser) {
+                if( comment.author.id !== params.currentUser.id ) {
+                    voteUpButton.click(function() {
+                        voteForComment(infoBoxObject, comment, true);
+                    });
+                    voteDownButton.click(function() {
+                        voteForComment(infoBoxObject, comment, false);
+                    });
+                }
+            }
         }
-        else {
-            voteUpButton.addClass("disabled");
-            voteDownButton.addClass("disabled");
-        }
+
 
         var quoteLabel;
         if( comment.questionCommentId ) {
@@ -2721,16 +2726,22 @@ $(function() {
 
         //comments
         $('#slideComment').off('click');
-        $('#slideComment').click(function() {
-            var vis = $('#slideCommentForm').data('visible');
+        if( authorized === false ) {
+            $('#slideComment').hide();
+        }
+        else {
+            $('#slideComment').click(function() {
+                var vis = $('#slideCommentForm').data('visible');
 
-            if( vis !== true ) {
-                showSlideAddCommentForm(quoteCommentInForm());
-            }
-            else {
-                hideSlideAddCommentForm();
-            }
-        });
+                if( vis !== true ) {
+                    showSlideAddCommentForm(quoteCommentInForm());
+                }
+                else {
+                    hideSlideAddCommentForm();
+                }
+            });
+        }
+
 
         initSlideAddCommentFormValidation(infoBoxObject);
         initSlideCommentFormSubmitBehavior(infoBoxObject);
