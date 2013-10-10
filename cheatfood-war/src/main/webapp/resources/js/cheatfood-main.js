@@ -535,6 +535,7 @@ $(function() {
         };
 
         showMarkerSlidePanel(infoBoxObject);
+        loadLocationAndCenterMap(location.id);
     }
 
     $.fn.createMap = function createMap(auth) {
@@ -1492,6 +1493,10 @@ $(function() {
 
         $('#profileModal').modal('hide');
 
+
+    }
+
+    function loadLocationAndCenterMap(id) {
         $.get(params.realPath+'/api/locations/'+id, function(location) {
             if( !location ) {
                 return;
