@@ -471,6 +471,10 @@ $(function() {
             })
             .hide();
 
+        var rate = location.averageRate;
+        if( !rate ) {
+            rate = 0;
+        }
 
         var res = $('<li/>').addClass("media").append(
             $('<a/>').addClass("pull-left")
@@ -503,7 +507,7 @@ $(function() {
                                     )
                                     .append(
                                         $('<span/>').addClass("badge badge-info spacer5 transparent")
-                                            .text(location.averageRate)
+                                            .text(rate)
                                     )
                                     .append(
                                         $('<div/>').addClass("btn-group pull-right")
@@ -3879,7 +3883,7 @@ $(function() {
         $.ajax({
             type: "POST",
             url: params.realPath+'/api/locations/add',
-            data: param = param,
+            data: JSON.stringify(param),
             contentType: 'application/json',
             mimeType: 'application/json',
             dataType: 'json',

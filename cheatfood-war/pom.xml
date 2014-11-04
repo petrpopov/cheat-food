@@ -6,13 +6,13 @@
     <artifactId>cheatood-war</artifactId>
     <packaging>war</packaging>
 
-    <version>1.7.1-SNAPSHOT</version>
+    <version>1.7.2-SNAPSHOT</version>
     <name>cheatfood webapp</name>
 
     <parent>
         <groupId>com.petrpopov</groupId>
         <artifactId>cheatood</artifactId>
-        <version>1.7.1-SNAPSHOT</version>
+        <version>1.7.2-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -365,7 +365,6 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
-
         </resources>
     </build>
 </project>
